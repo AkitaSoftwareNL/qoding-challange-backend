@@ -11,8 +11,10 @@ import java.util.List;
 
 import static nl.quintor.qodingchallenge.percistence.connection.ConnectionPoolFactory.getConnection;
 
-public class QuestionDAO {
+public class QuestionDAO implements IQuestionPercistence {
 
+
+    @Override
     public List<QuestionDTO> getQuestions(String category, int limit) throws SQLException {
             List<QuestionDTO> questions = new ArrayList<>();
             try (

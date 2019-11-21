@@ -6,6 +6,7 @@ public class QuestionDTO {
     private String category;
     private String questionName;
     private String questionType;
+    private String attachment = "this is an attachment for test value";
 
     public QuestionDTO(int ID, String category, String questionName, String questionType) {
         this.ID = ID;
@@ -44,5 +45,13 @@ public class QuestionDTO {
 
     public void setQuestionType(String questionType) {
         this.questionType = questionType;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 }
