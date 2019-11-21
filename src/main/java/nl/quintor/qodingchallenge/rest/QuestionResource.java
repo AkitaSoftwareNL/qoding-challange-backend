@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.rest;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import nl.quintor.qodingchallenge.service.QuestionServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -12,12 +13,11 @@ public class QuestionResource {
 
     private QuestionService questionService = new QuestionServiceImpl();
 
-    @PostMapping("/{particpantID")
+    @PostMapping("/{campaignName}/{participantID/{questionID}")
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity answerQuestion(@PathVariable int participantID,
-                                         @RequestParam String campaignName,
-                                         @RequestParam String givenAnswer) {
-        questionService.validateAnswer(participantID, campaignName, givenAnswer);
+    public ResponseEntity answerQuestion(@RequestParam GivenAnswerDTO givenAnswer) {
+
+        questionService.validateAnswer(givenAnswer);
 
         return new ResponseEntity(HttpStatus.OK);
     }
