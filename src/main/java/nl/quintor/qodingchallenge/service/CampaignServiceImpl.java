@@ -1,6 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.percistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.percistence.exception.CampaignAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public List<CampaignDTO> createNewCampaign(String name) throws SQLException, CampaignAlreadyExistsException {
-        campaignDAO.checkIfCampaignExists(name);
+        campaignDAO.campaignExists(name);
         campaignDAO.persistCampaign(name);
         return campaignDAO.getAllCampaigns();
     }

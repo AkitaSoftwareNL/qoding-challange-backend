@@ -1,4 +1,4 @@
-package nl.quintor.dto;
+package nl.quintor.qodingchallenge.dto;
 
 public class ParticipantDTO {
     

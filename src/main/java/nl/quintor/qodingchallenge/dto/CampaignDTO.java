@@ -1,4 +1,6 @@
-package nl.quintor.dto;
+package nl.quintor.qodingchallenge.dto;
+
+import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 
 import java.util.ArrayList;
 import java.util.List;

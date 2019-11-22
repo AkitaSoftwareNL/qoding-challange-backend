@@ -1,6 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.percistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.percistence.exception.CampaignAlreadyExistsException;
 

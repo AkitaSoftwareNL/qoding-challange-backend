@@ -1,6 +1,6 @@
 package nl.quintor.qodingchallenge.percistence.dao;
 
-import nl.quintor.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.percistence.exception.CampaignAlreadyExistsException;
 import org.springframework.stereotype.Service;
 

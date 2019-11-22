@@ -29,3 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### database properties file ###
+qoding-challange-backend\src\main\resources\database.properties

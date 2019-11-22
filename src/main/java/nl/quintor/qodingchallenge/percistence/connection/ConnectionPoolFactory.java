@@ -11,6 +11,7 @@ import java.util.Properties;
 import static java.util.Objects.requireNonNull;
 
 public class ConnectionPoolFactory {
+
     private static final String DATABASE_RESOURCE_LINK = "database.properties";
     private static final String DB_USER = "db.user";
     private static final String DB_PASSWORD = "db.password";
