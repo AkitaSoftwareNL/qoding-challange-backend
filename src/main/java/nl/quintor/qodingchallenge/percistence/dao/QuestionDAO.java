@@ -1,6 +1,5 @@
 package nl.quintor.qodingchallenge.percistence.dao;
 
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,7 @@ import java.util.List;
 import static nl.quintor.qodingchallenge.percistence.connection.ConnectionPoolFactory.getConnection;
 
 @Service
-public class QuestionDAO implements IQuestionPercistence {
+public class QuestionDAO implements QuestionPercistence {
 
 
     @Override
@@ -57,6 +56,26 @@ public class QuestionDAO implements IQuestionPercistence {
             throw new SQLException();
         }
     }
+
+    @Override
+    public String getCorrectAnswer(int questionID) throws SQLException {
+        String correctAnswer = "";
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT answer_option FROM multiple_choice_question WHERE questionID = ? AND is_correct = 1");
+            statement.setInt(1, questionID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                correctAnswer = resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return correctAnswer;
+    }
+
+
 }
 
 

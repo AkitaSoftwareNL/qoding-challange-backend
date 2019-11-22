@@ -1,10 +1,8 @@
 package nl.quintor.qodingchallenge.rest;
 
-import nl.quintor.qodingchallenge.dto.GivenAnswerlistDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
-import nl.quintor.qodingchallenge.service.IQuestionService;
+import nl.quintor.qodingchallenge.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +14,22 @@ import java.util.List;
 @RestController
 public class QuestionResource {
 
-    private IQuestionService questionService;
+    private QuestionService questionService;
 
     @Autowired
-    public void setQuestionService(IQuestionService questionService) {
+    public void setQuestionService(QuestionService questionService) {
         this.questionService = questionService;
     }
 
-    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/pleasework")
+    @GetMapping
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/campaign/{campaignName")
     // TODO: 11/21/2019 Fix parameters of get question away from the default questions
     public ResponseEntity<List<QuestionDTO>> sendQuestions() throws SQLException {
         return ResponseEntity.ok().body(questionService.getQuestions("java", 3));
     }
 
-    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/helpme")
+    @PostMapping
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/campaign/{campaignName")
     public ResponseEntity getAnswer(@RequestParam GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException {
         questionService.setAnswer(givenAnswerlistDTO);
         return new ResponseEntity(HttpStatus.OK);

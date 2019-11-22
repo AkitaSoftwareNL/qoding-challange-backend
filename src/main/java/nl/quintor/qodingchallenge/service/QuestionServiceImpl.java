@@ -1,23 +1,20 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.GivenAnswerlistDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
-import nl.quintor.qodingchallenge.percistence.dao.IQuestionPercistence;
+import nl.quintor.qodingchallenge.percistence.dao.QuestionPercistence;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Service
-public class QuestionServiceImpl implements IQuestionService {
+public class QuestionServiceImpl implements QuestionService {
 
-    private IQuestionPercistence questionPercistence;
+    private QuestionPercistence questionPercistence;
 
     @Autowired
-    public void setQuestionPercistence(IQuestionPercistence questionPercistence) {
+    public void setQuestionPercistence(QuestionPercistence questionPercistence) {
         this.questionPercistence = questionPercistence;
     }
     

@@ -1,42 +1,40 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.util.List;
+
 public class QuestionDTO {
 
-    private int ID;
-    private String category;
-    private String questionName;
+    private int questionID;
+//    private String category;
+    private String question;
     private String questionType;
-    private String attachment = "this is an attachment for test value";
+    private String attachment = "This is an attachment for test value";
+    private List<String> possibleAnswers;
+    private String givenAnswer;
 
-    public QuestionDTO(int ID, String category, String questionName, String questionType) {
-        this.ID = ID;
-        this.category = category;
-        this.questionName = questionName;
+    public QuestionDTO(int questionID, String question, String questionType, String attachment, List<String> possibleAnswers, String givenAnswer) {
+        this.questionID = questionID;
+        this.question = question;
         this.questionType = questionType;
+        this.attachment = attachment;
+        this.possibleAnswers = possibleAnswers;
+        this.givenAnswer = givenAnswer;
     }
 
-    public String getQuestionName() {
-        return questionName;
+    public int getQuestionID() {
+        return questionID;
     }
 
-    public void setQuestionName(String questionName) {
-        this.questionName = questionName;
+    public void setQuestionID(int questionID) {
+        this.questionID = questionID;
     }
 
-    public int getID() {
-        return ID;
+    public String getQuestion() {
+        return question;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     public String getQuestionType() {
@@ -53,5 +51,21 @@ public class QuestionDTO {
 
     public void setAttachment(String attachment) {
         this.attachment = attachment;
+    }
+
+    public List<String> getPossibleAnswers() {
+        return possibleAnswers;
+    }
+
+    public void setPossibleAnswers(List<String> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
+
+    public String getGivenAnswer() {
+        return givenAnswer;
+    }
+
+    public void setGivenAnswer(String givenAnswer) {
+        this.givenAnswer = givenAnswer;
     }
 }

@@ -1,7 +1,12 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
+import nl.quintor.qodingchallenge.dto.QuestionDTO;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public interface QuestionService {
-    void validateAnswer(GivenAnswerDTO givenAnswer);
+    List<QuestionDTO> getQuestions(String category, int amountOfQuestions) throws SQLException;
+
+    void setAnswer(GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException;
 }
