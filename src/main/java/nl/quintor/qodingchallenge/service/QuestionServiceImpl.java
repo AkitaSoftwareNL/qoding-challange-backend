@@ -1,7 +1,7 @@
 package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.GivenAnswerlistDTO;
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTOCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.percistence.dao.IQuestionPercistence;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,8 @@ public class QuestionServiceImpl implements IQuestionService {
     }
 
     @Override
-    public void setAnswer(GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException {
-        for (GivenAnswerDTO answer : givenAnswerlistDTO.getGivenAnswerDTO()) {
+    public void setAnswer(GivenAnswerDTOCollection givenAnswerDTOCollection) throws SQLException {
+        for (GivenAnswerDTO answer : givenAnswerDTOCollection.getGivenAnswerDTO()) {
             questionPercistence.setAnswer(answer);
         }
     }

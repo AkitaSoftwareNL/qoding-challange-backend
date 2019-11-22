@@ -1,6 +1,6 @@
 package nl.quintor.qodingchallenge.rest;
 
-import nl.quintor.qodingchallenge.dto.GivenAnswerlistDTO;
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTOCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.service.IQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,8 @@ public class QuestionResource {
     }
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/helpme")
-    public ResponseEntity getAnswer(@RequestParam GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException {
-        questionService.setAnswer(givenAnswerlistDTO);
+    public ResponseEntity getAnswer(@RequestParam GivenAnswerDTOCollection givenAnswerDTOCollection) throws SQLException {
+        questionService.setAnswer(givenAnswerDTOCollection);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

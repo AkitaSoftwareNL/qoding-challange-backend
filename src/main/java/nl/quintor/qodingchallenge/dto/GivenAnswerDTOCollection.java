@@ -3,7 +3,7 @@ package nl.quintor.qodingchallenge.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GivenAnswerlistDTO {
+public class GivenAnswerDTOCollection {
 
     private List<GivenAnswerDTO> givenAnswerDTO = new ArrayList<>();
 
