@@ -9,5 +9,5 @@ import java.util.List;
 public interface IQuestionPercistence {
     List<QuestionDTO> getQuestions(String category, int limit) throws SQLException;
 
-    void setAnswer(GivenAnswerDTO answer);
+    void setAnswer(GivenAnswerDTO answer) throws SQLException;
 }

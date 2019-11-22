@@ -8,9 +8,7 @@ import java.sql.SQLException;
 
 @SpringBootApplication
 public class QodingchallengeApplication {
-    public static void main(String[] args) throws SQLException {
-        var question = new QuestionDAO().getQuestions("java", 3);
-        question.forEach(questionDTO -> System.out.println(questionDTO.getQuestionName()));
+    public static void main(String[] args) {
         SpringApplication.run(QodingchallengeApplication.class, args);
     }
 }

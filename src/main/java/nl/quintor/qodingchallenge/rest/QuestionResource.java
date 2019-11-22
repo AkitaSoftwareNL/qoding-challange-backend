@@ -30,7 +30,7 @@ public class QuestionResource {
     }
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/helpme")
-    public ResponseEntity getAnswer(@RequestParam GivenAnswerlistDTO givenAnswerlistDTO) {
+    public ResponseEntity getAnswer(@RequestParam GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException {
         questionService.setAnswer(givenAnswerlistDTO);
         return new ResponseEntity(HttpStatus.OK);
     }

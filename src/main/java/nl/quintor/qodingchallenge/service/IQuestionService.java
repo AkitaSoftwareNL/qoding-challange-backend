@@ -9,5 +9,5 @@ import java.util.List;
 public interface IQuestionService {
     List<QuestionDTO> getQuestions(String category, int amountOfQuestions) throws SQLException;
 
-    void setAnswer(GivenAnswerlistDTO givenAnswerlistDTO);
+    void setAnswer(GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException;
 }

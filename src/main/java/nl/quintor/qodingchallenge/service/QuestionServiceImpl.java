@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.GivenAnswerlistDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.percistence.dao.IQuestionPercistence;
@@ -26,8 +27,9 @@ public class QuestionServiceImpl implements IQuestionService {
     }
 
     @Override
-    public void setAnswer(GivenAnswerlistDTO givenAnswerlistDTO) {
-        givenAnswerlistDTO.getGivenAnswerDTO().forEach((answer) -> questionPercistence.setAnswer(answer)
-        );
+    public void setAnswer(GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException {
+        for (GivenAnswerDTO answer : givenAnswerlistDTO.getGivenAnswerDTO()) {
+            questionPercistence.setAnswer(answer);
+        }
     }
 }
