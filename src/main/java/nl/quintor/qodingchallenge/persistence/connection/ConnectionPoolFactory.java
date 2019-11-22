@@ -1,6 +1,6 @@
-package nl.quintor.qodingchallenge.percistence.connection;
+package nl.quintor.qodingchallenge.persistence.connection;
 
-import nl.quintor.qodingchallenge.percistence.exception.PropertiesNotFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.PropertiesNotFoundException;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import java.io.IOException;

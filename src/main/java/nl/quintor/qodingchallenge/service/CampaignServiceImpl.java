@@ -1,8 +1,8 @@
 package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
-import nl.quintor.qodingchallenge.percistence.dao.CampaignDAO;
-import nl.quintor.qodingchallenge.percistence.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

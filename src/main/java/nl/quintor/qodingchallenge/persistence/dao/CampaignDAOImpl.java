@@ -1,7 +1,7 @@
-package nl.quintor.qodingchallenge.percistence.dao;
+package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
-import nl.quintor.qodingchallenge.percistence.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.quintor.qodingchallenge.percistence.connection.ConnectionPoolFactory.getConnection;
+import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
 @Service
 public class CampaignDAOImpl implements CampaignDAO {
@@ -23,7 +23,8 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT 1 FROM campaign");
+                    "SELECT 1 FROM campaign WHERE name = ?");
+            statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 throw new CampaignAlreadyExistsException("The campaign " + name + " already exists.");
