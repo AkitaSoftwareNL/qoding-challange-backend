@@ -14,11 +14,11 @@ public class QuestionDTO {
     private int participantID;
     private String campaignName;
 
-    public QuestionDTO(int questionID, String question, String questionType) {
+    public QuestionDTO(int questionID, String question, String questionType, String attachment) {
         this.questionID = questionID;
         this.question = question;
         this.questionType = questionType;
-        this.attachment = "This is an attachment";
+        this.attachment = attachment;
         this.givenAnswer = "";
         this.stateID = 1;
     }

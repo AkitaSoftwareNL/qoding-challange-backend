@@ -22,7 +22,7 @@ public class QuestionDAO implements QuestionPersistence {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT questionid, question, QUESTION_TYPE FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT questionid, question, QUESTION_TYPE, attachment FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
             statement.setString(1, category);
             statement.setInt(2, limit);
             ResultSet resultSet = statement.executeQuery();
@@ -30,7 +30,8 @@ public class QuestionDAO implements QuestionPersistence {
                 questions.add(new QuestionDTO(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3)
+                        resultSet.getString(3),
+                        resultSet.getString(4)
                 ));
             }
         } catch (SQLException e) {
