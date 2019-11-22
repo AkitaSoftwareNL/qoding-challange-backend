@@ -59,4 +59,3 @@ public class ConnectionPoolFactory {
         return properties;
     }
 }
-

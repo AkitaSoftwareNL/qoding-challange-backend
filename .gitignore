@@ -31,4 +31,4 @@ build/
 .vscode/
 
 ### database properties file ###
-database.properties
+qoding-challange-backend\src\main\resources\database.properties
