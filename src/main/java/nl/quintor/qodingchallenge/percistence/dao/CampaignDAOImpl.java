@@ -23,13 +23,14 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT 1 FROM campaign");
+                    "SELECT 1 FROM campaign WHERE NAME = ?");
+            statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 throw new CampaignAlreadyExistsException("The campaign " + name + " already exists.");
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new SQLException();
         }
     }
 
@@ -39,12 +40,11 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO campaign(NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
-                            "VALUES (?, 'conferentie', 'JAVA', 'admin', 2, null, 1)");
+                    "INSERT INTO campaign(NAME, CAMPAIGN_TYPE, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE) VALUES (?, 'conferentie', 'JAVA', 'admin', 2, null, 1)");
             statement.setString(1, name);
             statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new SQLException();
         }
     }
 
@@ -70,7 +70,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 );
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new SQLException();
         }
         return campaignDTOList;
     }
