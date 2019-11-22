@@ -1,6 +1,8 @@
 package nl.quintor.qodingchallenge.percistence.dao;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +13,7 @@ import java.util.List;
 
 import static nl.quintor.qodingchallenge.percistence.connection.ConnectionPoolFactory.getConnection;
 
+@Service
 public class QuestionDAO implements IQuestionPercistence {
 
 
@@ -37,5 +40,10 @@ public class QuestionDAO implements IQuestionPercistence {
             }
             return questions;
         }
+
+    @Override
+    public void setAnswer(GivenAnswerDTO answer) {
+
     }
+}
 

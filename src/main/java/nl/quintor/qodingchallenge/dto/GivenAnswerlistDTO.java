@@ -2,16 +2,17 @@ package nl.quintor.qodingchallenge.dto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GivenAnswerlistDTO {
 
-    List<GivenAnswerDTO> givenAnswerDTO = new ArrayList<>();
+    private List<GivenAnswerDTO> givenAnswerDTO = new ArrayList<>();
 
     public List<GivenAnswerDTO> getGivenAnswerDTO() {
-        return GivenAnswerDTO;
+        return givenAnswerDTO;
     }
 
     public void setGivenAnswerDTO(List<GivenAnswerDTO> givenAnswerDTO) {
-        this.GivenAnswerDTO = givenAnswerDTO;
+        this.givenAnswerDTO = givenAnswerDTO;
     }
 }
