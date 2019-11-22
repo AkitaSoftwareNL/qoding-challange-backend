@@ -5,20 +5,18 @@ import java.util.List;
 public class QuestionDTO {
 
     private int questionID;
-//    private String category;
     private String question;
     private String questionType;
-    private String attachment = "This is an attachment for test value";
+    private String attachment;
     private List<String> possibleAnswers;
     private String givenAnswer;
 
-    public QuestionDTO(int questionID, String question, String questionType, String attachment, List<String> possibleAnswers, String givenAnswer) {
+    public QuestionDTO(int questionID, String question, String questionType) {
         this.questionID = questionID;
         this.question = question;
         this.questionType = questionType;
-        this.attachment = attachment;
-        this.possibleAnswers = possibleAnswers;
-        this.givenAnswer = givenAnswer;
+        this.attachment = "This is an attachment";
+        this.givenAnswer = "";
     }
 
     public int getQuestionID() {

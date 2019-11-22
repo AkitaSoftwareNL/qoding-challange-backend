@@ -1,4 +1,4 @@
-package nl.quintor.qodingchallenge.percistence.dao;
+package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import org.springframework.stereotype.Service;
@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.quintor.qodingchallenge.percistence.connection.ConnectionPoolFactory.getConnection;
+import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
 @Service
-public class QuestionDAO implements QuestionPercistence {
+public class QuestionDAO implements QuestionPersistence {
 
 
     @Override
@@ -22,7 +22,7 @@ public class QuestionDAO implements QuestionPercistence {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT questionid, category_name, question, QUESTION_TYPE FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT questionid, question, QUESTION_TYPE FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
             statement.setString(1, category);
             statement.setInt(2, limit);
             ResultSet resultSet = statement.executeQuery();
@@ -30,14 +30,32 @@ public class QuestionDAO implements QuestionPercistence {
                 questions.add(new QuestionDTO(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4)
+                        resultSet.getString(3)
                 ));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
         return questions;
+    }
+
+    @Override
+    public List<String> getPossibleAnswers(int questionID) throws SQLException {
+        List<String> possibleAnswers = new ArrayList<>();
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS FROM multiple_choice_question WHERE QUESTIONID = ?");
+            statement.setInt(1, questionID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                possibleAnswers.add(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+
+        return null;
     }
 
     @Override
