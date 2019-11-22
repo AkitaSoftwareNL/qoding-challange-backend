@@ -5,7 +5,6 @@ import nl.quintor.qodingchallenge.dto.GivenAnswerlistDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.percistence.dao.IQuestionPercistence;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
