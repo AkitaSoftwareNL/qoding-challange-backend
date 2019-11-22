@@ -2,20 +2,16 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.percistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.percistence.exception.CampaignAlreadyExistsException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class CampaignService {
+public interface CampaignService {
 
-    private CampaignDAO campaignDAO = new CampaignDAO();
+    void setCampaignDAO(CampaignDAO campaignDAO);
 
-    public List<CampaignDTO> createNewCampaign(String name) throws SQLException {
-        campaignDAO.persistCampaign(name);
-        return campaignDAO.getAllCampaigns();
-    }
+    List<CampaignDTO> createNewCampaign(String name) throws SQLException, CampaignAlreadyExistsException;
 
-    public List<CampaignDTO> showCampaign() throws SQLException {
-        return campaignDAO.getAllCampaigns();
-    }
+    List<CampaignDTO> showCampaign() throws SQLException;
 }
