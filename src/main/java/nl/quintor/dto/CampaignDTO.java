@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CampaignDTO {
+
     private String name;
     private int amountOfQuestions;
-    private String startedby;
+    private String startedBy;
     private String category;
     private List<ParticipantDTO> participants;
 
@@ -16,7 +17,7 @@ public class CampaignDTO {
     public CampaignDTO(String name, int amountOfQuestions, String startedby, String category, List<ParticipantDTO> participants) {
         this.name = name;
         this.amountOfQuestions = amountOfQuestions;
-        this.startedby = startedby;
+        this.startedBy = startedby;
         this.category = category;
         this.participants = participants;
     }
@@ -37,12 +38,12 @@ public class CampaignDTO {
         this.amountOfQuestions = amountOfQuestions;
     }
 
-    public String getStartedby() {
-        return startedby;
+    public String getStartedBy() {
+        return startedBy;
     }
 
-    public void setStartedby(String startedby) {
-        this.startedby = startedby;
+    public void setStartedBy(String startedBy) {
+        this.startedBy = startedBy;
     }
 
     public String getCategory() {

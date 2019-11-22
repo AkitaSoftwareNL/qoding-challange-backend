@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface CampaignDAO {
-    void checkIfCampaignExists(String name) throws SQLException, CampaignAlreadyExistsException;
+    void campaignExists(String name) throws SQLException, CampaignAlreadyExistsException;
 
     void persistCampaign(String name) throws SQLException;
 

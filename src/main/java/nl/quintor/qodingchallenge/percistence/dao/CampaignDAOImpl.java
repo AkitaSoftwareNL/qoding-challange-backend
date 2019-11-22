@@ -18,7 +18,7 @@ public class CampaignDAOImpl implements CampaignDAO {
 
 
     @Override
-    public void checkIfCampaignExists(String name) throws SQLException, CampaignAlreadyExistsException {
+    public void campaignExists(String name) throws SQLException, CampaignAlreadyExistsException {
         try (
                 Connection connection = getConnection()
         ) {
@@ -26,7 +26,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                     "SELECT 1 FROM campaign");
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                throw new CampaignAlreadyExistsException("De campagne " + name + " bestaat al.");
+                throw new CampaignAlreadyExistsException("The campaign " + name + " already exists.");
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -69,9 +69,9 @@ public class CampaignDAOImpl implements CampaignDAO {
                         )
                 );
             }
-            return campaignDTOList;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+        return campaignDTOList;
     }
 }
