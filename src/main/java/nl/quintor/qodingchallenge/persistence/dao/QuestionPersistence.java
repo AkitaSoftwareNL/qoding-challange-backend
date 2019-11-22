@@ -8,7 +8,7 @@ import java.util.List;
 public interface QuestionPersistence {
     List<QuestionDTO> getQuestions(String category, int limit) throws SQLException;
 
-    void setAnswer(GivenAnswerDTO answer) throws SQLException;
+    void setAnswer(QuestionDTO question) throws SQLException;
 
     String getCorrectAnswer(int questionID) throws SQLException;
 

@@ -8,8 +8,11 @@ public class QuestionDTO {
     private String question;
     private String questionType;
     private String attachment;
-    private List<String> possibleAnswers;
+    private List<String> possibleAnswer;
     private String givenAnswer;
+    private int stateID;
+    private int participantID;
+    private String campaignName;
 
     public QuestionDTO(int questionID, String question, String questionType) {
         this.questionID = questionID;
@@ -17,6 +20,19 @@ public class QuestionDTO {
         this.questionType = questionType;
         this.attachment = "This is an attachment";
         this.givenAnswer = "";
+        this.stateID = 1;
+    }
+
+    public QuestionDTO(int questionID, String question, String questionType, String attachment, List<String> possibleAnswer, String givenAnswer, int stateID, int participantID, String campaignName) {
+        this.questionID = questionID;
+        this.question = question;
+        this.questionType = questionType;
+        this.attachment = attachment;
+        this.possibleAnswer = possibleAnswer;
+        this.givenAnswer = givenAnswer;
+        this.stateID = stateID;
+        this.participantID = participantID;
+        this.campaignName = campaignName;
     }
 
     public int getQuestionID() {
@@ -51,12 +67,12 @@ public class QuestionDTO {
         this.attachment = attachment;
     }
 
-    public List<String> getPossibleAnswers() {
-        return possibleAnswers;
+    public List<String> getPossibleAnswer() {
+        return possibleAnswer;
     }
 
-    public void setPossibleAnswers(List<String> possibleAnswers) {
-        this.possibleAnswers = possibleAnswers;
+    public void setPossibleAnswer(List<String> possibleAnswer) {
+        this.possibleAnswer = possibleAnswer;
     }
 
     public String getGivenAnswer() {
@@ -65,5 +81,29 @@ public class QuestionDTO {
 
     public void setGivenAnswer(String givenAnswer) {
         this.givenAnswer = givenAnswer;
+    }
+
+    public int getStateID() {
+        return stateID;
+    }
+
+    public void setStateID(int stateID) {
+        this.stateID = stateID;
+    }
+
+    public int getParticipantID() {
+        return participantID;
+    }
+
+    public void setParticipantID(int participantID) {
+        this.participantID = participantID;
+    }
+
+    public String getCampaignName() {
+        return campaignName;
+    }
+
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
     }
 }

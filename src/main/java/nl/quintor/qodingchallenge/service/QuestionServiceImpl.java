@@ -25,7 +25,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         for (QuestionDTO questionDTO : questions) {
             questionDTO
-                    .setPossibleAnswers(questionPersistence.getPossibleAnswers(questionDTO.getQuestionID())
+                    .setPossibleAnswer(questionPersistence.getPossibleAnswers(questionDTO.getQuestionID())
                     );
         }
 
@@ -33,21 +33,18 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void setAnswer(GivenAnswerlistDTO givenAnswerlistDTO) throws SQLException {
-        for (GivenAnswerDTO answer : givenAnswerlistDTO.getGivenAnswerDTO()) {
-            questionPersistence.setAnswer(answer);
+    public void setAnswer(QuestionCollection questionCollection) throws SQLException {
+        for (QuestionDTO question : questionCollection.getQuestions()) {
+            if (question.getQuestionType().equals("multiple")) {
+                String correctAnswer = questionPersistence.getCorrectAnswer(question.getQuestionID());
+                if (checkAnswer(correctAnswer, question.getGivenAnswer())) {
+                    question.setStateID(2); // correct
+                } else {
+                    question.setStateID(3); // incorrect
+                }
+            }
+            questionPersistence.setAnswer(question);
         }
-            // Gets the correct answer of the asked question
-//            String correctAnswer = questionDAO.getCorrectAnswer(givenAnswer.getQuestionID());
-//
-//            if(checkAnswer(correctAnswer, givenAnswer.getGivenAnswer())) {
-//                givenAnswer.setStateID(2); // correct
-//            } else {
-//                givenAnswer.setStateID(3); // incorrect
-//            }
-//
-//            questionDAO.persistAnswer(givenAnswer);
-
     }
 
     private boolean checkAnswer(String correctAnswer, String givenAnswer) {
