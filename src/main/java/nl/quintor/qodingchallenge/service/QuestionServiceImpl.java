@@ -25,7 +25,9 @@ public class QuestionServiceImpl implements QuestionService {
 
         for (QuestionDTO questionDTO : questions) {
             questionDTO
-                    .setPossibleAnswer(questionPersistence.getPossibleAnswers(questionDTO.getQuestionID())
+                    .setPossibleAnswer(questionPersistence
+                            .getPossibleAnswers(questionDTO
+                                    .getQuestionID())
                     );
         }
 
@@ -34,13 +36,17 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void setAnswer(QuestionCollection questionCollection) throws SQLException {
+        final int CORRECT = 2;
+        final int INCORRECT = 3;
+        final String TYPE = "multiple";
+
         for (QuestionDTO question : questionCollection.getQuestions()) {
-            if (question.getQuestionType().equals("multiple")) {
+            if (question.getQuestionType().equals(TYPE)) {
                 String correctAnswer = questionPersistence.getCorrectAnswer(question.getQuestionID());
                 if (checkAnswer(correctAnswer, question.getGivenAnswer())) {
-                    question.setStateID(2); // correct
+                    question.setStateID(CORRECT);
                 } else {
-                    question.setStateID(3); // incorrect
+                    question.setStateID(INCORRECT);
                 }
             }
             questionPersistence.setAnswer(question, questionCollection.getCampaignName(), questionCollection.getParticipantID());
