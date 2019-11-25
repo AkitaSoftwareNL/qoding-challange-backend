@@ -11,8 +11,10 @@ public class QuestionDTO {
     private List<String> possibleAnswer;
     private String givenAnswer;
     private int stateID;
-    private int participantID;
-    private String campaignName;
+
+    public QuestionDTO() {
+
+    }
 
     public QuestionDTO(int questionID, String question, String questionType, String attachment) {
         this.questionID = questionID;
@@ -21,18 +23,6 @@ public class QuestionDTO {
         this.attachment = attachment;
         this.givenAnswer = "";
         this.stateID = 1;
-    }
-
-    public QuestionDTO(int questionID, String question, String questionType, String attachment, List<String> possibleAnswer, String givenAnswer, int stateID, int participantID, String campaignName) {
-        this.questionID = questionID;
-        this.question = question;
-        this.questionType = questionType;
-        this.attachment = attachment;
-        this.possibleAnswer = possibleAnswer;
-        this.givenAnswer = givenAnswer;
-        this.stateID = stateID;
-        this.participantID = participantID;
-        this.campaignName = campaignName;
     }
 
     public int getQuestionID() {
@@ -91,19 +81,4 @@ public class QuestionDTO {
         this.stateID = stateID;
     }
 
-    public int getParticipantID() {
-        return participantID;
-    }
-
-    public void setParticipantID(int participantID) {
-        this.participantID = participantID;
-    }
-
-    public String getCampaignName() {
-        return campaignName;
-    }
-
-    public void setCampaignName(String campaignName) {
-        this.campaignName = campaignName;
-    }
 }
