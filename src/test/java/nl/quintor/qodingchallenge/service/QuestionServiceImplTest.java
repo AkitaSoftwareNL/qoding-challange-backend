@@ -39,26 +39,9 @@ class QuestionServiceImplTest {
         verify(questionPersistenceMock).getQuestions(CATEGORY, LIMIT);
     }
 
-    @Test
-    void getQuestionsCallsQuestionPersistenceGetPossibleAnswers() throws SQLException {
-
-        when(sut.getQuestions(CATEGORY, LIMIT)).thenReturn(setQuestionlist());
-
-        assertEquals(setQuestionlist(), sut.getQuestions(CATEGORY, LIMIT));
-    }
-
-    @Test
-    void setAnswerCallsQuestionPersistenceGetCorrectAnswer() throws SQLException {
-        sut.setAnswer(new QuestionCollection(1, "JFALL", setQuestionlist()));
-
-        verify(questionPersistenceMock).getCorrectAnswer(0);
-    }
-
     private List<QuestionDTO> setQuestionlist() throws SQLException {
         List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, LIMIT);
-        QuestionDTO questionDTO = new QuestionDTO(1, "String", "multiple", "String");
-        questionDTO.setGivenAnswer("");
-        questionDTO.setPossibleAnswer(Arrays.asList("", ""));
+        QuestionDTO questionDTO = new QuestionDTO(0, "String", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;
     }
