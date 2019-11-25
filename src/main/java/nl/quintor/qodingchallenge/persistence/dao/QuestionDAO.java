@@ -56,18 +56,18 @@ public class QuestionDAO implements QuestionPersistence {
             throw new SQLException(e);
         }
 
-        return null;
+        return possibleAnswers;
     }
 
     @Override
-    public void setAnswer(QuestionDTO question) throws SQLException {
+    public void setAnswer(QuestionDTO question, String campaignName, int participantID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO given_answer VALUES (?, ?, ?, ?, ?)");
             statement.setInt(1, question.getQuestionID());
-            statement.setInt(2, question.getParticipantID());
-            statement.setString(3, question.getCampaignName());
+            statement.setInt(2, participantID);
+            statement.setString(3, campaignName);
             statement.setInt(4, question.getStateID());
             statement.setString(5, question.getGivenAnswer());
             statement.executeUpdate();

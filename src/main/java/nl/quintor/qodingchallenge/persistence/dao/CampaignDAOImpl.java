@@ -41,7 +41,7 @@ public class CampaignDAOImpl implements CampaignDAO {
         ) {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO campaign(NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
-                            "VALUES (?, 'conferentie', 'JAVA', 'admin', 2, null, 1)");
+                            "VALUES (?, 'JAVA', 'conferentie', 'admin', 2, null, 1)");
             statement.setString(1, name);
             statement.execute();
         } catch (SQLException e) {

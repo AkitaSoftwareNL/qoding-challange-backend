@@ -8,6 +8,10 @@ public class QuestionCollection {
     private String campaignName;
     private List<QuestionDTO> questions;
 
+    public QuestionCollection() {
+
+    }
+
     public QuestionCollection(int participantID, String campaignName, List<QuestionDTO> questions) {
         this.participantID = participantID;
         this.campaignName = campaignName;

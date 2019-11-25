@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/campaign")
 public class CampaignResource {
 
 
@@ -25,7 +24,7 @@ public class CampaignResource {
     }
 
     @ResponseBody
-    @RequestMapping(path = "/create",
+    @RequestMapping(path = "/campaign/create",
             method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -34,7 +33,8 @@ public class CampaignResource {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.GET,
+    @RequestMapping(path = "/campaign",
+            method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<CampaignDTO>> showCampaign() throws SQLException {

@@ -43,7 +43,7 @@ public class QuestionServiceImpl implements QuestionService {
                     question.setStateID(3); // incorrect
                 }
             }
-            questionPersistence.setAnswer(question);
+            questionPersistence.setAnswer(question, questionCollection.getCampaignName(), questionCollection.getParticipantID());
         }
     }
 
