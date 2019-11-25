@@ -1,6 +1,6 @@
 package nl.quintor.qodingchallenge.rest.exceptionmapper;
 
-import nl.quintor.qodingchallenge.percistence.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
