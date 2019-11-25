@@ -22,7 +22,6 @@ public class QuestionResource {
     }
 
     @RequestMapping(produces = {MediaType.APPLICATION_JSON_VALUE},
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
             path = {"/campaign/{campaignName}"},
             method = {RequestMethod.GET})
     public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable String campaignName) throws SQLException {
