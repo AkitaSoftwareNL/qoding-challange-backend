@@ -82,7 +82,7 @@ public class QuestionDAO implements QuestionPersistence {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT answer_options FROM multiple_choice_question WHERE questionID = ? AND is_correct = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT answer_options  FROM multiple_choice_question WHERE questionID = ? AND is_correct = 1");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
