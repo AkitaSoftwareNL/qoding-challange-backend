@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -9,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
@@ -72,13 +74,13 @@ public class QuestionDAO implements QuestionPersistence {
             statement.setString(5, question.getGivenAnswer());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException();
+            throw new SQLException(e);
         }
     }
 
     @Override
     public String getCorrectAnswer(int questionID) throws SQLException {
-        String correctAnswer = "";
+        Optional<String> correctAnswer = Optional.empty();
         try (
                 Connection connection = getConnection()
         ) {
@@ -86,15 +88,13 @@ public class QuestionDAO implements QuestionPersistence {
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                correctAnswer = resultSet.getString(1);
+                correctAnswer = Optional.ofNullable(resultSet.getString(1));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
-        return correctAnswer;
+        return correctAnswer.orElseThrow(AnswerNotFoundException::new);
     }
-
-
 }
 
 

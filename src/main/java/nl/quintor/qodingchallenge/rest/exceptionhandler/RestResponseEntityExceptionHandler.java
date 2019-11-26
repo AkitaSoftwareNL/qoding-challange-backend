@@ -1,5 +1,6 @@
-package nl.quintor.qodingchallenge.rest.exceptionmapper;
+package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
+import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({SQLException.class})
     public ResponseEntity<Object> handleSQLException(Exception e, WebRequest request) {
-        return new ResponseEntity<>("An exception has occured with the database", new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("An exception has occured with the database", new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CampaignAlreadyExistsException.class)
-    public ResponseEntity<Object> handleCampaignAlreadyexistsException(Exception e, WebRequest request) {
+    @ExceptionHandler({CampaignAlreadyExistsException.class})
+    public ResponseEntity<Object> handleCampaignAlreadyExistsException(Exception e, WebRequest request) {
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({AnswerNotFoundException.class})
+    public ResponseEntity<Object> handleAnswerNotFoundException(Exception e, WebRequest request) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 }

@@ -21,21 +21,18 @@ public class QuestionResource {
         this.questionService = questionService;
     }
 
-    @RequestMapping(produces = {MediaType.APPLICATION_JSON_VALUE},
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
-            path = {"/campaign/{campaignName}"},
-            method = {RequestMethod.GET})
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            path = "/campaign/{campaignName}",
+            method = RequestMethod.GET)
     public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable String campaignName) throws SQLException {
         QuestionCollection questionCollection = new QuestionCollection(1, campaignName, questionService.getQuestions("java", 3));
-        return ResponseEntity.ok().body(
-                questionCollection
-        );
+        return ResponseEntity.ok().body(questionCollection);
     }
 
-    @RequestMapping(consumes = {MediaType.APPLICATION_JSON_VALUE},
-            path = {"/campaign/{campaignName}"},
-            method = {RequestMethod.POST})
     @ResponseBody
+    @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+            path = "/campaign/{campaignName}",
+            method = RequestMethod.POST)
     public ResponseEntity getAnswer(@RequestBody QuestionCollection questionCollection) throws SQLException {
         questionService.setAnswer(questionCollection);
         return new ResponseEntity(HttpStatus.OK);
