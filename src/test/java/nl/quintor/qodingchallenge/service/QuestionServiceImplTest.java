@@ -18,9 +18,9 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
-    private static final String CATEGORY = "category";
-    private static final int LIMIT = 1;
-    private static final int QUESTION_ID = 1;
+    private final String CATEGORY = "category";
+    private final int LIMIT = 1;
+    private final int QUESTION_ID = 1;
 
     private QuestionPersistence questionPersistenceMock;
     private QuestionServiceImpl sut;

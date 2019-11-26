@@ -26,17 +26,17 @@ public class CampaignResource {
     @ResponseBody
     @RequestMapping(path = "/campaign/create",
             method = RequestMethod.POST,
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<CampaignDTO>> createCampaign(@RequestBody CampaignDTO campaignDTO) throws SQLException, CampaignAlreadyExistsException {
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CampaignDTO>> createCampaign(@RequestBody CampaignDTO campaignDTO) throws SQLException {
         return new ResponseEntity<>(campaignService.createNewCampaign(campaignDTO.getName()), HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(path = "/campaign",
             method = RequestMethod.GET,
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CampaignDTO>> showCampaign() throws SQLException {
         return new ResponseEntity<>(campaignService.showCampaign(), HttpStatus.OK);
     }

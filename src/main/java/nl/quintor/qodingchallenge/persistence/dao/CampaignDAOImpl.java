@@ -18,7 +18,7 @@ public class CampaignDAOImpl implements CampaignDAO {
 
 
     @Override
-    public void campaignExists(String name) throws SQLException, CampaignAlreadyExistsException {
+    public void campaignExists(String name) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
@@ -52,7 +52,6 @@ public class CampaignDAOImpl implements CampaignDAO {
     @Override
     public List<CampaignDTO> getAllCampaigns() throws SQLException {
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
-
         try (
                 Connection connection = getConnection()
         ) {
@@ -66,7 +65,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                                 resultSet.getInt(4),
                                 resultSet.getString(2),
                                 resultSet.getString(3),
-                                null
+                                null //TODO SET REFERENCE
                         )
                 );
             }

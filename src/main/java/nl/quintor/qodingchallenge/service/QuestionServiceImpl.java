@@ -15,6 +15,7 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionPersistence questionPersistence;
 
     @Autowired
+    @Override
     public void setQuestionPersistence(QuestionPersistence questionPersistence) {
         this.questionPersistence = questionPersistence;
     }
@@ -56,5 +57,4 @@ public class QuestionServiceImpl implements QuestionService {
     private boolean checkAnswer(String correctAnswer, String givenAnswer) {
         return correctAnswer.equals(givenAnswer);
     }
-
 }
