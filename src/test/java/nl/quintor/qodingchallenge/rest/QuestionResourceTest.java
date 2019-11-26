@@ -35,8 +35,6 @@ public class QuestionResourceTest {
         this.sut = new QuestionResource();
         this.questionServiceMock = mock(QuestionService.class);
         this.sut.setQuestionService(questionServiceMock);
-
-        setQuestion();
     }
 
     @Test
@@ -51,7 +49,6 @@ public class QuestionResourceTest {
 
     @Test
     public void sendQuestionsResturnsResponseOK() throws SQLException {
-        setQuestion();
         var test = sut.sendQuestions(JFALL);
 
         assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());
@@ -59,6 +56,7 @@ public class QuestionResourceTest {
 
     @Test
     public void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
+        setQuestion();
         sut.getAnswer(questionCollection);
 
         verify(questionServiceMock).setAnswer(questionCollection);
