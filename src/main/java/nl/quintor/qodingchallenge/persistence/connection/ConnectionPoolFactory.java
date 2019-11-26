@@ -24,6 +24,9 @@ public class ConnectionPoolFactory {
     private static BasicDataSource ds = new BasicDataSource();
     private static Properties properties;
 
+    private ConnectionPoolFactory() {
+    }
+
     static {
         try {
             setProperties();
@@ -51,7 +54,7 @@ public class ConnectionPoolFactory {
     private static Properties readProperties() throws PropertiesNotFoundException {
         Properties properties = new Properties();
         try {
-            properties.load(requireNonNull(ConnectionPoolFactory.class.getClassLoader().getResourceAsStream("database.properties")));
+            properties.load(requireNonNull(ConnectionPoolFactory.class.getClassLoader().getResourceAsStream(DATABASE_RESOURCE_LINK)));
             Class.forName(properties.getProperty(DB_DRIVER));
         } catch (IOException | ClassNotFoundException e) {
             throw new PropertiesNotFoundException("Properties not found. Check " + DATABASE_RESOURCE_LINK, e.getCause());

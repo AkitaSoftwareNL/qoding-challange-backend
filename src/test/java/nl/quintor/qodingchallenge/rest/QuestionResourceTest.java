@@ -20,15 +20,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class QuestionResourceTest {
 
-    private static final String CATEGORY = "java";
-    private static final int AMOUNT_OF_QUESTIONS = 3;
-    private static final String QUESTION = "Dit is mijn vraag";
-    private static final String JAVA = "java";
-    private static final String JFALL = "JFALL";
+    private final String CATEGORY = "java";
+    private final int AMOUNT_OF_QUESTIONS = 3;
+    private final String QUESTION = "Dit is mijn vraag";
+    private final String JAVA = "java";
+    private final String JFALL = "JFALL";
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
-    private QuestionCollection questionCollection;
 
     @Before
     public void setUp() {
@@ -39,8 +38,7 @@ public class QuestionResourceTest {
 
     @Test
     public void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
-        setQuestion();
-        when(questionServiceMock.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS)).thenReturn(questionCollection.getQuestions());
+        when(questionServiceMock.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS)).thenReturn(setQuestionCollection().getQuestions());
 
         sut.sendQuestions(JFALL);
 
@@ -56,29 +54,28 @@ public class QuestionResourceTest {
 
     @Test
     public void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
-        setQuestion();
-        sut.getAnswer(questionCollection);
+        var questions = setQuestionCollection();
+        sut.getAnswer(questions);
 
-        verify(questionServiceMock).setAnswer(questionCollection);
+        verify(questionServiceMock).setAnswer(questions);
     }
 
     @Test
     public void getAnswerReturnsResponseOK() throws SQLException {
-        var test = sut.getAnswer(questionCollection);
+        var test = sut.getAnswer(setQuestionCollection());
 
         assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());
     }
 
-    private void setQuestion() {
-        var question = new QuestionDTO(2, CATEGORY, QUESTION, JAVA);
-        var question2 = new QuestionDTO(3, CATEGORY, QUESTION, JAVA);
+    private List<QuestionDTO> setQuestion() {
         List<QuestionDTO> questions = new ArrayList<>();
-        questions.add(0, question);
-        questions.add(1, question2);
-        questionCollection = new QuestionCollection();
-        questionCollection.setCampaignName(JFALL);
-        questionCollection.setParticipantID(1);
-        questionCollection.setQuestions(questions);
+        questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, JAVA));
+        questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, JAVA));
+        return questions;
+    }
+
+    private QuestionCollection setQuestionCollection() {
+        return new QuestionCollection(1,JFALL, setQuestion());
     }
 
 }
