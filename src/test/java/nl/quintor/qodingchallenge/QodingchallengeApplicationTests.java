@@ -7,9 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class QodingchallengeApplicationTests {
 
-    @Test
+    /*@Test
     void contextLoads() {
         Assertions.assertTrue(true);
-    }
+    }*/
 
 }
