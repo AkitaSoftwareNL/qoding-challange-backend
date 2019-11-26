@@ -15,12 +15,11 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
 
 class CampaignDAOImplIntTest {
 
-    private static final String CAMPAIGN_NAME = "HC2 Holdings, Inc";
-    private static final int AMOUNT_OF_CAMPAIGNS = 3;
+    private final String CAMPAIGN_NAME = "HC2 Holdings, Inc";
+    private final int AMOUNT_OF_CAMPAIGNS = 3;
     private CampaignDAOImpl sut;
 
     @BeforeEach
@@ -42,12 +41,12 @@ class CampaignDAOImplIntTest {
 
     @Test
     void throwsNoExceptionWhenCampaignDoesNotExists() {
-        assertDoesNotThrow(() -> sut.campaignExists(anyString()));
+        assertDoesNotThrow(() -> sut.campaignExists("Some non existing campaign"));
     }
 
     @Test
     void perstistCampaignAddsCampain() throws SQLException {
-        sut.persistCampaign(anyString());
+        sut.persistCampaign("Some non existing campaign");
 
         assertEquals(AMOUNT_OF_CAMPAIGNS + 1, sut.getAllCampaigns().size());
     }

@@ -48,6 +48,7 @@ class CampaignResourceTest {
     void returnsCorrectStatusAndEntityByRequestCreateCampaign() throws SQLException {
         when(campaignServiceStub.createNewCampaign(anyString()))
                 .thenReturn(campaignDTOList);
+
         ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(campaignDTO);
 
         assertEquals(ResponseEntity.status(HttpStatus.OK).build().getStatusCode(), actualResult.getStatusCode());
