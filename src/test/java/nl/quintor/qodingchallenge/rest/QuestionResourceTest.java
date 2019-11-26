@@ -75,7 +75,7 @@ public class QuestionResourceTest {
     }
 
     private QuestionCollection setQuestionCollection() {
-        return new QuestionCollection(1,JFALL, setQuestion());
+        return new QuestionCollection(1, JFALL, setQuestion());
     }
 
 }

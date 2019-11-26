@@ -8,12 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
@@ -78,6 +74,6 @@ class QuestionServiceImplTest {
     }
 
     private QuestionCollection setQuestionCollection() throws SQLException {
-        return new QuestionCollection(1,"test", setQuestionlist());
+        return new QuestionCollection(1, "test", setQuestionlist());
     }
 }

@@ -1,7 +1,6 @@
 package nl.quintor.qodingchallenge.rest;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
-import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
 import nl.quintor.qodingchallenge.service.CampaignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
