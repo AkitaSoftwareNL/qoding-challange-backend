@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 class QuestionServiceImplTest {
 
     private static final String CATEGORY = "category";
-    private static final int LIMIT = 3;
+    private static final int LIMIT = 1;
     private static final int QUESTION_ID = 1;
 
     private QuestionPersistence questionPersistenceMock;
@@ -39,10 +39,45 @@ class QuestionServiceImplTest {
         verify(questionPersistenceMock).getQuestions(CATEGORY, LIMIT);
     }
 
+    @Test
+    void getQuestionsCallsGetPossibleAnswer() throws SQLException {
+        // Mock
+        var list = setQuestionlist();
+        when(questionPersistenceMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
+        // Test
+        sut.getQuestions(CATEGORY, LIMIT);
+        // Verify
+        verify(questionPersistenceMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
+    }
+
+    @Test
+    void setAnswerCallsQuestionPersistenceGetCorrectAnswerCorrect() throws SQLException {
+        // Mock
+        when(questionPersistenceMock.getCorrectAnswer(QUESTION_ID)).thenReturn("");
+        // Test
+        sut.setAnswer(setQuestionCollection());
+        // Verify
+        verify(questionPersistenceMock).getCorrectAnswer(QUESTION_ID);
+    }
+
+    @Test
+    void setAnswerCallsQuestionPersistenceGetCorrectAnswerIncorrect() throws SQLException {
+        // Mock
+        when(questionPersistenceMock.getCorrectAnswer(QUESTION_ID)).thenReturn("incorrect");
+        // Test
+        sut.setAnswer(setQuestionCollection());
+        // Verify
+        verify(questionPersistenceMock).getCorrectAnswer(QUESTION_ID);
+    }
+
     private List<QuestionDTO> setQuestionlist() throws SQLException {
         List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, LIMIT);
-        QuestionDTO questionDTO = new QuestionDTO(0, "String", "multiple", "String");
+        QuestionDTO questionDTO = new QuestionDTO(QUESTION_ID, "String", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;
+    }
+
+    private QuestionCollection setQuestionCollection() throws SQLException {
+        return new QuestionCollection(1,"test", setQuestionlist());
     }
 }
