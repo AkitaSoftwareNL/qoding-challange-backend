@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.rest.exceptionmapper;
 
+import nl.quintor.qodingchallenge.rest.exceptionhandler.RestResponseEntityExceptionHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
