@@ -1,10 +1,13 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.persistence.connection.ConnectionFactoryPoolWrapper;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
+import javax.inject.Inject;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -15,6 +18,7 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 class CampaignDAOImplIntTest {
 
@@ -22,9 +26,12 @@ class CampaignDAOImplIntTest {
     private final int AMOUNT_OF_CAMPAIGNS = 3;
     private CampaignDAO sut;
 
+    private ConnectionFactoryPoolWrapper wrapper;
+
     @BeforeEach
     void setUp() {
         this.sut = new CampaignDAOImpl();
+        this.wrapper = spy(ConnectionFactoryPoolWrapper.wrapper.getClass());
         try {
             Connection connection = getConnection();
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testCampaignDDL.sql");
@@ -34,15 +41,12 @@ class CampaignDAOImplIntTest {
         }
     }
 
-    @Test
-    void throwExceptionWhenCampaignExists() {
-        assertThrows(CampaignAlreadyExistsException.class, () -> sut.campaignExists(CAMPAIGN_NAME));
-    }
-
-    @Test
-    void throwsNoExceptionWhenCampaignDoesNotExists() {
-        assertDoesNotThrow(() -> sut.campaignExists("Some non existing campaign"));
-    }
+//    @Test
+//    void testConnection() throws SQLException {
+//        when(wrapper.getConnection()).thenThrow(new SQLException());
+//
+//        assertThrows(SQLException.class, () -> sut.getAllCampaigns());
+//    }
 
     @Test
     void perstistCampaignAddsCampain() throws SQLException {

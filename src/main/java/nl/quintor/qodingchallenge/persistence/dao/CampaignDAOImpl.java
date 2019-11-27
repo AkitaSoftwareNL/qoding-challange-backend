@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.persistence.connection.ConnectionFactoryPoolWrapper;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;

@@ -2,6 +2,8 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionPersistence;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,24 +16,35 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
-    private final String JFALL = "JFALL";
+    private final String JFALL = "HC2 Holdings, Inc";
     private final String CATEGORY = "category";
     private final int LIMIT = 1;
     private final int QUESTION_ID = 1;
 
     private QuestionPersistence questionPersistenceMock;
+    private CampaignDAO campaignDAOMock;
     private QuestionServiceImpl sut;
 
     @BeforeEach
     void setUp() {
         sut = new QuestionServiceImpl();
+
         this.questionPersistenceMock = mock(QuestionDAO.class);
+        this.campaignDAOMock = mock(CampaignDAOImpl.class);
+
         this.sut.setQuestionPersistence(questionPersistenceMock);
+        this.sut.setCampaignDAO(campaignDAOMock);
+
+        try {
+            when(campaignDAOMock.campaignExists(JFALL)).thenReturn(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
-        sut.getQuestions(CATEGORY, LIMIT, "JFALL");
+        sut.getQuestions(CATEGORY, LIMIT, JFALL);
 
         verify(questionPersistenceMock).getQuestions(CATEGORY, LIMIT);
     }
@@ -42,7 +55,7 @@ class QuestionServiceImplTest {
         var list = setQuestionlist();
         when(questionPersistenceMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
         // Test
-        sut.getQuestions(CATEGORY, LIMIT, "JFALL");
+        sut.getQuestions(CATEGORY, LIMIT, JFALL);
         // Verify
         verify(questionPersistenceMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
     }

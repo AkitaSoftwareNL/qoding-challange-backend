@@ -20,6 +20,7 @@ public class QuestionServiceImpl implements QuestionService {
     private CampaignDAO campaignDAO;
 
     @Autowired
+    @Override
     public void setCampaignDAO(CampaignDAO campaignDAO) {
         this.campaignDAO = campaignDAO;
     }
@@ -33,7 +34,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDTO> getQuestions(String category, int amountOfQuestions, String campaignName) throws SQLException {
-        if(!campaignDAO.campaignExists(campaignName)) throw new NoCampaignFoundException(format("Campaign %s already exists", campaignName));
+        if(!campaignDAO.campaignExists(campaignName)) throw new NoCampaignFoundException(format("Campaign %s does not exist", campaignName));
         List<QuestionDTO> questions = questionPersistence.getQuestions(category, amountOfQuestions);
 
         for (QuestionDTO questionDTO : questions) {
