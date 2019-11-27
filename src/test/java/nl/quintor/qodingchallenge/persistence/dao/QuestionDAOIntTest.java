@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class QuestionDAOIntTest {
@@ -63,9 +62,7 @@ class QuestionDAOIntTest {
     void getCorrectAnswerGivesAllCorrectAnswers() throws SQLException {
         String actualResult = sut.getCorrectAnswer(QUESTION_ID);
 
-        assertTrue(!actualResult.isEmpty());
-
-
+        assertFalse(actualResult.isEmpty());
     }
 
 }
