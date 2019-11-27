@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler({AnswerNotFoundException.class})
     public ResponseEntity<Object> handleAnswerNotFoundException(Exception e, WebRequest request) {
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({CampaignAlreadyExistsException.class})
+    public ResponseEntity<Object> handleNoCampaignFoundException(Exception e, WebRequest request) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }
