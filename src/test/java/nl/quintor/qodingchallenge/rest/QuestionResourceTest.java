@@ -3,8 +3,8 @@ package nl.quintor.qodingchallenge.rest;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.service.QuestionService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionResourceTest {
+class QuestionResourceTest {
 
     private final String CATEGORY = "java";
     private final int AMOUNT_OF_QUESTIONS = 3;
@@ -29,15 +29,15 @@ public class QuestionResourceTest {
     private QuestionResource sut;
     private QuestionService questionServiceMock;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.sut = new QuestionResource();
         this.questionServiceMock = mock(QuestionService.class);
         this.sut.setQuestionService(questionServiceMock);
     }
 
     @Test
-    public void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
+    void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
         when(questionServiceMock.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS)).thenReturn(setQuestionCollection().getQuestions());
 
         sut.sendQuestions(JFALL);
@@ -46,14 +46,14 @@ public class QuestionResourceTest {
     }
 
     @Test
-    public void sendQuestionsResturnsResponseOK() throws SQLException {
+    void sendQuestionsResturnsResponseOK() throws SQLException {
         var test = sut.sendQuestions(JFALL);
 
         assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());
     }
 
     @Test
-    public void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
+    void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
         var questions = setQuestionCollection();
         sut.getAnswer(questions);
 
@@ -61,7 +61,7 @@ public class QuestionResourceTest {
     }
 
     @Test
-    public void getAnswerReturnsResponseOK() throws SQLException {
+    void getAnswerReturnsResponseOK() throws SQLException {
         var test = sut.getAnswer(setQuestionCollection());
 
         assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());
