@@ -1,6 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class CampaignDAOImplIntTest {
 
     private final String CAMPAIGN_NAME = "HC2 Holdings, Inc";
     private final int AMOUNT_OF_CAMPAIGNS = 3;
-    private CampaignDAOImpl sut;
+    private CampaignDAO sut;
 
     @BeforeEach
     void setUp() {

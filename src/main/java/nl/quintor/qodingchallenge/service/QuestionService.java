@@ -10,7 +10,7 @@ import java.util.List;
 public interface QuestionService {
     void setQuestionPersistence(QuestionPersistence questionPersistence);
 
-    List<QuestionDTO> getQuestions(String category, int amountOfQuestions) throws SQLException;
+    List<QuestionDTO> getQuestions(String category, int amountOfQuestions, String campaignName) throws SQLException;
 
     void setAnswer(QuestionCollection questionCollection) throws SQLException;
 }

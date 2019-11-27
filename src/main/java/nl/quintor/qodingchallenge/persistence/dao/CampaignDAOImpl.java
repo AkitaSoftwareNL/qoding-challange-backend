@@ -1,7 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
-import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -18,7 +17,7 @@ public class CampaignDAOImpl implements CampaignDAO {
 
 
     @Override
-    public void campaignExists(String name) throws SQLException {
+    public boolean campaignExists(String name) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
@@ -27,11 +26,12 @@ public class CampaignDAOImpl implements CampaignDAO {
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                throw new CampaignAlreadyExistsException("The campaign " + name + " already exists.");
+                return true;
             }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+        return false;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             }
         } catch (SQLException e) {
             throw new SQLException(e);
-    }
+        }
         return campaignDTOList;
     }
 }

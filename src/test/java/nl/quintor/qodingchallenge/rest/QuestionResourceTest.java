@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionResourceTest {
+class QuestionResourceTest {
 
     private final String CATEGORY = "java";
     private final int AMOUNT_OF_QUESTIONS = 3;
@@ -30,30 +30,30 @@ public class QuestionResourceTest {
     private QuestionService questionServiceMock;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.sut = new QuestionResource();
         this.questionServiceMock = mock(QuestionService.class);
         this.sut.setQuestionService(questionServiceMock);
     }
 
     @Test
-    public void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
-        when(questionServiceMock.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS)).thenReturn(setQuestionCollection().getQuestions());
+    void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
+        when(questionServiceMock.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS, JFALL)).thenReturn(setQuestionCollection().getQuestions());
 
         sut.sendQuestions(JFALL);
 
-        verify(questionServiceMock).getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS);
+        verify(questionServiceMock).getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS, JFALL);
     }
 
     @Test
-    public void sendQuestionsResturnsResponseOK() throws SQLException {
+    void sendQuestionsResturnsResponseOK() throws SQLException {
         var test = sut.sendQuestions(JFALL);
 
         assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());
     }
 
     @Test
-    public void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
+    void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
         var questions = setQuestionCollection();
         sut.getAnswer(questions);
 
@@ -61,7 +61,7 @@ public class QuestionResourceTest {
     }
 
     @Test
-    public void getAnswerReturnsResponseOK() throws SQLException {
+    void getAnswerReturnsResponseOK() throws SQLException {
         var test = sut.getAnswer(setQuestionCollection());
 
         assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());

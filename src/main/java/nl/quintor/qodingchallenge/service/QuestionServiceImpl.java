@@ -4,16 +4,25 @@ import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionPersistence;
+import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
     private QuestionPersistence questionPersistence;
+    private CampaignDAO campaignDAO;
+
+    @Autowired
+    public void setCampaignDAO(CampaignDAO campaignDAO) {
+        this.campaignDAO = campaignDAO;
+    }
 
     @Autowired
     @Override
@@ -23,7 +32,8 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public List<QuestionDTO> getQuestions(String category, int amountOfQuestions) throws SQLException {
+    public List<QuestionDTO> getQuestions(String category, int amountOfQuestions, String campaignName) throws SQLException {
+        if(!campaignDAO.campaignExists(campaignName)) throw new NoCampaignFoundException(format("Campaign %s already exists", campaignName));
         List<QuestionDTO> questions = questionPersistence.getQuestions(category, amountOfQuestions);
 
         for (QuestionDTO questionDTO : questions) {

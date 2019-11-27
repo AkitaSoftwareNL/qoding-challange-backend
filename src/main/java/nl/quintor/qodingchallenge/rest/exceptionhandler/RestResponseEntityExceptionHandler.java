@@ -1,7 +1,7 @@
 package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
-import nl.quintor.qodingchallenge.persistence.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

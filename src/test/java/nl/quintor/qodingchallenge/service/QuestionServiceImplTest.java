@@ -14,6 +14,7 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
+    private final String JFALL = "JFALL";
     private final String CATEGORY = "category";
     private final int LIMIT = 1;
     private final int QUESTION_ID = 1;
@@ -30,7 +31,7 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
-        sut.getQuestions(CATEGORY, LIMIT);
+        sut.getQuestions(CATEGORY, LIMIT, "JFALL");
 
         verify(questionPersistenceMock).getQuestions(CATEGORY, LIMIT);
     }
@@ -41,7 +42,7 @@ class QuestionServiceImplTest {
         var list = setQuestionlist();
         when(questionPersistenceMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
         // Test
-        sut.getQuestions(CATEGORY, LIMIT);
+        sut.getQuestions(CATEGORY, LIMIT, "JFALL");
         // Verify
         verify(questionPersistenceMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
     }
@@ -67,7 +68,7 @@ class QuestionServiceImplTest {
     }
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {
-        List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, LIMIT);
+        List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, LIMIT, JFALL);
         QuestionDTO questionDTO = new QuestionDTO(QUESTION_ID, "String", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;

@@ -25,7 +25,7 @@ public class QuestionResource {
             path = "/campaign/{campaignName}",
             method = RequestMethod.GET)
     public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable String campaignName) throws SQLException {
-        QuestionCollection questionCollection = new QuestionCollection(1, campaignName, questionService.getQuestions("java", 3));
+        QuestionCollection questionCollection = new QuestionCollection(1, campaignName, questionService.getQuestions("java", 3, campaignName));
         return ResponseEntity.ok().body(questionCollection);
     }
 
