@@ -1,4 +1,4 @@
-package nl.quintor.qodingchallenge.rest.exceptionmapper;
+/*package nl.quintor.qodingchallenge.rest.exceptionmapper;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -11,12 +11,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 @AutoConfigureMockMvc
 class RestResponseEntityExceptionHandlerTest {
 
-    Exception e;
+    /*Exception e;
 
     private RestResponseEntityExceptionHandler sut;
 
     @Test
     void catchesExceptionWhenCampaignWasNotFound() {
 
-    }
-}
+    }*/
+}*/
