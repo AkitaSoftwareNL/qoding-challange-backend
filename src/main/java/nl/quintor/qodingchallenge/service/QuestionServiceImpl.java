@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class QuestionServiceImpl implements QuestionService {
     public void setQuestionPersistence(QuestionPersistence questionPersistence) {
         this.questionPersistence = questionPersistence;
     }
+
 
     @Override
     public List<QuestionDTO> getQuestions(String category, int amountOfQuestions) throws SQLException {

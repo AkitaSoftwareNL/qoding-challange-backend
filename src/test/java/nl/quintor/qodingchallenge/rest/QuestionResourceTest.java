@@ -3,8 +3,8 @@ package nl.quintor.qodingchallenge.rest;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.service.QuestionService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class QuestionResourceTest {
     private QuestionResource sut;
     private QuestionService questionServiceMock;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.sut = new QuestionResource();
         this.questionServiceMock = mock(QuestionService.class);

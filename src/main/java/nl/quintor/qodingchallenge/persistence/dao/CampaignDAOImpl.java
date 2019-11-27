@@ -71,7 +71,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             }
         } catch (SQLException e) {
             throw new SQLException(e);
-        }
+    }
         return campaignDTOList;
     }
 }
