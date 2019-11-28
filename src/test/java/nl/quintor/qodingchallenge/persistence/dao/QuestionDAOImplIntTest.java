@@ -16,20 +16,20 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class QuestionDAOIntTest {
+class QuestionDAOImplIntTest {
 
     private final int AMOUNT_OF_QUESTIONS = 3;
     private final String CATEGORY = "JAVA";
     private final int AMOUNT_OF_ANSWERS = 2;
     private final int QUESTION_ID = 3;
-    private QuestionDAO sut;
+    private QuestionDAOImpl sut;
     private List<QuestionDTO> questionDTOList;
     private List<String> possibleAnswers;
     private QuestionDTO questionDTO = new QuestionDTO(10, "dit is een test vraag", "open", null);
 
     @BeforeEach
     void setUp() {
-        this.sut = new QuestionDAO();
+        this.sut = new QuestionDAOImpl();
         try {
             Connection connection = getConnection();
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testQuestionDDL.sql");

@@ -4,8 +4,8 @@ import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
+import nl.quintor.qodingchallenge.persistence.dao.QuestionDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
-import nl.quintor.qodingchallenge.persistence.dao.QuestionPersistence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ class QuestionServiceImplTest {
     private final int LIMIT = 1;
     private final int QUESTION_ID = 1;
 
-    private QuestionPersistence questionPersistenceMock;
+    private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
     private QuestionServiceImpl sut;
 
@@ -29,10 +29,10 @@ class QuestionServiceImplTest {
     void setUp() {
         sut = new QuestionServiceImpl();
 
-        this.questionPersistenceMock = mock(QuestionDAO.class);
+        this.questionDAOMock = mock(QuestionDAOImpl.class);
         this.campaignDAOMock = mock(CampaignDAOImpl.class);
 
-        this.sut.setQuestionPersistence(questionPersistenceMock);
+        this.sut.setQuestionDAO(questionDAOMock);
         this.sut.setCampaignDAO(campaignDAOMock);
 
         try {
@@ -46,38 +46,38 @@ class QuestionServiceImplTest {
     void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
         sut.getQuestions(CATEGORY, LIMIT, JFALL);
 
-        verify(questionPersistenceMock).getQuestions(CATEGORY, LIMIT);
+        verify(questionDAOMock).getQuestions(CATEGORY, LIMIT);
     }
 
     @Test
     void getQuestionsCallsGetPossibleAnswer() throws SQLException {
         // Mock
         var list = setQuestionlist();
-        when(questionPersistenceMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
+        when(questionDAOMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
         // Test
         sut.getQuestions(CATEGORY, LIMIT, JFALL);
         // Verify
-        verify(questionPersistenceMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
+        verify(questionDAOMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
     }
 
     @Test
     void setAnswerCallsQuestionPersistenceGetCorrectAnswerCorrect() throws SQLException {
         // Mock
-        when(questionPersistenceMock.getCorrectAnswer(QUESTION_ID)).thenReturn("");
+        when(questionDAOMock.getCorrectAnswer(QUESTION_ID)).thenReturn("");
         // Test
         sut.setAnswer(setQuestionCollection());
         // Verify
-        verify(questionPersistenceMock).getCorrectAnswer(QUESTION_ID);
+        verify(questionDAOMock).getCorrectAnswer(QUESTION_ID);
     }
 
     @Test
     void setAnswerCallsQuestionPersistenceGetCorrectAnswerIncorrect() throws SQLException {
         // Mock
-        when(questionPersistenceMock.getCorrectAnswer(QUESTION_ID)).thenReturn("incorrect");
+        when(questionDAOMock.getCorrectAnswer(QUESTION_ID)).thenReturn("incorrect");
         // Test
         sut.setAnswer(setQuestionCollection());
         // Verify
-        verify(questionPersistenceMock).getCorrectAnswer(QUESTION_ID);
+        verify(questionDAOMock).getCorrectAnswer(QUESTION_ID);
     }
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {

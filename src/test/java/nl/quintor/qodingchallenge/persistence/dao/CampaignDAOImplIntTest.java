@@ -1,13 +1,11 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.persistence.connection.ConnectionFactoryPoolWrapper;
+import nl.quintor.qodingchallenge.persistence.exception.PropertiesNotFoundException;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
-import javax.inject.Inject;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -15,10 +13,11 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 class CampaignDAOImplIntTest {
 
@@ -54,4 +53,19 @@ class CampaignDAOImplIntTest {
 
         assertEquals(AMOUNT_OF_CAMPAIGNS + 1, sut.getAllCampaigns().size());
     }
+
+    @Test
+    void campaignExitsReturnsTrueWhenCampaignExists() throws SQLException {
+        var expectedResult = sut.campaignExists(CAMPAIGN_NAME);
+
+        assertTrue(expectedResult);
+    }
+
+    @Test
+    void campaignExitsReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
+        var expectedResult = sut.campaignExists(anyString());
+
+        assertFalse(expectedResult);
+    }
+
 }
