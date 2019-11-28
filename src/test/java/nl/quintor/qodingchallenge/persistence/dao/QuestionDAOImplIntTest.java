@@ -13,14 +13,15 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class QuestionDAOImplIntTest {
 
     private final int QUESTION_ID = 3;
-    private QuestionDAOImpl sut;
     private final QuestionDTO questionDTO = new QuestionDTO(10, "dit is een test vraag", "open", null);
+    private QuestionDAOImpl sut;
 
     @BeforeEach
     void setUp() {

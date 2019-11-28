@@ -24,13 +24,8 @@ public class ConnectionPoolFactory {
     private static final int MAX_OPEN_PREPARED_STATEMENT = 100;
 
     private static final BasicDataSource ds = new BasicDataSource();
-    private static Properties properties;
-
     private static final Logger logger = LoggerFactory.getLogger(ConnectionPoolFactory.class);
-
-
-    private ConnectionPoolFactory() {
-    }
+    private static Properties properties;
 
     static {
         try {
@@ -44,6 +39,9 @@ public class ConnectionPoolFactory {
         ds.setMinIdle(MIN_IDLE);
         ds.setMaxIdle(MAX_IDLE);
         ds.setMaxOpenPreparedStatements(MAX_OPEN_PREPARED_STATEMENT);
+    }
+
+    private ConnectionPoolFactory() {
     }
 
     private static void setProperties() throws PropertiesNotFoundException {

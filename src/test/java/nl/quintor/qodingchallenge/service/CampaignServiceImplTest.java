@@ -23,12 +23,10 @@ class CampaignServiceImplTest {
 
     private final List<CampaignDTO> campaignDTOList = new ArrayList<>();
     private final CampaignDTO campaignDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
-
-    @Mock
-    private CampaignDAO campaignDAOStub;
-
     @InjectMocks
     CampaignServiceImpl sut;
+    @Mock
+    private CampaignDAO campaignDAOStub;
 
     @BeforeEach
     void setUp() {

@@ -10,7 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RestResponseEntityExceptionHandlerTest {
 

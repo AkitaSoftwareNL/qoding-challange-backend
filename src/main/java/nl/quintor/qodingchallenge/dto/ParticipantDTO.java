@@ -1,7 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
 public class ParticipantDTO {
-    
+
     private int participantID;
     private String firstname;
     private String insertion;
