@@ -31,4 +31,5 @@ build/
 .vscode/
 
 ### database properties file ###
-qoding-challange-backend\src\main\resources\database.properties
+/logs/spring-boot-logger.log
+/src/main/resources/database.properties
