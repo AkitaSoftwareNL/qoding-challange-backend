@@ -35,7 +35,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void getQuestionsReturnsQuestions() throws SQLException {
+    void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
         String CATEGORY = "JAVA";
         int AMOUNT_OF_QUESTIONS = 3;
         List<QuestionDTO> questionDTOList = sut.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS);

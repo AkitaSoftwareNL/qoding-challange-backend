@@ -51,8 +51,7 @@ class CampaignResourceTest {
 
         ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(campaignDTO);
 
-        assertEquals(ResponseEntity.status(HttpStatus.OK).build().getStatusCode(), actualResult.getStatusCode());
-        assertTrue(actualResult.hasBody());
+        checkRequest(actualResult);
     }
 
     @Test
@@ -61,6 +60,10 @@ class CampaignResourceTest {
                 .thenReturn(campaignDTOList);
         ResponseEntity<List<CampaignDTO>> actualResult = sut.showCampaign();
 
+        checkRequest(actualResult);
+    }
+
+    private void checkRequest(ResponseEntity<List<CampaignDTO>> actualResult) {
         assertEquals(ResponseEntity.status(HttpStatus.OK).build().getStatusCode(), actualResult.getStatusCode());
         assertTrue(actualResult.hasBody());
     }

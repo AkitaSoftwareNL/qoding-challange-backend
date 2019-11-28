@@ -35,7 +35,7 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
-        int AMOUNT_OF_QUESTIONS = 3;
+        final int AMOUNT_OF_QUESTIONS = 3;
         when(questionServiceMock.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS, JFALL)).thenReturn(setQuestionCollection().getQuestions());
 
         sut.sendQuestions(JFALL);

@@ -65,7 +65,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                                 resultSet.getInt(4),
                                 resultSet.getString(2),
                                 resultSet.getString(3),
-                                null //TODO SET REFERENCE
+                                null
                         )
                 );
             }

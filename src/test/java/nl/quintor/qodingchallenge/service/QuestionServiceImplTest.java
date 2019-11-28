@@ -22,23 +22,20 @@ class QuestionServiceImplTest {
     private final int QUESTION_ID = 1;
 
     private QuestionDAO questionDAOMock;
+    private CampaignDAO campaignDAOMock;
     private QuestionServiceImpl sut;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException {
         sut = new QuestionServiceImpl();
 
         this.questionDAOMock = mock(QuestionDAOImpl.class);
-        CampaignDAO campaignDAOMock = mock(CampaignDAOImpl.class);
+        this.campaignDAOMock = mock(CampaignDAOImpl.class);
 
         this.sut.setQuestionDAO(questionDAOMock);
         this.sut.setCampaignDAO(campaignDAOMock);
 
-        try {
-            when(campaignDAOMock.campaignExists(JFALL)).thenReturn(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        when(campaignDAOMock.campaignExists(JFALL)).thenReturn(true);
     }
 
     @Test
@@ -63,19 +60,20 @@ class QuestionServiceImplTest {
     void setAnswerCallsQuestionPersistenceGetCorrectAnswerCorrect() throws SQLException {
         // Mock
         when(questionDAOMock.getCorrectAnswer(QUESTION_ID)).thenReturn("");
-        // Test
-        sut.setAnswer(setQuestionCollection());
-        // Verify
-        verify(questionDAOMock).getCorrectAnswer(QUESTION_ID);
+
+        checkCorrectAnswerCorrectAndIncorrect();
     }
 
     @Test
     void setAnswerCallsQuestionPersistenceGetCorrectAnswerIncorrect() throws SQLException {
         // Mock
         when(questionDAOMock.getCorrectAnswer(QUESTION_ID)).thenReturn("incorrect");
-        // Test
+
+        checkCorrectAnswerCorrectAndIncorrect();
+    }
+
+    private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
         sut.setAnswer(setQuestionCollection());
-        // Verify
         verify(questionDAOMock).getCorrectAnswer(QUESTION_ID);
     }
 

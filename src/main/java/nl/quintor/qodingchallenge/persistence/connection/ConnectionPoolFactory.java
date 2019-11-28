@@ -2,6 +2,8 @@ package nl.quintor.qodingchallenge.persistence.connection;
 
 import nl.quintor.qodingchallenge.persistence.exception.PropertiesNotFoundException;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,6 +26,9 @@ public class ConnectionPoolFactory {
     private static final BasicDataSource ds = new BasicDataSource();
     private static Properties properties;
 
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionPoolFactory.class);
+
+
     private ConnectionPoolFactory() {
     }
 
@@ -31,7 +36,7 @@ public class ConnectionPoolFactory {
         try {
             setProperties();
         } catch (PropertiesNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Properties could not be read");
         }
         ds.setUrl(properties.getProperty(DB_URL));
         ds.setUsername(properties.getProperty(DB_USER));
