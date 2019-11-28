@@ -18,29 +18,29 @@ import java.sql.SQLException;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+    private Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
     @ExceptionHandler({SQLException.class})
     public ResponseEntity<Object> handleSQLException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
+        LOGGER.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>("An exception has occured with the database", new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({CampaignAlreadyExistsException.class})
     public ResponseEntity<Object> handleCampaignAlreadyExistsException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
+        LOGGER.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({AnswerNotFoundException.class})
     public ResponseEntity<Object> handleAnswerNotFoundException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
+        LOGGER.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({NoCampaignFoundException.class})
     public ResponseEntity<Object> handleNoCampaignFoundException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
+        LOGGER.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }

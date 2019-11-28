@@ -24,14 +24,14 @@ public class ConnectionPoolFactory {
     private static final int MAX_OPEN_PREPARED_STATEMENT = 100;
 
     private static final BasicDataSource ds = new BasicDataSource();
-    private static final Logger logger = LoggerFactory.getLogger(ConnectionPoolFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionPoolFactory.class);
     private static Properties properties;
 
     static {
         try {
             setProperties();
         } catch (PropertiesNotFoundException e) {
-            logger.error("Properties could not be read");
+            LOGGER.error("Properties could not be read \n", e.fillInStackTrace());
         }
         ds.setUrl(properties.getProperty(DB_URL));
         ds.setUsername(properties.getProperty(DB_USER));
@@ -60,6 +60,7 @@ public class ConnectionPoolFactory {
             properties.load(requireNonNull(ConnectionPoolFactory.class.getClassLoader().getResourceAsStream(DATABASE_RESOURCE_LINK)));
             Class.forName(properties.getProperty(DB_DRIVER));
         } catch (IOException | ClassNotFoundException e) {
+            LOGGER.error("An exception has occured \n", e.fillInStackTrace());
             throw new PropertiesNotFoundException("Properties not found. Check " + DATABASE_RESOURCE_LINK, e.getCause());
         }
         return properties;
