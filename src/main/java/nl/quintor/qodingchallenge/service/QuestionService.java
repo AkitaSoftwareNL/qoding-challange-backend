@@ -2,15 +2,18 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
-import nl.quintor.qodingchallenge.persistence.dao.QuestionPersistence;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface QuestionService {
-    void setQuestionPersistence(QuestionPersistence questionPersistence);
+    void setCampaignDAO(CampaignDAO campaignDAO);
 
-    List<QuestionDTO> getQuestions(String category, int amountOfQuestions) throws SQLException;
+    void setQuestionDAO(QuestionDAO questionDAO);
+
+    List<QuestionDTO> getQuestions(String category, int amountOfQuestions, String campaignName) throws SQLException;
 
     void setAnswer(QuestionCollection questionCollection) throws SQLException;
 }

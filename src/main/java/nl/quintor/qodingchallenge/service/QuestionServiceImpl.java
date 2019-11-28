@@ -3,32 +3,43 @@ package nl.quintor.qodingchallenge.service;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
-import nl.quintor.qodingchallenge.persistence.dao.QuestionPersistence;
+import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
+import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
-    private QuestionPersistence questionPersistence;
+    private QuestionDAO questionDAO;
+    private CampaignDAO campaignDAO;
 
     @Autowired
     @Override
-    public void setQuestionPersistence(QuestionPersistence questionPersistence) {
-        this.questionPersistence = questionPersistence;
+    public void setCampaignDAO(CampaignDAO campaignDAO) {
+        this.campaignDAO = campaignDAO;
+    }
+
+    @Autowired
+    @Override
+    public void setQuestionDAO(QuestionDAO questionDAO) {
+        this.questionDAO = questionDAO;
     }
 
 
     @Override
-    public List<QuestionDTO> getQuestions(String category, int amountOfQuestions) throws SQLException {
-        List<QuestionDTO> questions = questionPersistence.getQuestions(category, amountOfQuestions);
+    public List<QuestionDTO> getQuestions(String category, int amountOfQuestions, String campaignName) throws SQLException {
+        if(!campaignDAO.campaignExists(campaignName)) throw new NoCampaignFoundException(format("Campaign %s does not exist", campaignName));
+        List<QuestionDTO> questions = questionDAO.getQuestions(category, amountOfQuestions);
 
         for (QuestionDTO questionDTO : questions) {
             questionDTO
-                    .setPossibleAnswer(questionPersistence
+                    .setPossibleAnswer(questionDAO
                             .getPossibleAnswers(questionDTO
                                     .getQuestionID())
                     );
@@ -45,14 +56,14 @@ public class QuestionServiceImpl implements QuestionService {
 
         for (QuestionDTO question : questionCollection.getQuestions()) {
             if (question.getQuestionType().equals(TYPE)) {
-                String correctAnswer = questionPersistence.getCorrectAnswer(question.getQuestionID());
+                String correctAnswer = questionDAO.getCorrectAnswer(question.getQuestionID());
                 if (checkAnswer(correctAnswer, question.getGivenAnswer())) {
                     question.setStateID(CORRECT);
                 } else {
                     question.setStateID(INCORRECT);
                 }
             }
-            questionPersistence.setAnswer(question, questionCollection.getCampaignName(), questionCollection.getParticipantID());
+            questionDAO.setAnswer(question, questionCollection.getCampaignName(), questionCollection.getParticipantID());
         }
     }
 

@@ -2,8 +2,10 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
+import nl.quintor.qodingchallenge.persistence.dao.QuestionDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
-import nl.quintor.qodingchallenge.persistence.dao.QuestionPersistence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,60 +16,69 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
+    private final String JFALL = "HC2 Holdings, Inc";
     private final String CATEGORY = "category";
     private final int LIMIT = 1;
     private final int QUESTION_ID = 1;
 
-    private QuestionPersistence questionPersistenceMock;
+    private QuestionDAO questionDAOMock;
+    private CampaignDAO campaignDAOMock;
     private QuestionServiceImpl sut;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException {
         sut = new QuestionServiceImpl();
-        this.questionPersistenceMock = mock(QuestionDAO.class);
-        this.sut.setQuestionPersistence(questionPersistenceMock);
+
+        this.questionDAOMock = mock(QuestionDAOImpl.class);
+        this.campaignDAOMock = mock(CampaignDAOImpl.class);
+
+        this.sut.setQuestionDAO(questionDAOMock);
+        this.sut.setCampaignDAO(campaignDAOMock);
+
+        when(campaignDAOMock.campaignExists(JFALL)).thenReturn(true);
     }
 
     @Test
     void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
-        sut.getQuestions(CATEGORY, LIMIT);
+        sut.getQuestions(CATEGORY, LIMIT, JFALL);
 
-        verify(questionPersistenceMock).getQuestions(CATEGORY, LIMIT);
+        verify(questionDAOMock).getQuestions(CATEGORY, LIMIT);
     }
 
     @Test
     void getQuestionsCallsGetPossibleAnswer() throws SQLException {
         // Mock
         var list = setQuestionlist();
-        when(questionPersistenceMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
+        when(questionDAOMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
         // Test
-        sut.getQuestions(CATEGORY, LIMIT);
+        sut.getQuestions(CATEGORY, LIMIT, JFALL);
         // Verify
-        verify(questionPersistenceMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
+        verify(questionDAOMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
     }
 
     @Test
     void setAnswerCallsQuestionPersistenceGetCorrectAnswerCorrect() throws SQLException {
         // Mock
-        when(questionPersistenceMock.getCorrectAnswer(QUESTION_ID)).thenReturn("");
-        // Test
-        sut.setAnswer(setQuestionCollection());
-        // Verify
-        verify(questionPersistenceMock).getCorrectAnswer(QUESTION_ID);
+        when(questionDAOMock.getCorrectAnswer(QUESTION_ID)).thenReturn("");
+
+        checkCorrectAnswerCorrectAndIncorrect();
     }
 
     @Test
     void setAnswerCallsQuestionPersistenceGetCorrectAnswerIncorrect() throws SQLException {
         // Mock
-        when(questionPersistenceMock.getCorrectAnswer(QUESTION_ID)).thenReturn("incorrect");
-        // Test
+        when(questionDAOMock.getCorrectAnswer(QUESTION_ID)).thenReturn("incorrect");
+
+        checkCorrectAnswerCorrectAndIncorrect();
+    }
+
+    private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
         sut.setAnswer(setQuestionCollection());
-        // Verify
-        verify(questionPersistenceMock).getCorrectAnswer(QUESTION_ID);
+        verify(questionDAOMock).getCorrectAnswer(QUESTION_ID);
     }
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {
-        List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, LIMIT);
+        List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, LIMIT, JFALL);
         QuestionDTO questionDTO = new QuestionDTO(QUESTION_ID, "String", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;

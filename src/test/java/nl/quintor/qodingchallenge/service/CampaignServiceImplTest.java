@@ -1,7 +1,7 @@
 package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
-import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,13 +23,15 @@ class CampaignServiceImplTest {
 
     private final List<CampaignDTO> campaignDTOList = new ArrayList<>();
     private final CampaignDTO campaignDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
+
+    @Mock
+    private CampaignDAO campaignDAOStub;
+
     @InjectMocks
     CampaignServiceImpl sut;
-    @Mock
-    private CampaignDAOImpl campaignDAOStub;
 
     @BeforeEach
-    private void setUp() {
+    void setUp() {
         campaignDTOList.add(
                 new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null)
         );
