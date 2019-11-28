@@ -21,9 +21,6 @@ import static org.mockito.Mockito.*;
 class QuestionResourceTest {
 
     private final String CATEGORY = "java";
-    private final int AMOUNT_OF_QUESTIONS = 3;
-    private final String QUESTION = "Dit is mijn vraag";
-    private final String JAVA = "java";
     private final String JFALL = "JFALL";
 
     private QuestionResource sut;
@@ -38,6 +35,7 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
+        int AMOUNT_OF_QUESTIONS = 3;
         when(questionServiceMock.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS, JFALL)).thenReturn(setQuestionCollection().getQuestions());
 
         sut.sendQuestions(JFALL);
@@ -49,7 +47,7 @@ class QuestionResourceTest {
     void sendQuestionsResturnsResponseOK() throws SQLException {
         var test = sut.sendQuestions(JFALL);
 
-        assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());
+        assertEquals(HttpStatus.OK, test.getStatusCode());
     }
 
     @Test
@@ -64,11 +62,13 @@ class QuestionResourceTest {
     void getAnswerReturnsResponseOK() throws SQLException {
         var test = sut.getAnswer(setQuestionCollection());
 
-        assertEquals(HttpStatus.OK.toString(), test.getStatusCode().toString());
+        assertEquals(HttpStatus.OK, test.getStatusCode());
     }
 
     private List<QuestionDTO> setQuestion() {
         List<QuestionDTO> questions = new ArrayList<>();
+        String JAVA = "java";
+        String QUESTION = "Dit is mijn vraag";
         questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, JAVA));
         questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, JAVA));
         return questions;

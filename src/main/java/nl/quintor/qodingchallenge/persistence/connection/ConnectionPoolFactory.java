@@ -21,7 +21,7 @@ public class ConnectionPoolFactory {
     private static final int MAX_IDLE = 10;
     private static final int MAX_OPEN_PREPARED_STATEMENT = 100;
 
-    private static BasicDataSource ds = new BasicDataSource();
+    private static final BasicDataSource ds = new BasicDataSource();
     private static Properties properties;
 
     private ConnectionPoolFactory() {

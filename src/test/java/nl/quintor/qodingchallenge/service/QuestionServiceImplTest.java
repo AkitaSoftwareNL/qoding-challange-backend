@@ -22,7 +22,6 @@ class QuestionServiceImplTest {
     private final int QUESTION_ID = 1;
 
     private QuestionDAO questionDAOMock;
-    private CampaignDAO campaignDAOMock;
     private QuestionServiceImpl sut;
 
     @BeforeEach
@@ -30,7 +29,7 @@ class QuestionServiceImplTest {
         sut = new QuestionServiceImpl();
 
         this.questionDAOMock = mock(QuestionDAOImpl.class);
-        this.campaignDAOMock = mock(CampaignDAOImpl.class);
+        CampaignDAO campaignDAOMock = mock(CampaignDAOImpl.class);
 
         this.sut.setQuestionDAO(questionDAOMock);
         this.sut.setCampaignDAO(campaignDAOMock);

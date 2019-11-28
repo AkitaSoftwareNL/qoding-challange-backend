@@ -11,11 +11,11 @@ import org.springframework.web.context.request.WebRequest;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 
 class RestResponseEntityExceptionHandlerTest {
 
 
+    private static final String MESSAGE_FOR_EXCEPTION = "An exception message";
     private RestResponseEntityExceptionHandler handler;
     private WebRequest webRequest;
 
@@ -33,7 +33,7 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleCampaignAlreadyExistsExceptionTest() {
-        var expectedResponse = handler.handleCampaignAlreadyExistsException(new CampaignAlreadyExistsException(anyString()), webRequest);
+        var expectedResponse = handler.handleCampaignAlreadyExistsException(new CampaignAlreadyExistsException(MESSAGE_FOR_EXCEPTION), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
@@ -47,7 +47,7 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleNoCampaignFoundExceptionTest() {
-        var expectedResponse = handler.handleNoCampaignFoundException(new NoCampaignFoundException(anyString()), webRequest);
+        var expectedResponse = handler.handleNoCampaignFoundException(new NoCampaignFoundException(MESSAGE_FOR_EXCEPTION), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }

@@ -31,7 +31,7 @@ class CampaignServiceImplTest {
     CampaignServiceImpl sut;
 
     @BeforeEach
-    private void setUp() {
+    void setUp() {
         campaignDTOList.add(
                 new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null)
         );

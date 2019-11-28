@@ -18,14 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class QuestionDAOImplIntTest {
 
-    private final int AMOUNT_OF_QUESTIONS = 3;
-    private final String CATEGORY = "JAVA";
-    private final int AMOUNT_OF_ANSWERS = 2;
     private final int QUESTION_ID = 3;
     private QuestionDAOImpl sut;
-    private List<QuestionDTO> questionDTOList;
-    private List<String> possibleAnswers;
-    private QuestionDTO questionDTO = new QuestionDTO(10, "dit is een test vraag", "open", null);
+    private final QuestionDTO questionDTO = new QuestionDTO(10, "dit is een test vraag", "open", null);
 
     @BeforeEach
     void setUp() {
@@ -41,15 +36,18 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestions() throws SQLException {
-        questionDTOList = sut.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS);
+        String CATEGORY = "JAVA";
+        int AMOUNT_OF_QUESTIONS = 3;
+        List<QuestionDTO> questionDTOList = sut.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS);
 
         assertEquals(AMOUNT_OF_QUESTIONS, questionDTOList.size());
     }
 
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
-        possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
+        List<String> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
 
+        int AMOUNT_OF_ANSWERS = 2;
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
     }
 
