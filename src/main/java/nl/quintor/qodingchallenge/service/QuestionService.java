@@ -13,7 +13,7 @@ public interface QuestionService {
 
     void setQuestionDAO(QuestionDAO questionDAO);
 
-    List<QuestionDTO> getQuestions(String category, int amountOfQuestions, String campaignName) throws SQLException;
+    List<QuestionDTO> getQuestions(String category, String campaignName) throws SQLException;
 
     void setAnswer(QuestionCollection questionCollection) throws SQLException;
 }
