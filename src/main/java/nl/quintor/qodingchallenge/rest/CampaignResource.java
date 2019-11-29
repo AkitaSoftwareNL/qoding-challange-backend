@@ -28,7 +28,7 @@ public class CampaignResource {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CampaignDTO>> createCampaign(@RequestBody CampaignDTO campaignDTO) throws SQLException {
-        return new ResponseEntity<>(campaignService.createNewCampaign(campaignDTO.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(campaignService.createNewCampaign(campaignDTO), HttpStatus.OK);
     }
 
     @ResponseBody

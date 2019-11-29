@@ -35,14 +35,15 @@ public class CampaignDAOImpl implements CampaignDAO {
     }
 
     @Override
-    public void persistCampaign(String name) throws SQLException {
+    public void persistCampaign(CampaignDTO campaignDTO) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO campaign(NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
-                            "VALUES (?, 'JAVA', 'conferentie', 'admin', 2, null, 1)");
-            statement.setString(1, name);
+                            "VALUES (?, 'JAVA', 'conferentie', 'admin', ?, null, 1)");
+            statement.setString(1, campaignDTO.getName());
+            statement.setInt(2, campaignDTO.getAmountOfQuestions());
             statement.execute();
         } catch (SQLException e) {
             throw new SQLException(e);

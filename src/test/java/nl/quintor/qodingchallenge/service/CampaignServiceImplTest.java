@@ -21,8 +21,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CampaignServiceImplTest {
 
-    private final List<CampaignDTO> campaignDTOList = new ArrayList<>();
-    private final CampaignDTO campaignDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
+    private final List<CampaignDTO> CAMPAIGNDTOLIST = new ArrayList<>();
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
     @InjectMocks
     CampaignServiceImpl sut;
     @Mock
@@ -30,40 +30,40 @@ class CampaignServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        campaignDTOList.add(
+        CAMPAIGNDTOLIST.add(
                 new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null)
         );
-        campaignDTOList.add(
-                campaignDTO
+        CAMPAIGNDTOLIST.add(
+                CAMPAIGNDTO
         );
     }
 
     @Test
     void getCreatecampaignCallToDaoCampaignExists() throws SQLException {
-        sut.createNewCampaign(anyString());
+        sut.createNewCampaign(CAMPAIGNDTO);
 
         verify(campaignDAOStub).campaignExists(anyString());
     }
 
     @Test
     void getCreatecampaignCallToDaoPersistCampaign() throws SQLException {
-        sut.createNewCampaign(anyString());
+        sut.createNewCampaign(CAMPAIGNDTO);
 
-        verify(campaignDAOStub).persistCampaign(anyString());
+        verify(campaignDAOStub).persistCampaign(CAMPAIGNDTO);
     }
 
     @Test
     void returnsListWhenGettingAllCampaignsAfterCreation() throws SQLException {
         when(campaignDAOStub.getAllCampaigns())
-                .thenReturn(campaignDTOList);
+                .thenReturn(CAMPAIGNDTOLIST);
 
-        assertEquals(campaignDAOStub.getAllCampaigns(), sut.createNewCampaign(anyString()));
+        assertEquals(campaignDAOStub.getAllCampaigns(), sut.createNewCampaign(CAMPAIGNDTO));
     }
 
     @Test
     void returnsListWhenGettingAllCampaigns() throws SQLException {
         when(campaignDAOStub.getAllCampaigns())
-                .thenReturn(campaignDTOList);
+                .thenReturn(CAMPAIGNDTOLIST);
 
         assertEquals(campaignDAOStub.getAllCampaigns(), sut.showCampaign());
     }
