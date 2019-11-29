@@ -33,10 +33,10 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public List<QuestionDTO> getQuestions(String category, int amountOfQuestions, String campaignName) throws SQLException {
+    public List<QuestionDTO> getQuestions(String category, String campaignName) throws SQLException {
         if (!campaignDAO.campaignExists(campaignName))
             throw new NoCampaignFoundException(format("Campaign %s does not exist", campaignName));
-        List<QuestionDTO> questions = questionDAO.getQuestions(category, amountOfQuestions);
+        List<QuestionDTO> questions = questionDAO.getQuestions(category, campaignDAO.getAmountOfQuestions(campaignName));
 
         for (QuestionDTO questionDTO : questions) {
             questionDTO

@@ -21,10 +21,10 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public List<CampaignDTO> createNewCampaign(String name) throws SQLException {
-        if (campaignDAO.campaignExists(name))
-            throw new CampaignAlreadyExistsException("The campaign " + name + " already exists.");
-        campaignDAO.persistCampaign(name);
+    public List<CampaignDTO> createNewCampaign(CampaignDTO campaignDTO) throws SQLException {
+        if (campaignDAO.campaignExists(campaignDTO.getName()))
+            throw new CampaignAlreadyExistsException("The campaign " + campaignDTO.getName() + " already exists.");
+        campaignDAO.persistCampaign(campaignDTO);
         return campaignDAO.getAllCampaigns();
     }
 
