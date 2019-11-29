@@ -18,7 +18,7 @@ class QuestionServiceImplTest {
 
     private final String JFALL = "HC2 Holdings, Inc";
     private final String CATEGORY = "category";
-    private final int LIMIT = 1;
+    private final int LIMIT = 0;
     private final int QUESTION_ID = 1;
 
     private QuestionDAO questionDAOMock;
@@ -50,6 +50,7 @@ class QuestionServiceImplTest {
         // Mock
         var list = setQuestionlist();
         when(questionDAOMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
+        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
         // Test
         sut.getQuestions(CATEGORY, JFALL);
         // Verify
