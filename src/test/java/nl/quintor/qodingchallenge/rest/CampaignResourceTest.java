@@ -17,14 +17,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CampaignResourceTest {
 
-    private final List<CampaignDTO> campaignDTOList = new ArrayList<>();
-    private final CampaignDTO campaignDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
+    private final List<CampaignDTO> CAMPAIGNDTOLIST = new ArrayList<>();
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
 
 
     @Mock
@@ -36,20 +35,20 @@ class CampaignResourceTest {
 
     @BeforeEach
     void setUp() {
-        campaignDTOList.add(
+        CAMPAIGNDTOLIST.add(
                 new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null)
         );
-        campaignDTOList.add(
-                campaignDTO
+        CAMPAIGNDTOLIST.add(
+                CAMPAIGNDTO
         );
     }
 
     @Test
     void returnsCorrectStatusAndEntityByRequestCreateCampaign() throws SQLException {
-        when(campaignServiceStub.createNewCampaign(anyString()))
-                .thenReturn(campaignDTOList);
+        when(campaignServiceStub.createNewCampaign(CAMPAIGNDTO))
+                .thenReturn(CAMPAIGNDTOLIST);
 
-        ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(campaignDTO);
+        ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(CAMPAIGNDTO);
 
         checkRequest(actualResult);
     }
@@ -57,7 +56,7 @@ class CampaignResourceTest {
     @Test
     void returnsCorrectStatusAndEntityByRequestShowAllCampaigns() throws SQLException {
         when(campaignServiceStub.showCampaign())
-                .thenReturn(campaignDTOList);
+                .thenReturn(CAMPAIGNDTOLIST);
         ResponseEntity<List<CampaignDTO>> actualResult = sut.showCampaign();
 
         checkRequest(actualResult);

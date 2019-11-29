@@ -35,14 +35,15 @@ public class CampaignDAOImpl implements CampaignDAO {
     }
 
     @Override
-    public void persistCampaign(String name) throws SQLException {
+    public void persistCampaign(CampaignDTO campaignDTO) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO campaign(NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
-                            "VALUES (?, 'JAVA', 'conferentie', 'admin', 2, null, 1)");
-            statement.setString(1, name);
+                            "VALUES (?, 'JAVA', 'conferentie', 'admin', ?, null, 1)");
+            statement.setString(1, campaignDTO.getName());
+            statement.setInt(2, campaignDTO.getAmountOfQuestions());
             statement.execute();
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -74,4 +75,21 @@ public class CampaignDAOImpl implements CampaignDAO {
         }
         return campaignDTOList;
     }
+
+    @Override
+    public int getAmountOfQuestions(String campaignName) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE NAME = ?");
+            statement.setString(1, campaignName);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("AMOUNT_OF_QUESTIONS");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
 }

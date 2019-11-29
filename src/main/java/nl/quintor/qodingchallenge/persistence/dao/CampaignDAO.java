@@ -8,7 +8,10 @@ import java.util.List;
 public interface CampaignDAO {
     boolean campaignExists(String name) throws SQLException;
 
-    void persistCampaign(String name) throws SQLException;
+    void persistCampaign(CampaignDTO campaignDTO) throws SQLException;
 
     List<CampaignDTO> getAllCampaigns() throws SQLException;
+
+    int getAmountOfQuestions(String campaignName) throws SQLException;
+
 }

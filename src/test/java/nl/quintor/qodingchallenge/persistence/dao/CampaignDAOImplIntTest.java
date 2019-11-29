@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.persistence.connection.ConnectionFactoryPoolWrapper;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,8 @@ import static org.mockito.Mockito.spy;
 
 class CampaignDAOImplIntTest {
 
-    private static final String NO_CAMPAIGN = "Some non existing campaign";
+    private final String NO_CAMPAIGN = "Some non existing campaign";
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null);
     private CampaignDAO sut;
 
     @BeforeEach
@@ -42,7 +44,7 @@ class CampaignDAOImplIntTest {
 
     @Test
     void perstistCampaignAddsCampain() throws SQLException {
-        sut.persistCampaign("Some non existing campaign");
+        sut.persistCampaign(CAMPAIGNDTO);
 
         int AMOUNT_OF_CAMPAIGNS = 3;
         assertEquals(AMOUNT_OF_CAMPAIGNS + 1, sut.getAllCampaigns().size());
