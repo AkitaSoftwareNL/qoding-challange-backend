@@ -11,4 +11,7 @@ public interface CampaignDAO {
     void persistCampaign(CampaignDTO campaignDTO) throws SQLException;
 
     List<CampaignDTO> getAllCampaigns() throws SQLException;
+
+    int getAmountOfQuestions(String campaignName) throws SQLException;
+
 }

@@ -75,4 +75,21 @@ public class CampaignDAOImpl implements CampaignDAO {
         }
         return campaignDTOList;
     }
+
+    @Override
+    public int getAmountOfQuestions(String campaignName) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE NAME = ?");
+            statement.setString(1, campaignName);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("AMOUNT_OF_QUESTIONS");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
 }

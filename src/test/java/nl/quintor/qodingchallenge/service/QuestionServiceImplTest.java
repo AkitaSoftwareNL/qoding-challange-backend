@@ -40,7 +40,7 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
-        sut.getQuestions(CATEGORY, LIMIT, JFALL);
+        sut.getQuestions(CATEGORY, JFALL);
 
         verify(questionDAOMock).getQuestions(CATEGORY, LIMIT);
     }
@@ -51,7 +51,7 @@ class QuestionServiceImplTest {
         var list = setQuestionlist();
         when(questionDAOMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
         // Test
-        sut.getQuestions(CATEGORY, LIMIT, JFALL);
+        sut.getQuestions(CATEGORY, JFALL);
         // Verify
         verify(questionDAOMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
     }
@@ -78,7 +78,7 @@ class QuestionServiceImplTest {
     }
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {
-        List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, LIMIT, JFALL);
+        List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, JFALL);
         QuestionDTO questionDTO = new QuestionDTO(QUESTION_ID, "String", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;
