@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 
@@ -22,6 +23,9 @@ class QuestionResourceTest {
 
     private final String CATEGORY = "java";
     private final String JFALL = "JFALL";
+    private final String JAVA = "java";
+    private final String QUESTION = "Dit is mijn vraag";
+    private final QuestionDTO question = new QuestionDTO(1, CATEGORY, QUESTION, JAVA);
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
@@ -65,10 +69,52 @@ class QuestionResourceTest {
         assertEquals(HttpStatus.OK, test.getStatusCode());
     }
 
+    @Test
+    void createQuestionCallsCreateQuestion() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.createQuestion(question);
+        // Test
+        verify(questionServiceMock).createQuestion(question);
+    }
+
+    @Test
+    void createQuestionReturnsStatusCode200() throws SQLException {
+        // Mock
+
+        // Verify
+        var testValue = sut.createQuestion(question);
+        // Test
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    @Test
+    void getAllQuestionsCallsGetAllQuestions() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.getAllQuestions();
+        // Test
+        verify(questionServiceMock).getAllQuestions();
+    }
+
+    @Test
+    void getAllQuestionsReturnsQuestionCollectionAndStatusCode200() throws SQLException {
+        // Mock
+        var questions = setQuestion();
+        when(questionServiceMock.getAllQuestions()).thenReturn(questions);
+        QuestionCollection questionCollection = new QuestionCollection();
+        questionCollection.setQuestions(questions);
+        // Verify
+        var testValue = sut.getAllQuestions();
+        // Test
+        assertEquals(questionCollection, testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
     private List<QuestionDTO> setQuestion() {
         List<QuestionDTO> questions = new ArrayList<>();
-        String JAVA = "java";
-        String QUESTION = "Dit is mijn vraag";
         questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, JAVA));
         questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, JAVA));
         return questions;
