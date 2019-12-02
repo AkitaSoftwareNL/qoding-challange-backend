@@ -40,4 +40,23 @@ public class QuestionResource {
         questionService.setAnswer(questionCollection);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @ResponseBody
+    @RequestMapping(path = "/questions/create",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createQuestion(QuestionDTO question) throws SQLException {
+        questionService.createQuestion(question);
+        return ResponseEntity.status(200).build();
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/questions",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<QuestionCollection> getAllQuestions() throws SQLException {
+        QuestionCollection questionCollection = new QuestionCollection();
+        questionCollection.setQuestions(questionService.getAllQuestions());
+        return ResponseEntity.ok().body(questionCollection);
+    }
 }
