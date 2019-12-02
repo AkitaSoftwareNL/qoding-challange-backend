@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class QuestionServiceImplTest {
 
@@ -20,6 +21,7 @@ class QuestionServiceImplTest {
     private final String CATEGORY = "category";
     private final int LIMIT = 0;
     private final int QUESTION_ID = 1;
+    private final QuestionDTO questionDTO = new QuestionDTO(2, "String", "multiple", "String");
 
     private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
@@ -71,6 +73,37 @@ class QuestionServiceImplTest {
         when(questionDAOMock.getCorrectAnswer(QUESTION_ID)).thenReturn("incorrect");
 
         checkCorrectAnswerCorrectAndIncorrect();
+    }
+
+    @Test
+    void getAllQuestionsCallsGetAllQuestions() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.getAllQuestions();
+        // Test
+        verify(questionDAOMock).getAllQuestions();
+    }
+
+    @Test
+    void getAllQuestionsReturnsQuestionList() throws SQLException {
+        // Mock
+        var questions = setQuestionlist();
+        when(questionDAOMock.getAllQuestions()).thenReturn(questions);
+        // Test
+        var testValue = sut.getAllQuestions();
+        // Verify
+        assertEquals(questions, testValue);
+    }
+
+    @Test
+    void createQuestionCallsPersistQuestion() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.createQuestion(questionDTO);
+        // Test
+        verify(questionDAOMock).persistQuestion(questionDTO);
     }
 
     private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
