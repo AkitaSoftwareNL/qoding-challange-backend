@@ -18,7 +18,7 @@ import java.sql.SQLException;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
     @ExceptionHandler({SQLException.class})
     public ResponseEntity<Object> handleSQLException(Exception e, WebRequest request) {

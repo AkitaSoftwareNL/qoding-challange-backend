@@ -16,4 +16,8 @@ public interface QuestionService {
     List<QuestionDTO> getQuestions(String category, String campaignName) throws SQLException;
 
     void setAnswer(QuestionCollection questionCollection) throws SQLException;
+
+    void createQuestion(QuestionDTO question) throws SQLException;
+
+    List<QuestionDTO> getAllQuestions() throws SQLException;
 }

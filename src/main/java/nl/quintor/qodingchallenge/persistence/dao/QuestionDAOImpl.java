@@ -95,6 +95,37 @@ public class QuestionDAOImpl implements QuestionDAO {
         }
         return correctAnswer.orElseThrow(AnswerNotFoundException::new);
     }
+
+    @Override
+    public void persistQuestion(QuestionDTO question) throws SQLException {
+        final String JAVA = "JAVA";
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("insert into question(category_name, question, question_type, attachment) values (?, ?, ?, ?)");
+            statement.setString(1, JAVA);
+            statement.setString(2, question.getQuestion());
+            statement.setString(3, question.getQuestionType());
+            statement.setString(4, question.getAttachment());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    @Override
+    public List<QuestionDTO> getAllQuestions() throws SQLException {
+        List<QuestionDTO> questions = new ArrayList<>();
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question");
+            statement.executeQuery();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return questions;
+    }
 }
 
 
