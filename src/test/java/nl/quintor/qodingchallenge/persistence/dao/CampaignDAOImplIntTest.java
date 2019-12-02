@@ -26,8 +26,9 @@ class CampaignDAOImplIntTest {
     void setUp() {
         this.sut = new CampaignDAOImpl();
         ConnectionFactoryPoolWrapper wrapper = spy(ConnectionFactoryPoolWrapper.wrapper.getClass());
-        try {
-            Connection connection = getConnection();
+        try (
+                Connection connection = getConnection()
+        ) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testCampaignDDL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {

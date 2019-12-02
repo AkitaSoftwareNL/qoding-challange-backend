@@ -120,7 +120,16 @@ public class QuestionDAOImpl implements QuestionDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM question");
-            statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                questions.add(
+                        new QuestionDTO(
+                                resultSet.getInt(1),
+                                resultSet.getString(1),
+                                resultSet.getString(3),
+                                resultSet.getString(4)
+                        ));
+            }
         } catch (SQLException e) {
             throw new SQLException(e);
         }

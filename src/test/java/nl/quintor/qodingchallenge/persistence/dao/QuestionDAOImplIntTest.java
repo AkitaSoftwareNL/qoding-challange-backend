@@ -26,8 +26,9 @@ class QuestionDAOImplIntTest {
     @BeforeEach
     void setUp() {
         this.sut = new QuestionDAOImpl();
-        try {
-            Connection connection = getConnection();
+        try (
+                Connection connection = getConnection()
+        ) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testQuestionDDL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
@@ -64,5 +65,23 @@ class QuestionDAOImplIntTest {
         assertFalse(actualResult.isEmpty());
     }
 
+    @Test
+    void persistQuestionPersistsQuestion() throws SQLException {
+        // Mock
+        final int AMOUNT_OF_QUESTIONS = 3;
+        // Test
+        sut.persistQuestion(questionDTO);
+        // Verify
+        assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
+    }
 
+    @Test
+    void getAllQuestionsReturnsAllQuestions() throws SQLException {
+        // Mock
+        final int AMOUNT_OF_QUESTIONS = 3;
+        // Test
+        var testValue = sut.getAllQuestions();
+        // Verify
+        assertEquals(AMOUNT_OF_QUESTIONS, testValue.size());
+    }
 }

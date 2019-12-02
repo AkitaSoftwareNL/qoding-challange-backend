@@ -79,9 +79,9 @@ class QuestionServiceImplTest {
     void getAllQuestionsCallsGetAllQuestions() throws SQLException {
         // Mock
 
-        // Verify
-        sut.getAllQuestions();
         // Test
+        sut.getAllQuestions();
+        // Verify
         verify(questionDAOMock).getAllQuestions();
     }
 
@@ -100,9 +100,9 @@ class QuestionServiceImplTest {
     void createQuestionCallsPersistQuestion() throws SQLException {
         // Mock
 
-        // Verify
-        sut.createQuestion(questionDTO);
         // Test
+        sut.createQuestion(questionDTO);
+        // Verify
         verify(questionDAOMock).persistQuestion(questionDTO);
     }
 
