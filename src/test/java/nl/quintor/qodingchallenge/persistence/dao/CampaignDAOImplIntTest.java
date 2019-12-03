@@ -16,9 +16,7 @@ import static org.junit.Assert.*;
 
 class CampaignDAOImplIntTest {
 
-    private static final int EXPECTEDAMOUNTOFQUESTIONS = 1;
-    private final String NO_CAMPAIGN = "Some non existing campaign";
-    private CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null);
+    private final String CAMPAIGN_NAME = "HC2 Holdings, Inc";
     private CampaignDAO sut;
 
     @BeforeEach
@@ -39,7 +37,6 @@ class CampaignDAOImplIntTest {
 
     @Test
     void campaignExistReturnsTrueWhenCampaignExists() throws SQLException {
-        String CAMPAIGN_NAME = "HC2 Holdings, Inc";
         var expectedResult = sut.campaignExists(CAMPAIGN_NAME);
 
         assertTrue(expectedResult);
@@ -47,22 +44,21 @@ class CampaignDAOImplIntTest {
 
     @Test
     void campaignExistReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
-        var expectedResult = sut.campaignExists(NO_CAMPAIGN);
+        var expectedResult = sut.campaignExists("Some non existing campaign");
 
         assertFalse(expectedResult);
     }
 
     @Test
     void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
-        final String CAMPAIGN_NAME = "HC2 Holdings, Inc";
         var actualResult = sut.getAmountOfQuestions(CAMPAIGN_NAME);
 
-        assertEquals(EXPECTEDAMOUNTOFQUESTIONS, actualResult);
+        assertEquals(1, actualResult);
     }
 
     @Test
     void perstistCampaignAddsCampain() throws SQLException {
-        sut.persistCampaign(CAMPAIGNDTO);
+        sut.persistCampaign(new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null));
 
         int AMOUNT_OF_CAMPAIGNS = 3;
         assertEquals(AMOUNT_OF_CAMPAIGNS + 1, sut.getAllCampaigns().size());
