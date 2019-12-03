@@ -40,9 +40,10 @@ public class QuestionServiceImpl implements QuestionService {
 
         for (QuestionDTO questionDTO : questions) {
             questionDTO
-                    .setPossibleAnswer(questionDAO
-                            .getPossibleAnswers(questionDTO
-                                    .getQuestionID())
+                    .setPossibleAnswer(
+                            questionDAO.getPossibleAnswers(
+                                    questionDTO.getQuestionID()
+                            )
                     );
         }
 

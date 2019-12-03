@@ -26,8 +26,9 @@ class QuestionDAOImplIntTest {
     @BeforeEach
     void setUp() {
         this.sut = new QuestionDAOImpl();
-        try {
-            Connection connection = getConnection();
+        try (
+                Connection connection = getConnection()
+        ) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testQuestionDDL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {

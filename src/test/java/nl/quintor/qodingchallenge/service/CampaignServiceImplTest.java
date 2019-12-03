@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,8 +23,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CampaignServiceImplTest {
 
+    private final String JFALL = "JFALL - 2020";
     private final List<CampaignDTO> CAMPAIGNDTOLIST = new ArrayList<>();
-    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO(JFALL, 5, "admin", "JAVA", null);
+
     @InjectMocks
     CampaignServiceImpl sut;
     @Mock
@@ -66,5 +70,12 @@ class CampaignServiceImplTest {
                 .thenReturn(CAMPAIGNDTOLIST);
 
         assertEquals(campaignDAOStub.getAllCampaigns(), sut.showCampaign());
+    }
+
+    @Test
+    void createNewCampaignThrowsCampaignAlreadyExistsException() throws SQLException {
+        when(campaignDAOStub.campaignExists(JFALL)).thenReturn(true);
+
+        assertThrows(CampaignAlreadyExistsException.class, () -> sut.createNewCampaign(CAMPAIGNDTO));
     }
 }
