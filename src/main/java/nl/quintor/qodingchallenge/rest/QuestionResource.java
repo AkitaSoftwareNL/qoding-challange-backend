@@ -63,7 +63,6 @@ public class QuestionResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<QuestionDTO>> removeQuestion(@PathVariable("questionID") int questionID) throws SQLException {
-        List<QuestionDTO> questionDTOList = questionService.removeQuestion(questionID);
-        return ResponseEntity.ok().body(questionDTOList);
+        return ResponseEntity.ok().body(questionService.removeQuestion(questionID));
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 public class CampaignDTO {
 
+    private int id;
     private String name;
     private int amountOfQuestions;
     private String startedBy;
@@ -14,7 +15,8 @@ public class CampaignDTO {
     public CampaignDTO() {
     }
 
-    public CampaignDTO(String name, int amountOfQuestions, String startedby, String category, List<ParticipantDTO> participants) {
+    public CampaignDTO(int id, String name, int amountOfQuestions, String startedby, String category, List<ParticipantDTO> participants) {
+        this.id = id;
         this.name = name;
         this.amountOfQuestions = amountOfQuestions;
         this.startedBy = startedby;
@@ -60,5 +62,13 @@ public class CampaignDTO {
 
     public void setParticipants(ArrayList<ParticipantDTO> participants) {
         this.participants = participants;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
