@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
@@ -20,4 +21,10 @@ public interface QuestionService {
     void createQuestion(QuestionDTO question) throws SQLException;
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
+
+    List<GivenAnswerDTO> getPendingQuestions(int campaignId, int questionState) throws SQLException;
+
+    QuestionDTO getQuestion(int questionid) throws SQLException;
+
+    void setPendingQuestion(GivenAnswerDTO givenAnswerDTO) throws SQLException;
 }

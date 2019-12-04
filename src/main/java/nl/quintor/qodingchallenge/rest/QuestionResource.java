@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.rest;
 
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.service.QuestionService;
@@ -39,6 +40,31 @@ public class QuestionResource {
     public ResponseEntity getAnswer(@RequestBody QuestionCollection questionCollection) throws SQLException {
         questionService.setAnswer(questionCollection);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            path = "/campaign/{campaignid}/answers/{state}",
+            method = RequestMethod.GET)
+    public ResponseEntity getPendingQuestions(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState) throws SQLException {
+        List<GivenAnswerDTO> givenAnswers = questionService.getPendingQuestions(campaignId, questionState);
+        return ResponseEntity.ok().body(givenAnswers);
+    }
+
+    @ResponseBody
+    @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+            path = "/answers/update",
+            method = RequestMethod.POST)
+    public ResponseEntity setPendingQuestion(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionService.setPendingQuestion(givenAnswerDTO);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            path = "/questions/{questionid}",
+            method = RequestMethod.GET)
+    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException {
+        QuestionDTO question = questionService.getQuestion(questionId);
+        return ResponseEntity.ok().body(question);
     }
 
     @ResponseBody

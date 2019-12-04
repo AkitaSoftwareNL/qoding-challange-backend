@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 
 import java.sql.SQLException;
@@ -17,4 +18,10 @@ public interface QuestionDAO {
     void persistQuestion(QuestionDTO question) throws SQLException;
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
+
+    List<GivenAnswerDTO> getPendingQuestion(int campaignId, int questionState) throws SQLException;
+
+    QuestionDTO getQuestion(int questionid) throws SQLException;
+
+    void setPendingQuestion(GivenAnswerDTO questionDTO) throws SQLException;
 }

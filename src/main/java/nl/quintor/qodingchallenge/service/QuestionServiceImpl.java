@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
@@ -80,5 +81,20 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<QuestionDTO> getAllQuestions() throws SQLException {
         return questionDAO.getAllQuestions();
+    }
+
+    @Override
+    public List<GivenAnswerDTO> getPendingQuestions(int campaignId, int questionState) throws SQLException {
+        return questionDAO.getPendingQuestion(campaignId, questionState);
+    }
+
+    @Override
+    public QuestionDTO getQuestion(int questionid) throws SQLException {
+        return questionDAO.getQuestion(questionid);
+    }
+
+    @Override
+    public void setPendingQuestion(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionDAO.setPendingQuestion(givenAnswerDTO);
     }
 }

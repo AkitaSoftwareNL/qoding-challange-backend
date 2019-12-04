@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import org.springframework.stereotype.Service;
@@ -125,6 +126,75 @@ public class QuestionDAOImpl implements QuestionDAO {
             throw new SQLException(e);
         }
         return questions;
+    }
+
+    @Override
+    public List<GivenAnswerDTO> getPendingQuestion(int campaignId, int questionState) throws SQLException {
+        List<GivenAnswerDTO> givenAnswers = new ArrayList<>();
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("select * from given_answer where CAMPAIGN_ID = ? and STATEID = ?");
+            statement.setInt(1, campaignId);
+            statement.setInt(2, questionState);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
+
+                givenAnswerDTO.setQuestionId(resultSet.getInt(1));
+                givenAnswerDTO.setParticipentId(resultSet.getInt(2));
+                givenAnswerDTO.setCampaignId(resultSet.getInt(3));
+                givenAnswerDTO.setStateId(resultSet.getInt(4));
+                givenAnswerDTO.setGivenAnswer(resultSet.getString(5));
+
+                givenAnswers.add(givenAnswerDTO);
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return givenAnswers;
+    }
+
+    @Override
+    public QuestionDTO getQuestion(int questionid) throws SQLException {
+        QuestionDTO question = new QuestionDTO();
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("select * from question where questionid = ?");
+            statement.setInt(1, questionid);
+            ResultSet resultSet = statement.executeQuery();
+
+            resultSet.next();
+
+            question.setQuestionID(resultSet.getInt(1));
+            question.setQuestion(resultSet.getString(2));
+            question.setQuestionType(resultSet.getString(3));
+            question.setAttachment(resultSet.getString(4));
+            question.setGivenAnswer(resultSet.getString(5));
+            question.setStateID(resultSet.getInt(6));
+
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return question;
+    }
+
+    @Override
+    public void setPendingQuestion(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("update given_answer set STATEID = ? where QUESTIONID = ? and CAMPAIGN_ID = ? and PARTICIPANTID = ?");
+            statement.setInt(1, givenAnswerDTO.getStateId());
+            statement.setInt(2, givenAnswerDTO.getQuestionId());
+            statement.setInt(3, givenAnswerDTO.getCampaignId());
+            statement.setInt(4, givenAnswerDTO.getParticipentId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 }
 
