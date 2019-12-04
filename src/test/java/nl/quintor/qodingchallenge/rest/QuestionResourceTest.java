@@ -80,7 +80,7 @@ class QuestionResourceTest {
     }
 
     @Test
-    void createQuestionReturnsStatusCode200() throws SQLException {
+    void createQuestionReturnsStatusCodeOK() throws SQLException {
         // Mock
 
         // Verify
