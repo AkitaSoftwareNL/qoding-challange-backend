@@ -5,15 +5,15 @@ drop table if exists GIVEN_ANSWER;
 drop table if exists QUESTION;
 
 
-create table QUESTION
+CREATE TABLE QUESTION
 (
-  QUESTIONID    smallint     not null,
-  CATEGORY_NAME varchar(255) not null,
-  QUESTION      varchar(255) not null,
-  STATE         bool         not null,
-  QUESTION_TYPE varchar(255),
-  ATTACHMENT    varchar(4096),
-  primary key (QUESTIONID)
+  QUESTIONID    SMALLINT     NOT NULL AUTO_INCREMENT,
+  CATEGORY_NAME VARCHAR(255) NOT NULL,
+  QUESTION      VARCHAR(255) NOT NULL,
+  STATE         BOOL         NOT NULL default 1,
+  QUESTION_TYPE VARCHAR(255),
+  ATTACHMENT    VARCHAR(4096),
+  PRIMARY KEY (QUESTIONID)
 );
 
 create table MULTIPLE_CHOICE_QUESTION
@@ -34,14 +34,14 @@ create table GIVEN_ANSWER
   primary key (QUESTIONID, PARTICIPANTID, NAME)
 );
 
-insert into question (questionID, category_name, question, state, QUESTION_TYPE)
-values (1, 'JAVA', 'Wat is de output van het draaien van de main methode in klasse B voor de volgende code', 1, 'open');
-insert into question (questionID, category_name, question, state, QUESTION_TYPE)
-values (2, 'JAVA',
+insert into question (category_name, question, state, QUESTION_TYPE)
+values ('JAVA', 'Wat is de output van het draaien van de main methode in klasse B voor de volgende code', 1, 'open');
+insert into question (category_name, question, state, QUESTION_TYPE)
+values ('JAVA',
         'Juist of onjuist, er bestaat ter allen tijd een instantie van de class singelton. Licht je antwoord toe', 1,
         'open');
-insert into question (questionID, category_name, question, state, QUESTION_TYPE)
-values (3, 'JAVA', 'Kan je meerdere catch statements gebruiken voor EEN try', 1, 'multiple');
+insert into question (category_name, question, state, QUESTION_TYPE)
+values ('JAVA', 'Kan je meerdere catch statements gebruiken voor EEN try', 1, 'multiple');
 
 insert into multiple_choice_question (questionID, ANSWER_OPTIONS, is_correct)
 values (3, 'Ja', 1);

@@ -33,8 +33,6 @@ class CampaignDAOImplIntTest {
         }
     }
 
-
-
     @Test
     void campaignExistReturnsTrueWhenCampaignExists() throws SQLException {
         var expectedResult = sut.campaignExists(CAMPAIGN_NAME);

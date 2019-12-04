@@ -85,6 +85,37 @@ class QuestionServiceImplTest {
     }
 
     @Test
+    void getAllQuestionsCallsGetAllQuestions() throws SQLException {
+        // Mock
+
+        // Test
+        sut.getAllQuestions();
+        // Verify
+        verify(questionDAOMock).getAllQuestions();
+    }
+
+    @Test
+    void getAllQuestionsReturnsQuestionList() throws SQLException {
+        // Mock
+        var questions = setQuestionlist();
+        when(questionDAOMock.getAllQuestions()).thenReturn(questions);
+        // Test
+        var testValue = sut.getAllQuestions();
+        // Verify
+        assertEquals(questions, testValue);
+    }
+
+    @Test
+    void createQuestionCallsPersistQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.createQuestion(getQuestion());
+        // Verify
+        verify(questionDAOMock).persistQuestion(getQuestion());
+    }
+
+    @Test
     void getQuestionThrowsNoCampaignFoundException() throws SQLException {
         when(campaignDAOMock.campaignExists("This campaign does not exist")).thenReturn(true);
 
@@ -118,5 +149,9 @@ class QuestionServiceImplTest {
 
     private QuestionCollection setQuestionCollection() throws SQLException {
         return new QuestionCollection(1, "test", setQuestionlist());
+    }
+
+    private QuestionDTO getQuestion() {
+        return new QuestionDTO(2, "String", "multiple", "String");
     }
 }

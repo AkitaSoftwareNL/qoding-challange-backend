@@ -72,4 +72,14 @@ public class QuestionServiceImpl implements QuestionService {
     private boolean checkAnswer(String correctAnswer, String givenAnswer) {
         return correctAnswer.equals(givenAnswer);
     }
+
+    @Override
+    public void createQuestion(QuestionDTO question) throws SQLException {
+        questionDAO.persistQuestion(question);
+    }
+
+    @Override
+    public List<QuestionDTO> getAllQuestions() throws SQLException {
+        return questionDAO.getAllQuestions();
+    }
 }

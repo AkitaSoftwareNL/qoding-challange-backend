@@ -22,6 +22,8 @@ class QuestionResourceTest {
 
     private final String CATEGORY = "java";
     private final String JFALL = "JFALL";
+    private final String ATTACHMENT = "java";
+    private final String QUESTION = "Dit is mijn vraag";
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
@@ -36,7 +38,7 @@ class QuestionResourceTest {
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
         final int AMOUNT_OF_QUESTIONS = 3;
-        when(questionServiceMock.getQuestions(CATEGORY, JFALL)).thenReturn(setQuestionCollection().getQuestions());
+        when(questionServiceMock.getQuestions(CATEGORY, JFALL)).thenReturn(getQuestionCollection().getQuestions());
 
         sut.sendQuestions(JFALL);
 
@@ -52,7 +54,7 @@ class QuestionResourceTest {
 
     @Test
     void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
-        var questions = setQuestionCollection();
+        var questions = getQuestionCollection();
         sut.getAnswer(questions);
 
         verify(questionServiceMock).setAnswer(questions);
@@ -60,22 +62,68 @@ class QuestionResourceTest {
 
     @Test
     void getAnswerReturnsResponseOK() throws SQLException {
-        var test = sut.getAnswer(setQuestionCollection());
+        var test = sut.getAnswer(getQuestionCollection());
 
         assertEquals(HttpStatus.OK, test.getStatusCode());
     }
 
-    private List<QuestionDTO> setQuestion() {
+    @Test
+    void createQuestionCallsCreateQuestion() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.createQuestion(getQuestion());
+        // Test
+        verify(questionServiceMock).createQuestion(getQuestion());
+    }
+
+    @Test
+    void createQuestionReturnsStatusCodeOK() throws SQLException {
+        // Mock
+
+        // Verify
+        var testValue = sut.createQuestion(getQuestion());
+        // Test
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    @Test
+    void getAllQuestionsCallsGetAllQuestions() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.getAllQuestions();
+        // Test
+        verify(questionServiceMock).getAllQuestions();
+    }
+
+    @Test
+    void getAllQuestionsReturnsQuestionCollectionAndStatusCodeOK() throws SQLException {
+        // Mock
+        var questions = getQuestions();
+        when(questionServiceMock.getAllQuestions()).thenReturn(questions);
+        QuestionCollection questionCollection = new QuestionCollection();
+        questionCollection.setQuestions(questions);
+        // Verify
+        var testValue = sut.getAllQuestions();
+        // Test
+        assertEquals(questionCollection, testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    private List<QuestionDTO> getQuestions() {
         List<QuestionDTO> questions = new ArrayList<>();
-        String JAVA = "java";
-        String QUESTION = "Dit is mijn vraag";
-        questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, JAVA));
-        questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, JAVA));
+        questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, ATTACHMENT));
+        questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, ATTACHMENT));
         return questions;
     }
 
-    private QuestionCollection setQuestionCollection() {
-        return new QuestionCollection(1, JFALL, setQuestion());
+    private QuestionCollection getQuestionCollection() {
+        return new QuestionCollection(1, JFALL, getQuestions());
+    }
+
+    private QuestionDTO getQuestion() {
+        return new QuestionDTO(1, CATEGORY, QUESTION, ATTACHMENT);
     }
 
 }
