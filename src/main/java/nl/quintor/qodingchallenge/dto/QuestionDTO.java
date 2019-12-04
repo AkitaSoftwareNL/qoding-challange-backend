@@ -8,7 +8,7 @@ public class QuestionDTO {
     private String question;
     private String questionType;
     private String attachment;
-    private List<String> possibleAnswer;
+    private List<PossibleAnswerDTO> possibleAnswers;
     private String givenAnswer;
     private int stateID;
 
@@ -57,12 +57,12 @@ public class QuestionDTO {
         this.attachment = attachment;
     }
 
-    public List<String> getPossibleAnswer() {
-        return possibleAnswer;
+    public List<PossibleAnswerDTO> getPossibleAnswers() {
+        return possibleAnswers;
     }
 
-    public void setPossibleAnswer(List<String> possibleAnswer) {
-        this.possibleAnswer = possibleAnswer;
+    public void setPossibleAnswers(List<PossibleAnswerDTO> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
     }
 
     public String getGivenAnswer() {

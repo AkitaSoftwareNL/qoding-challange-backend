@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,8 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<String> getPossibleAnswers(int questionID) throws SQLException {
-        List<String> possibleAnswers = new ArrayList<>();
+    public List<PossibleAnswerDTO> getPossibleAnswers(int questionID) throws SQLException {
+        List<PossibleAnswerDTO> possibleAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
@@ -52,7 +53,8 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                possibleAnswers.add(resultSet.getString(1));
+                possibleAnswers.add(new PossibleAnswerDTO(
+                        resultSet.getString(1),false));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
