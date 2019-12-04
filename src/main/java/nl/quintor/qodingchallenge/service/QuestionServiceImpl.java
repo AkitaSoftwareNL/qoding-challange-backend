@@ -5,10 +5,14 @@ import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
+import nl.quintor.qodingchallenge.service.questionstrategy.MultipleStrategyImpl;
+import nl.quintor.qodingchallenge.service.questionstrategy.OpenStrategyImpl;
+import nl.quintor.qodingchallenge.service.questionstrategy.QuestionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -18,6 +22,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     private QuestionDAO questionDAO;
     private CampaignDAO campaignDAO;
+    private List<QuestionStrategy> strategies = new ArrayList<>() {
+        {
+            add(new OpenStrategyImpl(questionDAO));
+            add(new MultipleStrategyImpl(questionDAO));
+        }
+    };
+
 
     @Autowired
     @Override
@@ -74,7 +85,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createQuestion(QuestionDTO question) throws SQLException {
-        questionDAO.persistQuestion(question);
+        String questionType = question.getQuestionType();
+        for (QuestionStrategy strategy : strategies) {
+            if (strategy.isType(questionType)) {
+                strategy.persistQuestion(question);
+                break;
+            }
+        }
     }
 
     @Override

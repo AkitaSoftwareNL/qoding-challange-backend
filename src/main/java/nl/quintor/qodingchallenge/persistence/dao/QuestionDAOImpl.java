@@ -97,7 +97,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void persistQuestion(QuestionDTO question) throws SQLException {
+    public void persistOpenQuestion(QuestionDTO question) throws SQLException {
         final String JAVA = "JAVA";
         try (
                 Connection connection = getConnection()
@@ -125,6 +125,18 @@ public class QuestionDAOImpl implements QuestionDAO {
             throw new SQLException(e);
         }
         return questions;
+    }
+
+    @Override
+    public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
+        try (
+                Connection connection = getConnection()
+                ) {
+            PreparedStatement statement = connection.prepareStatement("DE PROCEDURE");
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 }
 

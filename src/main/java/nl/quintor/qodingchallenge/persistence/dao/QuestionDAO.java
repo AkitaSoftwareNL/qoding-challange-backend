@@ -14,7 +14,9 @@ public interface QuestionDAO {
 
     List<String> getPossibleAnswers(int questionID) throws SQLException;
 
-    void persistQuestion(QuestionDTO question) throws SQLException;
+    void persistOpenQuestion(QuestionDTO question) throws SQLException;
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
+
+    void persistMultipleQuestion(QuestionDTO question) throws SQLException;
 }
