@@ -17,4 +17,6 @@ public interface QuestionDAO {
     void persistQuestion(QuestionDTO question) throws SQLException;
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
+
+    void removeQuestion(int questionID) throws SQLException;
 }

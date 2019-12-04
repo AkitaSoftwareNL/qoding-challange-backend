@@ -20,4 +20,6 @@ public interface QuestionService {
     void createQuestion(QuestionDTO question) throws SQLException;
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
+
+    List<QuestionDTO> removeQuestion(int questionID) throws SQLException;
 }
