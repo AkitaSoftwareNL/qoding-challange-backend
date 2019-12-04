@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -23,9 +24,8 @@ class QuestionResourceTest {
 
     private final String CATEGORY = "java";
     private final String JFALL = "JFALL";
-    private final String JAVA = "java";
+    private final String ATTACHMENT = "java";
     private final String QUESTION = "Dit is mijn vraag";
-    private final QuestionDTO question = new QuestionDTO(1, CATEGORY, QUESTION, JAVA);
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
@@ -40,7 +40,7 @@ class QuestionResourceTest {
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
         final int AMOUNT_OF_QUESTIONS = 3;
-        when(questionServiceMock.getQuestions(CATEGORY, JFALL)).thenReturn(setQuestionCollection().getQuestions());
+        when(questionServiceMock.getQuestions(CATEGORY, JFALL)).thenReturn(getQuestionCollection().getQuestions());
 
         sut.sendQuestions(JFALL);
 
@@ -56,7 +56,7 @@ class QuestionResourceTest {
 
     @Test
     void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
-        var questions = setQuestionCollection();
+        var questions = getQuestionCollection();
         sut.getAnswer(questions);
 
         verify(questionServiceMock).setAnswer(questions);
@@ -64,7 +64,7 @@ class QuestionResourceTest {
 
     @Test
     void getAnswerReturnsResponseOK() throws SQLException {
-        var test = sut.getAnswer(setQuestionCollection());
+        var test = sut.getAnswer(getQuestionCollection());
 
         assertEquals(HttpStatus.OK, test.getStatusCode());
     }
@@ -74,9 +74,9 @@ class QuestionResourceTest {
         // Mock
 
         // Verify
-        sut.createQuestion(question);
+        sut.createQuestion(getQuestion());
         // Test
-        verify(questionServiceMock).createQuestion(question);
+        verify(questionServiceMock).createQuestion(getQuestion());
     }
 
     @Test
@@ -84,7 +84,7 @@ class QuestionResourceTest {
         // Mock
 
         // Verify
-        var testValue = sut.createQuestion(question);
+        var testValue = sut.createQuestion(getQuestion());
         // Test
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
     }
@@ -100,7 +100,7 @@ class QuestionResourceTest {
     }
 
     @Test
-    void getAllQuestionsReturnsQuestionCollectionAndStatusCode200() throws SQLException {
+    void getAllQuestionsReturnsQuestionCollectionAndStatusCodeOK() throws SQLException {
         // Mock
         var questions = getQuestions();
         when(questionServiceMock.getAllQuestions()).thenReturn(questions);
@@ -115,13 +115,17 @@ class QuestionResourceTest {
 
     private List<QuestionDTO> getQuestions() {
         List<QuestionDTO> questions = new ArrayList<>();
-        questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, JAVA));
-        questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, JAVA));
+        questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, ATTACHMENT));
+        questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, ATTACHMENT));
         return questions;
     }
 
-    private QuestionCollection setQuestionCollection() {
+    private QuestionCollection getQuestionCollection() {
         return new QuestionCollection(1, JFALL, getQuestions());
+    }
+
+    private QuestionDTO getQuestion() {
+        return new QuestionDTO(1, CATEGORY, QUESTION, ATTACHMENT);
     }
 
 }

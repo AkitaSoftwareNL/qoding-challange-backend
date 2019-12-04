@@ -48,7 +48,9 @@ public class QuestionCollection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QuestionCollection that = (QuestionCollection) o;
-        return Objects.equals(questions, that.questions);
+        return participantID == that.participantID &&
+                Objects.equals(campaignName, that.campaignName) &&
+                Objects.equals(questions, that.questions);
     }
 
     @Override

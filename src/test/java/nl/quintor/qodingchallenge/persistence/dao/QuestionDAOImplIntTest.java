@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class QuestionDAOImplIntTest {
 
     private final int QUESTION_ID = 3;
-    private final QuestionDTO questionDTO = new QuestionDTO(10, "dit is een test vraag", "open", null);
+    private final int AMOUNT_OF_QUESTIONS = 3;
     private QuestionDAOImpl sut;
 
     @BeforeEach
@@ -55,7 +55,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(questionDTO, "testcampaign", 1));
+        assertDoesNotThrow(() -> sut.setAnswer(getQuestions(), "testcampaign", 1));
     }
 
     @Test
@@ -68,9 +68,9 @@ class QuestionDAOImplIntTest {
     @Test
     void persistQuestionPersistsQuestion() throws SQLException {
         // Mock
-        final int AMOUNT_OF_QUESTIONS = 3;
+
         // Test
-        sut.persistQuestion(questionDTO);
+        sut.persistQuestion(getQuestions());
         // Verify
         assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
     }
@@ -78,10 +78,14 @@ class QuestionDAOImplIntTest {
     @Test
     void getAllQuestionsReturnsAllQuestions() throws SQLException {
         // Mock
-        final int AMOUNT_OF_QUESTIONS = 3;
+
         // Test
         var testValue = sut.getAllQuestions();
         // Verify
         assertEquals(AMOUNT_OF_QUESTIONS, testValue.size());
+    }
+
+    private QuestionDTO getQuestions() {
+        return new QuestionDTO(10, "dit is een test vraag", "open", null);
     }
 }
