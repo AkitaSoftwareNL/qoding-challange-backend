@@ -26,7 +26,7 @@ public class ReportDAOImpl implements ReportDAO {
                     "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID" +
                             ",poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER, " +
                             "(SELECT COUNT(*) FROM given_answer  WHERE poc.CAMPAIGN_ID = CAMPAIGN_ID AND poc.PARTICIPANTID = PARTICIPANTID AND STATEID = 1) AS CORRECT " +
-                            "FROM qodingchallenge.participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
+                            "FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
             statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -34,7 +34,7 @@ public class ReportDAOImpl implements ReportDAO {
                         new ParticipantDTO(
                                 resultSet.getInt(1),
                                 resultSet.getInt(2),
-                                resultSet.getTime(3),
+                                resultSet.getLong(3),
                                 resultSet.getString(4),
                                 resultSet.getString(5),
                                 resultSet.getString(6),

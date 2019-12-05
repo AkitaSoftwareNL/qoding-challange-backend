@@ -1,14 +1,10 @@
 package nl.quintor.qodingchallenge.dto;
 
-import jdk.jfr.Unsigned;
-
-import java.sql.Time;
-
 public class ParticipantDTO {
 
     private int participantID;
     private int campaignID;
-    private Time timeInMillis;
+    private long timeInMillis;
     private String firstname;
     private String insertion;
     private String lastname;
@@ -19,7 +15,7 @@ public class ParticipantDTO {
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(int participantID, int campaignID, Time timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAwnseredQuestions) {
+    public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAwnseredQuestions) {
         this.participantID = participantID;
         this.campaignID = campaignID;
         this.timeInMillis = timeInMillis;
@@ -87,11 +83,11 @@ public class ParticipantDTO {
         this.campaignID = campaignID;
     }
 
-    public Time getTimeInMillis() {
+    public long getTimeInMillis() {
         return timeInMillis;
     }
 
-    public void setTimeInMillis(Time timeInMillis) {
+    public void setTimeInMillis(long timeInMillis) {
         this.timeInMillis = timeInMillis;
     }
 

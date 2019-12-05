@@ -14,4 +14,20 @@ public class RankedParticipantCollection {
         this.campaignName = campaignName;
         this.participants = participants;
     }
+
+    public String getCampaignName() {
+        return campaignName;
+    }
+
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
+    }
+
+    public List<ParticipantDTO> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<ParticipantDTO> participants) {
+        this.participants = participants;
+    }
 }

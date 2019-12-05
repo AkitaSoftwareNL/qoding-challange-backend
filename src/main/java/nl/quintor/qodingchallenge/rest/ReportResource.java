@@ -40,7 +40,7 @@ public class ReportResource {
         return new ResponseEntity<>(reportService.getRankedParticipantsPerCampaign(campaignID), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/report/{campaingID}/{participantID}",
+    @RequestMapping(path = "/report/{campaignID}/{participantID}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AnswerCollection> getAnswersPerParticipant(@PathVariable int campaignID, @PathVariable int participantID) throws SQLException {

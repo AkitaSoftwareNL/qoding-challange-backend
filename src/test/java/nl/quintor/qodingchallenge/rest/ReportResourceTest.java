@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +73,7 @@ class ReportResourceTest {
     }
 
     private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO(1, 2, new Time(300), "jan", "van", "peter", "ik@gmail.com", "069839428", 4);
+        return new ParticipantDTO(1, 2, 420000, "jan", "van", "peter", "ik@gmail.com", "069839428", 4);
     }
 
     private List<ParticipantDTO> getListParticipant() {
