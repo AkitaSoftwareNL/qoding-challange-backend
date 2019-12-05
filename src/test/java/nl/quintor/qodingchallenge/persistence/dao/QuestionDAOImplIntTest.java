@@ -21,14 +21,15 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class QuestionDAOImplIntTest {
 
     private final int QUESTION_ID = 3;
-    private final QuestionDTO questionDTO = new QuestionDTO(10, "dit is een test vraag", "open", null);
+    private final int AMOUNT_OF_QUESTIONS = 3;
     private QuestionDAOImpl sut;
 
     @BeforeEach
     void setUp() {
         this.sut = new QuestionDAOImpl();
-        try {
-            Connection connection = getConnection();
+        try (
+                Connection connection = getConnection()
+        ) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testQuestionDDL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
@@ -55,7 +56,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(questionDTO, "testcampaign", 1));
+        assertDoesNotThrow(() -> sut.setAnswer(getQuestions(), "testcampaign", 1));
     }
 
     @Test
@@ -65,4 +66,27 @@ class QuestionDAOImplIntTest {
         assertFalse(actualResult.isEmpty());
     }
 
+    @Test
+    void persistQuestionPersistsQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistQuestion(getQuestions());
+        // Verify
+        assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
+    }
+
+    @Test
+    void getAllQuestionsReturnsAllQuestions() throws SQLException {
+        // Mock
+
+        // Test
+        var testValue = sut.getAllQuestions();
+        // Verify
+        assertEquals(AMOUNT_OF_QUESTIONS, testValue.size());
+    }
+
+    private QuestionDTO getQuestions() {
+        return new QuestionDTO(10, "dit is een test vraag", "open", null);
+    }
 }
