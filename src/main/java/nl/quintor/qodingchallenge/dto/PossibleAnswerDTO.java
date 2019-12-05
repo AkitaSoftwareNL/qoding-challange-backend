@@ -3,9 +3,12 @@ package nl.quintor.qodingchallenge.dto;
 public class PossibleAnswerDTO {
 
     private String possibleAnswer;
-    private boolean is_Correct;
+    private int is_Correct;
 
-    public PossibleAnswerDTO(String possibleAnswer, boolean is_Correct) {
+    public PossibleAnswerDTO() {
+    }
+
+    public PossibleAnswerDTO(String possibleAnswer, int is_Correct) {
         this.possibleAnswer = possibleAnswer;
         this.is_Correct = is_Correct;
     }
@@ -18,11 +21,11 @@ public class PossibleAnswerDTO {
         this.possibleAnswer = possibleAnswer;
     }
 
-    public boolean getIs_Correct() {
+    public int getIs_Correct() {
         return is_Correct;
     }
 
-    public void setIs_Correct(boolean is_Correct) {
+    public void setIs_Correct(int is_Correct) {
         this.is_Correct = is_Correct;
     }
 }

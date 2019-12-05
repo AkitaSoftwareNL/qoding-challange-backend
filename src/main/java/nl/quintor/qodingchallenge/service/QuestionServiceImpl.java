@@ -22,13 +22,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private QuestionDAO questionDAO;
     private CampaignDAO campaignDAO;
-    private List<QuestionStrategy> strategies = new ArrayList<>() {
-        {
-            add(new OpenStrategyImpl(questionDAO));
-            add(new MultipleStrategyImpl(questionDAO));
-        }
-    };
-
+    private List<QuestionStrategy> strategies = new ArrayList<>();
 
     @Autowired
     @Override
@@ -40,8 +34,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void setQuestionDAO(QuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
+        strategies.add(new OpenStrategyImpl(questionDAO));
+        strategies.add(new MultipleStrategyImpl(questionDAO));
     }
-
 
     @Override
     public List<QuestionDTO> getQuestions(String category, String campaignName) throws SQLException {

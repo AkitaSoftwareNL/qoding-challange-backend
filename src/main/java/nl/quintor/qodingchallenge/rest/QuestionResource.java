@@ -45,7 +45,7 @@ public class QuestionResource {
     @RequestMapping(path = "/questions/create",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createQuestion(QuestionDTO question) throws SQLException {
+    public ResponseEntity createQuestion(@RequestBody QuestionDTO question) throws SQLException {
         questionService.createQuestion(question);
         return ResponseEntity.status(200).build();
     }

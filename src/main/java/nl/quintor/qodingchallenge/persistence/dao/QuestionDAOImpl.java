@@ -54,7 +54,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 possibleAnswers.add(new PossibleAnswerDTO(
-                        resultSet.getString(1),false));
+                        resultSet.getString(1),0));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -131,14 +131,41 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
+        final String delimiter = "&";
+        List<String> possibleAnswersString = makeString(question.getPossibleAnswers(), delimiter);
+
         try (
                 Connection connection = getConnection()
                 ) {
-            PreparedStatement statement = connection.prepareStatement("DE PROCEDURE");
+            PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
+            statement.setString(1, "JAVA");
+            statement.setString(2, question.getQuestion());
+            statement.setString(3, question.getQuestionType());
+            statement.setString(4, question.getAttachment());
+            statement.setString(5, possibleAnswersString.get(0));
+            statement.setString(6, possibleAnswersString.get(1));
+            statement.setInt(7, question.getPossibleAnswers().size());
+            statement.setString(8, delimiter);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+    }
+
+    private List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
+        List<String> possibleAnswersString = new ArrayList<>();
+        String possibleAnswerString = delimiter;
+        String isCorrectString = delimiter;
+
+        for (PossibleAnswerDTO possibleAnswer : possibleAnswers) {
+            possibleAnswerString = possibleAnswerString.concat(possibleAnswer.getPossibleAnswer() + delimiter);
+            isCorrectString = isCorrectString.concat(possibleAnswer.getIs_Correct() + delimiter);
+        }
+
+        possibleAnswersString.add(possibleAnswerString);
+        possibleAnswersString.add(isCorrectString);
+
+        return possibleAnswersString;
     }
 }
 
