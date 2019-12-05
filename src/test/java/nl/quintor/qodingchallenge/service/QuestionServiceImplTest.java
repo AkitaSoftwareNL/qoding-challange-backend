@@ -6,14 +6,16 @@ import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAOImpl;
+import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
@@ -22,6 +24,10 @@ class QuestionServiceImplTest {
     private final String CATEGORY = "category";
     private final int LIMIT = 0;
     private final int QUESTION_ID = 1;
+    private final List<String> POSSIBLE_ANSWER = new ArrayList<>();
+    private final QuestionDTO QUESTIONDTO = new QuestionDTO(
+            QUESTION_ID, "de beschrijving van de vraag", "meerkeuze", "dit is een bijlage"
+    );
 
     private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
@@ -38,6 +44,9 @@ class QuestionServiceImplTest {
         this.sut.setCampaignDAO(campaignDAOMock);
 
         when(campaignDAOMock.campaignExists(JFALL)).thenReturn(true);
+
+        POSSIBLE_ANSWER.add("Eerste antwoord");
+        POSSIBLE_ANSWER.add("Tweede antwoord");
     }
 
     @Test
@@ -104,6 +113,26 @@ class QuestionServiceImplTest {
         sut.createQuestion(getQuestion());
         // Verify
         verify(questionDAOMock).persistQuestion(getQuestion());
+    }
+
+    @Test
+    void getQuestionThrowsNoCampaignFoundException() throws SQLException {
+        when(campaignDAOMock.campaignExists("This campaign does not exist")).thenReturn(true);
+
+        assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(CATEGORY, "This campaign does not exists"));
+    }
+
+    @Test
+    void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        questionDTOList.add(QUESTIONDTO);
+        when(campaignDAOMock.getAmountOfQuestions(JFALL)).thenReturn(1);
+        when(questionDAOMock.getQuestions(CATEGORY, campaignDAOMock.getAmountOfQuestions(JFALL))).thenReturn(questionDTOList);
+        when(questionDAOMock.getPossibleAnswers(QUESTION_ID)).thenReturn(POSSIBLE_ANSWER);
+
+        QUESTIONDTO.setPossibleAnswer(POSSIBLE_ANSWER);
+
+        assertEquals(questionDTOList, sut.getQuestions(CATEGORY, JFALL));
     }
 
     private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
