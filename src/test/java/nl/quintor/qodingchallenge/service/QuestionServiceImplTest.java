@@ -109,11 +109,20 @@ class QuestionServiceImplTest {
     @Test
     void createQuestionCallsPersistOpenQuestion() throws SQLException {
         // Mock
-
+        var question = getOpenQuestion();
         // Test
-        sut.createQuestion(getQuestion());
+        sut.createQuestion(getOpenQuestion());
         // Verify
-        verify(questionDAOMock).persistOpenQuestion(getQuestion());
+        verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
+
+        // Mock
+        var list = setQuestionlist();
+        when(questionDAOMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
+        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
+        // Test
+        sut.getQuestions(CATEGORY, JFALL);
+        // Verify
+        verify(questionDAOMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
     }
 
     @Test
@@ -152,7 +161,11 @@ class QuestionServiceImplTest {
         return new QuestionCollection(1, "test", setQuestionlist());
     }
 
-    private QuestionDTO getQuestion() {
+    private QuestionDTO getOpenQuestion() {
+        return new QuestionDTO(2, "String", "open", "String");
+    }
+
+    private QuestionDTO getMultipleQuestion() {
         return new QuestionDTO(2, "String", "multiple", "String");
     }
 }
