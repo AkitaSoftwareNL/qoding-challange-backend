@@ -67,11 +67,11 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void persistQuestionPersistsQuestion() throws SQLException {
+    void persistOpenQuestionPersistsOpenQuestion() throws SQLException {
         // Mock
 
         // Test
-        sut.persistQuestion(getQuestions());
+        sut.persistOpenQuestion(getQuestions());
         // Verify
         assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
     }

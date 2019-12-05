@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
@@ -24,7 +25,7 @@ class QuestionServiceImplTest {
     private final String CATEGORY = "category";
     private final int LIMIT = 0;
     private final int QUESTION_ID = 1;
-    private final List<String> POSSIBLE_ANSWER = new ArrayList<>();
+    private final List<PossibleAnswerDTO> POSSIBLE_ANSWER = new ArrayList<>();
     private final QuestionDTO QUESTIONDTO = new QuestionDTO(
             QUESTION_ID, "de beschrijving van de vraag", "meerkeuze", "dit is een bijlage"
     );
@@ -45,8 +46,8 @@ class QuestionServiceImplTest {
 
         when(campaignDAOMock.campaignExists(JFALL)).thenReturn(true);
 
-        POSSIBLE_ANSWER.add("Eerste antwoord");
-        POSSIBLE_ANSWER.add("Tweede antwoord");
+        POSSIBLE_ANSWER.add(new PossibleAnswerDTO("yes", 1));
+        POSSIBLE_ANSWER.add(new PossibleAnswerDTO("no", 0));
     }
 
     @Test
@@ -106,13 +107,13 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void createQuestionCallsPersistQuestion() throws SQLException {
+    void createQuestionCallsPersistOpenQuestion() throws SQLException {
         // Mock
 
         // Test
         sut.createQuestion(getQuestion());
         // Verify
-        verify(questionDAOMock).persistQuestion(getQuestion());
+        verify(questionDAOMock).persistOpenQuestion(getQuestion());
     }
 
     @Test
@@ -130,7 +131,7 @@ class QuestionServiceImplTest {
         when(questionDAOMock.getQuestions(CATEGORY, campaignDAOMock.getAmountOfQuestions(JFALL))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(QUESTION_ID)).thenReturn(POSSIBLE_ANSWER);
 
-        QUESTIONDTO.setPossibleAnswer(POSSIBLE_ANSWER);
+        QUESTIONDTO.setPossibleAnswers(POSSIBLE_ANSWER);
 
         assertEquals(questionDTOList, sut.getQuestions(CATEGORY, JFALL));
     }
