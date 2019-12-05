@@ -22,7 +22,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT 1 FROM campaign WHERE name = ?");
+                    "SELECT 1 FROM campaign WHERE CAMPAIGN_NAME = ?");
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -40,7 +40,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO campaign(NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
+                    "INSERT INTO campaign(CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
                             "VALUES (?, 'JAVA', 'conferentie', 'admin', ?, null, 1)");
             statement.setString(1, campaignDTO.getName());
             statement.setInt(2, campaignDTO.getAmountOfQuestions());
@@ -57,7 +57,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT CAMPAIGN_ID, NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS FROM campaign");
+                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS FROM campaign");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 campaignDTOList.add(
@@ -65,8 +65,8 @@ public class CampaignDAOImpl implements CampaignDAO {
                                 resultSet.getInt(1),
                                 resultSet.getString(2),
                                 resultSet.getInt(5),
-                                resultSet.getString(3),
                                 resultSet.getString(4),
+                                resultSet.getString(3),
                                 null
                         )
                 );
@@ -83,7 +83,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE NAME = ?");
+                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE CAMPAIGN_NAME = ?");
             statement.setString(1, campaignName);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
