@@ -1,24 +1,32 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.sql.Time;
+
 public class ParticipantDTO {
 
     private int participantID;
+    private int campaignID;
+    private Time timeInMillis;
     private String firstname;
     private String insertion;
     private String lastname;
     private String email;
     private int phonenumber;
+    private int AmountOfRightAwnseredQuestions;
 
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(int participantID, String firstname, String insertion, String lastname, String email, int phonenumber) {
+    public ParticipantDTO(int participantID, int campaignID, Time timeInMillis, String firstname, String insertion, String lastname, String email, int phonenumber, int amountOfRightAwnseredQuestions) {
         this.participantID = participantID;
+        this.campaignID = campaignID;
+        this.timeInMillis = timeInMillis;
         this.firstname = firstname;
         this.insertion = insertion;
         this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
+        AmountOfRightAwnseredQuestions = amountOfRightAwnseredQuestions;
     }
 
     public int getParticipantID() {
@@ -67,5 +75,29 @@ public class ParticipantDTO {
 
     public void setPhonenumber(int phonenumber) {
         this.phonenumber = phonenumber;
+    }
+
+    public int getCampaignID() {
+        return campaignID;
+    }
+
+    public void setCampaignID(int campaignID) {
+        this.campaignID = campaignID;
+    }
+
+    public Time getTimeInMillis() {
+        return timeInMillis;
+    }
+
+    public void setTimeInMillis(Time timeInMillis) {
+        this.timeInMillis = timeInMillis;
+    }
+
+    public int getAmountOfRightAwnseredQuestions() {
+        return AmountOfRightAwnseredQuestions;
+    }
+
+    public void setAmountOfRightAwnseredQuestions(int amountOfRightAwnseredQuestions) {
+        AmountOfRightAwnseredQuestions = amountOfRightAwnseredQuestions;
     }
 }

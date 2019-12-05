@@ -92,4 +92,19 @@ public class CampaignDAOImpl implements CampaignDAO {
         }
     }
 
+    @Override
+    public String getCampaignName(int campaignID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT campaign_name FROM campaign WHERE CAMPAIGN_ID = ?");
+            statement.setInt(1, campaignID);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getString(1);
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
 }
