@@ -19,9 +19,9 @@ public interface QuestionDAO {
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
 
-    List<GivenAnswerDTO> getPendingQuestion(int campaignId, int questionState) throws SQLException;
+    List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 
     QuestionDTO getQuestion(int questionid) throws SQLException;
 
-    void setPendingQuestion(GivenAnswerDTO questionDTO) throws SQLException;
+    void setPendingAnswers(GivenAnswerDTO questionDTO) throws SQLException;
 }

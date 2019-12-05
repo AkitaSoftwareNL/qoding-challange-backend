@@ -22,9 +22,9 @@ public interface QuestionService {
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
 
-    List<GivenAnswerDTO> getPendingQuestions(int campaignId, int questionState) throws SQLException;
+    List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 
     QuestionDTO getQuestion(int questionid) throws SQLException;
 
-    void setPendingQuestion(GivenAnswerDTO givenAnswerDTO) throws SQLException;
+    void setPendingAnswers(GivenAnswerDTO givenAnswerDTO) throws SQLException;
 }

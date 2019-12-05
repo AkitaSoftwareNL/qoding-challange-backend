@@ -129,7 +129,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<GivenAnswerDTO> getPendingQuestion(int campaignId, int questionState) throws SQLException {
+    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException {
         List<GivenAnswerDTO> givenAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -182,7 +182,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void setPendingQuestion(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+    public void setPendingAnswers(GivenAnswerDTO givenAnswerDTO) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {

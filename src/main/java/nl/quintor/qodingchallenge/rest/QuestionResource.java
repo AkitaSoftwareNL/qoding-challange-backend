@@ -45,17 +45,16 @@ public class QuestionResource {
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/campaign/{campaignid}/answers/{state}",
             method = RequestMethod.GET)
-    public ResponseEntity getPendingQuestions(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState) throws SQLException {
-        List<GivenAnswerDTO> givenAnswers = questionService.getPendingQuestions(campaignId, questionState);
-        return ResponseEntity.ok().body(givenAnswers);
+    public ResponseEntity getPendingAnswers(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState) throws SQLException {
+        return ResponseEntity.ok().body(questionService.getPendingAnswers(campaignId, questionState));
     }
 
     @ResponseBody
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             path = "/answers/update",
             method = RequestMethod.POST)
-    public ResponseEntity setPendingQuestion(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
-        questionService.setPendingQuestion(givenAnswerDTO);
+    public ResponseEntity setPendingAnswers(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionService.setPendingAnswers(givenAnswerDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -63,8 +62,7 @@ public class QuestionResource {
             path = "/questions/{questionid}",
             method = RequestMethod.GET)
     public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException {
-        QuestionDTO question = questionService.getQuestion(questionId);
-        return ResponseEntity.ok().body(question);
+        return ResponseEntity.ok().body(questionService.getQuestion(questionId));
     }
 
     @ResponseBody

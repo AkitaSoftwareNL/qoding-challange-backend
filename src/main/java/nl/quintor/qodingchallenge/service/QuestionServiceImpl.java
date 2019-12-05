@@ -84,8 +84,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<GivenAnswerDTO> getPendingQuestions(int campaignId, int questionState) throws SQLException {
-        return questionDAO.getPendingQuestion(campaignId, questionState);
+    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException {
+        return questionDAO.getPendingAnswers(campaignId, questionState);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void setPendingQuestion(GivenAnswerDTO givenAnswerDTO) throws SQLException {
-        questionDAO.setPendingQuestion(givenAnswerDTO);
+    public void setPendingAnswers(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionDAO.setPendingAnswers(givenAnswerDTO);
     }
 }
