@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
+import jdk.jfr.Unsigned;
+
 import java.sql.Time;
 
 public class ParticipantDTO {
@@ -11,13 +13,13 @@ public class ParticipantDTO {
     private String insertion;
     private String lastname;
     private String email;
-    private int phonenumber;
+    private String phonenumber;
     private int AmountOfRightAwnseredQuestions;
 
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(int participantID, int campaignID, Time timeInMillis, String firstname, String insertion, String lastname, String email, int phonenumber, int amountOfRightAwnseredQuestions) {
+    public ParticipantDTO(int participantID, int campaignID, Time timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAwnseredQuestions) {
         this.participantID = participantID;
         this.campaignID = campaignID;
         this.timeInMillis = timeInMillis;
@@ -26,7 +28,7 @@ public class ParticipantDTO {
         this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
-        AmountOfRightAwnseredQuestions = amountOfRightAwnseredQuestions;
+        this.AmountOfRightAwnseredQuestions = amountOfRightAwnseredQuestions;
     }
 
     public int getParticipantID() {
@@ -69,11 +71,11 @@ public class ParticipantDTO {
         this.email = email;
     }
 
-    public int getPhonenumber() {
+    public String getPhonenumber() {
         return phonenumber;
     }
 
-    public void setPhonenumber(int phonenumber) {
+    public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
     }
 

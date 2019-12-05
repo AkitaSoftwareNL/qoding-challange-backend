@@ -63,7 +63,7 @@ class CampaignResourceTest {
     }
 
     private void checkRequest(ResponseEntity<List<CampaignDTO>> actualResult) {
-        assertEquals(ResponseEntity.status(HttpStatus.OK).build().getStatusCode(), actualResult.getStatusCode());
+        assertEquals(HttpStatus.OK, actualResult.getStatusCode());
         assertTrue(actualResult.hasBody());
     }
 
