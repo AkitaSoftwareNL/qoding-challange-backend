@@ -57,15 +57,18 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS FROM campaign");
+                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS TIMESTAMP_CREATED, STATE FROM campaign");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 campaignDTOList.add(
                         new CampaignDTO(
-                                resultSet.getString(1),
-                                resultSet.getInt(4),
+                                resultSet.getInt(1),
                                 resultSet.getString(2),
                                 resultSet.getString(3),
+                                resultSet.getString(4),
+                                resultSet.getInt(5),
+                                resultSet.getString(6),
+                                resultSet.getInt(7),
                                 null
                         )
                 );
