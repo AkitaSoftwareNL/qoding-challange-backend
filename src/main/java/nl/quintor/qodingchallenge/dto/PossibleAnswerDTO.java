@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.util.Objects;
+
 public class PossibleAnswerDTO {
 
     private String possibleAnswer;
@@ -27,5 +29,19 @@ public class PossibleAnswerDTO {
 
     public void setIs_Correct(int is_Correct) {
         this.is_Correct = is_Correct;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PossibleAnswerDTO that = (PossibleAnswerDTO) o;
+        return is_Correct == that.is_Correct &&
+                Objects.equals(possibleAnswer, that.possibleAnswer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(possibleAnswer, is_Correct);
     }
 }
