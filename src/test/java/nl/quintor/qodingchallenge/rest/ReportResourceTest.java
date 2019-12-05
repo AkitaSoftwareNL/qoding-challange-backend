@@ -61,9 +61,17 @@ class ReportResourceTest {
         assertTrue(result.hasBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
+    private int id;
+    private String name;
+    private String startedBy;
+    private String category;
+    private int amountOfQuestions;
+    private String date;
+    private int state;
+    private List<ParticipantDTO> participants;
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(JFALL, 3, "me", "JAVA", null);
+        return new CampaignDTO(1, JFALL,"me","JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {

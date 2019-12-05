@@ -19,7 +19,7 @@ import static org.mockito.Mockito.spy;
 class CampaignDAOImplIntTest {
 
     private final String NO_CAMPAIGN = "Some non existing campaign";
-    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null);
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO(1, "JFALL","me","JAVA", 3, "12/2/2019", 1, null);
     private CampaignDAO sut;
 
     @BeforeEach
@@ -44,7 +44,7 @@ class CampaignDAOImplIntTest {
 //    }
 
     @Test
-    void perstistCampaignAddsCampain() throws SQLException {
+    void persistCampaignAddsCampaing() throws SQLException {
         sut.persistCampaign(CAMPAIGNDTO);
 
         int AMOUNT_OF_CAMPAIGNS = 3;

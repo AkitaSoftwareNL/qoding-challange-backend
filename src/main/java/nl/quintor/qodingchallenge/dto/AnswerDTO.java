@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.util.Objects;
+
 public class AnswerDTO {
 
     private String givenAnswer;
@@ -44,5 +46,21 @@ public class AnswerDTO {
 
     public void setQuestionType(String questionType) {
         this.questionType = questionType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AnswerDTO answerDTO = (AnswerDTO) o;
+        return state == answerDTO.state &&
+                Objects.equals(givenAnswer, answerDTO.givenAnswer) &&
+                Objects.equals(question, answerDTO.question) &&
+                Objects.equals(questionType, answerDTO.questionType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(givenAnswer, question, state, questionType);
     }
 }

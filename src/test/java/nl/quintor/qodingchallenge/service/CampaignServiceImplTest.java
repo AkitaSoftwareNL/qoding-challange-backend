@@ -22,7 +22,8 @@ import static org.mockito.Mockito.when;
 class CampaignServiceImplTest {
 
     private final List<CampaignDTO> CAMPAIGNDTOLIST = new ArrayList<>();
-    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
+    private final String JFALL = "JFALL";
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO(1, JFALL,"me","JAVA", 3, "12/2/2019", 1, null);
     @InjectMocks
     CampaignServiceImpl sut;
     @Mock
@@ -31,7 +32,7 @@ class CampaignServiceImplTest {
     @BeforeEach
     void setUp() {
         CAMPAIGNDTOLIST.add(
-                new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null)
+                new CampaignDTO(1, JFALL,"me","JAVA", 3, "12/2/2019", 1, null)
         );
         CAMPAIGNDTOLIST.add(
                 CAMPAIGNDTO
