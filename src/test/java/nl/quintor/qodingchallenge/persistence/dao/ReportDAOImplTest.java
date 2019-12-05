@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -63,7 +62,7 @@ class ReportDAOImplTest {
     void getRankedParticipantReturnsOrderedParticipantList() throws SQLException {
         final long[] min = {0};
         getRankedParticipantCollection().getParticipants().iterator().forEachRemaining(participantDTO -> {
-            if(min[0] == 0) min[0] = participantDTO.getTimeInMillis();
+            if (min[0] == 0) min[0] = participantDTO.getTimeInMillis();
             if (min[0] > participantDTO.getTimeInMillis()) {
                 min[0] = participantDTO.getTimeInMillis();
             }

@@ -1,8 +1,3 @@
-drop table if exists conference;
-drop table if exists given_answer;
-drop table if exists question;
-drop table if exists participant_of_campaign;
-
 CREATE TABLE CONFERENCE
 (
    PARTICIPANTID        SMALLINT NOT NULL,
