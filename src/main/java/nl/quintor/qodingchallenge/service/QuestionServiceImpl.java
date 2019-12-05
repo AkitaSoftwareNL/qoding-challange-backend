@@ -19,14 +19,14 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionDAO questionDAO;
     private CampaignDAO campaignDAO;
 
-    @Autowired
     @Override
+    @Autowired
     public void setCampaignDAO(CampaignDAO campaignDAO) {
         this.campaignDAO = campaignDAO;
     }
 
-    @Autowired
     @Override
+    @Autowired
     public void setQuestionDAO(QuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }

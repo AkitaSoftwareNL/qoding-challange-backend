@@ -1,43 +1,29 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.qodingchallenge.dto.*;
+import nl.quintor.qodingchallenge.dto.AnswerCollection;
+import nl.quintor.qodingchallenge.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.dto.RankedParticipantCollection;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ReportDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Service
-public class ReportService {
-
-    private ReportDAO reportDAO;
-
-    private ParticipantDAO participantDAO;
-
-    private CampaignDAO campaignDAO;
+public interface ReportService {
+    @Autowired
+    void setCampaignDAO(CampaignDAO campaignDAO);
 
     @Autowired
-    public void setCampaignDAO(CampaignDAO campaignDAO) {
-        this.campaignDAO = campaignDAO;
-    }
+    void setParticipantDAO(ParticipantDAO participantDAO);
 
-    public List<CampaignDTO> getAllCampaings() throws SQLException {
-        return campaignDAO.getAllCampaigns();
-    }
+    @Autowired
+    void setReportDAO(ReportDAO reportDAO);
 
-    public RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
-        return new RankedParticipantCollection(
-                campaignDAO.getCampaignName(campaignID),
-                reportDAO.getRankedParticipantsPerCampaign(campaignID)
-        );
-    }
+    List<CampaignDTO> getAllCampaings() throws SQLException;
 
-    public AnswerCollection getAnswersPerParticipant(int campaignID, int participantID) throws SQLException {
-        AnswerCollection answerCollection = participantDAO.getFirstAndLastname(participantID);
-        answerCollection.setAnswers(reportDAO.getAnswersPerParticipant(campaignID, participantID));
-        return answerCollection;
-    }
+    RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) throws SQLException;
+
+    AnswerCollection getAnswersPerParticipant(int campaignID, int participantID) throws SQLException;
 }

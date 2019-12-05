@@ -8,7 +8,6 @@ public class RankedParticipantCollection {
     private List<ParticipantDTO> participants;
 
     public RankedParticipantCollection() {
-
     }
 
     public RankedParticipantCollection(String campaignName, List<ParticipantDTO> participants) {
