@@ -51,7 +51,11 @@ public class QuestionDTO {
     }
 
     public String getAttachment() {
-        return attachment;
+        if(attachment.isEmpty()) {
+            return null;
+        } else {
+            return attachment;
+        }
     }
 
     public void setAttachment(String attachment) {
@@ -92,12 +96,12 @@ public class QuestionDTO {
                 Objects.equals(question, that.question) &&
                 Objects.equals(questionType, that.questionType) &&
                 Objects.equals(attachment, that.attachment) &&
-                Objects.equals(possibleAnswer, that.possibleAnswer) &&
+                Objects.equals(possibleAnswers, that.possibleAnswers) &&
                 Objects.equals(givenAnswer, that.givenAnswer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionID, question, questionType, attachment, possibleAnswer, givenAnswer, stateID);
+        return Objects.hash(questionID, question, questionType, attachment, possibleAnswers, givenAnswer, stateID);
     }
 }

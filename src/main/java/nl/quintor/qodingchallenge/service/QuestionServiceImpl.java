@@ -4,6 +4,7 @@ import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
+import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import nl.quintor.qodingchallenge.service.questionstrategy.MultipleStrategyImpl;
 import nl.quintor.qodingchallenge.service.questionstrategy.OpenStrategyImpl;
@@ -81,6 +82,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createQuestion(QuestionDTO question) throws SQLException {
+        if(question.getQuestion().isEmpty()) {
+            throw new EmptyQuestionException("Question can not be empty.");
+        }
         String questionType = question.getQuestionType();
         for (QuestionStrategy strategy : strategies) {
             if (strategy.isType(questionType)) {

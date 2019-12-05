@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({NoCampaignFoundException.class})
     public ResponseEntity<Object> handleNoCampaignFoundException(Exception e, WebRequest request) {
+        logger.error(e.fillInStackTrace().toString());
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({EmptyQuestionException.class})
+    public ResponseEntity<Object> handleEmptyQuestionException(Exception e, WebRequest request) {
         logger.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
