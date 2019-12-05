@@ -14,10 +14,10 @@ public class CampaignDTO {
     public CampaignDTO() {
     }
 
-    public CampaignDTO(String name, int amountOfQuestions, String startedby, String category, List<ParticipantDTO> participants) {
+    public CampaignDTO(String name, int amountOfQuestions, String startedBy, String category, List<ParticipantDTO> participants) {
         this.name = name;
         this.amountOfQuestions = amountOfQuestions;
-        this.startedBy = startedby;
+        this.startedBy = startedBy;
         this.category = category;
         this.participants = participants;
     }
