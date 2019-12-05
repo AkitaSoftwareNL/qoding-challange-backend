@@ -8,6 +8,8 @@ public class AnswerCollection {
     private String lastname;
     private List<AnswerDTO> answers;
 
+    public AnswerCollection() {}
+
     public AnswerCollection(String firstname, String lastname, List<AnswerDTO> answers) {
         this.firstname = firstname;
         this.lastname = lastname;

@@ -1,9 +1,6 @@
 package nl.quintor.qodingchallenge.rest;
 
-import nl.quintor.qodingchallenge.dto.AnswerDTO;
-import nl.quintor.qodingchallenge.dto.CampaignDTO;
-import nl.quintor.qodingchallenge.dto.ParticipantDTO;
-import nl.quintor.qodingchallenge.dto.RankedParticipantCollection;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.service.ReportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +34,7 @@ public class ReportResource {
     @RequestMapping(path = "/report/{campaingID}/{participantID}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AnswerDTO>> getAnswersPerParticipant(@PathVariable int campaginID, @PathVariable int participantID) throws SQLException {
-        return new ResponseEntity<>(reportService.getAnswersPerParticipant(campaginID, participantID) ,HttpStatus.OK);
+    public ResponseEntity<AnswerCollection> getAnswersPerParticipant(@PathVariable int campaignID, @PathVariable int participantID) throws SQLException {
+        return new ResponseEntity<>(reportService.getAnswersPerParticipant(campaignID, participantID) ,HttpStatus.OK);
     }
 }

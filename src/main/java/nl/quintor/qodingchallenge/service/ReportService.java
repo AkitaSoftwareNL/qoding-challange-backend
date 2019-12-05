@@ -1,10 +1,8 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.qodingchallenge.dto.AnswerDTO;
-import nl.quintor.qodingchallenge.dto.CampaignDTO;
-import nl.quintor.qodingchallenge.dto.ParticipantDTO;
-import nl.quintor.qodingchallenge.dto.RankedParticipantCollection;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ReportDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +14,8 @@ import java.util.List;
 public class ReportService {
 
     private ReportDAO reportDAO;
+
+    private ParticipantDAO participantDAO;
 
     private CampaignDAO campaignDAO;
 
@@ -35,7 +35,9 @@ public class ReportService {
         );
     }
 
-    public List<AnswerDTO> getAnswersPerParticipant(int campaignID, int participantID) throws SQLException {
-        return reportDAO.getAnswersPerParticipant(campaignID, participantID);
+    public AnswerCollection getAnswersPerParticipant(int campaignID, int participantID) throws SQLException {
+        AnswerCollection answerCollection = participantDAO.getFirstAndLastname(participantID);
+        answerCollection.setAnswers(reportDAO.getAnswersPerParticipant(campaignID, participantID));
+        return answerCollection;
     }
 }
