@@ -82,7 +82,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createQuestion(QuestionDTO question) throws SQLException {
-        if(question.getQuestion().isEmpty()) {
+        if (question.getQuestion().isEmpty()) {
             throw new EmptyQuestionException("Question can not be empty.");
         }
         String questionType = question.getQuestionType();
