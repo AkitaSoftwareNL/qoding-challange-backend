@@ -139,9 +139,9 @@ public class QuestionDAOImpl implements QuestionDAO {
             questions.add(
                     new QuestionDTO(
                             resultSet.getInt(1),
-                            resultSet.getString(2),
                             resultSet.getString(3),
-                            resultSet.getString(4)
+                            resultSet.getString(5),
+                            resultSet.getString(6)
                     ));
         }
         return questions;
