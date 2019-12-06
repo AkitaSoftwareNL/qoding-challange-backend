@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class CampaignResourceTest {
 
     private final List<CampaignDTO> CAMPAIGNDTOLIST = new ArrayList<>();
-    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO(1, "JFALL","me","JAVA", 3, "12/2/2019", 1, null);
 
 
     @Mock
@@ -36,7 +36,7 @@ class CampaignResourceTest {
     @BeforeEach
     void setUp() {
         CAMPAIGNDTOLIST.add(
-                new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null)
+                new CampaignDTO(1, "JFALL","me","JAVA", 3, "12/2/2019", 1, null)
         );
         CAMPAIGNDTOLIST.add(
                 CAMPAIGNDTO
@@ -63,7 +63,7 @@ class CampaignResourceTest {
     }
 
     private void checkRequest(ResponseEntity<List<CampaignDTO>> actualResult) {
-        assertEquals(ResponseEntity.status(HttpStatus.OK).build().getStatusCode(), actualResult.getStatusCode());
+        assertEquals(HttpStatus.OK, actualResult.getStatusCode());
         assertTrue(actualResult.hasBody());
     }
 

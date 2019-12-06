@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +21,15 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class QuestionDAOImplIntTest {
 
     private final int QUESTION_ID = 3;
-    private final QuestionDTO questionDTO = new QuestionDTO(10, "dit is een test vraag", "open", null);
+    private final int AMOUNT_OF_QUESTIONS = 3;
     private QuestionDAOImpl sut;
 
     @BeforeEach
     void setUp() {
         this.sut = new QuestionDAOImpl();
-        try {
-            Connection connection = getConnection();
+        try (
+                Connection connection = getConnection()
+        ) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testQuestionDDL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
@@ -46,7 +48,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
-        List<String> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
+        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
 
         int AMOUNT_OF_ANSWERS = 2;
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
@@ -54,7 +56,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(questionDTO, "testcampaign", 1));
+        assertDoesNotThrow(() -> sut.setAnswer(getQuestions(), "testcampaign", 1));
     }
 
     @Test
@@ -64,4 +66,27 @@ class QuestionDAOImplIntTest {
         assertFalse(actualResult.isEmpty());
     }
 
+    @Test
+    void persistOpenQuestionPersistsOpenQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistOpenQuestion(getQuestions());
+        // Verify
+        assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
+    }
+
+    @Test
+    void getAllQuestionsReturnsAllQuestions() throws SQLException {
+        // Mock
+
+        // Test
+        var testValue = sut.getAllQuestions();
+        // Verify
+        assertEquals(AMOUNT_OF_QUESTIONS, testValue.size());
+    }
+
+    private QuestionDTO getQuestions() {
+        return new QuestionDTO(10, "dit is een test vraag", "open", null);
+    }
 }

@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
@@ -14,11 +15,13 @@ public interface QuestionDAO {
 
     String getCorrectAnswer(int questionID) throws SQLException;
 
-    List<String> getPossibleAnswers(int questionID) throws SQLException;
+    List<PossibleAnswerDTO> getPossibleAnswers(int questionID) throws SQLException;
 
-    void persistQuestion(QuestionDTO question) throws SQLException;
+    void persistOpenQuestion(QuestionDTO question) throws SQLException;
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
+
+    void persistMultipleQuestion(QuestionDTO question) throws SQLException;
 
     List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 

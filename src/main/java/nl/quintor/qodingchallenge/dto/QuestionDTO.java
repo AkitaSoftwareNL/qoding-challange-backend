@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class QuestionDTO {
 
@@ -8,7 +9,7 @@ public class QuestionDTO {
     private String question;
     private String questionType;
     private String attachment;
-    private List<String> possibleAnswer;
+    private List<PossibleAnswerDTO> possibleAnswers;
     private String givenAnswer;
     private int stateID;
 
@@ -50,19 +51,23 @@ public class QuestionDTO {
     }
 
     public String getAttachment() {
-        return attachment;
+        if(attachment != null && attachment.isEmpty()) {
+            return null;
+        } else {
+            return attachment;
+        }
     }
 
     public void setAttachment(String attachment) {
         this.attachment = attachment;
     }
 
-    public List<String> getPossibleAnswer() {
-        return possibleAnswer;
+    public List<PossibleAnswerDTO> getPossibleAnswers() {
+        return possibleAnswers;
     }
 
-    public void setPossibleAnswer(List<String> possibleAnswer) {
-        this.possibleAnswer = possibleAnswer;
+    public void setPossibleAnswers(List<PossibleAnswerDTO> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
     }
 
     public String getGivenAnswer() {
@@ -81,4 +86,22 @@ public class QuestionDTO {
         this.stateID = stateID;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuestionDTO that = (QuestionDTO) o;
+        return questionID == that.questionID &&
+                stateID == that.stateID &&
+                Objects.equals(question, that.question) &&
+                Objects.equals(questionType, that.questionType) &&
+                Objects.equals(attachment, that.attachment) &&
+                Objects.equals(possibleAnswers, that.possibleAnswers) &&
+                Objects.equals(givenAnswer, that.givenAnswer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(questionID, question, questionType, attachment, possibleAnswers, givenAnswer, stateID);
+    }
 }

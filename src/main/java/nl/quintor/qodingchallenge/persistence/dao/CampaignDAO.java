@@ -14,4 +14,5 @@ public interface CampaignDAO {
 
     int getAmountOfQuestions(String campaignName) throws SQLException;
 
+    String getCampaignName(int campaignID) throws SQLException;
 }
