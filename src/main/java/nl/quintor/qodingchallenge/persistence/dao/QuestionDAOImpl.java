@@ -140,15 +140,12 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()){
-                GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
-
-                givenAnswerDTO.setQuestionId(resultSet.getInt(1));
-                givenAnswerDTO.setParticipentId(resultSet.getInt(2));
-                givenAnswerDTO.setCampaignId(resultSet.getInt(3));
-                givenAnswerDTO.setStateId(resultSet.getInt(4));
-                givenAnswerDTO.setGivenAnswer(resultSet.getString(5));
-
-                givenAnswers.add(givenAnswerDTO);
+                givenAnswers.add(new GivenAnswerDTO(
+                        resultSet.getInt(1),
+                        resultSet.getInt(2),
+                        resultSet.getInt(3),
+                        resultSet.getInt(4),
+                        resultSet.getString(5)));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -166,15 +163,14 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionid);
             ResultSet resultSet = statement.executeQuery();
 
-            resultSet.next();
-
-            question.setQuestionID(resultSet.getInt(1));
-            question.setQuestion(resultSet.getString(2));
-            question.setQuestionType(resultSet.getString(3));
-            question.setAttachment(resultSet.getString(4));
-            question.setGivenAnswer(resultSet.getString(5));
-            question.setStateID(resultSet.getInt(6));
-
+            if(resultSet.next()){
+                question.setQuestionID(resultSet.getInt(1));
+                question.setQuestion(resultSet.getString(2));
+                question.setQuestionType(resultSet.getString(3));
+                question.setAttachment(resultSet.getString(4));
+                question.setGivenAnswer(resultSet.getString(5));
+                question.setStateID(resultSet.getInt(6));
+            }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
