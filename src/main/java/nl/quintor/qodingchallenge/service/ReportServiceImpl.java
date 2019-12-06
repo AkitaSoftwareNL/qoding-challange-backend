@@ -54,6 +54,7 @@ public class ReportServiceImpl implements ReportService {
     public AnswerCollection getAnswersPerParticipant(int campaignID, int participantID) throws SQLException {
         AnswerCollection answerCollection = participantDAO.getFirstAndLastname(participantID);
         answerCollection.setCampaignName(campaignDAO.getCampaignName(campaignID));
+        answerCollection.setCampaignID(campaignID);
         answerCollection.setAnswers(reportDAO.getAnswersPerParticipant(campaignID, participantID));
         return answerCollection;
     }

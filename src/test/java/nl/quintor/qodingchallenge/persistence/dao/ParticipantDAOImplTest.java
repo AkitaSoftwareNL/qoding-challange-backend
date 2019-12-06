@@ -34,6 +34,6 @@ class ParticipantDAOImplTest {
 
     @Test
     void getFirstAndLastNameReturnsAnAnswerCollectionWithoutAnswers() throws SQLException {
-        assertEquals(new AnswerCollection("Gray", null, "Snare", null, null), sut.getFirstAndLastname(1));
+        assertEquals(new AnswerCollection("Gray", null, "Snare", null,0, null), sut.getFirstAndLastname(1));
     }
 }

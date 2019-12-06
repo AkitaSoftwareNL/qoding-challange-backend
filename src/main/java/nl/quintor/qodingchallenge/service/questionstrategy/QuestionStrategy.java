@@ -2,8 +2,6 @@ package nl.quintor.qodingchallenge.service.questionstrategy;
 
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 

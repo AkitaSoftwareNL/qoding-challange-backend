@@ -111,6 +111,6 @@ class ReportServiceImplTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "", "HC2 Holdings, Inc", "anothername", getListAnswer());
+        return new AnswerCollection("Name", "", "HC2 Holdings, Inc", "anothername", 1, getListAnswer());
     }
 }

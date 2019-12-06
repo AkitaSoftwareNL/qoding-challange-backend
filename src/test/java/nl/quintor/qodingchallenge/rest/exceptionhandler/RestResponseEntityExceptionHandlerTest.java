@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,13 @@ class RestResponseEntityExceptionHandlerTest {
     @Test
     void handleNoCampaignFoundExceptionTest() {
         var expectedResponse = handler.handleNoCampaignFoundException(new NoCampaignFoundException(MESSAGE_FOR_EXCEPTION), webRequest);
+
+        assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
+    }
+
+    @Test
+    void handleEmptyQuestionException() {
+        var expectedResponse = handler.handleEmptyQuestionException(new EmptyQuestionException(MESSAGE_FOR_EXCEPTION), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }

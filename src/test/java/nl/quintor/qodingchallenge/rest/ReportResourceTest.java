@@ -35,7 +35,7 @@ class ReportResourceTest {
     void getAllCampaignsReturnsAllCampaingsWithStatuscodeOk() throws SQLException {
         when(reportServiceMock.getAllCampaings()).thenReturn(getListCampaign());
 
-        ResponseEntity<List<CampaignDTO>> result = sut.getAllCampaings();
+        ResponseEntity<List<CampaignDTO>> result = sut.getAllCampaigns();
 
         assertTrue(result.hasBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -105,7 +105,7 @@ class ReportResourceTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "","anothername", "JFALL", getListAnswer());
+        return new AnswerCollection("Name", "","anothername", "JFALL", 1, getListAnswer());
     }
 
 

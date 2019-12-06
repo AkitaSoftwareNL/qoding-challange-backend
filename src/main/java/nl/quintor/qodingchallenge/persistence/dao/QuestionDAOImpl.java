@@ -142,7 +142,6 @@ public class QuestionDAOImpl implements QuestionDAO {
     public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
         final String delimiter = "&";
         List<String> possibleAnswersString = makeString(question.getPossibleAnswers(), delimiter);
-
         try (
                 Connection connection = getConnection()
                 ) {
