@@ -85,7 +85,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE NAME = ?");
+                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE CAMPAIGN_NAME = ?");
             statement.setString(1, campaignName);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
