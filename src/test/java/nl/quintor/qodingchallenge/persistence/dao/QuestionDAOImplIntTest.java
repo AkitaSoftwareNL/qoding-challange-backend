@@ -23,9 +23,8 @@ import static org.mockito.Mockito.doThrow;
 
 class QuestionDAOImplIntTest {
 
-    private final String CATEGORY = "JAVA";
-    private final int QUESTION_ID = 3;
-    private final int AMOUNT_OF_QUESTIONS = 3;
+    private final int questionId = 3;
+    private final int amountOfQuestions = 3;
     private QuestionDAOImpl sut;
 
     @BeforeEach
@@ -43,14 +42,15 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        List<QuestionDTO> questionDTOList = sut.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS);
+        final String category = "JAVA";
+        List<QuestionDTO> questionDTOList = sut.getQuestions(category, amountOfQuestions);
 
-        assertEquals(AMOUNT_OF_QUESTIONS, questionDTOList.size());
+        assertEquals(amountOfQuestions, questionDTOList.size());
     }
 
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
-        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
+        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(questionId);
 
         int AMOUNT_OF_ANSWERS = 2;
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
@@ -63,7 +63,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getCorrectAnswerGivesAllCorrectAnswers() throws SQLException {
-        String actualResult = sut.getCorrectAnswer(QUESTION_ID);
+        String actualResult = sut.getCorrectAnswer(questionId);
 
         assertFalse(actualResult.isEmpty());
     }
@@ -75,7 +75,7 @@ class QuestionDAOImplIntTest {
         // Test
         sut.persistOpenQuestion(getOpenQuestion());
         // Verify
-        assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
     }
 
     @Test
@@ -85,7 +85,7 @@ class QuestionDAOImplIntTest {
         // Test
         var testValue = sut.getAllQuestions();
         // Verify
-        assertEquals(AMOUNT_OF_QUESTIONS, testValue.size());
+        assertEquals(amountOfQuestions, testValue.size());
     }
 
     @Test
