@@ -9,7 +9,7 @@ public class QuestionDTO {
     private String question;
     private String questionType;
     private String attachment;
-    private List<String> possibleAnswer;
+    private List<PossibleAnswerDTO> possibleAnswers;
     private String givenAnswer;
     private int stateID;
 
@@ -51,19 +51,23 @@ public class QuestionDTO {
     }
 
     public String getAttachment() {
-        return attachment;
+        if(attachment != null && attachment.isEmpty()) {
+            return null;
+        } else {
+            return attachment;
+        }
     }
 
     public void setAttachment(String attachment) {
         this.attachment = attachment;
     }
 
-    public List<String> getPossibleAnswer() {
-        return possibleAnswer;
+    public List<PossibleAnswerDTO> getPossibleAnswers() {
+        return possibleAnswers;
     }
 
-    public void setPossibleAnswer(List<String> possibleAnswer) {
-        this.possibleAnswer = possibleAnswer;
+    public void setPossibleAnswers(List<PossibleAnswerDTO> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
     }
 
     public String getGivenAnswer() {
@@ -92,12 +96,12 @@ public class QuestionDTO {
                 Objects.equals(question, that.question) &&
                 Objects.equals(questionType, that.questionType) &&
                 Objects.equals(attachment, that.attachment) &&
-                Objects.equals(possibleAnswer, that.possibleAnswer) &&
+                Objects.equals(possibleAnswers, that.possibleAnswers) &&
                 Objects.equals(givenAnswer, that.givenAnswer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionID, question, questionType, attachment, possibleAnswer, givenAnswer, stateID);
+        return Objects.hash(questionID, question, questionType, attachment, possibleAnswers, givenAnswer, stateID);
     }
 }

@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +48,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
-        List<String> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
+        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
 
         int AMOUNT_OF_ANSWERS = 2;
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
@@ -66,11 +67,11 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void persistQuestionPersistsQuestion() throws SQLException {
+    void persistOpenQuestionPersistsOpenQuestion() throws SQLException {
         // Mock
 
         // Test
-        sut.persistQuestion(getQuestions());
+        sut.persistOpenQuestion(getQuestions());
         // Verify
         assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
     }

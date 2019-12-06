@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,8 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<String> getPossibleAnswers(int questionID) throws SQLException {
-        List<String> possibleAnswers = new ArrayList<>();
+    public List<PossibleAnswerDTO> getPossibleAnswers(int questionID) throws SQLException {
+        List<PossibleAnswerDTO> possibleAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
@@ -52,7 +53,8 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                possibleAnswers.add(resultSet.getString(1));
+                possibleAnswers.add(new PossibleAnswerDTO(
+                        resultSet.getString(1),0));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -97,7 +99,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void persistQuestion(QuestionDTO question) throws SQLException {
+    public void persistOpenQuestion(QuestionDTO question) throws SQLException {
         final String JAVA = "JAVA";
         try (
                 Connection connection = getConnection()
@@ -134,6 +136,45 @@ public class QuestionDAOImpl implements QuestionDAO {
             throw new SQLException(e);
         }
         return questions;
+    }
+
+    @Override
+    public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
+        final String delimiter = "&";
+        List<String> possibleAnswersString = makeString(question.getPossibleAnswers(), delimiter);
+
+        try (
+                Connection connection = getConnection()
+                ) {
+            PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
+            statement.setString(1, "JAVA");
+            statement.setString(2, question.getQuestion());
+            statement.setString(3, question.getQuestionType());
+            statement.setString(4, question.getAttachment());
+            statement.setString(5, possibleAnswersString.get(0));
+            statement.setString(6, possibleAnswersString.get(1));
+            statement.setInt(7, question.getPossibleAnswers().size());
+            statement.setString(8, delimiter);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    private List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
+        List<String> possibleAnswersString = new ArrayList<>();
+        String possibleAnswerString = delimiter;
+        String isCorrectString = delimiter;
+
+        for (PossibleAnswerDTO possibleAnswer : possibleAnswers) {
+            possibleAnswerString = possibleAnswerString.concat(possibleAnswer.getPossibleAnswer() + delimiter);
+            isCorrectString = isCorrectString.concat(possibleAnswer.getIs_Correct() + delimiter);
+        }
+
+        possibleAnswersString.add(possibleAnswerString);
+        possibleAnswersString.add(isCorrectString);
+
+        return possibleAnswersString;
     }
 }
 
