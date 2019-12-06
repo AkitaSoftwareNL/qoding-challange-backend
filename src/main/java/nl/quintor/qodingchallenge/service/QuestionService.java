@@ -26,5 +26,5 @@ public interface QuestionService {
 
     QuestionDTO getQuestion(int questionid) throws SQLException;
 
-    void setPendingAnswers(GivenAnswerDTO givenAnswerDTO) throws SQLException;
+    void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException;
 }

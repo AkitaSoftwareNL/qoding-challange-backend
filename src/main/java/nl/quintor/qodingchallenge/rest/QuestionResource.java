@@ -53,8 +53,8 @@ public class QuestionResource {
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             path = "/answers/update",
             method = RequestMethod.POST)
-    public ResponseEntity setPendingAnswers(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
-        questionService.setPendingAnswers(givenAnswerDTO);
+    public ResponseEntity setPendingAnswer(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionService.setPendingAnswer(givenAnswerDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 

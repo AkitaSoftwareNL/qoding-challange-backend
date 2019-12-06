@@ -94,7 +94,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void setPendingAnswers(GivenAnswerDTO givenAnswerDTO) throws SQLException {
-        questionDAO.setPendingAnswers(givenAnswerDTO);
+    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionDAO.setPendingAnswer(givenAnswerDTO);
     }
 }

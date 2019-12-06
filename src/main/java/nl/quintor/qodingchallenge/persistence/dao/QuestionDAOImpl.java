@@ -182,7 +182,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void setPendingAnswers(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {

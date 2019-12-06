@@ -23,5 +23,5 @@ public interface QuestionDAO {
 
     QuestionDTO getQuestion(int questionid) throws SQLException;
 
-    void setPendingAnswers(GivenAnswerDTO questionDTO) throws SQLException;
+    void setPendingAnswer(GivenAnswerDTO questionDTO) throws SQLException;
 }
