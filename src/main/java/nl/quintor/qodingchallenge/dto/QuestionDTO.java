@@ -51,7 +51,7 @@ public class QuestionDTO {
     }
 
     public String getAttachment() {
-        if(attachment == null) {
+        if(attachment != null && attachment.isEmpty()) {
             return null;
         } else {
             return attachment;
