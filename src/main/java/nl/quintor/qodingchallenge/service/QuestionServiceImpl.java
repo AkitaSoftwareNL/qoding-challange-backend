@@ -5,6 +5,7 @@ import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,7 +90,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDTO getQuestion(int questionid) throws SQLException {
+    public QuestionDTO getQuestion(int questionid) throws SQLException, NoQuestionFoundException {
         return questionDAO.getQuestion(questionid);
     }
 

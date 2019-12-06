@@ -26,6 +26,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>("An exception has occured with the database", new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<Object> handleNoQuestionFoundException(Exception e, WebRequest request) {
+        logger.error(e.fillInStackTrace().toString());
+        return new ResponseEntity<>("Question could not be found", new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler({CampaignAlreadyExistsException.class})
     public ResponseEntity<Object> handleCampaignAlreadyExistsException(Exception e, WebRequest request) {
         logger.error(e.fillInStackTrace().toString());

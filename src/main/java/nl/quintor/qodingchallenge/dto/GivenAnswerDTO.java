@@ -7,15 +7,15 @@ public class GivenAnswerDTO {
     private int stateId;
     private String givenAnswer;
 
+    public GivenAnswerDTO() {
+    }
+
     public GivenAnswerDTO(int questionId, int participentId, int campaignId, int stateId, String givenAnswer) {
         this.questionId = questionId;
         this.participentId = participentId;
         this.campaignId = campaignId;
         this.stateId = stateId;
         this.givenAnswer = givenAnswer;
-    }
-
-    public GivenAnswerDTO() {
     }
 
     public int getQuestionId() {

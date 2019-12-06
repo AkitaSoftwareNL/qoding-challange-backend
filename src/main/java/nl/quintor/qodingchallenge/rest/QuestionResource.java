@@ -4,6 +4,7 @@ package nl.quintor.qodingchallenge.rest;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +62,7 @@ public class QuestionResource {
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/questions/{questionid}",
             method = RequestMethod.GET)
-    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException {
+    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException, NoQuestionFoundException {
         return ResponseEntity.ok().body(questionService.getQuestion(questionId));
     }
 

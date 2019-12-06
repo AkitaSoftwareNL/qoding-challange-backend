@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -154,7 +155,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public QuestionDTO getQuestion(int questionid) throws SQLException {
+    public QuestionDTO getQuestion(int questionid) throws SQLException, NoQuestionFoundException {
         QuestionDTO question = new QuestionDTO();
         try (
                 Connection connection = getConnection()
@@ -171,8 +172,14 @@ public class QuestionDAOImpl implements QuestionDAO {
                 question.setGivenAnswer(resultSet.getString(5));
                 question.setStateID(resultSet.getInt(6));
             }
+            else{
+                throw new NoQuestionFoundException();
+            }
         } catch (SQLException e) {
             throw new SQLException(e);
+        }
+        catch (NoQuestionFoundException e) {
+            throw new NoQuestionFoundException();
         }
         return question;
     }
