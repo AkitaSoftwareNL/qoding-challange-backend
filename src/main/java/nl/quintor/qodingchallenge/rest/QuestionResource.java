@@ -1,8 +1,10 @@
 package nl.quintor.qodingchallenge.rest;
 
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,29 @@ public class QuestionResource {
     public ResponseEntity getAnswer(@RequestBody QuestionCollection questionCollection) throws SQLException {
         questionService.setAnswer(questionCollection);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            path = "/campaign/{campaignid}/answers/{state}",
+            method = RequestMethod.GET)
+    public ResponseEntity getPendingAnswers(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState) throws SQLException {
+        return ResponseEntity.ok().body(questionService.getPendingAnswers(campaignId, questionState));
+    }
+
+    @ResponseBody
+    @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+            path = "/answers/update",
+            method = RequestMethod.POST)
+    public ResponseEntity setPendingAnswer(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionService.setPendingAnswer(givenAnswerDTO);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            path = "/questions/{questionid}",
+            method = RequestMethod.GET)
+    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException, NoQuestionFoundException {
+        return ResponseEntity.ok().body(questionService.getQuestion(questionId));
     }
 
     @ResponseBody

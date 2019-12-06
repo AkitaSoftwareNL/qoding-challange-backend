@@ -1,10 +1,12 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import nl.quintor.qodingchallenge.service.questionstrategy.MultipleStrategyImpl;
 import nl.quintor.qodingchallenge.service.questionstrategy.OpenStrategyImpl;
@@ -97,5 +99,20 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<QuestionDTO> getAllQuestions() throws SQLException {
         return questionDAO.getAllQuestions();
+    }
+
+    @Override
+    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException {
+        return questionDAO.getPendingAnswers(campaignId, questionState);
+    }
+
+    @Override
+    public QuestionDTO getQuestion(int questionid) throws SQLException, NoQuestionFoundException {
+        return questionDAO.getQuestion(questionid);
+    }
+
+    @Override
+    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        questionDAO.setPendingAnswer(givenAnswerDTO);
     }
 }
