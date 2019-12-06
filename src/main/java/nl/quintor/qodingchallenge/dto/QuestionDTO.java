@@ -14,6 +14,9 @@ public class QuestionDTO {
     private String givenAnswer;
     private int stateID;
 
+    public QuestionDTO() {
+    }
+
     public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment) {
         this.questionID = questionID;
         this.question = question;

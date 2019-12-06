@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CampaignServiceImplTest {
 
-    private final String JFALL = "JFALL - 2020";
+    private final String jfall = "jfall - 2020";
 
     @InjectMocks
     CampaignServiceImpl sut;
@@ -39,11 +39,11 @@ class CampaignServiceImplTest {
 
     @Test
     void getCreatecampaignCallToDaoPersistCampaign() throws SQLException {
-        final CampaignDTO CAMPAIGNDTOTEST = getCampaignDTO();
+        final CampaignDTO campaign = getCampaignDTO();
 
-        sut.createNewCampaign(CAMPAIGNDTOTEST);
+        sut.createNewCampaign(campaign);
 
-        verify(campaignDAOStub).persistCampaign(CAMPAIGNDTOTEST);
+        verify(campaignDAOStub).persistCampaign(campaign);
     }
 
     @Test
@@ -64,14 +64,14 @@ class CampaignServiceImplTest {
 
     @Test
     void createNewCampaignThrowsCampaignAlreadyExistsException() throws SQLException {
-        when(campaignDAOStub.campaignExists(JFALL))
+        when(campaignDAOStub.campaignExists(jfall))
                 .thenReturn(true);
 
         assertThrows(CampaignAlreadyExistsException.class, () -> sut.createNewCampaign(getCampaignDTO()));
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, JFALL, "me", "JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(1, jfall, "me", "JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getCampaignDtoList() {

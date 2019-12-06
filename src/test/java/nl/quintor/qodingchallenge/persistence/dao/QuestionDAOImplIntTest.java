@@ -20,8 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class QuestionDAOImplIntTest {
 
-    private final int QUESTION_ID = 3;
-    private final int AMOUNT_OF_QUESTIONS = 3;
+    private final int questionId = 3;
+    private final int amountOfQuestions = 3;
+
     private QuestionDAOImpl sut;
 
     @BeforeEach
@@ -39,18 +40,19 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        String CATEGORY = "JAVA";
-        int AMOUNT_OF_QUESTIONS = 3;
-        List<QuestionDTO> questionDTOList = sut.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS);
+        String category = "JAVA";
 
-        assertEquals(AMOUNT_OF_QUESTIONS, questionDTOList.size());
+        List<QuestionDTO> questionDTOList = sut.getQuestions(category, amountOfQuestions);
+
+        assertEquals(amountOfQuestions, questionDTOList.size());
     }
 
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
-        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
-
         int AMOUNT_OF_ANSWERS = 2;
+
+        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(questionId);
+
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
     }
 
@@ -61,7 +63,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getCorrectAnswerGivesAllCorrectAnswers() throws SQLException {
-        String actualResult = sut.getCorrectAnswer(QUESTION_ID);
+        String actualResult = sut.getCorrectAnswer(questionId);
 
         assertFalse(actualResult.isEmpty());
     }
@@ -73,7 +75,7 @@ class QuestionDAOImplIntTest {
         // Test
         sut.persistOpenQuestion(getQuestions());
         // Verify
-        assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
     }
 
     @Test
@@ -83,7 +85,7 @@ class QuestionDAOImplIntTest {
         // Test
         var testValue = sut.getAllQuestions();
         // Verify
-        assertEquals(AMOUNT_OF_QUESTIONS, testValue.size());
+        assertEquals(amountOfQuestions, testValue.size());
     }
 
     private QuestionDTO getQuestions() {
