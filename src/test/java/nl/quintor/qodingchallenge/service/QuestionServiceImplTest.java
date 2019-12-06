@@ -26,7 +26,7 @@ class QuestionServiceImplTest {
     private final int QUESTION_ID = 1;
     private final List<String> POSSIBLE_ANSWER = new ArrayList<>();
     private final QuestionDTO QUESTIONDTO = new QuestionDTO(
-            QUESTION_ID, "de beschrijving van de vraag", "meerkeuze", "dit is een bijlage"
+            QUESTION_ID, "de beschrijving van de vraag", "meerkeuze", CATEGORY, "dit is een bijlage"
     );
 
     private QuestionDAO questionDAOMock;
@@ -142,7 +142,7 @@ class QuestionServiceImplTest {
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {
         List<QuestionDTO> testValue = sut.getQuestions(CATEGORY, JFALL);
-        QuestionDTO questionDTO = new QuestionDTO(QUESTION_ID, "String", "multiple", "String");
+        QuestionDTO questionDTO = new QuestionDTO(QUESTION_ID, "String", "Java", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;
     }
@@ -152,6 +152,6 @@ class QuestionServiceImplTest {
     }
 
     private QuestionDTO getQuestion() {
-        return new QuestionDTO(2, "String", "multiple", "String");
+        return new QuestionDTO(QUESTION_ID, "String", "Java", "open", "String");
     }
 }

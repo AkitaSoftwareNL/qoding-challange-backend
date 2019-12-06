@@ -86,6 +86,6 @@ class QuestionDAOImplIntTest {
     }
 
     private QuestionDTO getQuestions() {
-        return new QuestionDTO(10, "dit is een test vraag", "open", null);
+        return new QuestionDTO(10, "dit is een test vraag", "java", "open", null);
     }
 }

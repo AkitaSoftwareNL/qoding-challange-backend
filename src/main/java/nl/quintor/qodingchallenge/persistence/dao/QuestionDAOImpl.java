@@ -24,7 +24,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT questionid, question, QUESTION_TYPE, attachment FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT questionid, CATEGORY_NAME, question, QUESTION_TYPE, attachment FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
             statement.setString(1, category);
             statement.setInt(2, limit);
             questions = createQuestionDTO(statement);
@@ -111,7 +111,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question WHERE STATE = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT questionid, CATEGORY_NAME, question, QUESTION_TYPE, attachment FROM question WHERE STATE = 1");
             questions = createQuestionDTO(statement);
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -140,8 +140,9 @@ public class QuestionDAOImpl implements QuestionDAO {
                     new QuestionDTO(
                             resultSet.getInt(1),
                             resultSet.getString(3),
-                            resultSet.getString(5),
-                            resultSet.getString(6)
+                            resultSet.getString(2),
+                            resultSet.getString(4),
+                            resultSet.getString(5)
                     ));
         }
         return questions;

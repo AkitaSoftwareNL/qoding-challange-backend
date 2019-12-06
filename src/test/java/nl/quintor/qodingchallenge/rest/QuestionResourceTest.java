@@ -113,8 +113,8 @@ class QuestionResourceTest {
 
     private List<QuestionDTO> getQuestions() {
         List<QuestionDTO> questions = new ArrayList<>();
-        questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, ATTACHMENT));
-        questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, ATTACHMENT));
+        questions.add(0, new QuestionDTO(2, QUESTION, CATEGORY, "open", ATTACHMENT));
+        questions.add(1, new QuestionDTO(3, QUESTION, CATEGORY, "open", ATTACHMENT));
         return questions;
     }
 
@@ -123,7 +123,7 @@ class QuestionResourceTest {
     }
 
     private QuestionDTO getQuestion() {
-        return new QuestionDTO(1, CATEGORY, QUESTION, ATTACHMENT);
+        return new QuestionDTO(1, QUESTION, CATEGORY, "open", ATTACHMENT);
     }
 
 }
