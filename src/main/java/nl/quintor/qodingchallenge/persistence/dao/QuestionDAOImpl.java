@@ -1,7 +1,10 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -35,8 +38,8 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<String> getPossibleAnswers(int questionID) throws SQLException {
-        List<String> possibleAnswers = new ArrayList<>();
+    public List<PossibleAnswerDTO> getPossibleAnswers(int questionID) throws SQLException {
+        List<PossibleAnswerDTO> possibleAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
@@ -44,7 +47,8 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                possibleAnswers.add(resultSet.getString(1));
+                possibleAnswers.add(new PossibleAnswerDTO(
+                        resultSet.getString(1),0));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -89,7 +93,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void persistQuestion(QuestionDTO question) throws SQLException {
+    public void persistOpenQuestion(QuestionDTO question) throws SQLException {
         final String JAVA = "JAVA";
         try (
                 Connection connection = getConnection()
@@ -146,6 +150,115 @@ public class QuestionDAOImpl implements QuestionDAO {
                     ));
         }
         return questions;
+    }
+
+    @Override
+    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException {
+        List<GivenAnswerDTO> givenAnswers = new ArrayList<>();
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("select * from given_answer where CAMPAIGN_ID = ? and STATEID = ?");
+            statement.setInt(1, campaignId);
+            statement.setInt(2, questionState);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                givenAnswers.add(new GivenAnswerDTO(
+                        resultSet.getInt(1),
+                        resultSet.getInt(2),
+                        resultSet.getInt(3),
+                        resultSet.getInt(4),
+                        resultSet.getString(5)));
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return givenAnswers;
+    }
+
+    @Override
+    public QuestionDTO getQuestion(int questionid) throws SQLException, NoQuestionFoundException {
+        QuestionDTO question = new QuestionDTO();
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("select * from question where questionid = ?");
+            statement.setInt(1, questionid);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()){
+                question.setQuestionID(resultSet.getInt(1));
+                question.setQuestion(resultSet.getString(2));
+                question.setQuestionType(resultSet.getString(3));
+                question.setAttachment(resultSet.getString(4));
+                question.setGivenAnswer(resultSet.getString(5));
+                question.setStateID(resultSet.getInt(6));
+            }
+            else{
+                throw new NoQuestionFoundException();
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        catch (NoQuestionFoundException e) {
+            throw new NoQuestionFoundException();
+        }
+        return question;
+    }
+
+    @Override
+    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("update given_answer set STATEID = ? where QUESTIONID = ? and CAMPAIGN_ID = ? and PARTICIPANTID = ?");
+            statement.setInt(1, givenAnswerDTO.getStateId());
+            statement.setInt(2, givenAnswerDTO.getQuestionId());
+            statement.setInt(3, givenAnswerDTO.getCampaignId());
+            statement.setInt(4, givenAnswerDTO.getParticipentId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    @Override
+    public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
+        final String delimiter = "&";
+        List<String> possibleAnswersString = makeString(question.getPossibleAnswers(), delimiter);
+        try (
+                Connection connection = getConnection()
+                ) {
+            PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
+            statement.setString(1, "JAVA");
+            statement.setString(2, question.getQuestion());
+            statement.setString(3, question.getQuestionType());
+            statement.setString(4, question.getAttachment());
+            statement.setString(5, possibleAnswersString.get(0));
+            statement.setString(6, possibleAnswersString.get(1));
+            statement.setInt(7, question.getPossibleAnswers().size());
+            statement.setString(8, delimiter);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    private List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
+        List<String> possibleAnswersString = new ArrayList<>();
+        String possibleAnswerString = delimiter;
+        String isCorrectString = delimiter;
+
+        for (PossibleAnswerDTO possibleAnswer : possibleAnswers) {
+            possibleAnswerString = possibleAnswerString.concat(possibleAnswer.getPossibleAnswer() + delimiter);
+            isCorrectString = isCorrectString.concat(possibleAnswer.getIs_Correct() + delimiter);
+        }
+
+        possibleAnswersString.add(possibleAnswerString);
+        possibleAnswersString.add(isCorrectString);
+
+        return possibleAnswersString;
     }
 }
 

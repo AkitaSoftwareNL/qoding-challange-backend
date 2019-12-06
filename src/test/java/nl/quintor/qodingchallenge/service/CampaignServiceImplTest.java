@@ -71,7 +71,7 @@ class CampaignServiceImplTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, JFALL, 5, "admin", "JAVA", null);
+        return new CampaignDTO(1, JFALL, "me", "JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getCampaignDtoList() {

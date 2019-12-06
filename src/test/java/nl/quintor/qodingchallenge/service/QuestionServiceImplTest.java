@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
@@ -24,10 +25,7 @@ class QuestionServiceImplTest {
     private final String CATEGORY = "category";
     private final int LIMIT = 0;
     private final int QUESTION_ID = 1;
-    private final List<String> POSSIBLE_ANSWER = new ArrayList<>();
-    private final QuestionDTO QUESTIONDTO = new QuestionDTO(
-            QUESTION_ID, "de beschrijving van de vraag", "meerkeuze", CATEGORY, "dit is een bijlage"
-    );
+    private final List<PossibleAnswerDTO> POSSIBLE_ANSWER = new ArrayList<>();
 
     private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
@@ -45,8 +43,8 @@ class QuestionServiceImplTest {
 
         when(campaignDAOMock.campaignExists(JFALL)).thenReturn(true);
 
-        POSSIBLE_ANSWER.add("Eerste antwoord");
-        POSSIBLE_ANSWER.add("Tweede antwoord");
+        POSSIBLE_ANSWER.add(new PossibleAnswerDTO("yes", 1));
+        POSSIBLE_ANSWER.add(new PossibleAnswerDTO("no", 0));
     }
 
     @Test
@@ -106,13 +104,22 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void createQuestionCallsPersistQuestion() throws SQLException {
+    void createQuestionCallsPersistOpenQuestion() throws SQLException {
         // Mock
-
+        var question = getOpenQuestion();
         // Test
-        sut.createQuestion(getQuestion());
+        sut.createQuestion(getOpenQuestion());
         // Verify
-        verify(questionDAOMock).persistQuestion(getQuestion());
+        verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
+
+        // Mock
+        var list = setQuestionlist();
+        when(questionDAOMock.getQuestions(CATEGORY, LIMIT)).thenReturn(list);
+        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
+        // Test
+        sut.getQuestions(CATEGORY, JFALL);
+        // Verify
+        verify(questionDAOMock, times(LIMIT)).getPossibleAnswers(QUESTION_ID);
     }
 
     @Test
@@ -124,13 +131,12 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
-        questionDTOList.add(QUESTIONDTO);
+        List<QuestionDTO> questionDTOList = setQuestionlist()
         when(campaignDAOMock.getAmountOfQuestions(JFALL)).thenReturn(1);
         when(questionDAOMock.getQuestions(CATEGORY, campaignDAOMock.getAmountOfQuestions(JFALL))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(QUESTION_ID)).thenReturn(POSSIBLE_ANSWER);
 
-        QUESTIONDTO.setPossibleAnswer(POSSIBLE_ANSWER);
+        questionDTOList.get(0).setPossibleAnswers(POSSIBLE_ANSWER);
 
         assertEquals(questionDTOList, sut.getQuestions(CATEGORY, JFALL));
     }
@@ -151,7 +157,11 @@ class QuestionServiceImplTest {
         return new QuestionCollection(1, "test", setQuestionlist());
     }
 
-    private QuestionDTO getQuestion() {
-        return new QuestionDTO(QUESTION_ID, "String", "Java", "open", "String");
+    private QuestionDTO getOpenQuestion() {
+        return new QuestionDTO(2, "String", "JAVA", "open", "String");
+    }
+
+    private QuestionDTO getMultipleQuestion() {
+        return new QuestionDTO(2, "String", "JAVA", "multiple", "String");
     }
 }

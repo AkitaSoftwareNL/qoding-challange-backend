@@ -51,9 +51,25 @@ class CampaignDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
+        String CAMPAIGN_NAME = "HC2 Holdings, Inc";
         var actualResult = sut.getAmountOfQuestions(CAMPAIGN_NAME);
 
         assertEquals(1, actualResult);
+    }
+
+    @Test
+    void persistCampaignAddsCampaing() throws SQLException {
+        final int AMOUNT_OF_CAMPAIGNS = 3;
+
+        sut.persistCampaign(CAMPAIGNDTO);
+
+        assertEquals(AMOUNT_OF_CAMPAIGNS + 1, sut.getAllCampaigns().size());
+    }
+
+    @Test
+    void campaignExitsReturnsTrueWhenCampaignExists() throws SQLException {
+        final String CAMPAIGN_NAME = "HC2 Holdings, Inc";
+        assertTrue(sut.campaignExists(CAMPAIGN_NAME));
     }
 
     @Test
@@ -64,4 +80,15 @@ class CampaignDAOImplIntTest {
         assertEquals(AMOUNT_OF_CAMPAIGNS + 1, sut.getAllCampaigns().size());
     }
 
+    @Test
+    void campaignExitsReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
+        final String NO_CAMPAIGN = "Some non existing campaign";
+        assertFalse(sut.campaignExists(NO_CAMPAIGN));
+    }
+
+    @Test
+    void getCampaignName() throws SQLException {
+        assertEquals("HC2 Holdings, Inc", sut.getCampaignName(1));
+        assertEquals("Syros Pharmaceuticals, Inc", sut.getCampaignName(2));
+    }
 }
