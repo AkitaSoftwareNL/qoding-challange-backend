@@ -23,7 +23,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({SQLException.class})
     public ResponseEntity<Object> handleSQLException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>("An exception has occured with the database", new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 

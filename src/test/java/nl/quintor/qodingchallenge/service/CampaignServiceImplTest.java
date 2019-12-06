@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.service;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,11 +25,26 @@ class CampaignServiceImplTest {
 
     private final String JFALL = "JFALL - 2020";
 
+    private final List<CampaignDTO> CAMPAIGNDTOLIST = new ArrayList<>();
+    private final String JFALL = "JFALL";
+    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO(1, JFALL,"me","JAVA", 3, "12/2/2019", 1, null);
+
+
     @InjectMocks
     CampaignServiceImpl sut;
 
     @Mock
     private CampaignDAO campaignDAOStub;
+
+    @BeforeEach
+    void setUp() {
+        CAMPAIGNDTOLIST.add(
+                new CampaignDTO(1, JFALL,"me","JAVA", 3, "12/2/2019", 1, null)
+        );
+        CAMPAIGNDTOLIST.add(
+                CAMPAIGNDTO
+        );
+    }
 
     @Test
     void getCreatecampaignCallToDaoCampaignExists() throws SQLException {

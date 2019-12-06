@@ -25,14 +25,14 @@ public class QuestionServiceImpl implements QuestionService {
     private CampaignDAO campaignDAO;
     private List<QuestionStrategy> strategies = new ArrayList<>();
 
-    @Autowired
     @Override
+    @Autowired
     public void setCampaignDAO(CampaignDAO campaignDAO) {
         this.campaignDAO = campaignDAO;
     }
 
-    @Autowired
     @Override
+    @Autowired
     public void setQuestionDAO(QuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
         strategies.add(new OpenStrategyImpl(questionDAO));
