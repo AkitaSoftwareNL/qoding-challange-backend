@@ -36,13 +36,6 @@ class CampaignDAOImplIntTest {
         }
     }
 
-//    @Test
-//    void testConnection() throws SQLException {
-//        when(wrapper.getConnection()).thenThrow(new SQLException());
-//
-//        assertThrows(SQLException.class, () -> sut.getAllCampaigns());
-//    }
-
     @Test
     void persistCampaignAddsCampaing() throws SQLException {
         sut.persistCampaign(CAMPAIGNDTO);
