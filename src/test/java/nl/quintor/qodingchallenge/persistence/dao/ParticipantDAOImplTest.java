@@ -2,7 +2,6 @@ package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
 import org.h2.tools.RunScript;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
+import static org.junit.Assert.assertEquals;
 
 class ParticipantDAOImplTest {
 
@@ -34,6 +34,6 @@ class ParticipantDAOImplTest {
 
     @Test
     void getFirstAndLastNameReturnsAnAnswerCollectionWithoutAnswers() throws SQLException {
-        Assertions.assertEquals(new AnswerCollection("Gray", "Snare", null), sut.getFirstAndLastname(1));
+        assertEquals(new AnswerCollection("Gray", null, "Snare", null, null), sut.getFirstAndLastname(1));
     }
 }

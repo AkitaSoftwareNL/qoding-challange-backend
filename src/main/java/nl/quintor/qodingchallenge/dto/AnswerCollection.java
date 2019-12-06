@@ -6,14 +6,18 @@ import java.util.Objects;
 public class AnswerCollection {
 
     private String firstname;
+    private String insertion;
     private String lastname;
+    private String campaignName;
     private List<AnswerDTO> answers;
 
     public AnswerCollection() {}
 
-    public AnswerCollection(String firstname, String lastname, List<AnswerDTO> answers) {
+    public AnswerCollection(String firstname, String insertion, String lastname, String campaignName, List<AnswerDTO> answers) {
         this.firstname = firstname;
+        this.insertion = insertion;
         this.lastname = lastname;
+        this.campaignName = campaignName;
         this.answers = answers;
     }
 
@@ -25,12 +29,28 @@ public class AnswerCollection {
         this.firstname = firstname;
     }
 
+    public String getInsertion() {
+        return insertion;
+    }
+
+    public void setInsertion(String insertion) {
+        this.insertion = insertion;
+    }
+
     public String getLastname() {
         return lastname;
     }
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getCampaignName() {
+        return campaignName;
+    }
+
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
     }
 
     public List<AnswerDTO> getAnswers() {
@@ -47,12 +67,14 @@ public class AnswerCollection {
         if (o == null || getClass() != o.getClass()) return false;
         AnswerCollection that = (AnswerCollection) o;
         return Objects.equals(firstname, that.firstname) &&
+                Objects.equals(insertion, that.insertion) &&
                 Objects.equals(lastname, that.lastname) &&
+                Objects.equals(campaignName, that.campaignName) &&
                 Objects.equals(answers, that.answers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstname, lastname, answers);
+        return Objects.hash(firstname, insertion, lastname, campaignName, answers);
     }
 }

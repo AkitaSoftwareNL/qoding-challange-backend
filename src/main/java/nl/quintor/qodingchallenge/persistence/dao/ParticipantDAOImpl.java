@@ -20,13 +20,14 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT firstname, lastname FROM conference WHERE participantID = ?"
+                    "SELECT firstname, INSERTION, lastname FROM conference WHERE participantID = ?"
             );
             statement.setInt(1, participantID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             answerCollection.setFirstname(resultSet.getString(1));
-            answerCollection.setLastname(resultSet.getString(2));
+            answerCollection.setInsertion(resultSet.getString(2));
+            answerCollection.setLastname(resultSet.getString(3));
         } catch (SQLException e) {
             throw new SQLException(e);
         }

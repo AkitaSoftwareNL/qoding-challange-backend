@@ -72,20 +72,22 @@ class ReportServiceImplTest {
 
     @Test
     void getAnswerPerParticipantCallsParticipantDAOGetFirstAndLastName() throws SQLException {
-        when(participantDAOMock.getFirstAndLastname(PARTICIPANT_ID)).thenReturn(getAnswerCollection());
-
-        sut.getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID);
+        setupGetAnswerPerParticipant();
 
         verify(participantDAOMock).getFirstAndLastname(PARTICIPANT_ID);
     }
 
     @Test
     void getAnswerPerParticipantCallsReportDAOGetAnswerPerParticipant() throws SQLException {
+        setupGetAnswerPerParticipant();
+
+        verify(reportDAOMock).getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID);
+    }
+
+    private void setupGetAnswerPerParticipant() throws SQLException {
         when(participantDAOMock.getFirstAndLastname(PARTICIPANT_ID)).thenReturn(getAnswerCollection());
 
         sut.getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID);
-
-        verify(reportDAOMock).getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID);
     }
 
     private CampaignDTO getCampaignDTO() {
@@ -109,6 +111,6 @@ class ReportServiceImplTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "anothername", getListAnswer());
+        return new AnswerCollection("Name", "", "HC2 Holdings, Inc", "anothername", getListAnswer());
     }
 }

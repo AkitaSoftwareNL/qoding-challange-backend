@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.AnswerDTO;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.RankedParticipantCollection;
+import nl.quintor.qodingchallenge.persistence.connection.ConnectionFactoryPoolWrapper;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ class ReportDAOImplTest {
 
     private List<ParticipantDTO> participants = spy(new ArrayList<>());
     private List<AnswerDTO> answers = spy(new ArrayList<>());
+    private ConnectionFactoryPoolWrapper connectionFactoryPoolWrapper = spy(ConnectionFactoryPoolWrapper.class);
 
     @BeforeEach
     void setUp() throws SQLException {

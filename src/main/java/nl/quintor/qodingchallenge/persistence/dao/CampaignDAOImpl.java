@@ -22,7 +22,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT 1 FROM campaign WHERE name = ?");
+                    "SELECT 1 FROM campaign WHERE CAMPAIGN_NAME = ?");
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -40,7 +40,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO campaign(NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
+                    "INSERT INTO campaign(CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
                             "VALUES (?, 'JAVA', 'conferentie', 'admin', ?, null, 1)");
             statement.setString(1, campaignDTO.getName());
             statement.setInt(2, campaignDTO.getAmountOfQuestions());
@@ -109,5 +109,4 @@ public class CampaignDAOImpl implements CampaignDAO {
             throw new SQLException(e);
         }
     }
-
 }

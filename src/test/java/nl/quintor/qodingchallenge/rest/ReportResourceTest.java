@@ -105,7 +105,7 @@ class ReportResourceTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "anothername", getListAnswer());
+        return new AnswerCollection("Name", "","anothername", "JFALL", getListAnswer());
     }
 
 
