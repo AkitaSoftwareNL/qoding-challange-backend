@@ -79,9 +79,15 @@ public class QuestionResource {
     @RequestMapping(path = "/questions",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionCollection> getAllQuestions() throws SQLException {
-        QuestionCollection questionCollection = new QuestionCollection();
-        questionCollection.setQuestions(questionService.getAllQuestions());
-        return ResponseEntity.ok().body(questionCollection);
+    public ResponseEntity<List<QuestionDTO>> getAllQuestions() throws SQLException {
+        List<QuestionDTO> questionDTOList = questionService.getAllQuestions();
+        return ResponseEntity.ok().body(questionDTOList);
+    }
+
+    @RequestMapping(path = "/questions/delete/{questionID}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<QuestionDTO>> removeQuestion(@PathVariable("questionID") int questionID) throws SQLException {
+        return ResponseEntity.ok().body(questionService.removeQuestion(questionID));
     }
 }

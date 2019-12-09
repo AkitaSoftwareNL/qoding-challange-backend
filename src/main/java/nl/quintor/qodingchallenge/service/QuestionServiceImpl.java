@@ -84,7 +84,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createQuestion(QuestionDTO question) throws SQLException {
-        if(question.getQuestion().isEmpty()) {
+        if (question.getQuestion().isEmpty()) {
             throw new EmptyQuestionException("Question can not be empty.");
         }
         String questionType = question.getQuestionType();
@@ -98,6 +98,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDTO> getAllQuestions() throws SQLException {
+        return questionDAO.getAllQuestions();
+    }
+
+    @Override
+    public List<QuestionDTO> removeQuestion(int questionID) throws SQLException {
+        questionDAO.removeQuestion(questionID);
         return questionDAO.getAllQuestions();
     }
 

@@ -18,8 +18,8 @@ import static org.mockito.Mockito.when;
 
 class ReportResourceTest {
 
-    private final int CAMPAIGNID = 5;
-    private final String JFALL = "JFALL";
+    private final int campaignId = 5;
+    private final String campaign = "campaign";
 
     private ReportService reportServiceMock;
     private ReportResource sut;
@@ -43,9 +43,9 @@ class ReportResourceTest {
 
     @Test
     void getRankedParticipantsPerCampaignReturnsRankedListWithParticipantsWithStatuscodeOk() throws SQLException {
-        when(reportServiceMock.getRankedParticipantsPerCampaign(CAMPAIGNID)).thenReturn(getRankedListOfParticipants());
+        when(reportServiceMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedListOfParticipants());
 
-        ResponseEntity<RankedParticipantCollection> result = sut.getRankedParticipantsPerCampaign(CAMPAIGNID);
+        ResponseEntity<RankedParticipantCollection> result = sut.getRankedParticipantsPerCampaign(campaignId);
 
         assertTrue(result.hasBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -54,24 +54,16 @@ class ReportResourceTest {
     @Test
     void getAnswersPerParticipantReturnsAnswerCollectionAndStatuscodeOK() throws SQLException {
         final int PARTICIPANT_ID = 2;
-        when(reportServiceMock.getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID)).thenReturn(getAnswerCollection());
+        when(reportServiceMock.getAnswersPerParticipant(campaignId, PARTICIPANT_ID)).thenReturn(getAnswerCollection());
 
-        ResponseEntity<AnswerCollection> result = sut.getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID);
+        ResponseEntity<AnswerCollection> result = sut.getAnswersPerParticipant(campaignId, PARTICIPANT_ID);
 
         assertTrue(result.hasBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
-    private int id;
-    private String name;
-    private String startedBy;
-    private String category;
-    private int amountOfQuestions;
-    private String date;
-    private int state;
-    private List<ParticipantDTO> participants;
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, JFALL,"me","JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(1, campaign,"me","JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {
@@ -91,7 +83,7 @@ class ReportResourceTest {
     }
 
     private RankedParticipantCollection getRankedListOfParticipants() {
-        return new RankedParticipantCollection(JFALL, getListParticipant());
+        return new RankedParticipantCollection(campaign, getListParticipant());
     }
 
     private AnswerDTO getAnswerDTO() {
@@ -105,7 +97,7 @@ class ReportResourceTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "","anothername", "JFALL", 1, getListAnswer());
+        return new AnswerCollection("Name", "","anothername", "campaign", 1, getListAnswer());
     }
 
 

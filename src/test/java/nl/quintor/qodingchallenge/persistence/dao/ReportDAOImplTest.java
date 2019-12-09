@@ -23,8 +23,9 @@ import static org.mockito.Mockito.when;
 
 class ReportDAOImplTest {
 
-    private final int PARTICIPANT_ID = 1;
-    private final int CAMPAIGN_ID = 1;
+    private final int participantId = 1;
+    private final int campaignId = 1;
+
     private ReportDAOImpl sut;
 
     private List<ParticipantDTO> participants = spy(new ArrayList<>());
@@ -44,20 +45,22 @@ class ReportDAOImplTest {
             e.printStackTrace();
         }
 
-        answers.add(sut.getAnswersPerParticipant(CAMPAIGN_ID, PARTICIPANT_ID).get(0));
-        participants.add(sut.getRankedParticipantsPerCampaign(CAMPAIGN_ID).get(0));
+        answers.add(sut.getAnswersPerParticipant(campaignId, participantId).get(0));
+        participants.add(sut.getRankedParticipantsPerCampaign(campaignId).get(0));
     }
 
     @Test
     void getRankedParticipantsReturnsListWithParticipants() throws SQLException {
-        when(participants.size()).thenReturn(3);
+        int sizeOfParticipants = 3;
 
-        assertEquals(participants.size(), sut.getRankedParticipantsPerCampaign(CAMPAIGN_ID).size());
+        when(participants.size()).thenReturn(sizeOfParticipants);
+
+        assertEquals(participants.size(), sut.getRankedParticipantsPerCampaign(campaignId).size());
     }
 
     @Test
     void getRankedParticipantReturnsListWithAnParticipant() throws SQLException {
-        assertEquals(participants.get(0), sut.getRankedParticipantsPerCampaign(CAMPAIGN_ID).get(0));
+        assertEquals(participants.get(0), sut.getRankedParticipantsPerCampaign(campaignId).get(0));
     }
 
     @Test
@@ -69,7 +72,7 @@ class ReportDAOImplTest {
                 min[0] = participantDTO.getTimeInMillis();
             }
             try {
-                assertEquals(min[0], sut.getRankedParticipantsPerCampaign(CAMPAIGN_ID).get(0).getTimeInMillis());
+                assertEquals(min[0], sut.getRankedParticipantsPerCampaign(campaignId).get(0).getTimeInMillis());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -78,17 +81,19 @@ class ReportDAOImplTest {
 
     @Test
     void getAnswersPerParticipantsReturnListWithAnswers() throws SQLException {
-        when(answers.size()).thenReturn(3);
+        int sizeOfAnswers = 3;
 
-        assertEquals(answers.size(), sut.getAnswersPerParticipant(CAMPAIGN_ID, PARTICIPANT_ID).size());
+        when(answers.size()).thenReturn(sizeOfAnswers);
+
+        assertEquals(answers.size(), sut.getAnswersPerParticipant(campaignId, participantId).size());
     }
 
     @Test
     void getAnswersPerParticipantReturnsListWithAnAnswer() throws SQLException {
-        assertEquals(answers.get(0), sut.getAnswersPerParticipant(CAMPAIGN_ID, PARTICIPANT_ID).get(0));
+        assertEquals(answers.get(0), sut.getAnswersPerParticipant(campaignId, participantId).get(0));
     }
 
     private RankedParticipantCollection getRankedParticipantCollection() throws SQLException {
-        return new RankedParticipantCollection("JFALL", sut.getRankedParticipantsPerCampaign(CAMPAIGN_ID));
+        return new RankedParticipantCollection("JFALL", sut.getRankedParticipantsPerCampaign(campaignId));
     }
 }

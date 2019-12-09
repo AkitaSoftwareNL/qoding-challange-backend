@@ -4,6 +4,8 @@ drop table if exists GIVEN_ANSWER;
 
 drop table if exists QUESTION;
 
+drop table if exists TMP_MULTIPLE_CHOICE_QUESTION;
+
 
 CREATE TABLE QUESTION
 (
@@ -32,6 +34,14 @@ create table GIVEN_ANSWER
   STATEID       smallint      not null,
   GIVEN_ANSWER  varchar(1024) not null,
   primary key (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID)
+);
+
+CREATE TABLE TMP_MULTIPLE_CHOICE_QUESTION
+(
+   QUESTIONID           SMALLINT NOT NULL,
+   ANSWER_OPTIONS       VARCHAR(255) NOT NULL,
+   IS_CORRECT           BOOL NOT NULL,
+   PRIMARY KEY (QUESTIONID, ANSWER_OPTIONS)
 );
 
 insert into question (category_name, question, state, QUESTION_TYPE)

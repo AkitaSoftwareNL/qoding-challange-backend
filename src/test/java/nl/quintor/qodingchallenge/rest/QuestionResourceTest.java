@@ -21,10 +21,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class QuestionResourceTest {
 
-    private final String CATEGORY = "java";
-    private final String JFALL = "JFALL";
-    private final String ATTACHMENT = "java";
-    private final String QUESTION = "Dit is mijn vraag";
+    private final String category = "java";
+    private final String campaign = "campaign";
+    private final String attachment = "attachment";
+    private final String question = "Dit is mijn vraag";
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
@@ -39,16 +39,16 @@ class QuestionResourceTest {
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
         final int AMOUNT_OF_QUESTIONS = 3;
-        when(questionServiceMock.getQuestions(CATEGORY, JFALL)).thenReturn(getQuestionCollection().getQuestions());
+        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection().getQuestions());
 
-        sut.sendQuestions(JFALL);
+        sut.sendQuestions(campaign);
 
-        verify(questionServiceMock).getQuestions(CATEGORY, JFALL);
+        verify(questionServiceMock).getQuestions(category, campaign);
     }
 
     @Test
     void sendQuestionsResturnsResponseOK() throws SQLException {
-        var test = sut.sendQuestions(JFALL);
+        var test = sut.sendQuestions(campaign);
 
         assertEquals(HttpStatus.OK, test.getStatusCode());
     }
@@ -108,14 +108,14 @@ class QuestionResourceTest {
         // Verify
         var testValue = sut.getAllQuestions();
         // Test
-        assertEquals(questionCollection, testValue.getBody());
+        assertEquals(getQuestions(), testValue.getBody());
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
     }
 
     private List<QuestionDTO> getQuestions() {
         List<QuestionDTO> questions = new ArrayList<>();
-        questions.add(0, new QuestionDTO(2, CATEGORY, QUESTION, ATTACHMENT));
-        questions.add(1, new QuestionDTO(3, CATEGORY, QUESTION, ATTACHMENT));
+        questions.add(0, new QuestionDTO(2, question, category, "open", attachment));
+        questions.add(1, new QuestionDTO(3, question, category, "open", attachment));
         return questions;
     }
 
@@ -185,11 +185,11 @@ class QuestionResourceTest {
 
 
     private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, JFALL, getQuestions());
+        return new QuestionCollection(1, campaign, getQuestions());
     }
 
     private QuestionDTO getQuestion() {
-        return new QuestionDTO(1, CATEGORY, QUESTION, ATTACHMENT);
+        return new QuestionDTO(1, question, category, "open", attachment);
     }
 
 }

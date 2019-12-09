@@ -90,5 +90,6 @@ public class CampaignDTO {
     public void setParticipants(List<ParticipantDTO> participants) {
         this.participants = participants;
     }
+
 }
 
