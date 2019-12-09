@@ -38,20 +38,10 @@ class CampaignServiceImplTest {
     }
 
     @Test
-    void getCreatecampaignCallToDaoPersistCampaign() throws SQLException {
-        final CampaignDTO campaign = getCampaignDTO();
+    void getCreateCampaignCallToDaoPersistCampaign() throws SQLException {
+        sut.createNewCampaign(getCampaignDTO());
 
-        sut.createNewCampaign(campaign);
-
-        verify(campaignDAOStub).persistCampaign(campaign);
-    }
-
-    @Test
-    void returnsListWhenGettingAllCampaigns() throws SQLException {
-        when(campaignDAOStub.getAllCampaigns())
-                .thenReturn(getCampaignDtoList());
-
-        assertEquals(campaignDAOStub.getAllCampaigns(), sut.showCampaign());
+        verify(campaignDAOStub).persistCampaign(getCampaignDTO());
     }
 
     @Test
@@ -62,17 +52,33 @@ class CampaignServiceImplTest {
         assertThrows(CampaignAlreadyExistsException.class, () -> sut.createNewCampaign(getCampaignDTO()));
     }
 
+    @Test
+    void showCampaignCallsGetAllCampaigns() throws SQLException {
+        // Mock
+
+        // Test
+        sut.showCampaign();
+        // Verify
+        verify(campaignDAOStub).getAllCampaigns();
+    }
+
+    @Test
+    void returnsListWhenGettingAllCampaigns() throws SQLException {
+        when(campaignDAOStub.getAllCampaigns())
+                .thenReturn(getCampaignDtoList());
+
+        assertEquals(campaignDAOStub.getAllCampaigns(), sut.showCampaign());
+    }
+
     private CampaignDTO getCampaignDTO() {
         return new CampaignDTO(1, campaign, "me", "JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getCampaignDtoList() {
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
-
         campaignDTOList.add(
                 getCampaignDTO()
         );
-
         return campaignDTOList;
     }
 }

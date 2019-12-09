@@ -12,7 +12,6 @@ import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,8 +25,8 @@ class QuestionServiceImplTest {
 
     private final String campaign = "HC2 Holdings, Inc";
     private final int campaignID = 1;
-    private final String category = "category";
-    private final int limit = 0;
+    private final String category = "JAVA";
+    private final int questionLimit = 3;
     private final int questionId = 1;
     private final int pendingState = 1;
 
@@ -49,26 +48,27 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
+    void getQuestionsCallsGetQuestions() throws SQLException {
         sut.getQuestions(category, campaign);
 
-        verify(questionDAOMock).getQuestions(category, limit);
+        verify(questionDAOMock).getQuestions(category, questionLimit);
     }
 
+    // TODO fix for loop.
     @Test
     void getQuestionsCallsGetPossibleAnswer() throws SQLException {
         // Mock
-        var list = setQuestionlist();
-        when(questionDAOMock.getQuestions(category, limit)).thenReturn(list);
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
+        var list = getQuestionlist();
+        when(questionDAOMock.getQuestions(category, questionLimit)).thenReturn(list);
+        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(questionLimit);
         // Test
         sut.getQuestions(category, campaign);
         // Verify
-        verify(questionDAOMock, times(limit)).getPossibleAnswers(questionId);
+        verify(questionDAOMock, times(0)).getPossibleAnswers(questionId);
     }
 
     @Test
-    void setAnswerCallsQuestionPersistenceGetCorrectAnswerCorrect() throws SQLException {
+    void setAnswerCallsGetCorrectAnswerCorrect() throws SQLException {
         // Mock
         when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
 
@@ -96,33 +96,33 @@ class QuestionServiceImplTest {
     @Test
     void getAllQuestionsReturnsQuestionList() throws SQLException {
         // Mock
-        var questions = setQuestionlist();
-        when(questionDAOMock.getAllQuestions()).thenReturn(questions);
+        when(questionDAOMock.getAllQuestions()).thenReturn(getQuestionlist());
         // Test
         var testValue = sut.getAllQuestions();
         // Verify
-        assertEquals(questions, testValue);
+        assertEquals(getQuestionlist(), testValue);
     }
 
     @Test
     void createQuestionCallsPersistOpenQuestion() throws SQLException {
         // Mock
+
         // Test
         sut.createQuestion(getOpenQuestion());
         // Verify
         verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
     }
 
+    // TODO fix for loop.
     @Test
     void getQuestionsCallsGetPossibleAnswers() throws SQLException {
         // Mock
-        var list = setQuestionlist();
-        when(questionDAOMock.getQuestions(category, limit)).thenReturn(list);
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
+        when(questionDAOMock.getQuestions(anyString(), anyInt())).thenReturn(getQuestionlist());
+        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(getQuestionlist().size());
         // Test
         sut.getQuestions(category, campaign);
         // Verify
-        verify(questionDAOMock, times(limit)).getPossibleAnswers(questionId);
+        verify(questionDAOMock, times(1)).getPossibleAnswers(questionId);
     }
 
     @Test
@@ -134,7 +134,7 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
-        List<QuestionDTO> questionDTOList = setQuestionlist();
+        List<QuestionDTO> questionDTOList = getQuestionlist();
         when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
         when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaign))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
@@ -224,7 +224,7 @@ class QuestionServiceImplTest {
     }
 
     private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
-        sut.setAnswer(setQuestionCollection());
+        sut.setAnswer(getQuestionCollection());
         verify(questionDAOMock).getCorrectAnswer(questionId);
     }
 
@@ -235,15 +235,14 @@ class QuestionServiceImplTest {
         return answers;
     }
 
-    private List<QuestionDTO> setQuestionlist() throws SQLException {
-        List<QuestionDTO> testValue = sut.getQuestions(category, campaign);
-        QuestionDTO questionDTO = new QuestionDTO(questionId, "String", "Java", "multiple", "String");
-        testValue.add(questionDTO);
-        return testValue;
+    private List<QuestionDTO> getQuestionlist() throws SQLException {
+        return new ArrayList<>() {{
+            new QuestionDTO(questionId, "String", category, "multiple", "String");
+        }};
     }
 
-    private QuestionCollection setQuestionCollection() throws SQLException {
-        return new QuestionCollection(1, "test", setQuestionlist());
+    private QuestionCollection getQuestionCollection() throws SQLException {
+        return new QuestionCollection(1, "test", getQuestionlist());
     }
 
     private QuestionDTO getOpenQuestion() {
