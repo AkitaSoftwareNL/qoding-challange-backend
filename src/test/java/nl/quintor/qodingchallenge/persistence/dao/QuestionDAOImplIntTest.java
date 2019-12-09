@@ -51,17 +51,18 @@ class QuestionDAOImplIntTest {
     }
 
     /*
-        Onze intentie was om de vraag op te slaan. En vervolgens te controleren of het aantal vragen
+        Onze intentie was om de vraag op te slaan en vervolgens te controleren of het aantal vragen
         in de database met één omhoog is gegaan.
      */
     @Test
     void persistMultipleQuestionPersistsMultipleQuestion() throws SQLException {
+        final int expectedLength = 4;
         // Mock
 
         // Test
         sut.persistMultipleQuestion(getMultipleQuestion());
         // Verify
-        assertEquals(4, get);
+        assertEquals(expectedLength, sut.getAllQuestions().size());
     }
 
     private QuestionDTO getMultipleQuestion() {

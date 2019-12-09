@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,28 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 public class QuestionDAOImpl implements QuestionDAO {
 
 
+    @Override
+    public List<QuestionDTO> getAllQuestions() throws SQLException {
+        List<QuestionDTO> questions = new ArrayList<>();
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                questions.add(
+                        new QuestionDTO(
+                                resultSet.getInt(1),
+                                resultSet.getString(2),
+                                resultSet.getString(3),
+                                resultSet.getString(4)
+                        ));
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return questions;
+    }
 
     /*
         Er is gekozen om een stored procedure gebruiken voor het opslaan van meerkeuzevragen
