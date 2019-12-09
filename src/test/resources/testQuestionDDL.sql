@@ -28,10 +28,10 @@ create table GIVEN_ANSWER
 (
   QUESTIONID    smallint      not null,
   PARTICIPANTID smallint      not null,
-  NAME          varchar(255)  not null,
+  CAMPAIGN_ID   int  not null,
   STATEID       smallint      not null,
   GIVEN_ANSWER  varchar(1024) not null,
-  primary key (QUESTIONID, PARTICIPANTID, NAME)
+  primary key (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID)
 );
 
 insert into question (category_name, question, state, QUESTION_TYPE)
@@ -48,5 +48,5 @@ values (3, 'Ja', 1);
 insert into multiple_choice_question (questionID, ANSWER_OPTIONS, is_correct)
 values (3, 'Nee', 0);
 
-insert into GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, NAME, STATEID, GIVEN_ANSWER)
-values (3, 1, 'HC2 Holdings, Inc', 1, 'A');
+insert into GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, STATEID, GIVEN_ANSWER)
+values (3, 1, 1, 1, 'A');

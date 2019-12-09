@@ -74,7 +74,7 @@ public class QuestionServiceImpl implements QuestionService {
                     question.setStateID(INCORRECT);
                 }
             }
-            questionDAO.setAnswer(question, questionCollection.getCampaignName(), questionCollection.getParticipantID());
+            questionDAO.setAnswer(question, questionCollection.getCampaignId(), questionCollection.getParticipantID());
         }
     }
 
