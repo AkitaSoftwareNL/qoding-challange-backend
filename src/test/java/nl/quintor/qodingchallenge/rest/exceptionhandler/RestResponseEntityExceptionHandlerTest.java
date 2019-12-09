@@ -63,8 +63,8 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleNoQuestionFoundException() {
-        var expecterdResponse = handler.handleNoQuestionFoundException(new NoQuestionFoundException(), webRequest);
+        var expectedResponse = handler.handleNoQuestionFoundException(new NoQuestionFoundException(), webRequest);
 
-        assertEquals(HttpStatus.NOT_FOUND , expecterdResponse.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND , expectedResponse.getStatusCode());
     }
 }
