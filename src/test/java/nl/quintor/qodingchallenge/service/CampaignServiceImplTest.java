@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CampaignServiceImplTest {
 
-    private final String jfall = "jfall - 2020";
+    private final String campaign = "campaign - 2020";
 
     @InjectMocks
     CampaignServiceImpl sut;
@@ -64,14 +64,14 @@ class CampaignServiceImplTest {
 
     @Test
     void createNewCampaignThrowsCampaignAlreadyExistsException() throws SQLException {
-        when(campaignDAOStub.campaignExists(jfall))
+        when(campaignDAOStub.campaignExists(campaign))
                 .thenReturn(true);
 
         assertThrows(CampaignAlreadyExistsException.class, () -> sut.createNewCampaign(getCampaignDTO()));
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, jfall, "me", "JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(1, campaign, "me", "JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getCampaignDtoList() {

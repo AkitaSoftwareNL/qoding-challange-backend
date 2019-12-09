@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class QuestionResourceTest {
 
     private final String category = "java";
-    private final String jfall = "jfall";
+    private final String campaign = "campaign";
     private final String attachment = "attachment";
     private final String question = "Dit is mijn vraag";
 
@@ -38,16 +38,16 @@ class QuestionResourceTest {
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
         final int AMOUNT_OF_QUESTIONS = 3;
-        when(questionServiceMock.getQuestions(category, jfall)).thenReturn(getQuestionCollection().getQuestions());
+        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection().getQuestions());
 
-        sut.sendQuestions(jfall);
+        sut.sendQuestions(campaign);
 
-        verify(questionServiceMock).getQuestions(category, jfall);
+        verify(questionServiceMock).getQuestions(category, campaign);
     }
 
     @Test
     void sendQuestionsResturnsResponseOK() throws SQLException {
-        var test = sut.sendQuestions(jfall);
+        var test = sut.sendQuestions(campaign);
 
         assertEquals(HttpStatus.OK, test.getStatusCode());
     }
@@ -119,7 +119,7 @@ class QuestionResourceTest {
     }
 
     private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, jfall, getQuestions());
+        return new QuestionCollection(1, campaign, getQuestions());
     }
 
     private QuestionDTO getQuestion() {

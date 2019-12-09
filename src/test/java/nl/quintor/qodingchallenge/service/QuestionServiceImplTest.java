@@ -11,7 +11,6 @@ import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
-    private final String jfall = "HC2 Holdings, Inc";
+    private final String campaign = "HC2 Holdings, Inc";
     private final String category = "category";
     private final int limit = 0;
     private final int questionId = 1;
@@ -42,12 +41,12 @@ class QuestionServiceImplTest {
         this.sut.setQuestionDAO(questionDAOMock);
         this.sut.setCampaignDAO(campaignDAOMock);
 
-        when(campaignDAOMock.campaignExists(jfall)).thenReturn(true);
+        when(campaignDAOMock.campaignExists(campaign)).thenReturn(true);
     }
 
     @Test
     void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
-        sut.getQuestions(category, jfall);
+        sut.getQuestions(category, campaign);
 
         verify(questionDAOMock).getQuestions(category, limit);
     }
@@ -59,7 +58,7 @@ class QuestionServiceImplTest {
         when(questionDAOMock.getQuestions(category, limit)).thenReturn(list);
         when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
         // Test
-        sut.getQuestions(category, jfall);
+        sut.getQuestions(category, campaign);
         // Verify
         verify(questionDAOMock, times(limit)).getPossibleAnswers(questionId);
     }
@@ -118,7 +117,7 @@ class QuestionServiceImplTest {
         when(questionDAOMock.getQuestions(category, limit)).thenReturn(list);
         when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
         // Test
-        sut.getQuestions(category, jfall);
+        sut.getQuestions(category, campaign);
         // Verify
         verify(questionDAOMock, times(limit)).getPossibleAnswers(questionId);
     }
@@ -133,13 +132,13 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
         List<QuestionDTO> questionDTOList = setQuestionlist();
-        when(campaignDAOMock.getAmountOfQuestions(jfall)).thenReturn(1);
-        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(jfall))).thenReturn(questionDTOList);
+        when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
+        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaign))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
 
         questionDTOList.get(0).setPossibleAnswers(getPossibleAnswers());
 
-        assertEquals(questionDTOList, sut.getQuestions(category, jfall));
+        assertEquals(questionDTOList, sut.getQuestions(category, campaign));
     }
 
     @Test
@@ -166,7 +165,7 @@ class QuestionServiceImplTest {
     }
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {
-        List<QuestionDTO> testValue = sut.getQuestions(category, jfall);
+        List<QuestionDTO> testValue = sut.getQuestions(category, campaign);
         QuestionDTO questionDTO = new QuestionDTO(questionId, "String", "Java", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;
@@ -177,11 +176,11 @@ class QuestionServiceImplTest {
     }
 
     private QuestionDTO getOpenQuestion() {
-        return new QuestionDTO(2, "String", "JAVA", "open", "String");
+        return new QuestionDTO(2, "String", category, "open", "String");
     }
 
     private QuestionDTO getMultipleQuestion() {
-        return new QuestionDTO(2, "String", "JAVA", "multiple", "String");
+        return new QuestionDTO(2, "String", category, "multiple", "String");
     }
 
     private ArrayList<PossibleAnswerDTO> getPossibleAnswers() {
@@ -192,7 +191,7 @@ class QuestionServiceImplTest {
     }
 
     private QuestionDTO getEmptyQuestion() {
-        return new QuestionDTO(2, "", "multiple", "String");
+        return new QuestionDTO(2, "", category, "multiple", "String");
     }
 
 }
