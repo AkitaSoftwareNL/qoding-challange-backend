@@ -29,11 +29,11 @@ class QuestionDAOImplIntTest {
     private final int questionState = 1;
     private final int questionId = 3;
     private final int amountOfQuestions = 3;
+    private final int participentId = 1;
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
-    private final int participentId = 1;
-
+    
     @BeforeEach
     void setUp() {
         this.sut = new QuestionDAOImpl();
