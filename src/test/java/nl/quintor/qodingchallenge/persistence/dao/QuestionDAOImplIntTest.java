@@ -26,11 +26,14 @@ import static org.mockito.Mockito.doThrow;
 
 class QuestionDAOImplIntTest {
 
+    public static final int CAMPAIGN_ID = 1;
+    public static final int QUESTION_STATE = 1;
     private final int questionId = 3;
     private final int amountOfQuestions = 3;
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
+    public static final int PARTICIPENT_ID = 1;
 
     @BeforeEach
     void setUp() {
@@ -63,7 +66,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(getQuestions(), 1, 1));
+        assertDoesNotThrow(() -> sut.setAnswer(getOpenQuestion(), CAMPAIGN_ID, PARTICIPENT_ID));
     }
 
     @Test
@@ -101,12 +104,15 @@ class QuestionDAOImplIntTest {
 
         // Verify
         assertThrows(SQLException.class, () -> sut.persistMultipleQuestion(getMultipleQuestion()));
+    }
+
     @Test
     void getPendingAnswersReturnPendingAnswers() throws SQLException {
         //Mock
 
         //Test
-        var testValue = sut.getPendingAnswers(1,1);
+
+        var testValue = sut.getPendingAnswers(CAMPAIGN_ID, QUESTION_STATE);
         int expectedLength = 1;
 
         //Verify
@@ -120,14 +126,14 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionReturnQuestion() throws SQLException, NoQuestionFoundException{
+        int expectedId = 3;
         //Mock
 
         //Test
-        var testValue = sut.getQuestion(1);
-        int expectedLength = 1;
+        var testValue = sut.getQuestion(questionId);
 
         //Verify
-        assertEquals(expectedLength, testValue.getQuestionID());
+        assertEquals(expectedId, testValue.getQuestionID());
     }
 
     @Test
@@ -137,35 +143,33 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionReturnQuestionThrowsNoQuestionFound() throws SQLException, NoQuestionFoundException{
+        int falseId = 50;
         //Mock
 
         //Test
 
         //Verify
         assertThrows(NoQuestionFoundException.class, () -> {
-            sut.getQuestion(50);
+            sut.getQuestion(falseId);
         });
     }
 
     @Test
     void setAnswerAddAmountPlusOne() throws SQLException{
+        int correctState = 2;
         //Mock
-        var oldLengthValue = sut.getPendingAnswers(1,1).size();
+        var oldLengthValue = sut.getPendingAnswers(CAMPAIGN_ID,QUESTION_STATE).size();
 
         //Test
-        sut.setPendingAnswer(new GivenAnswerDTO(3,1,1,2,"Test"));
+        sut.setPendingAnswer(new GivenAnswerDTO(questionId, PARTICIPENT_ID,CAMPAIGN_ID,correctState,"Test"));
 
         //Verify
-        assertEquals(oldLengthValue - 1, sut.getPendingAnswers(1,1).size());
+        assertEquals(oldLengthValue - 1, sut.getPendingAnswers(CAMPAIGN_ID,QUESTION_STATE).size());
     }
 
     @Test
     void setAnswerThrowsSqlException() throws SQLException{
         //TODO: when connection is mockable, add
-    }
-
-    private QuestionDTO getQuestions() {
-        return new QuestionDTO(10, "dit is een test vraag", "open", null);
     }
 
     private QuestionDTO getOpenQuestion() {
