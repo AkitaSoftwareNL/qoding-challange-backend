@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,11 +18,13 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
 
 class QuestionDAOImplIntTest {
 
-    private final int QUESTION_ID = 3;
-    private final int AMOUNT_OF_QUESTIONS = 3;
+    private final int questionId = 3;
+    private final int amountOfQuestions = 3;
     private QuestionDAOImpl sut;
 
     @BeforeEach
@@ -39,16 +42,15 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        String CATEGORY = "JAVA";
-        int AMOUNT_OF_QUESTIONS = 3;
-        List<QuestionDTO> questionDTOList = sut.getQuestions(CATEGORY, AMOUNT_OF_QUESTIONS);
+        final String category = "JAVA";
+        List<QuestionDTO> questionDTOList = sut.getQuestions(category, amountOfQuestions);
 
-        assertEquals(AMOUNT_OF_QUESTIONS, questionDTOList.size());
+        assertEquals(amountOfQuestions, questionDTOList.size());
     }
 
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
-        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(QUESTION_ID);
+        List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(questionId);
 
         int AMOUNT_OF_ANSWERS = 2;
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
@@ -56,12 +58,12 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(getQuestions(), "testcampaign", 1));
+        assertDoesNotThrow(() -> sut.setAnswer(getOpenQuestion(), "testcampaign", 1));
     }
 
     @Test
     void getCorrectAnswerGivesAllCorrectAnswers() throws SQLException {
-        String actualResult = sut.getCorrectAnswer(QUESTION_ID);
+        String actualResult = sut.getCorrectAnswer(questionId);
 
         assertFalse(actualResult.isEmpty());
     }
@@ -71,9 +73,9 @@ class QuestionDAOImplIntTest {
         // Mock
 
         // Test
-        sut.persistOpenQuestion(getQuestions());
+        sut.persistOpenQuestion(getOpenQuestion());
         // Verify
-        assertEquals(AMOUNT_OF_QUESTIONS + 1, sut.getAllQuestions().size());
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
     }
 
     @Test
@@ -83,10 +85,32 @@ class QuestionDAOImplIntTest {
         // Test
         var testValue = sut.getAllQuestions();
         // Verify
-        assertEquals(AMOUNT_OF_QUESTIONS, testValue.size());
+        assertEquals(amountOfQuestions, testValue.size());
     }
 
-    private QuestionDTO getQuestions() {
+    @Test
+    void persistMultipleQuestionThrowsSQLException() {
+        // Mock
+
+        // Test
+
+        // Verify
+        assertThrows(SQLException.class, () -> sut.persistMultipleQuestion(getMultipleQuestion()));
+    }
+
+    private QuestionDTO getOpenQuestion() {
         return new QuestionDTO(10, "dit is een test vraag", "open", null);
+    }
+
+    private QuestionDTO getMultipleQuestion() {
+        QuestionDTO question = new QuestionDTO(10, "dit is een test vraag", "open", null);
+        ArrayList<PossibleAnswerDTO> possibleAnswers = new ArrayList<>() {
+            {
+                add(new PossibleAnswerDTO("yes", 1));
+                add(new PossibleAnswerDTO("no", 0));
+            }
+        };
+        question.setPossibleAnswers(possibleAnswers);
+        return question;
     }
 }
