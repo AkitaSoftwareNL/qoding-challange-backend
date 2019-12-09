@@ -23,7 +23,7 @@ public interface QuestionService {
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
 
-    List<QuestionDTO> removeQuestion(int questionID) throws SQLException;
+    void removeQuestion(int questionID) throws SQLException;
 
     List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 

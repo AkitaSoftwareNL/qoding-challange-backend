@@ -119,11 +119,6 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void getPendingAnswersThrowsSqlException() throws SQLException{
-        //TODO: when connection is mockable, add
-    }
-
-    @Test
     void getQuestionReturnQuestion() throws SQLException, NoQuestionFoundException{
         int expectedId = 3;
         //Mock
@@ -136,21 +131,14 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void getQuestionReturnQuestionThrowsSqlException() throws SQLException, NoQuestionFoundException{
-        //TODO: when connection is mockable, add
-    }
-
-    @Test
-    void getQuestionReturnQuestionThrowsNoQuestionFound() throws SQLException, NoQuestionFoundException{
+    void getQuestionReturnQuestionThrowsNoQuestionFound() throws NoQuestionFoundException{
         int falseId = 50;
         //Mock
 
         //Test
 
         //Verify
-        assertThrows(NoQuestionFoundException.class, () -> {
-            sut.getQuestion(falseId);
-        });
+        assertThrows(NoQuestionFoundException.class, () -> sut.getQuestion(falseId));
     }
 
     @Test
@@ -167,8 +155,13 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void setAnswerThrowsSqlException() throws SQLException{
-        //TODO: when connection is mockable, add
+    void removeQuestionRemovesQuesion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.removeQuestion(questionId);
+        // Verify
+        assertEquals(amountOfQuestions - 1, sut.getAllQuestions().size());
     }
 
     private QuestionDTO getOpenQuestion() {

@@ -24,9 +24,11 @@ import static org.mockito.Mockito.*;
 class QuestionServiceImplTest {
 
     private final String campaign = "HC2 Holdings, Inc";
+    private final int campaignID = 1;
     private final String category = "category";
     private final int limit = 0;
     private final int questionId = 1;
+    private final int pendingState = 1;
 
     private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
@@ -164,21 +166,21 @@ class QuestionServiceImplTest {
     void getQuestionCallsGetQuestion() throws SQLException {
         // Mock
 
-        // Verify
-        sut.getQuestion(1);
         // Test
-        verify(questionDAOMock).getQuestion(1);
+        sut.getQuestion(questionId);
+        // Verify
+        verify(questionDAOMock).getQuestion(questionId);
     }
 
     @Test
     void getQuestionReturnQuestion() throws SQLException {
         // Mock
         var question = getOpenQuestion();
-        when(questionDAOMock.getQuestion(1)).thenReturn(question);
+        when(questionDAOMock.getQuestion(questionId)).thenReturn(question);
 
-        // Verify
-        var testValue = sut.getQuestion(1);
         // Test
+        var testValue = sut.getQuestion(questionId);
+        // Verify
         assertEquals(question, testValue);
     }
 
@@ -186,29 +188,22 @@ class QuestionServiceImplTest {
     void getPendingAnswersCallsGetPendingAnswers() throws SQLException {
         // Mock
 
-        // Verify
-        sut.getPendingAnswers(1,1);
         // Test
-        verify(questionDAOMock).getPendingAnswers(1,1);
+        sut.getPendingAnswers(campaignID, pendingState);
+        // Verify
+        verify(questionDAOMock).getPendingAnswers(campaignID, pendingState);
     }
 
     @Test
     void getPendingAnswersReturnListAndStatusCodeOK() throws SQLException {
         // Mock
         var Answers = getAnswers();
-        when(questionDAOMock.getPendingAnswers(1,1)).thenReturn(Answers);
+        when(questionDAOMock.getPendingAnswers(campaignID, pendingState)).thenReturn(Answers);
 
-        // Verify
-        var testValue = sut.getPendingAnswers(1,1);
         // Test
+        var testValue = sut.getPendingAnswers(campaignID, pendingState);
+        // Verify
         assertEquals(Answers, testValue);
-    }
-
-    private List<GivenAnswerDTO> getAnswers() {
-        List<GivenAnswerDTO> answers = new ArrayList<>();
-        answers.add(0, new GivenAnswerDTO(1, 1, 1, 1, "A"));
-        answers.add(1, new GivenAnswerDTO(2, 2, 2, 1, "B"));
-        return answers;
     }
 
     @Test
@@ -216,15 +211,32 @@ class QuestionServiceImplTest {
         // Mock
         GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
 
-        // Verify
-        sut.setPendingAnswer(givenAnswerDTO);
         // Test
+        sut.setPendingAnswer(givenAnswerDTO);
+        // Verify
         verify(questionDAOMock).setPendingAnswer(givenAnswerDTO);
+    }
+
+    @Test
+    void removeQuestionCallRemoveQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.removeQuestion(questionId);
+        // Verify
+        verify(questionDAOMock).removeQuestion(questionId);
     }
 
     private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
         sut.setAnswer(setQuestionCollection());
         verify(questionDAOMock).getCorrectAnswer(questionId);
+    }
+
+    private List<GivenAnswerDTO> getAnswers() {
+        List<GivenAnswerDTO> answers = new ArrayList<>();
+        answers.add(0, new GivenAnswerDTO(1, 1, 1, 1, "A"));
+        answers.add(1, new GivenAnswerDTO(2, 2, 2, 1, "B"));
+        return answers;
     }
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {

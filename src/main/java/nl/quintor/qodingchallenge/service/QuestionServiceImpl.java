@@ -102,9 +102,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionDTO> removeQuestion(int questionID) throws SQLException {
+    public void removeQuestion(int questionID) throws SQLException {
         questionDAO.removeQuestion(questionID);
-        return questionDAO.getAllQuestions();
     }
 
     @Override

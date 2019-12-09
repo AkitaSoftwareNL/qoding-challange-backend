@@ -25,6 +25,9 @@ class QuestionResourceTest {
     private final String campaign = "campaign";
     private final String attachment = "attachment";
     private final String question = "Dit is mijn vraag";
+    private final int questionID = 1;
+    private final int campaignID = 1;
+    private final int pendingState = 1;
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
@@ -38,7 +41,6 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
-        final int AMOUNT_OF_QUESTIONS = 3;
         when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection().getQuestions());
 
         sut.sendQuestions(campaign);
@@ -105,41 +107,107 @@ class QuestionResourceTest {
         when(questionServiceMock.getAllQuestions()).thenReturn(questions);
         QuestionCollection questionCollection = new QuestionCollection();
         questionCollection.setQuestions(questions);
-        // Verify
-        var testValue = sut.getAllQuestions();
         // Test
+        var testValue = sut.getAllQuestions();
+        // Verify
         assertEquals(getQuestions(), testValue.getBody());
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
-    }
-
-    private List<QuestionDTO> getQuestions() {
-        List<QuestionDTO> questions = new ArrayList<>();
-        questions.add(0, new QuestionDTO(2, question, category, "open", attachment));
-        questions.add(1, new QuestionDTO(3, question, category, "open", attachment));
-        return questions;
     }
 
     @Test
     void getPendingAnswersCallsGetPendingAnswers() throws SQLException {
         // Mock
 
-        // Verify
-        sut.getPendingAnswers(1,1);
         // Test
-        verify(questionServiceMock).getPendingAnswers(1,1);
+        sut.getPendingAnswers(campaignID,pendingState);
+        // Verify
+        verify(questionServiceMock).getPendingAnswers(campaignID,pendingState);
     }
 
     @Test
     void getPendingAnswersReturnListAndStatusCodeOK() throws SQLException {
         // Mock
         var Answers = getAnswers();
-        when(questionServiceMock.getPendingAnswers(1,1)).thenReturn(Answers);
+        when(questionServiceMock.getPendingAnswers(campaignID,pendingState)).thenReturn(Answers);
 
-        // Verify
-        var testValue = sut.getPendingAnswers(1,1);
         // Test
+        var testValue = sut.getPendingAnswers(campaignID,pendingState);
+        // Verify
         assertEquals(Answers, testValue.getBody());
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    @Test
+    void setPendingAnswersCallsSetPendingAnswers() throws SQLException {
+        // Mock
+        GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
+
+        // Test
+        sut.setPendingAnswer(givenAnswerDTO);
+        // Verify
+        verify(questionServiceMock).setPendingAnswer(givenAnswerDTO);
+    }
+
+    @Test
+    void getQuestionCallsGetQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.getQuestion(questionID);
+        // Verify
+        verify(questionServiceMock).getQuestion(questionID);
+    }
+
+    @Test
+    void getQuestionReturnQuestion() throws SQLException {
+        // Mock
+        var question = getQuestion();
+        when(questionServiceMock.getQuestion(questionID)).thenReturn(question);
+
+        // Test
+        var testValue = sut.getQuestion(questionID);
+        // Verify
+        assertEquals(question, testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    @Test
+    void removeQuestionCallsRemoveQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.removeQuestion(questionID);
+        // Verify
+        verify(questionServiceMock).removeQuestion(questionID);
+    }
+
+    @Test
+    void removeQuestionCallsGetAllQuestions() throws SQLException {
+        // Mock
+
+        // Test
+        sut.removeQuestion(questionID);
+        // Verify
+        verify(questionServiceMock).getAllQuestions();
+    }
+
+    @Test
+    void removeQuestionReturnsQuestionList() throws SQLException {
+        // Mock
+        when(questionServiceMock.getAllQuestions()).thenReturn(getQuestions());
+        // Test
+        var testValue = sut.removeQuestion(questionID);
+        // Verify
+        assertEquals(getQuestions(), testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    private QuestionCollection getQuestionCollection() {
+        return new QuestionCollection(1, campaign, getQuestions());
+    }
+
+    private QuestionDTO getQuestion() {
+        return new QuestionDTO(1, question, category, "open", attachment);
     }
 
     private List<GivenAnswerDTO> getAnswers() {
@@ -149,47 +217,11 @@ class QuestionResourceTest {
         return answers;
     }
 
-    @Test
-    void setPendingAnswersCallsSetPendingAnswers() throws SQLException {
-        // Mock
-        GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
-
-        // Verify
-        sut.setPendingAnswer(givenAnswerDTO);
-        // Test
-        verify(questionServiceMock).setPendingAnswer(givenAnswerDTO);
-    }
-
-    @Test
-    void getQuestionCallsGetQuestion() throws SQLException {
-        // Mock
-
-        // Verify
-        sut.getQuestion(1);
-        // Test
-        verify(questionServiceMock).getQuestion(1);
-    }
-
-    @Test
-    void getQuestionReturnQuestion() throws SQLException {
-        // Mock
-        var question = getQuestion();
-        when(questionServiceMock.getQuestion(1)).thenReturn(question);
-
-        // Verify
-        var testValue = sut.getQuestion(1);
-        // Test
-        assertEquals(question, testValue.getBody());
-        assertEquals(HttpStatus.OK, testValue.getStatusCode());
-    }
-
-
-    private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, campaign, getQuestions());
-    }
-
-    private QuestionDTO getQuestion() {
-        return new QuestionDTO(1, question, category, "open", attachment);
+    private List<QuestionDTO> getQuestions() {
+        List<QuestionDTO> questions = new ArrayList<>();
+        questions.add(0, new QuestionDTO(2, question, category, "open", attachment));
+        questions.add(1, new QuestionDTO(3, question, category, "open", attachment));
+        return questions;
     }
 
 }
