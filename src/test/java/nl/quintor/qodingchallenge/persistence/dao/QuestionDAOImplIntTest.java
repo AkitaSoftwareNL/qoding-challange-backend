@@ -7,7 +7,6 @@ import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,14 +25,14 @@ import static org.mockito.Mockito.doThrow;
 
 class QuestionDAOImplIntTest {
 
-    public static final int CAMPAIGN_ID = 1;
-    public static final int QUESTION_STATE = 1;
+    private final int campaignId = 1;
+    private final int questionState = 1;
     private final int questionId = 3;
     private final int amountOfQuestions = 3;
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
-    public static final int PARTICIPENT_ID = 1;
+    private final int participentId = 1;
 
     @BeforeEach
     void setUp() {
@@ -66,7 +65,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(getOpenQuestion(), CAMPAIGN_ID, PARTICIPENT_ID));
+        assertDoesNotThrow(() -> sut.setAnswer(getOpenQuestion(), campaignId, participentId));
     }
 
     @Test
@@ -112,7 +111,7 @@ class QuestionDAOImplIntTest {
 
         //Test
 
-        var testValue = sut.getPendingAnswers(CAMPAIGN_ID, QUESTION_STATE);
+        var testValue = sut.getPendingAnswers(campaignId, questionState);
         int expectedLength = 1;
 
         //Verify
@@ -158,13 +157,13 @@ class QuestionDAOImplIntTest {
     void setAnswerAddAmountPlusOne() throws SQLException{
         int correctState = 2;
         //Mock
-        var oldLengthValue = sut.getPendingAnswers(CAMPAIGN_ID,QUESTION_STATE).size();
+        var oldLengthValue = sut.getPendingAnswers(campaignId, questionState).size();
 
         //Test
-        sut.setPendingAnswer(new GivenAnswerDTO(questionId, PARTICIPENT_ID,CAMPAIGN_ID,correctState,"Test"));
+        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participentId, campaignId,correctState,"Test"));
 
         //Verify
-        assertEquals(oldLengthValue - 1, sut.getPendingAnswers(CAMPAIGN_ID,QUESTION_STATE).size());
+        assertEquals(oldLengthValue - 1, sut.getPendingAnswers(campaignId, questionState).size());
     }
 
     @Test
