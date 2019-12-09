@@ -12,6 +12,7 @@ import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -106,11 +107,10 @@ class QuestionServiceImplTest {
     @Test
     void createQuestionCallsPersistOpenQuestion() throws SQLException {
         // Mock
-        var question = getOpenQuestion();
         // Test
-        sut.createQuestion(question);
+        sut.createQuestion(getOpenQuestion());
         // Verify
-        verify(questionDAOMock).persistOpenQuestion(question);
+        verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
     }
 
     @Test
@@ -154,11 +154,11 @@ class QuestionServiceImplTest {
     @Test
     void createQuestionCallsPersistMultipleQuestion() throws SQLException {
         // Mock
-        var question = getMultipleQuestion();
+
         // Test
-        sut.createQuestion(question);
+        sut.createQuestion(getMultipleQuestion());
         // Verify
-        verify(questionDAOMock).persistMultipleQuestion(question);
+        verify(questionDAOMock).persistMultipleQuestion(getMultipleQuestion());
 
     }
 
@@ -173,15 +173,13 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void getQuestionReturnQuestion() throws SQLException {
+    void getQuestionReturnsQuestion() throws SQLException {
         // Mock
-        var question = getOpenQuestion();
-        when(questionDAOMock.getQuestion(questionId)).thenReturn(question);
-
+        when(questionDAOMock.getQuestion(questionId)).thenReturn(getOpenQuestion());
         // Test
         var testValue = sut.getQuestion(questionId);
         // Verify
-        assertEquals(question, testValue);
+        assertEquals(getOpenQuestion(), testValue);
     }
 
     @Test
@@ -195,15 +193,13 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void getPendingAnswersReturnListAndStatusCodeOK() throws SQLException {
+    void getPendingAnswersReturnList() throws SQLException {
         // Mock
-        var Answers = getAnswers();
-        when(questionDAOMock.getPendingAnswers(campaignID, pendingState)).thenReturn(Answers);
-
+        when(questionDAOMock.getPendingAnswers(campaignID, pendingState)).thenReturn(getAnswers());
         // Test
         var testValue = sut.getPendingAnswers(campaignID, pendingState);
         // Verify
-        assertEquals(Answers, testValue);
+        assertEquals(getAnswers(), testValue);
     }
 
     @Test

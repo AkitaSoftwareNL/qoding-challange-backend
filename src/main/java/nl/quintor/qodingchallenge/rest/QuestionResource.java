@@ -52,11 +52,11 @@ public class QuestionResource {
 
     @ResponseBody
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            path = "/answers/update",
+            path = "/campaign/{campaignid}/answers/{state}/update",
             method = RequestMethod.POST)
-    public ResponseEntity setPendingAnswer(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
+    public ResponseEntity setPendingAnswer(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState, @RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
         questionService.setPendingAnswer(givenAnswerDTO);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body(questionService.getPendingAnswers(campaignId, questionState));
     }
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,

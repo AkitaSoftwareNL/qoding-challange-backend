@@ -64,11 +64,6 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(getOpenQuestion(), campaignId, participentId));
-    }
-
-    @Test
     void getCorrectAnswerGivesAllCorrectAnswers() throws SQLException {
         String actualResult = sut.getCorrectAnswer(questionId);
 
@@ -107,13 +102,12 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getPendingAnswersReturnPendingAnswers() throws SQLException {
+        int expectedLength = 1;
         //Mock
 
         //Test
 
         var testValue = sut.getPendingAnswers(campaignId, questionState);
-        int expectedLength = 1;
-
         //Verify
         assertEquals(expectedLength, testValue.size());
     }
@@ -146,10 +140,8 @@ class QuestionDAOImplIntTest {
         int correctState = 2;
         //Mock
         var oldLengthValue = sut.getPendingAnswers(campaignId, questionState).size();
-
         //Test
         sut.setPendingAnswer(new GivenAnswerDTO(questionId, participentId, campaignId,correctState,"Test"));
-
         //Verify
         assertEquals(oldLengthValue - 1, sut.getPendingAnswers(campaignId, questionState).size());
     }

@@ -30,7 +30,7 @@ public class ReportResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CampaignDTO>> getAllCampaigns() throws SQLException {
-        return new ResponseEntity<>(reportService.getAllCampaings(), HttpStatus.OK);
+        return new ResponseEntity<>(reportService.getAllCampaigns(), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/report/{campaignID}",

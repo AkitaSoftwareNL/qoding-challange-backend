@@ -5,14 +5,14 @@ import java.util.Objects;
 public class PossibleAnswerDTO {
 
     private String possibleAnswer;
-    private int is_Correct;
+    private int isCorrect;
 
     public PossibleAnswerDTO() {
     }
 
-    public PossibleAnswerDTO(String possibleAnswer, int is_Correct) {
+    public PossibleAnswerDTO(String possibleAnswer, int isCorrect) {
         this.possibleAnswer = possibleAnswer;
-        this.is_Correct = is_Correct;
+        this.isCorrect = isCorrect;
     }
 
     public String getPossibleAnswer() {
@@ -23,12 +23,12 @@ public class PossibleAnswerDTO {
         this.possibleAnswer = possibleAnswer;
     }
 
-    public int getIs_Correct() {
-        return is_Correct;
+    public int getIsCorrect() {
+        return isCorrect;
     }
 
-    public void setIs_Correct(int is_Correct) {
-        this.is_Correct = is_Correct;
+    public void setIsCorrect(int isCorrect) {
+        this.isCorrect = isCorrect;
     }
 
     @Override
@@ -36,12 +36,12 @@ public class PossibleAnswerDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PossibleAnswerDTO that = (PossibleAnswerDTO) o;
-        return is_Correct == that.is_Correct &&
+        return isCorrect == that.isCorrect &&
                 Objects.equals(possibleAnswer, that.possibleAnswer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(possibleAnswer, is_Correct);
+        return Objects.hash(possibleAnswer, isCorrect);
     }
 }

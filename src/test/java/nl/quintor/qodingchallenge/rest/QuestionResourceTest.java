@@ -6,8 +6,6 @@ import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.sql.SQLException;
@@ -18,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class QuestionResourceTest {
 
     private final String category = "java";
@@ -41,26 +38,26 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
-        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection().getQuestions());
-
         sut.sendQuestions(campaign);
 
         verify(questionServiceMock).getQuestions(category, campaign);
     }
 
     @Test
-    void sendQuestionsResturnsResponseOK() throws SQLException {
+    void sendQuestionsReturnsQuestionCollectionAndResponseOK() throws SQLException {
+        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestions());
+
         var test = sut.sendQuestions(campaign);
 
+        assertEquals(getQuestionCollection(), test.getBody());
         assertEquals(HttpStatus.OK, test.getStatusCode());
     }
 
     @Test
     void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
-        var questions = getQuestionCollection();
-        sut.getAnswer(questions);
+        sut.getAnswer(getQuestionCollection());
 
-        verify(questionServiceMock).setAnswer(questions);
+        verify(questionServiceMock).setAnswer(getQuestionCollection());
     }
 
     @Test
@@ -103,10 +100,9 @@ class QuestionResourceTest {
     @Test
     void getAllQuestionsReturnsQuestionCollectionAndStatusCodeOK() throws SQLException {
         // Mock
-        var questions = getQuestions();
-        when(questionServiceMock.getAllQuestions()).thenReturn(questions);
+        when(questionServiceMock.getAllQuestions()).thenReturn(getQuestions());
         QuestionCollection questionCollection = new QuestionCollection();
-        questionCollection.setQuestions(questions);
+        questionCollection.setQuestions(getQuestions());
         // Test
         var testValue = sut.getAllQuestions();
         // Verify
@@ -119,33 +115,52 @@ class QuestionResourceTest {
         // Mock
 
         // Test
-        sut.getPendingAnswers(campaignID,pendingState);
+        sut.getPendingAnswers(campaignID, pendingState);
         // Verify
-        verify(questionServiceMock).getPendingAnswers(campaignID,pendingState);
+        verify(questionServiceMock).getPendingAnswers(campaignID, pendingState);
     }
 
     @Test
-    void getPendingAnswersReturnListAndStatusCodeOK() throws SQLException {
+    void getPendingAnswersReturnAnswerListAndStatusCodeOK() throws SQLException {
         // Mock
-        var Answers = getAnswers();
-        when(questionServiceMock.getPendingAnswers(campaignID,pendingState)).thenReturn(Answers);
+        when(questionServiceMock.getPendingAnswers(campaignID, pendingState)).thenReturn(getAnswers());
 
         // Test
-        var testValue = sut.getPendingAnswers(campaignID,pendingState);
+        var testValue = sut.getPendingAnswers(campaignID, pendingState);
         // Verify
-        assertEquals(Answers, testValue.getBody());
+        assertEquals(getAnswers(), testValue.getBody());
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
     }
 
     @Test
-    void setPendingAnswersCallsSetPendingAnswers() throws SQLException {
+    void setPendingAnswerCallsSetPendingAnswer() throws SQLException {
         // Mock
-        GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
 
         // Test
-        sut.setPendingAnswer(givenAnswerDTO);
+        sut.setPendingAnswer(campaignID, pendingState, getAnswerDTO());
         // Verify
-        verify(questionServiceMock).setPendingAnswer(givenAnswerDTO);
+        verify(questionServiceMock).setPendingAnswer(getAnswerDTO());
+    }
+
+    @Test
+    void setPendingAnswerCallsGetPendingAnswers() throws SQLException {
+        // Mock
+
+        // Test
+        sut.setPendingAnswer(campaignID, pendingState, getAnswerDTO());
+        // Verify
+        verify(questionServiceMock).getPendingAnswers(campaignID, pendingState);
+    }
+
+    @Test
+    void setPendingAnswerReturnsAnswerListAndStatusCodeOK() throws SQLException {
+        // Mock
+        when(questionServiceMock.getPendingAnswers(campaignID, pendingState)).thenReturn(getAnswers());
+        // Test
+        var testValue = sut.setPendingAnswer(campaignID, pendingState, getAnswerDTO());
+        // Verify
+        assertEquals(getAnswers(), testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
     }
 
     @Test
@@ -161,13 +176,11 @@ class QuestionResourceTest {
     @Test
     void getQuestionReturnQuestion() throws SQLException {
         // Mock
-        var question = getQuestion();
-        when(questionServiceMock.getQuestion(questionID)).thenReturn(question);
-
+        when(questionServiceMock.getQuestion(questionID)).thenReturn(getQuestion());
         // Test
         var testValue = sut.getQuestion(questionID);
         // Verify
-        assertEquals(question, testValue.getBody());
+        assertEquals(getQuestion(), testValue.getBody());
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
     }
 
@@ -200,6 +213,10 @@ class QuestionResourceTest {
         // Verify
         assertEquals(getQuestions(), testValue.getBody());
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    private GivenAnswerDTO getAnswerDTO() {
+        return new GivenAnswerDTO();
     }
 
     private QuestionCollection getQuestionCollection() {

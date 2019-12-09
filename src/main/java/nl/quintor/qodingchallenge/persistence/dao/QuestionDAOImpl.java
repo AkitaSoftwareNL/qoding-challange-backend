@@ -252,7 +252,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
         for (PossibleAnswerDTO possibleAnswer : possibleAnswers) {
             possibleAnswerString = possibleAnswerString.concat(possibleAnswer.getPossibleAnswer() + delimiter);
-            isCorrectString = isCorrectString.concat(possibleAnswer.getIs_Correct() + delimiter);
+            isCorrectString = isCorrectString.concat(possibleAnswer.getIsCorrect() + delimiter);
         }
 
         possibleAnswersString.add(possibleAnswerString);

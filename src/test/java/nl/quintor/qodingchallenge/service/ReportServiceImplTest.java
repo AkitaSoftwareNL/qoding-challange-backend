@@ -42,7 +42,7 @@ class ReportServiceImplTest {
 
     @Test
     void getAllCampaignsCallsCampaignDAOGetAllCampaigns() throws SQLException {
-        sut.getAllCampaings();
+        sut.getAllCampaigns();
 
         verify(campaignDAOMock).getAllCampaigns();
     }
@@ -52,7 +52,7 @@ class ReportServiceImplTest {
     void getAllCampaingsReturnsListWithCampaigns() throws SQLException {
         when(campaignDAOMock.getAllCampaigns()).thenReturn(getListCampaign());
 
-        assertEquals(sut.getAllCampaings(), campaignDAOMock.getAllCampaigns());
+        assertEquals(sut.getAllCampaigns(), campaignDAOMock.getAllCampaigns());
     }
 
     @Test

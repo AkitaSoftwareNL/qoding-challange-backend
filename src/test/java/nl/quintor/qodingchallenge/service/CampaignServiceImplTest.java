@@ -47,14 +47,6 @@ class CampaignServiceImplTest {
     }
 
     @Test
-    void returnsListWhenGettingAllCampaignsAfterCreation() throws SQLException {
-        when(campaignDAOStub.getAllCampaigns())
-                .thenReturn(getCampaignDtoList());
-
-        assertEquals(campaignDAOStub.getAllCampaigns(), sut.createNewCampaign(getCampaignDTO()));
-    }
-
-    @Test
     void returnsListWhenGettingAllCampaigns() throws SQLException {
         when(campaignDAOStub.getAllCampaigns())
                 .thenReturn(getCampaignDtoList());
