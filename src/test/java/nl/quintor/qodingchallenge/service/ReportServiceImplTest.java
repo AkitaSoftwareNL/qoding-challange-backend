@@ -18,8 +18,8 @@ import static org.mockito.Mockito.*;
 
 class ReportServiceImplTest {
 
-    private final int CAMPAIGNID = 1;
-    private final int PARTICIPANT_ID = 1;
+    private final int campaignId = 1;
+    private final int participantId = 1;
 
     private ReportDAO reportDAOMock;
     private ParticipantDAO participantDAOMock;
@@ -57,37 +57,37 @@ class ReportServiceImplTest {
 
     @Test
     void getRankedParticipantsPerCampaignCallsCampaignDAOGetCampaignName() throws SQLException {
-        sut.getRankedParticipantsPerCampaign(CAMPAIGNID);
+        sut.getRankedParticipantsPerCampaign(campaignId);
 
-        verify(campaignDAOMock).getCampaignName(CAMPAIGNID);
+        verify(campaignDAOMock).getCampaignName(campaignId);
     }
 
 
     @Test
     void getRankedParticipantsPerCampaignCallsReportDAOGetRankedParticipantsPerCampaign() throws SQLException {
-        sut.getRankedParticipantsPerCampaign(CAMPAIGNID);
+        sut.getRankedParticipantsPerCampaign(campaignId);
 
-        verify(reportDAOMock).getRankedParticipantsPerCampaign(CAMPAIGNID);
+        verify(reportDAOMock).getRankedParticipantsPerCampaign(campaignId);
     }
 
     @Test
     void getAnswerPerParticipantCallsParticipantDAOGetFirstAndLastName() throws SQLException {
         setupGetAnswerPerParticipant();
 
-        verify(participantDAOMock).getFirstAndLastname(PARTICIPANT_ID);
+        verify(participantDAOMock).getFirstAndLastname(participantId);
     }
 
     @Test
     void getAnswerPerParticipantCallsReportDAOGetAnswerPerParticipant() throws SQLException {
         setupGetAnswerPerParticipant();
 
-        verify(reportDAOMock).getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID);
+        verify(reportDAOMock).getAnswersPerParticipant(campaignId, participantId);
     }
 
     private void setupGetAnswerPerParticipant() throws SQLException {
-        when(participantDAOMock.getFirstAndLastname(PARTICIPANT_ID)).thenReturn(getAnswerCollection());
+        when(participantDAOMock.getFirstAndLastname(participantId)).thenReturn(getAnswerCollection());
 
-        sut.getAnswersPerParticipant(CAMPAIGNID, PARTICIPANT_ID);
+        sut.getAnswersPerParticipant(campaignId, participantId);
     }
 
     private CampaignDTO getCampaignDTO() {

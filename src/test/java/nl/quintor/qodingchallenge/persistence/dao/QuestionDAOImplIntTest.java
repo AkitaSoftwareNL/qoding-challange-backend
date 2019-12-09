@@ -25,6 +25,8 @@ class QuestionDAOImplIntTest {
 
     private final int questionId = 3;
     private final int amountOfQuestions = 3;
+    private final String category = "JAVA";
+
     private QuestionDAOImpl sut;
 
     @BeforeEach
@@ -42,7 +44,6 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        final String category = "JAVA";
         List<QuestionDTO> questionDTOList = sut.getQuestions(category, amountOfQuestions);
 
         assertEquals(amountOfQuestions, questionDTOList.size());
@@ -50,9 +51,10 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
+        int AMOUNT_OF_ANSWERS = 2;
+
         List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(questionId);
 
-        int AMOUNT_OF_ANSWERS = 2;
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
     }
 
@@ -99,11 +101,11 @@ class QuestionDAOImplIntTest {
     }
 
     private QuestionDTO getOpenQuestion() {
-        return new QuestionDTO(10, "dit is een test vraag", "open", null);
+        return new QuestionDTO(10, "dit is een test vraag", category, "open", null);
     }
 
     private QuestionDTO getMultipleQuestion() {
-        QuestionDTO question = new QuestionDTO(10, "dit is een test vraag", "open", null);
+        QuestionDTO question = new QuestionDTO(10, "dit is een test vraag", category, "open", null);
         ArrayList<PossibleAnswerDTO> possibleAnswers = new ArrayList<>() {
             {
                 add(new PossibleAnswerDTO("yes", 1));

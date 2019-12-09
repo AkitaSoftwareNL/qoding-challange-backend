@@ -7,6 +7,7 @@ public class QuestionDTO {
 
     private int questionID;
     private String question;
+    private String categoryType;
     private String questionType;
     private String attachment;
     private List<PossibleAnswerDTO> possibleAnswers;
@@ -14,12 +15,12 @@ public class QuestionDTO {
     private int stateID;
 
     public QuestionDTO() {
-
     }
 
-    public QuestionDTO(int questionID, String question, String questionType, String attachment) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment) {
         this.questionID = questionID;
         this.question = question;
+        this.categoryType = categoryType;
         this.questionType = questionType;
         this.attachment = attachment;
         this.givenAnswer = "";
@@ -51,7 +52,7 @@ public class QuestionDTO {
     }
 
     public String getAttachment() {
-        if(attachment != null && attachment.isEmpty()) {
+        if (attachment != null && attachment.isEmpty()) {
             return null;
         } else {
             return attachment;
@@ -86,6 +87,14 @@ public class QuestionDTO {
         this.stateID = stateID;
     }
 
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,6 +103,7 @@ public class QuestionDTO {
         return questionID == that.questionID &&
                 stateID == that.stateID &&
                 Objects.equals(question, that.question) &&
+                Objects.equals(categoryType, that.categoryType) &&
                 Objects.equals(questionType, that.questionType) &&
                 Objects.equals(attachment, that.attachment) &&
                 Objects.equals(possibleAnswers, that.possibleAnswers) &&
@@ -102,6 +112,6 @@ public class QuestionDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionID, question, questionType, attachment, possibleAnswers, givenAnswer, stateID);
+        return Objects.hash(questionID, question, categoryType, questionType, attachment, possibleAnswers, givenAnswer, stateID);
     }
 }

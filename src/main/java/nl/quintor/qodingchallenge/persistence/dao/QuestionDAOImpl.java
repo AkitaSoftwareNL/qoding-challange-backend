@@ -23,22 +23,14 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public List<QuestionDTO> getQuestions(String category, int limit) throws SQLException {
-        List<QuestionDTO> questions = new ArrayList<>();
+        List<QuestionDTO> questions;
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT questionid, question, QUESTION_TYPE, attachment FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT questionid, CATEGORY_NAME, question, QUESTION_TYPE, attachment FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
             statement.setString(1, category);
             statement.setInt(2, limit);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                questions.add(new QuestionDTO(
-                        resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4)
-                ));
-            }
+            questions = createQuestionDTO(statement);
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -119,23 +111,43 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public List<QuestionDTO> getAllQuestions() throws SQLException {
-        List<QuestionDTO> questions = new ArrayList<>();
+        List<QuestionDTO> questions;
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question");
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                questions.add(
-                        new QuestionDTO(
-                                resultSet.getInt(1),
-                                resultSet.getString(2),
-                                resultSet.getString(3),
-                                resultSet.getString(4)
-                        ));
-            }
+            PreparedStatement statement = connection.prepareStatement("SELECT questionid, CATEGORY_NAME, question, QUESTION_TYPE, attachment FROM question WHERE STATE = 1");
+            questions = createQuestionDTO(statement);
         } catch (SQLException e) {
             throw new SQLException(e);
+        }
+        return questions;
+    }
+
+    @Override
+    public void removeQuestion(int questionID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE question SET STATE = 0 WHERE QUESTIONID = ?");
+            statement.setInt(1, questionID);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    private List<QuestionDTO> createQuestionDTO(PreparedStatement statement) throws SQLException {
+        List<QuestionDTO> questions = new ArrayList<>();
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            questions.add(
+                    new QuestionDTO(
+                            resultSet.getInt(1),
+                            resultSet.getString(3),
+                            resultSet.getString(2),
+                            resultSet.getString(4),
+                            resultSet.getString(5)
+                    ));
         }
         return questions;
     }

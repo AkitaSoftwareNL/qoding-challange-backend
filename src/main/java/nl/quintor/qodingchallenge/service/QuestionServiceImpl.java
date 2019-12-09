@@ -102,6 +102,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<QuestionDTO> removeQuestion(int questionID) throws SQLException {
+        questionDAO.removeQuestion(questionID);
+        return questionDAO.getAllQuestions();
+    }
+
+    @Override
     public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException {
         return questionDAO.getPendingAnswers(campaignId, questionState);
     }

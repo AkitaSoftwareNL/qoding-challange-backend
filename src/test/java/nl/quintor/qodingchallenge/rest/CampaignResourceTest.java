@@ -22,41 +22,28 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CampaignResourceTest {
 
-    private final List<CampaignDTO> CAMPAIGNDTOLIST = new ArrayList<>();
-    private final CampaignDTO CAMPAIGNDTO = new CampaignDTO(1, "JFALL","me","JAVA", 3, "12/2/2019", 1, null);
-
-
     @Mock
-    private CampaignService campaignServiceStub;
+    private CampaignService campaignServiceMock;
 
     @InjectMocks
     private CampaignResource sut;
 
-
-    @BeforeEach
-    void setUp() {
-        CAMPAIGNDTOLIST.add(
-                new CampaignDTO(1, "JFALL","me","JAVA", 3, "12/2/2019", 1, null)
-        );
-        CAMPAIGNDTOLIST.add(
-                CAMPAIGNDTO
-        );
-    }
-
     @Test
     void returnsCorrectStatusAndEntityByRequestCreateCampaign() throws SQLException {
-        when(campaignServiceStub.createNewCampaign(CAMPAIGNDTO))
-                .thenReturn(CAMPAIGNDTOLIST);
+        var campaign = getCampaign();
 
-        ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(CAMPAIGNDTO);
+        when(campaignServiceMock.createNewCampaign(campaign))
+                .thenReturn(getCampaignList());
+
+        ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(campaign);
 
         checkRequest(actualResult);
     }
 
     @Test
     void returnsCorrectStatusAndEntityByRequestShowAllCampaigns() throws SQLException {
-        when(campaignServiceStub.showCampaign())
-                .thenReturn(CAMPAIGNDTOLIST);
+        when(campaignServiceMock.showCampaign())
+                .thenReturn(getCampaignList());
         ResponseEntity<List<CampaignDTO>> actualResult = sut.showCampaign();
 
         checkRequest(actualResult);
@@ -65,6 +52,18 @@ class CampaignResourceTest {
     private void checkRequest(ResponseEntity<List<CampaignDTO>> actualResult) {
         assertEquals(HttpStatus.OK, actualResult.getStatusCode());
         assertTrue(actualResult.hasBody());
+    }
+
+    private ArrayList<CampaignDTO> getCampaignList() {
+        return new ArrayList<>() {
+            {
+                add(getCampaign());
+            }
+        };
+    }
+
+    private CampaignDTO getCampaign() {
+        return new CampaignDTO(1, "JFALL", "me", "JAVA", 3, "12/2/2019", 1, null);
     }
 
 }
