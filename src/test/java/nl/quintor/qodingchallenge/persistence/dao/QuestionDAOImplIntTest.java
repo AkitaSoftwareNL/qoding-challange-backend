@@ -1,7 +1,9 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +25,15 @@ import static org.mockito.Mockito.doThrow;
 
 class QuestionDAOImplIntTest {
 
+    private final int campaignId = 1;
+    private final int questionState = 1;
     private final int questionId = 3;
     private final int amountOfQuestions = 3;
+    private final int participentId = 1;
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
-
+    
     @BeforeEach
     void setUp() {
         this.sut = new QuestionDAOImpl();
@@ -60,7 +65,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setAnswerAddsOneMoreAnswerToQuestion() {
-        assertDoesNotThrow(() -> sut.setAnswer(getOpenQuestion(), "testcampaign", 1));
+        assertDoesNotThrow(() -> sut.setAnswer(getOpenQuestion(), campaignId, participentId));
     }
 
     @Test
@@ -98,6 +103,72 @@ class QuestionDAOImplIntTest {
 
         // Verify
         assertThrows(SQLException.class, () -> sut.persistMultipleQuestion(getMultipleQuestion()));
+    }
+
+    @Test
+    void getPendingAnswersReturnPendingAnswers() throws SQLException {
+        //Mock
+
+        //Test
+
+        var testValue = sut.getPendingAnswers(campaignId, questionState);
+        int expectedLength = 1;
+
+        //Verify
+        assertEquals(expectedLength, testValue.size());
+    }
+
+    @Test
+    void getPendingAnswersThrowsSqlException() throws SQLException{
+        //TODO: when connection is mockable, add
+    }
+
+    @Test
+    void getQuestionReturnQuestion() throws SQLException, NoQuestionFoundException{
+        int expectedId = 3;
+        //Mock
+
+        //Test
+        var testValue = sut.getQuestion(questionId);
+
+        //Verify
+        assertEquals(expectedId, testValue.getQuestionID());
+    }
+
+    @Test
+    void getQuestionReturnQuestionThrowsSqlException() throws SQLException, NoQuestionFoundException{
+        //TODO: when connection is mockable, add
+    }
+
+    @Test
+    void getQuestionReturnQuestionThrowsNoQuestionFound() throws SQLException, NoQuestionFoundException{
+        int falseId = 50;
+        //Mock
+
+        //Test
+
+        //Verify
+        assertThrows(NoQuestionFoundException.class, () -> {
+            sut.getQuestion(falseId);
+        });
+    }
+
+    @Test
+    void setAnswerAddAmountPlusOne() throws SQLException{
+        int correctState = 2;
+        //Mock
+        var oldLengthValue = sut.getPendingAnswers(campaignId, questionState).size();
+
+        //Test
+        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participentId, campaignId,correctState,"Test"));
+
+        //Verify
+        assertEquals(oldLengthValue - 1, sut.getPendingAnswers(campaignId, questionState).size());
+    }
+
+    @Test
+    void setAnswerThrowsSqlException() throws SQLException{
+        //TODO: when connection is mockable, add
     }
 
     private QuestionDTO getOpenQuestion() {

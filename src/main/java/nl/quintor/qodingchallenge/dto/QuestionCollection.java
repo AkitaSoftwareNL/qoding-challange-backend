@@ -6,6 +6,7 @@ import java.util.Objects;
 public class QuestionCollection {
 
     private int participantID;
+    private int campaignId;
     private String campaignName;
     private List<QuestionDTO> questions;
 
@@ -16,6 +17,12 @@ public class QuestionCollection {
     public QuestionCollection(int participantID, String campaignName, List<QuestionDTO> questions) {
         this.participantID = participantID;
         this.campaignName = campaignName;
+        this.questions = questions;
+    }
+
+    public QuestionCollection(int participantID, int campaignId, List<QuestionDTO> questions) {
+        this.participantID = participantID;
+        this.campaignId = campaignId;
         this.questions = questions;
     }
 
@@ -56,5 +63,13 @@ public class QuestionCollection {
     @Override
     public int hashCode() {
         return Objects.hash(participantID, campaignName, questions);
+    }
+
+    public int getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(int campaignId) {
+        this.campaignId = campaignId;
     }
 }

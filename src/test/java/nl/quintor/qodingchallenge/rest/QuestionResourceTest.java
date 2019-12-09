@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.rest;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.service.QuestionService;
@@ -117,6 +118,71 @@ class QuestionResourceTest {
         questions.add(1, new QuestionDTO(3, question, category, "open", attachment));
         return questions;
     }
+
+    @Test
+    void getPendingAnswersCallsGetPendingAnswers() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.getPendingAnswers(1,1);
+        // Test
+        verify(questionServiceMock).getPendingAnswers(1,1);
+    }
+
+    @Test
+    void getPendingAnswersReturnListAndStatusCodeOK() throws SQLException {
+        // Mock
+        var Answers = getAnswers();
+        when(questionServiceMock.getPendingAnswers(1,1)).thenReturn(Answers);
+
+        // Verify
+        var testValue = sut.getPendingAnswers(1,1);
+        // Test
+        assertEquals(Answers, testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    private List<GivenAnswerDTO> getAnswers() {
+        List<GivenAnswerDTO> answers = new ArrayList<>();
+        answers.add(0, new GivenAnswerDTO(1, 1, 1, 1, "A"));
+        answers.add(1, new GivenAnswerDTO(2, 2, 2, 1, "B"));
+        return answers;
+    }
+
+    @Test
+    void setPendingAnswersCallsSetPendingAnswers() throws SQLException {
+        // Mock
+        GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
+
+        // Verify
+        sut.setPendingAnswer(givenAnswerDTO);
+        // Test
+        verify(questionServiceMock).setPendingAnswer(givenAnswerDTO);
+    }
+
+    @Test
+    void getQuestionCallsGetQuestion() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.getQuestion(1);
+        // Test
+        verify(questionServiceMock).getQuestion(1);
+    }
+
+    @Test
+    void getQuestionReturnQuestion() throws SQLException {
+        // Mock
+        var question = getQuestion();
+        when(questionServiceMock.getQuestion(1)).thenReturn(question);
+
+        // Verify
+        var testValue = sut.getQuestion(1);
+        // Test
+        assertEquals(question, testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
 
     private QuestionCollection getQuestionCollection() {
         return new QuestionCollection(1, campaign, getQuestions());

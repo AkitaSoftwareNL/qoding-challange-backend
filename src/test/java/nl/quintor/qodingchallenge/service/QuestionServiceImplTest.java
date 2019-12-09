@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
@@ -157,6 +158,68 @@ class QuestionServiceImplTest {
         // Verify
         verify(questionDAOMock).persistMultipleQuestion(question);
 
+    }
+
+    @Test
+    void getQuestionCallsGetQuestion() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.getQuestion(1);
+        // Test
+        verify(questionDAOMock).getQuestion(1);
+    }
+
+    @Test
+    void getQuestionReturnQuestion() throws SQLException {
+        // Mock
+        var question = getOpenQuestion();
+        when(questionDAOMock.getQuestion(1)).thenReturn(question);
+
+        // Verify
+        var testValue = sut.getQuestion(1);
+        // Test
+        assertEquals(question, testValue);
+    }
+
+    @Test
+    void getPendingAnswersCallsGetPendingAnswers() throws SQLException {
+        // Mock
+
+        // Verify
+        sut.getPendingAnswers(1,1);
+        // Test
+        verify(questionDAOMock).getPendingAnswers(1,1);
+    }
+
+    @Test
+    void getPendingAnswersReturnListAndStatusCodeOK() throws SQLException {
+        // Mock
+        var Answers = getAnswers();
+        when(questionDAOMock.getPendingAnswers(1,1)).thenReturn(Answers);
+
+        // Verify
+        var testValue = sut.getPendingAnswers(1,1);
+        // Test
+        assertEquals(Answers, testValue);
+    }
+
+    private List<GivenAnswerDTO> getAnswers() {
+        List<GivenAnswerDTO> answers = new ArrayList<>();
+        answers.add(0, new GivenAnswerDTO(1, 1, 1, 1, "A"));
+        answers.add(1, new GivenAnswerDTO(2, 2, 2, 1, "B"));
+        return answers;
+    }
+
+    @Test
+    void setPendingAnswersCallsSetPendingAnswers() throws SQLException {
+        // Mock
+        GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
+
+        // Verify
+        sut.setPendingAnswer(givenAnswerDTO);
+        // Test
+        verify(questionDAOMock).setPendingAnswer(givenAnswerDTO);
     }
 
     private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
