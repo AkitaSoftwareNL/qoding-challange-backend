@@ -7,9 +7,11 @@ import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAOImpl;
+import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -104,10 +106,13 @@ class QuestionServiceImplTest {
         // Mock
         var question = getOpenQuestion();
         // Test
-        sut.createQuestion(getOpenQuestion());
+        sut.createQuestion(question);
         // Verify
-        verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
+        verify(questionDAOMock).persistOpenQuestion(question);
+    }
 
+    @Test
+    void getQuestionsCallsGetPossibleAnswers() throws SQLException {
         // Mock
         var list = setQuestionlist();
         when(questionDAOMock.getQuestions(category, limit)).thenReturn(list);
@@ -135,6 +140,24 @@ class QuestionServiceImplTest {
         questionDTOList.get(0).setPossibleAnswers(getPossibleAnswers());
 
         assertEquals(questionDTOList, sut.getQuestions(category, jfall));
+    }
+
+    @Test
+    void createQuestionThrowsEmptyQuestionException() {
+        QuestionDTO questionDTO = getEmptyQuestion();
+
+        assertThrows(EmptyQuestionException.class, () -> sut.createQuestion(questionDTO));
+    }
+
+    @Test
+    void createQuestionCallsPersistMultipleQuestion() throws SQLException {
+        // Mock
+        var question = getMultipleQuestion();
+        // Test
+        sut.createQuestion(question);
+        // Verify
+        verify(questionDAOMock).persistMultipleQuestion(question);
+
     }
 
     private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
@@ -167,4 +190,9 @@ class QuestionServiceImplTest {
             add(new PossibleAnswerDTO("no", 0));
         }};
     }
+
+    private QuestionDTO getEmptyQuestion() {
+        return new QuestionDTO(2, "", "multiple", "String");
+    }
+
 }
