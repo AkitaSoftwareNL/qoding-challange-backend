@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class ReportResourceTest {
 
     private final int campaignId = 5;
-    private final String jfall = "jfall";
+    private final String campaign = "campaign";
 
     private ReportService reportServiceMock;
     private ReportResource sut;
@@ -63,7 +63,7 @@ class ReportResourceTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, jfall,"me","JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(1, campaign,"me","JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {
@@ -83,7 +83,7 @@ class ReportResourceTest {
     }
 
     private RankedParticipantCollection getRankedListOfParticipants() {
-        return new RankedParticipantCollection(jfall, getListParticipant());
+        return new RankedParticipantCollection(campaign, getListParticipant());
     }
 
     private AnswerDTO getAnswerDTO() {
@@ -97,7 +97,7 @@ class ReportResourceTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "","anothername", "jfall", 1, getListAnswer());
+        return new AnswerCollection("Name", "","anothername", "campaign", 1, getListAnswer());
     }
 
 
