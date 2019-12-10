@@ -23,4 +23,7 @@ public abstract class QuestionStrategy {
         questionDAO.persistOpenQuestion(question);
     }
 
+    public void validateAnswer(QuestionDTO question) throws SQLException {
+
+    }
 }

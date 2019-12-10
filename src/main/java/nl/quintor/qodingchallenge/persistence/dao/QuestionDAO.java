@@ -1,9 +1,8 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
+import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
-import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 
 import java.sql.SQLException;
 import java.util.List;
