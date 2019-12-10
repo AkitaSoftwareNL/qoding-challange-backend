@@ -19,9 +19,7 @@ import java.util.Objects;
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
 
 class QuestionDAOImplIntTest {
 
