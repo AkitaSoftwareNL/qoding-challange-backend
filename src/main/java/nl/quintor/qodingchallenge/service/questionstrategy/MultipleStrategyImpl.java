@@ -14,4 +14,17 @@ public class MultipleStrategyImpl extends QuestionStrategy {
     public void persistQuestion(QuestionDTO question) throws SQLException {
         questionDAO.persistMultipleQuestion(question);
     }
+
+    @Override
+    public void validateAnswer(QuestionDTO question) throws SQLException {
+        final int CORRECT = 2;
+        final int INCORRECT = 3;
+
+        String correctAnswer = questionDAO.getCorrectAnswer(question.getQuestionID());
+        if (correctAnswer.equals(question.getGivenAnswer())) {
+            question.setStateID(CORRECT);
+        } else {
+            question.setStateID(INCORRECT);
+        }
+    }
 }

@@ -6,7 +6,6 @@ import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
-import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import nl.quintor.qodingchallenge.service.questionstrategy.MultipleStrategyImpl;
 import nl.quintor.qodingchallenge.service.questionstrategy.OpenStrategyImpl;
@@ -60,25 +59,14 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void setAnswer(QuestionCollection questionCollection) throws SQLException {
-        final int CORRECT = 2;
-        final int INCORRECT = 3;
-        final String TYPE = "multiple";
-
         for (QuestionDTO question : questionCollection.getQuestions()) {
-            if (question.getQuestionType().equals(TYPE)) {
-                String correctAnswer = questionDAO.getCorrectAnswer(question.getQuestionID());
-                if (checkAnswer(correctAnswer, question.getGivenAnswer())) {
-                    question.setStateID(CORRECT);
-                } else {
-                    question.setStateID(INCORRECT);
+            for (QuestionStrategy strategy : strategies) {
+                if (strategy.isType(question.getQuestionType())) {
+                    strategy.validateAnswer(question);
                 }
             }
             questionDAO.setAnswer(question, questionCollection.getCampaignId(), questionCollection.getParticipantID());
         }
-    }
-
-    private boolean checkAnswer(String correctAnswer, String givenAnswer) {
-        return correctAnswer.equals(givenAnswer);
     }
 
     @Override
