@@ -83,19 +83,7 @@ class QuestionServiceImplTest {
 
         assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, "This campaign does not exists"));
     }
-
-    @Test
-    void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
-        List<QuestionDTO> questionDTOList = getQuestionlist();
-        when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
-        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaign))).thenReturn(questionDTOList);
-        when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
-
-        getQuestionlist().get(0).setPossibleAnswers(getPossibleAnswers());
-
-        assertEquals(questionDTOList, sut.getQuestions(category, campaign));
-    }
-
+    
     @Test
     void getAllQuestionsReturnsQuestionList() throws SQLException {
         // Mock
@@ -123,7 +111,19 @@ class QuestionServiceImplTest {
         // Test
         sut.createQuestion(getOpenQuestion());
         // Verify
-        verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
+        verify(questionDAOMock, times(2)).getPossibleAnswers(questionId);
+    }
+
+    @Test
+    void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
+        List<QuestionDTO> questionDTOList = getQuestionlist();
+        when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
+        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaign))).thenReturn(questionDTOList);
+        when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
+
+        questionDTOList.get(0).setPossibleAnswers(getPossibleAnswers());
+
+        assertEquals(questionDTOList.get(0).getPossibleAnswers(), sut.getQuestions(category, campaign).getQuestions().get(0).getPossibleAnswers());
     }
 
     @Test
@@ -212,6 +212,7 @@ class QuestionServiceImplTest {
         return answers;
     }
 
+
     private List<QuestionDTO> getQuestionlist() {
         List<QuestionDTO> questionList = new ArrayList<>();
         questionList.add(new QuestionDTO(questionId, "String", category, "multiple", "String"));
@@ -222,7 +223,7 @@ class QuestionServiceImplTest {
     }
 
     private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, "test", getQuestionlist());
+        return new QuestionCollection(1, campaignID, "test", getQuestionlist());
     }
 
     private QuestionDTO getOpenQuestion() {
@@ -235,8 +236,8 @@ class QuestionServiceImplTest {
 
     private List<PossibleAnswerDTO> getPossibleAnswers() {
         List<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
-            possibleAnswersList.add(new PossibleAnswerDTO("yes", 1));
-            possibleAnswersList.add(new PossibleAnswerDTO("no", 0));
+        possibleAnswersList.add(new PossibleAnswerDTO("yes", 1));
+        possibleAnswersList.add(new PossibleAnswerDTO("no", 0));
         return possibleAnswersList;
     }
 

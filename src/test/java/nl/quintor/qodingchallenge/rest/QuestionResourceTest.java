@@ -38,6 +38,9 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
+        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
+
+
         sut.sendQuestions(campaign);
 
         verify(questionServiceMock).getQuestions(category, campaign);
@@ -45,7 +48,7 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionsReturnsQuestionCollectionAndResponseOK() throws SQLException {
-        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestions());
+        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
 
         var test = sut.sendQuestions(campaign);
 
@@ -220,7 +223,7 @@ class QuestionResourceTest {
     }
 
     private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, campaign, getQuestions());
+        return new QuestionCollection(1, 1, campaign, getQuestions());
     }
 
     private QuestionDTO getQuestion() {

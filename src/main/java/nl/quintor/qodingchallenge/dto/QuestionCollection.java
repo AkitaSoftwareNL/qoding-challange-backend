@@ -14,15 +14,10 @@ public class QuestionCollection {
 
     }
 
-    public QuestionCollection(int participantID, String campaignName, List<QuestionDTO> questions) {
-        this.participantID = participantID;
-        this.campaignName = campaignName;
-        this.questions = questions;
-    }
-
-    public QuestionCollection(int participantID, int campaignId, List<QuestionDTO> questions) {
+    public QuestionCollection(int participantID, int campaignId, String campaignName, List<QuestionDTO> questions) {
         this.participantID = participantID;
         this.campaignId = campaignId;
+        this.campaignName = campaignName;
         this.questions = questions;
     }
 
