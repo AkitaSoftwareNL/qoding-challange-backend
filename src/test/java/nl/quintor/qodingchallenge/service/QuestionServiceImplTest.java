@@ -56,7 +56,7 @@ class QuestionServiceImplTest {
         // Test
         sut.getQuestions(category, campaign);
         // Verify
-        verify(questionDAOMock, times(2)).getPossibleAnswers(questionId);
+        verify(questionDAOMock, times(3)).getPossibleAnswers(questionId);
     }
 
     @Test
@@ -83,7 +83,7 @@ class QuestionServiceImplTest {
 
         assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, "This campaign does not exists"));
     }
-    
+
     @Test
     void getAllQuestionsReturnsQuestionList() throws SQLException {
         // Mock
@@ -105,16 +105,6 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void createQuestionCallsPersistOpenQuestion() throws SQLException {
-        // Mock
-
-        // Test
-        sut.createQuestion(getOpenQuestion());
-        // Verify
-        verify(questionDAOMock, times(2)).getPossibleAnswers(questionId);
-    }
-
-    @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
         List<QuestionDTO> questionDTOList = getQuestionlist();
         when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
@@ -131,6 +121,16 @@ class QuestionServiceImplTest {
         QuestionDTO questionDTO = getEmptyQuestion();
 
         assertThrows(EmptyQuestionException.class, () -> sut.createQuestion(questionDTO));
+    }
+
+    @Test
+    void createQuestionCallsPersistOpenQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.createQuestion(getOpenQuestion());
+        // Verify
+        verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
     }
 
     @Test
@@ -216,6 +216,7 @@ class QuestionServiceImplTest {
     private List<QuestionDTO> getQuestionlist() {
         List<QuestionDTO> questionList = new ArrayList<>();
         questionList.add(new QuestionDTO(questionId, "String", category, "multiple", "String"));
+        questionList.add(new QuestionDTO(questionId, "String", category, "open", "String"));
         QuestionDTO question = new QuestionDTO(questionId, "String", category, "multiple", "String");
         question.setGivenAnswer("WrongAnswer");
         questionList.add(question);

@@ -40,7 +40,6 @@ class QuestionResourceTest {
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
         when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
 
-
         sut.sendQuestions(campaign);
 
         verify(questionServiceMock).getQuestions(category, campaign);
