@@ -69,7 +69,7 @@ public class QuestionResource {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createQuestion(@RequestBody QuestionDTO question) throws SQLException {
         questionService.createQuestion(question);
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.ok().build();
     }
 
     @ResponseBody

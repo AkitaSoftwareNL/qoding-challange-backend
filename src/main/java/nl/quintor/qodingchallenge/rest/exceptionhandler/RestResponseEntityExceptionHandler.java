@@ -22,37 +22,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     private final Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
-    @ExceptionHandler({SQLException.class})
-    public ResponseEntity<Object> handleSQLException(Exception e, WebRequest request) {
-        return new ResponseEntity<>("An exception has occured with the database", new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({NoQuestionFoundException.class})
-    public ResponseEntity<Object> handleNoQuestionFoundException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>("Question could not be found", new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({CampaignAlreadyExistsException.class})
-    public ResponseEntity<Object> handleCampaignAlreadyExistsException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({AnswerNotFoundException.class})
-    public ResponseEntity<Object> handleAnswerNotFoundException(Exception e, WebRequest request) {
+    @ExceptionHandler({AnswerNotFoundException.class, NoQuestionFoundException.class, SQLException.class})
+    public ResponseEntity<Object> handleNotFoundStatus(Exception e, WebRequest request) {
         logger.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({NoCampaignFoundException.class})
-    public ResponseEntity<Object> handleNoCampaignFoundException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({EmptyQuestionException.class})
-    public ResponseEntity<Object> handleEmptyQuestionException(Exception e, WebRequest request) {
+    @ExceptionHandler({NoCampaignFoundException.class, EmptyQuestionException.class, CampaignAlreadyExistsException.class})
+    public ResponseEntity<Object> handleBadRequestStatus(Exception e, WebRequest request) {
         logger.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
