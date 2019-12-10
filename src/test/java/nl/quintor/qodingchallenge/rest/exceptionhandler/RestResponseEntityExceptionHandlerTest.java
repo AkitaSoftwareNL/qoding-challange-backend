@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
@@ -58,5 +59,12 @@ class RestResponseEntityExceptionHandlerTest {
         var expectedResponse = handler.handleEmptyQuestionException(new EmptyQuestionException(MESSAGE_FOR_EXCEPTION), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
+    }
+
+    @Test
+    void handleNoQuestionFoundException() {
+        var expectedResponse = handler.handleNoQuestionFoundException(new NoQuestionFoundException(), webRequest);
+
+        assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }
 }

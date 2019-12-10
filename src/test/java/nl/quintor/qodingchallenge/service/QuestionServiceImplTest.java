@@ -24,9 +24,11 @@ import static org.mockito.Mockito.*;
 class QuestionServiceImplTest {
 
     private final String campaign = "HC2 Holdings, Inc";
-    private final String category = "category";
-    private final int limit = 0;
+    private final int campaignID = 1;
+    private final String category = "JAVA";
+    private final int questionLimit = 3;
     private final int questionId = 1;
+    private final int pendingState = 1;
 
     private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
@@ -36,48 +38,60 @@ class QuestionServiceImplTest {
     void setUp() throws SQLException {
         sut = new QuestionServiceImpl();
 
-        this.questionDAOMock = mock(QuestionDAOImpl.class);
         this.campaignDAOMock = mock(CampaignDAOImpl.class);
+        this.questionDAOMock = mock(QuestionDAOImpl.class);
 
-        this.sut.setQuestionDAO(questionDAOMock);
         this.sut.setCampaignDAO(campaignDAOMock);
+        this.sut.setQuestionDAO(questionDAOMock);
 
         when(campaignDAOMock.campaignExists(campaign)).thenReturn(true);
     }
 
     @Test
-    void getQuestionsCallsQuestionPercistenceGetQuestions() throws SQLException {
-        sut.getQuestions(category, campaign);
-
-        verify(questionDAOMock).getQuestions(category, limit);
-    }
-
-    @Test
-    void getQuestionsCallsGetPossibleAnswer() throws SQLException {
+    void getQuestionsCallsGetPossibleAnswers() throws SQLException {
         // Mock
-        var list = setQuestionlist();
-        when(questionDAOMock.getQuestions(category, limit)).thenReturn(list);
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
+        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(getQuestionlist().size());
+        when(questionDAOMock.getQuestions(anyString(), anyInt())).thenReturn(getQuestionlist());
+        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
         // Test
         sut.getQuestions(category, campaign);
         // Verify
-        verify(questionDAOMock, times(limit)).getPossibleAnswers(questionId);
+        verify(questionDAOMock, times(3)).getPossibleAnswers(questionId);
     }
 
     @Test
-    void setAnswerCallsQuestionPersistenceGetCorrectAnswerCorrect() throws SQLException {
-        // Mock
+    void getQuestionsCallsGetQuestions() throws SQLException {
+        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(questionLimit);
+
+        sut.getQuestions(category, campaign);
+
+        verify(questionDAOMock).getQuestions(category, questionLimit);
+    }
+
+    @Test
+    void setAnswerCallsGetCorrectAnswerCorrect() throws SQLException {
         when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
 
-        checkCorrectAnswerCorrectAndIncorrect();
+        sut.setAnswer(getQuestionCollection());
+
+        verify(questionDAOMock, times(2)).getCorrectAnswer(questionId);
     }
 
     @Test
-    void setAnswerCallsQuestionPersistenceGetCorrectAnswerIncorrect() throws SQLException {
-        // Mock
-        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("incorrect");
+    void getQuestionThrowsNoCampaignFoundException() throws SQLException {
+        when(campaignDAOMock.campaignExists("This campaign does not exist")).thenReturn(true);
 
-        checkCorrectAnswerCorrectAndIncorrect();
+        assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, "This campaign does not exists"));
+    }
+
+    @Test
+    void getAllQuestionsReturnsQuestionList() throws SQLException {
+        // Mock
+        when(questionDAOMock.getAllQuestions()).thenReturn(getQuestionlist());
+        // Test
+        var testValue = sut.getAllQuestions();
+        // Verify
+        assertEquals(getQuestionlist(), testValue);
     }
 
     @Test
@@ -91,55 +105,15 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void getAllQuestionsReturnsQuestionList() throws SQLException {
-        // Mock
-        var questions = setQuestionlist();
-        when(questionDAOMock.getAllQuestions()).thenReturn(questions);
-        // Test
-        var testValue = sut.getAllQuestions();
-        // Verify
-        assertEquals(questions, testValue);
-    }
-
-    @Test
-    void createQuestionCallsPersistOpenQuestion() throws SQLException {
-        // Mock
-        var question = getOpenQuestion();
-        // Test
-        sut.createQuestion(question);
-        // Verify
-        verify(questionDAOMock).persistOpenQuestion(question);
-    }
-
-    @Test
-    void getQuestionsCallsGetPossibleAnswers() throws SQLException {
-        // Mock
-        var list = setQuestionlist();
-        when(questionDAOMock.getQuestions(category, limit)).thenReturn(list);
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(1);
-        // Test
-        sut.getQuestions(category, campaign);
-        // Verify
-        verify(questionDAOMock, times(limit)).getPossibleAnswers(questionId);
-    }
-
-    @Test
-    void getQuestionThrowsNoCampaignFoundException() throws SQLException {
-        when(campaignDAOMock.campaignExists("This campaign does not exist")).thenReturn(true);
-
-        assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, "This campaign does not exists"));
-    }
-
-    @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
-        List<QuestionDTO> questionDTOList = setQuestionlist();
+        List<QuestionDTO> questionDTOList = getQuestionlist();
         when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
         when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaign))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
 
         questionDTOList.get(0).setPossibleAnswers(getPossibleAnswers());
 
-        assertEquals(questionDTOList, sut.getQuestions(category, campaign));
+        assertEquals(questionDTOList.get(0).getPossibleAnswers(), sut.getQuestions(category, campaign).getQuestions().get(0).getPossibleAnswers());
     }
 
     @Test
@@ -150,13 +124,23 @@ class QuestionServiceImplTest {
     }
 
     @Test
+    void createQuestionCallsPersistOpenQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.createQuestion(getOpenQuestion());
+        // Verify
+        verify(questionDAOMock).persistOpenQuestion(getOpenQuestion());
+    }
+
+    @Test
     void createQuestionCallsPersistMultipleQuestion() throws SQLException {
         // Mock
-        var question = getMultipleQuestion();
+
         // Test
-        sut.createQuestion(question);
+        sut.createQuestion(getMultipleQuestion());
         // Verify
-        verify(questionDAOMock).persistMultipleQuestion(question);
+        verify(questionDAOMock).persistMultipleQuestion(getMultipleQuestion());
 
     }
 
@@ -164,44 +148,61 @@ class QuestionServiceImplTest {
     void getQuestionCallsGetQuestion() throws SQLException {
         // Mock
 
-        // Verify
-        sut.getQuestion(1);
         // Test
-        verify(questionDAOMock).getQuestion(1);
+        sut.getQuestion(questionId);
+        // Verify
+        verify(questionDAOMock).getQuestion(questionId);
     }
 
     @Test
-    void getQuestionReturnQuestion() throws SQLException {
+    void getQuestionReturnsQuestion() throws SQLException {
         // Mock
-        var question = getOpenQuestion();
-        when(questionDAOMock.getQuestion(1)).thenReturn(question);
-
-        // Verify
-        var testValue = sut.getQuestion(1);
+        when(questionDAOMock.getQuestion(questionId)).thenReturn(getOpenQuestion());
         // Test
-        assertEquals(question, testValue);
+        var testValue = sut.getQuestion(questionId);
+        // Verify
+        assertEquals(getOpenQuestion(), testValue);
     }
 
     @Test
     void getPendingAnswersCallsGetPendingAnswers() throws SQLException {
         // Mock
 
-        // Verify
-        sut.getPendingAnswers(1,1);
         // Test
-        verify(questionDAOMock).getPendingAnswers(1,1);
+        sut.getPendingAnswers(campaignID, pendingState);
+        // Verify
+        verify(questionDAOMock).getPendingAnswers(campaignID, pendingState);
     }
 
     @Test
-    void getPendingAnswersReturnListAndStatusCodeOK() throws SQLException {
+    void getPendingAnswersReturnList() throws SQLException {
         // Mock
-        var Answers = getAnswers();
-        when(questionDAOMock.getPendingAnswers(1,1)).thenReturn(Answers);
-
-        // Verify
-        var testValue = sut.getPendingAnswers(1,1);
+        when(questionDAOMock.getPendingAnswers(campaignID, pendingState)).thenReturn(getAnswers());
         // Test
-        assertEquals(Answers, testValue);
+        var testValue = sut.getPendingAnswers(campaignID, pendingState);
+        // Verify
+        assertEquals(getAnswers(), testValue);
+    }
+
+    @Test
+    void setPendingAnswersCallsSetPendingAnswers() throws SQLException {
+        // Mock
+        GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
+
+        // Test
+        sut.setPendingAnswer(givenAnswerDTO);
+        // Verify
+        verify(questionDAOMock).setPendingAnswer(givenAnswerDTO);
+    }
+
+    @Test
+    void removeQuestionCallRemoveQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.removeQuestion(questionId);
+        // Verify
+        verify(questionDAOMock).removeQuestion(questionId);
     }
 
     private List<GivenAnswerDTO> getAnswers() {
@@ -211,31 +212,19 @@ class QuestionServiceImplTest {
         return answers;
     }
 
-    @Test
-    void setPendingAnswersCallsSetPendingAnswers() throws SQLException {
-        // Mock
-        GivenAnswerDTO givenAnswerDTO = new GivenAnswerDTO();
 
-        // Verify
-        sut.setPendingAnswer(givenAnswerDTO);
-        // Test
-        verify(questionDAOMock).setPendingAnswer(givenAnswerDTO);
+    private List<QuestionDTO> getQuestionlist() {
+        List<QuestionDTO> questionList = new ArrayList<>();
+        questionList.add(new QuestionDTO(questionId, "String", category, "multiple", "String"));
+        questionList.add(new QuestionDTO(questionId, "String", category, "open", "String"));
+        QuestionDTO question = new QuestionDTO(questionId, "String", category, "multiple", "String");
+        question.setGivenAnswer("WrongAnswer");
+        questionList.add(question);
+        return questionList;
     }
 
-    private void checkCorrectAnswerCorrectAndIncorrect() throws SQLException {
-        sut.setAnswer(setQuestionCollection());
-        verify(questionDAOMock).getCorrectAnswer(questionId);
-    }
-
-    private List<QuestionDTO> setQuestionlist() throws SQLException {
-        List<QuestionDTO> testValue = sut.getQuestions(category, campaign);
-        QuestionDTO questionDTO = new QuestionDTO(questionId, "String", "Java", "multiple", "String");
-        testValue.add(questionDTO);
-        return testValue;
-    }
-
-    private QuestionCollection setQuestionCollection() throws SQLException {
-        return new QuestionCollection(1, "test", setQuestionlist());
+    private QuestionCollection getQuestionCollection() {
+        return new QuestionCollection(1, campaignID, "test", getQuestionlist());
     }
 
     private QuestionDTO getOpenQuestion() {
@@ -246,11 +235,11 @@ class QuestionServiceImplTest {
         return new QuestionDTO(2, "String", category, "multiple", "String");
     }
 
-    private ArrayList<PossibleAnswerDTO> getPossibleAnswers() {
-        return new ArrayList<>() {{
-            add(new PossibleAnswerDTO("yes", 1));
-            add(new PossibleAnswerDTO("no", 0));
-        }};
+    private List<PossibleAnswerDTO> getPossibleAnswers() {
+        List<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
+        possibleAnswersList.add(new PossibleAnswerDTO("yes", 1));
+        possibleAnswersList.add(new PossibleAnswerDTO("no", 0));
+        return possibleAnswersList;
     }
 
     private QuestionDTO getEmptyQuestion() {

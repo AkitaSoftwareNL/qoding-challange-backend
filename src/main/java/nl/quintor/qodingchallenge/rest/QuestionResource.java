@@ -29,9 +29,7 @@ public class QuestionResource {
             path = "/campaign/{campaignName}",
             method = RequestMethod.GET)
     public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable String campaignName) throws SQLException {
-        List<QuestionDTO> questions = questionService.getQuestions("java", campaignName);
-        QuestionCollection questionCollection = new QuestionCollection(1, campaignName, questions);
-        return ResponseEntity.ok().body(questionCollection);
+        return ResponseEntity.ok().body(questionService.getQuestions("java", campaignName));
     }
 
     @ResponseBody
@@ -52,11 +50,11 @@ public class QuestionResource {
 
     @ResponseBody
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            path = "/answers/update",
+            path = "/campaign/{campaignid}/answers/{state}/update",
             method = RequestMethod.POST)
-    public ResponseEntity setPendingAnswer(@RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
+    public ResponseEntity setPendingAnswer(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState, @RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
         questionService.setPendingAnswer(givenAnswerDTO);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body(questionService.getPendingAnswers(campaignId, questionState));
     }
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
@@ -85,9 +83,10 @@ public class QuestionResource {
     }
 
     @RequestMapping(path = "/questions/delete/{questionID}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<QuestionDTO>> removeQuestion(@PathVariable("questionID") int questionID) throws SQLException {
-        return ResponseEntity.ok().body(questionService.removeQuestion(questionID));
+        questionService.removeQuestion(questionID);
+        return ResponseEntity.ok().body(questionService.getAllQuestions());
     }
 }

@@ -85,9 +85,14 @@ class CampaignDAOImplIntTest {
     }
 
     @Test
-    void getCampaignName() throws SQLException {
-        assertEquals("HC2 Holdings, Inc", sut.getCampaignName(1));
+    void getCampaignNameGetsCampaignName() throws SQLException {
+        assertEquals(campaignName, sut.getCampaignName(1));
         assertEquals("Syros Pharmaceuticals, Inc", sut.getCampaignName(2));
+    }
+
+    @Test
+    void getCampaignIDgetsCampaignID() throws SQLException {
+        assertEquals(1, sut.getCampaignID(campaignName));
     }
 
     private CampaignDTO getCampaign() {

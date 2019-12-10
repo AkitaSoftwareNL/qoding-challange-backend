@@ -15,7 +15,7 @@ public interface QuestionService {
 
     void setQuestionDAO(QuestionDAO questionDAO);
 
-    List<QuestionDTO> getQuestions(String category, String campaignName) throws SQLException;
+    QuestionCollection getQuestions(String category, String campaignName) throws SQLException;
 
     void setAnswer(QuestionCollection questionCollection) throws SQLException;
 
@@ -23,7 +23,7 @@ public interface QuestionService {
 
     List<QuestionDTO> getAllQuestions() throws SQLException;
 
-    List<QuestionDTO> removeQuestion(int questionID) throws SQLException;
+    void removeQuestion(int questionID) throws SQLException;
 
     List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 

@@ -14,15 +14,10 @@ public class QuestionCollection {
 
     }
 
-    public QuestionCollection(int participantID, String campaignName, List<QuestionDTO> questions) {
-        this.participantID = participantID;
-        this.campaignName = campaignName;
-        this.questions = questions;
-    }
-
-    public QuestionCollection(int participantID, int campaignId, List<QuestionDTO> questions) {
+    public QuestionCollection(int participantID, int campaignId, String campaignName, List<QuestionDTO> questions) {
         this.participantID = participantID;
         this.campaignId = campaignId;
+        this.campaignName = campaignName;
         this.questions = questions;
     }
 
@@ -50,26 +45,27 @@ public class QuestionCollection {
         this.questions = questions;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        QuestionCollection that = (QuestionCollection) o;
-        return participantID == that.participantID &&
-                Objects.equals(campaignName, that.campaignName) &&
-                Objects.equals(questions, that.questions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(participantID, campaignName, questions);
-    }
-
     public int getCampaignId() {
         return campaignId;
     }
 
     public void setCampaignId(int campaignId) {
         this.campaignId = campaignId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuestionCollection that = (QuestionCollection) o;
+        return participantID == that.participantID &&
+                campaignId == that.campaignId &&
+                Objects.equals(campaignName, that.campaignName) &&
+                Objects.equals(questions, that.questions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(participantID, campaignId, campaignName, questions);
     }
 }

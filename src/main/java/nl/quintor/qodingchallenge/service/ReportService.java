@@ -21,7 +21,7 @@ public interface ReportService {
     @Autowired
     void setReportDAO(ReportDAO reportDAO);
 
-    List<CampaignDTO> getAllCampaings() throws SQLException;
+    List<CampaignDTO> getAllCampaigns() throws SQLException;
 
     RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) throws SQLException;
 

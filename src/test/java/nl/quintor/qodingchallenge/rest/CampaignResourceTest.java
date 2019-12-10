@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,15 +30,43 @@ class CampaignResourceTest {
     private CampaignResource sut;
 
     @Test
-    void returnsCorrectStatusAndEntityByRequestCreateCampaign() throws SQLException {
-        var campaign = getCampaign();
+    void createCampaignCallsCreateCampaign() throws SQLException {
+        // Mock
 
-        when(campaignServiceMock.createNewCampaign(campaign))
+        // Test
+        sut.createCampaign(getCampaign());
+        // Verify
+        verify(campaignServiceMock).createNewCampaign(getCampaign());
+    }
+
+    @Test
+    void createCampaignCallsShowCampaign() throws SQLException {
+        // Mock
+
+        // Test
+        sut.createCampaign(getCampaign());
+        // Verify
+        verify(campaignServiceMock).showCampaign();
+    }
+
+    @Test
+    void returnsCorrectStatusAndEntityByRequestCreateCampaign() throws SQLException {
+        when(campaignServiceMock.showCampaign())
                 .thenReturn(getCampaignList());
 
-        ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(campaign);
+        ResponseEntity<List<CampaignDTO>> actualResult = sut.createCampaign(getCampaign());
 
         checkRequest(actualResult);
+    }
+
+    @Test
+    void showCampaignCallsShowCampaign() throws SQLException {
+        // Mock
+
+        // Test
+        sut.showCampaign();
+        // Verify
+        verify(campaignServiceMock).showCampaign();
     }
 
     @Test
@@ -51,7 +80,7 @@ class CampaignResourceTest {
 
     private void checkRequest(ResponseEntity<List<CampaignDTO>> actualResult) {
         assertEquals(HttpStatus.OK, actualResult.getStatusCode());
-        assertTrue(actualResult.hasBody());
+        assertEquals(getCampaignList(), actualResult.getBody());
     }
 
     private ArrayList<CampaignDTO> getCampaignList() {

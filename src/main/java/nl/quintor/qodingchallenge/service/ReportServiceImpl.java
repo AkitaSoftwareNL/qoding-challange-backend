@@ -38,7 +38,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<CampaignDTO> getAllCampaings() throws SQLException {
+    public List<CampaignDTO> getAllCampaigns() throws SQLException {
         return campaignDAO.getAllCampaigns();
     }
 

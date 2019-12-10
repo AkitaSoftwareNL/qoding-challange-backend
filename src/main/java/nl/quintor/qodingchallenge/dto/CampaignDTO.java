@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CampaignDTO {
 
@@ -91,5 +92,24 @@ public class CampaignDTO {
         this.participants = participants;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CampaignDTO that = (CampaignDTO) o;
+        return id == that.id &&
+                amountOfQuestions == that.amountOfQuestions &&
+                state == that.state &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(startedBy, that.startedBy) &&
+                Objects.equals(category, that.category) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(participants, that.participants);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, startedBy, category, amountOfQuestions, date, state, participants);
+    }
 }
 

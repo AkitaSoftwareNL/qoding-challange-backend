@@ -1,8 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.qodingchallenge.dto.AnswerCollection;
-import nl.quintor.qodingchallenge.dto.AnswerDTO;
-import nl.quintor.qodingchallenge.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ReportDAO;
@@ -14,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 class ReportServiceImplTest {
 
     private final int campaignId = 1;
     private final int participantId = 1;
+    private final String campaignName = "Principal U.S. Small Cap Index ETF";
 
     private ReportDAO reportDAOMock;
     private ParticipantDAO participantDAOMock;
@@ -42,7 +42,7 @@ class ReportServiceImplTest {
 
     @Test
     void getAllCampaignsCallsCampaignDAOGetAllCampaigns() throws SQLException {
-        sut.getAllCampaings();
+        sut.getAllCampaigns();
 
         verify(campaignDAOMock).getAllCampaigns();
     }
@@ -52,7 +52,7 @@ class ReportServiceImplTest {
     void getAllCampaingsReturnsListWithCampaigns() throws SQLException {
         when(campaignDAOMock.getAllCampaigns()).thenReturn(getListCampaign());
 
-        assertEquals(sut.getAllCampaings(), campaignDAOMock.getAllCampaigns());
+        assertEquals(sut.getAllCampaigns(), campaignDAOMock.getAllCampaigns());
     }
 
     @Test
@@ -71,17 +71,39 @@ class ReportServiceImplTest {
     }
 
     @Test
-    void getAnswerPerParticipantCallsParticipantDAOGetFirstAndLastName() throws SQLException {
+    void getRankedParticipantPerCampaignReturnsRankedParticipantCollection() throws SQLException {
+        // Mock
+        when(campaignDAOMock.getCampaignName(campaignId)).thenReturn(campaignName);
+        when(reportDAOMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedParticipants());
+        // Test
+        var testValue = sut.getRankedParticipantsPerCampaign(campaignId);
+        // Verify
+        assertEquals(getRankedparticipantCollection(), testValue);
+    }
+
+    @Test
+    void getAnswerPerParticipantCallsGetFirstAndLastName() throws SQLException {
         setupGetAnswerPerParticipant();
 
         verify(participantDAOMock).getFirstAndLastname(participantId);
     }
 
     @Test
-    void getAnswerPerParticipantCallsReportDAOGetAnswerPerParticipant() throws SQLException {
+    void getAnswerPerParticipantCallsGetAnswerPerParticipant() throws SQLException {
         setupGetAnswerPerParticipant();
 
         verify(reportDAOMock).getAnswersPerParticipant(campaignId, participantId);
+    }
+
+    @Test
+    void getAnswerPerParticipantReturnsAnswerCollection() throws SQLException {
+        when(participantDAOMock.getFirstAndLastname(participantId)).thenReturn(getAnswerCollection());
+        when(campaignDAOMock.getCampaignName(campaignId)).thenReturn(campaignName);
+        when(reportDAOMock.getAnswersPerParticipant(campaignId, participantId)).thenReturn(getListAnswer());
+
+        var testValue = sut.getAnswersPerParticipant(campaignId, participantId);
+
+        assertEquals(getAnswerCollection(), testValue);
     }
 
     private void setupGetAnswerPerParticipant() throws SQLException {
@@ -91,7 +113,7 @@ class ReportServiceImplTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, "JFALL","me","JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(campaignId, campaignName,"me","JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {
@@ -111,6 +133,16 @@ class ReportServiceImplTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "", "HC2 Holdings, Inc", "anothername", 1, getListAnswer());
+        return new AnswerCollection("Name", "", "HC2 Holdings, Inc", campaignName, campaignId, getListAnswer());
+    }
+
+    private List<ParticipantDTO> getRankedParticipants() {
+        List<ParticipantDTO> list = new ArrayList<>();
+        list.add(new ParticipantDTO(1, campaignId, 290,"Name", "", "lastName", "mail", "telefoonnummer", 1));
+        return list;
+    }
+
+    private RankedParticipantCollection getRankedparticipantCollection() {
+        return new RankedParticipantCollection(campaignName, getRankedParticipants());
     }
 }

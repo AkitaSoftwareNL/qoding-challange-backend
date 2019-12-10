@@ -13,13 +13,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ReportResourceTest {
 
     private final int campaignId = 5;
     private final String campaign = "campaign";
+    private final int participantId = 2;
 
     private ReportService reportServiceMock;
     private ReportResource sut;
@@ -32,33 +32,62 @@ class ReportResourceTest {
     }
 
     @Test
-    void getAllCampaignsReturnsAllCampaingsWithStatuscodeOk() throws SQLException {
-        when(reportServiceMock.getAllCampaings()).thenReturn(getListCampaign());
+    void getAllCampaignsCallsGetAllCampaigns() throws SQLException {
+        // Mock
+
+        // Test
+        sut.getAllCampaigns();
+        // Verify
+        verify(reportServiceMock).getAllCampaigns();
+    }
+
+    @Test
+    void getAllCampaignsReturnsAllCampaignsWithStatuscodeOk() throws SQLException {
+        when(reportServiceMock.getAllCampaigns()).thenReturn(getListCampaign());
 
         ResponseEntity<List<CampaignDTO>> result = sut.getAllCampaigns();
 
-        assertTrue(result.hasBody());
+        assertEquals(getListCampaign(), result.getBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    void getRankedParticipantsPerCampaignCallsGetRankedParticipantsPerCampaign() throws SQLException {
+        // Mock
+
+        // Test
+        sut.getRankedParticipantsPerCampaign(campaignId);
+        // Verify
+        verify(reportServiceMock).getRankedParticipantsPerCampaign(campaignId);
     }
 
     @Test
     void getRankedParticipantsPerCampaignReturnsRankedListWithParticipantsWithStatuscodeOk() throws SQLException {
-        when(reportServiceMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedListOfParticipants());
+        when(reportServiceMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedParticipantCollection());
 
         ResponseEntity<RankedParticipantCollection> result = sut.getRankedParticipantsPerCampaign(campaignId);
 
-        assertTrue(result.hasBody());
+        assertEquals(getRankedParticipantCollection(), result.getBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
+    void getAnswersPerParticipantCallsGetAnswersPerParticipant() throws SQLException {
+        // Mock
+
+        // Test
+        sut.getAnswersPerParticipant(campaignId, participantId);
+        // Verify
+        verify(reportServiceMock).getAnswersPerParticipant(campaignId, participantId);
+    }
+
+    @Test
     void getAnswersPerParticipantReturnsAnswerCollectionAndStatuscodeOK() throws SQLException {
-        final int PARTICIPANT_ID = 2;
-        when(reportServiceMock.getAnswersPerParticipant(campaignId, PARTICIPANT_ID)).thenReturn(getAnswerCollection());
+        when(reportServiceMock.getAnswersPerParticipant(campaignId, participantId)).thenReturn(getAnswerCollection());
 
-        ResponseEntity<AnswerCollection> result = sut.getAnswersPerParticipant(campaignId, PARTICIPANT_ID);
+        ResponseEntity<AnswerCollection> result = sut.getAnswersPerParticipant(campaignId, participantId);
 
-        assertTrue(result.hasBody());
+        assertEquals(getAnswerCollection(), result.getBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
@@ -82,7 +111,7 @@ class ReportResourceTest {
         return participants;
     }
 
-    private RankedParticipantCollection getRankedListOfParticipants() {
+    private RankedParticipantCollection getRankedParticipantCollection() {
         return new RankedParticipantCollection(campaign, getListParticipant());
     }
 
