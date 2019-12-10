@@ -33,7 +33,7 @@ class QuestionDAOImplIntTest {
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
-    
+
     @BeforeEach
     void setUp() {
         this.sut = new QuestionDAOImpl();
@@ -61,6 +61,15 @@ class QuestionDAOImplIntTest {
         List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(questionId);
 
         assertEquals(AMOUNT_OF_ANSWERS, possibleAnswers.size());
+    }
+
+    @Test
+    void setAnswerSetsAnswer() throws SQLException {
+        int oldLength = sut.getPendingAnswers(campaignId, questionState).size();
+
+        sut.setAnswer(getOpenQuestion(), campaignId, participentId);
+
+        assertEquals(oldLength + 1, sut.getPendingAnswers(campaignId, questionState).size());
     }
 
     @Test
@@ -113,7 +122,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void getQuestionReturnQuestion() throws SQLException, NoQuestionFoundException{
+    void getQuestionReturnQuestion() throws SQLException, NoQuestionFoundException {
         int expectedId = 3;
         //Mock
 
@@ -125,7 +134,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void getQuestionReturnQuestionThrowsNoQuestionFound() throws NoQuestionFoundException{
+    void getQuestionReturnQuestionThrowsNoQuestionFound() throws NoQuestionFoundException {
         int falseId = 50;
         //Mock
 
@@ -136,12 +145,12 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void setAnswerAddAmountPlusOne() throws SQLException{
+    void setPendingAnswerAddAmountPlusOne() throws SQLException {
         int correctState = 2;
         //Mock
         var oldLengthValue = sut.getPendingAnswers(campaignId, questionState).size();
         //Test
-        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participentId, campaignId,correctState,"Test"));
+        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participentId, campaignId, correctState, "Test"));
         //Verify
         assertEquals(oldLengthValue - 1, sut.getPendingAnswers(campaignId, questionState).size());
     }

@@ -85,7 +85,7 @@ public class QuestionResource {
     }
 
     @RequestMapping(path = "/questions/delete/{questionID}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<QuestionDTO>> removeQuestion(@PathVariable("questionID") int questionID) throws SQLException {
         questionService.removeQuestion(questionID);

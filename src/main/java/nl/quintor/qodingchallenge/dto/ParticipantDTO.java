@@ -12,12 +12,12 @@ public class ParticipantDTO {
     private String lastname;
     private String email;
     private String phonenumber;
-    private int AmountOfRightAwnseredQuestions;
+    private int AmountOfRightAnsweredQuestions;
 
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAwnseredQuestions) {
+    public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAnsweredQuestions) {
         this.participantID = participantID;
         this.campaignID = campaignID;
         this.timeInMillis = timeInMillis;
@@ -26,7 +26,7 @@ public class ParticipantDTO {
         this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
-        this.AmountOfRightAwnseredQuestions = amountOfRightAwnseredQuestions;
+        this.AmountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
     public int getParticipantID() {
@@ -93,12 +93,12 @@ public class ParticipantDTO {
         this.timeInMillis = timeInMillis;
     }
 
-    public int getAmountOfRightAwnseredQuestions() {
-        return AmountOfRightAwnseredQuestions;
+    public int getAmountOfRightAnsweredQuestions() {
+        return AmountOfRightAnsweredQuestions;
     }
 
-    public void setAmountOfRightAwnseredQuestions(int amountOfRightAwnseredQuestions) {
-        AmountOfRightAwnseredQuestions = amountOfRightAwnseredQuestions;
+    public void setAmountOfRightAnsweredQuestions(int amountOfRightAnsweredQuestions) {
+        AmountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ParticipantDTO {
         return participantID == that.participantID &&
                 campaignID == that.campaignID &&
                 timeInMillis == that.timeInMillis &&
-                AmountOfRightAwnseredQuestions == that.AmountOfRightAwnseredQuestions &&
+                AmountOfRightAnsweredQuestions == that.AmountOfRightAnsweredQuestions &&
                 Objects.equals(firstname, that.firstname) &&
                 Objects.equals(insertion, that.insertion) &&
                 Objects.equals(lastname, that.lastname) &&
@@ -119,6 +119,6 @@ public class ParticipantDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, AmountOfRightAwnseredQuestions);
+        return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, AmountOfRightAnsweredQuestions);
     }
 }
