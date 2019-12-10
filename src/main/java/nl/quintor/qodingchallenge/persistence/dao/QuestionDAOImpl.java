@@ -48,7 +48,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 possibleAnswers.add(new PossibleAnswerDTO(
-                        resultSet.getString(1),0));
+                        resultSet.getString(1), 0));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -163,7 +163,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(2, questionState);
             ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 givenAnswers.add(new GivenAnswerDTO(
                         resultSet.getInt(1),
                         resultSet.getInt(2),
@@ -178,7 +178,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public QuestionDTO getQuestion(int questionid) throws SQLException, NoQuestionFoundException {
+    public QuestionDTO getQuestion(int questionid) throws SQLException {
         QuestionDTO question = new QuestionDTO();
         try (
                 Connection connection = getConnection()
@@ -186,23 +186,18 @@ public class QuestionDAOImpl implements QuestionDAO {
             PreparedStatement statement = connection.prepareStatement("select * from question where questionid = ?");
             statement.setInt(1, questionid);
             ResultSet resultSet = statement.executeQuery();
-
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 question.setQuestionID(resultSet.getInt(1));
                 question.setQuestionType(resultSet.getString(2));
                 question.setQuestion(resultSet.getString(3));
                 question.setAttachment(resultSet.getString(4));
                 question.setGivenAnswer(resultSet.getString(5));
                 question.setStateID(resultSet.getInt(6));
-            }
-            else{
+            } else {
                 throw new NoQuestionFoundException();
             }
         } catch (SQLException e) {
             throw new SQLException(e);
-        }
-        catch (NoQuestionFoundException e) {
-            throw new NoQuestionFoundException();
         }
         return question;
     }
@@ -229,7 +224,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         List<String> possibleAnswersString = makeString(question.getPossibleAnswers(), delimiter);
         try (
                 Connection connection = getConnection()
-                ) {
+        ) {
             PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setString(1, "JAVA");
             statement.setString(2, question.getQuestion());

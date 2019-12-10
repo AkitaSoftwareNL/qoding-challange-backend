@@ -111,7 +111,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDTO getQuestion(int questionid) throws SQLException, NoQuestionFoundException {
+    public QuestionDTO getQuestion(int questionid) throws SQLException {
         return questionDAO.getQuestion(questionid);
     }
 

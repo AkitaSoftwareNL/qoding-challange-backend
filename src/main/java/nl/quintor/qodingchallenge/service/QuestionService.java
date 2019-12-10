@@ -27,7 +27,7 @@ public interface QuestionService {
 
     List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 
-    QuestionDTO getQuestion(int questionid) throws SQLException, NoQuestionFoundException;
+    QuestionDTO getQuestion(int questionid) throws SQLException;
 
     void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException;
 }
