@@ -15,7 +15,6 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 @Service
 public class CampaignDAOImpl implements CampaignDAO {
 
-
     @Override
     public boolean campaignExists(String name) throws SQLException {
         try (

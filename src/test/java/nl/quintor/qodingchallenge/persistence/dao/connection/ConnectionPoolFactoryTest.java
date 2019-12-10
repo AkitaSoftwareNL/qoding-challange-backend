@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao.connection;
 
 import nl.quintor.qodingchallenge.persistence.connection.ConnectionFactoryPoolWrapper;
+import nl.quintor.qodingchallenge.persistence.connection.IConnectionFactoryPoolWrapper;
 import nl.quintor.qodingchallenge.persistence.exception.PropertiesNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,15 +10,16 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 
 class ConnectionPoolFactoryTest {
 
-    private ConnectionFactoryPoolWrapper sut;
+    private IConnectionFactoryPoolWrapper sut;
 
     @BeforeEach
     void setUp() {
-        sut = spy(ConnectionFactoryPoolWrapper.wrapper);
+        sut = spy(ConnectionFactoryPoolWrapper.class);
     }
 
     @Test
