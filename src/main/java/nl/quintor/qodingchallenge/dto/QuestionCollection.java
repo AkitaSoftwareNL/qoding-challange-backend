@@ -14,15 +14,10 @@ public class QuestionCollection {
 
     }
 
-    public QuestionCollection(int participantID, String campaignName, List<QuestionDTO> questions) {
-        this.participantID = participantID;
-        this.campaignName = campaignName;
-        this.questions = questions;
-    }
-
-    public QuestionCollection(int participantID, int campaignId, List<QuestionDTO> questions) {
+    public QuestionCollection(int participantID, int campaignId, String campaignName, List<QuestionDTO> questions) {
         this.participantID = participantID;
         this.campaignId = campaignId;
+        this.campaignName = campaignName;
         this.questions = questions;
     }
 
@@ -50,6 +45,14 @@ public class QuestionCollection {
         this.questions = questions;
     }
 
+    public int getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(int campaignId) {
+        this.campaignId = campaignId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,13 +66,5 @@ public class QuestionCollection {
     @Override
     public int hashCode() {
         return Objects.hash(participantID, campaignName, questions);
-    }
-
-    public int getCampaignId() {
-        return campaignId;
-    }
-
-    public void setCampaignId(int campaignId) {
-        this.campaignId = campaignId;
     }
 }

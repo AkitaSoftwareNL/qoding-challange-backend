@@ -139,7 +139,7 @@ class QuestionServiceImplTest {
 
         questionDTOList.get(0).setPossibleAnswers(getPossibleAnswers());
 
-        assertEquals(questionDTOList, sut.getQuestions(category, campaign));
+        assertEquals(questionDTOList.get(0).getPossibleAnswers(), sut.getQuestions(category, campaign).getQuestions().get(0).getPossibleAnswers());
     }
 
     @Test
@@ -228,14 +228,14 @@ class QuestionServiceImplTest {
     }
 
     private List<QuestionDTO> setQuestionlist() throws SQLException {
-        List<QuestionDTO> testValue = sut.getQuestions(category, campaign);
+        List<QuestionDTO> testValue = questionDAOMock.getQuestions(category, 5);
         QuestionDTO questionDTO = new QuestionDTO(questionId, "String", "Java", "multiple", "String");
         testValue.add(questionDTO);
         return testValue;
     }
 
     private QuestionCollection setQuestionCollection() throws SQLException {
-        return new QuestionCollection(1, "test", setQuestionlist());
+        return new QuestionCollection(1, 1,"test",  setQuestionlist());
     }
 
     private QuestionDTO getOpenQuestion() {

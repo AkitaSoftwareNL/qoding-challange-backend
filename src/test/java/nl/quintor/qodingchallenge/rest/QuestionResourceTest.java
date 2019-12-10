@@ -39,7 +39,7 @@ class QuestionResourceTest {
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
         final int AMOUNT_OF_QUESTIONS = 3;
-        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection().getQuestions());
+        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
 
         sut.sendQuestions(campaign);
 
@@ -185,7 +185,7 @@ class QuestionResourceTest {
 
 
     private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, campaign, getQuestions());
+        return new QuestionCollection(1, 1, campaign, getQuestions());
     }
 
     private QuestionDTO getQuestion() {
