@@ -60,7 +60,7 @@ public class QuestionResource {
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/questions/{questionid}",
             method = RequestMethod.GET)
-    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException, NoQuestionFoundException {
+    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException {
         return ResponseEntity.ok().body(questionService.getQuestion(questionId));
     }
 
