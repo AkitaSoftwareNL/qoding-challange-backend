@@ -28,42 +28,42 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleSQLExceptionTest() {
-        var expectedResponse = handler.handleSQLException(new SQLException(), webRequest);
+        var expectedResponse = handler.handleNotFoundStatus(new SQLException(), webRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleCampaignAlreadyExistsExceptionTest() {
-        var expectedResponse = handler.handleCampaignAlreadyExistsException(new CampaignAlreadyExistsException(MESSAGE_FOR_EXCEPTION), webRequest);
+        var expectedResponse = handler.handleBadRequestStatus(new CampaignAlreadyExistsException(MESSAGE_FOR_EXCEPTION), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleAnswerNotFoundExceptionTest() {
-        var expectedResponse = handler.handleAnswerNotFoundException(new AnswerNotFoundException(), webRequest);
+        var expectedResponse = handler.handleNotFoundStatus(new AnswerNotFoundException(), webRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleNoCampaignFoundExceptionTest() {
-        var expectedResponse = handler.handleNoCampaignFoundException(new NoCampaignFoundException(MESSAGE_FOR_EXCEPTION), webRequest);
+        var expectedResponse = handler.handleBadRequestStatus(new NoCampaignFoundException(MESSAGE_FOR_EXCEPTION), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleEmptyQuestionException() {
-        var expectedResponse = handler.handleEmptyQuestionException(new EmptyQuestionException(MESSAGE_FOR_EXCEPTION), webRequest);
+        var expectedResponse = handler.handleBadRequestStatus(new EmptyQuestionException(MESSAGE_FOR_EXCEPTION), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleNoQuestionFoundException() {
-        var expectedResponse = handler.handleNoQuestionFoundException(new NoQuestionFoundException(), webRequest);
+        var expectedResponse = handler.handleNotFoundStatus(new NoQuestionFoundException(), webRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }
