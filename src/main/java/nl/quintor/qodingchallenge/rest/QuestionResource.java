@@ -18,8 +18,8 @@ import java.util.List;
 @RestController
 public class QuestionResource {
 
-    private QuestionService questionService;
     private ParticipantService participantService;
+    private QuestionService questionService;
 
     @Autowired
     public void setParticipantService(ParticipantService participantService) {
