@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public abstract class QuestionStrategy {
 
-    QuestionDAO questionDAO;
+    protected QuestionDAO questionDAO;
     private String type;
 
     QuestionStrategy(QuestionDAO questionDAO, String type) {

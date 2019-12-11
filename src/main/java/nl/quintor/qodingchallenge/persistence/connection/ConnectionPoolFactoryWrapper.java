@@ -3,7 +3,7 @@ package nl.quintor.qodingchallenge.persistence.connection;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class ConnectionFactoryPoolWrapper implements IConnectionFactoryPoolWrapper {
+public class ConnectionPoolFactoryWrapper implements IConnectionPoolFactoryWrapper {
 
     @Override
     public Connection getConnection() throws SQLException {

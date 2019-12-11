@@ -1,7 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao.connection;
 
-import nl.quintor.qodingchallenge.persistence.connection.ConnectionFactoryPoolWrapper;
-import nl.quintor.qodingchallenge.persistence.connection.IConnectionFactoryPoolWrapper;
+import nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactoryWrapper;
+import nl.quintor.qodingchallenge.persistence.connection.IConnectionPoolFactoryWrapper;
 import nl.quintor.qodingchallenge.persistence.exception.PropertiesNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +14,11 @@ import static org.mockito.Mockito.spy;
 
 class ConnectionPoolFactoryTest {
 
-    private IConnectionFactoryPoolWrapper sut;
+    private IConnectionPoolFactoryWrapper sut;
 
     @BeforeEach
     void setUp() {
-        sut = spy(ConnectionFactoryPoolWrapper.class);
+        sut = spy(ConnectionPoolFactoryWrapper.class);
     }
 
     @Test
