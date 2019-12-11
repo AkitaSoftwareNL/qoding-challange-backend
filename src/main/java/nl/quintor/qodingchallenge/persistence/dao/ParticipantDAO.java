@@ -6,4 +6,6 @@ import java.sql.SQLException;
 
 public interface ParticipantDAO {
     AnswerCollection getFirstAndLastname(int participantID) throws SQLException;
+
+    void addParticipantToCampaign(int campaignID, int participantID) throws SQLException;
 }

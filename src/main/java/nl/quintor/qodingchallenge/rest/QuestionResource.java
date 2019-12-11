@@ -4,6 +4,7 @@ package nl.quintor.qodingchallenge.rest;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.service.ParticipantService;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,13 @@ import java.util.List;
 @RestController
 public class QuestionResource {
 
+    private ParticipantService participantService;
     private QuestionService questionService;
+
+    @Autowired
+    public void setParticipantService(ParticipantService participantService) {
+        this.participantService = participantService;
+    }
 
     @Autowired
     public void setQuestionService(QuestionService questionService) {
@@ -36,6 +43,7 @@ public class QuestionResource {
             path = "/campaign/{campaignName}",
             method = RequestMethod.POST)
     public ResponseEntity getAnswer(@RequestBody QuestionCollection questionCollection) throws SQLException {
+        participantService.addParticipantToCampaign(questionCollection.getCampaignId(), questionCollection.getParticipantID());
         questionService.setAnswer(questionCollection);
         return new ResponseEntity(HttpStatus.OK);
     }
