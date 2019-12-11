@@ -33,5 +33,21 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         }
         return answerCollection;
     }
+
+    @Override
+    public void addParticipantToCampaign(int campaignID, int participantID) throws SQLException{
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO participant_of_campaign(CAMPAIGN_ID, PARTICIPANTID) VALUES (?,?)"
+            );
+            statement.setInt(1, campaignID);
+            statement.setInt(2, participantID);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
 }
 
