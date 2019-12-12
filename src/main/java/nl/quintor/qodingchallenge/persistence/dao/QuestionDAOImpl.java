@@ -48,7 +48,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 possibleAnswers.add(new PossibleAnswerDTO(
-                        resultSet.getString(1), 0));
+                        resultSet.getString("ANSWER_OPTIONS"), 0));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -84,7 +84,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                correctAnswer = Optional.ofNullable(resultSet.getString(1));
+                correctAnswer = Optional.ofNullable(resultSet.getString("ANSWER_OPTIONS"));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -165,11 +165,11 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             while (resultSet.next()) {
                 givenAnswers.add(new GivenAnswerDTO(
-                        resultSet.getInt(1),
-                        resultSet.getInt(2),
-                        resultSet.getInt(3),
-                        resultSet.getInt(4),
-                        resultSet.getString(5)));
+                        resultSet.getInt("QUESTIONID"),
+                        resultSet.getInt("PARTICIPANTID"),
+                        resultSet.getInt("CAMPAIGN_ID"),
+                        resultSet.getInt("STATEID"),
+                        resultSet.getString("GIVEN_ANSWER")));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -187,12 +187,12 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionid);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                question.setQuestionID(resultSet.getInt(1));
-                question.setQuestionType(resultSet.getString(2));
-                question.setQuestion(resultSet.getString(3));
-                question.setAttachment(resultSet.getString(4));
-                question.setGivenAnswer(resultSet.getString(5));
-                question.setStateID(resultSet.getInt(6));
+                question.setQuestionID(resultSet.getInt("QUESTIONID"));
+                question.setQuestionType(resultSet.getString("CATEGORY_NAME"));
+                question.setQuestion(resultSet.getString("QUESTION"));
+                question.setAttachment(resultSet.getString("STATE"));
+                question.setGivenAnswer(resultSet.getString("QUESTION_TYPE"));
+                question.setStateID(resultSet.getInt("ATTACHMENT"));
             } else {
                 throw new NoQuestionFoundException();
             }

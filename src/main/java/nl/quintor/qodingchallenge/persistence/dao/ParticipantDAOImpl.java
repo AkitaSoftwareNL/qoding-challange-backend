@@ -25,9 +25,9 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             statement.setInt(1, participantID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            answerCollection.setFirstname(resultSet.getString(1));
-            answerCollection.setInsertion(resultSet.getString(2));
-            answerCollection.setLastname(resultSet.getString(3));
+            answerCollection.setFirstname(resultSet.getString("FIRSTNAME"));
+            answerCollection.setInsertion(resultSet.getString("INSERTION"));
+            answerCollection.setLastname(resultSet.getString("LASTNAME"));
         } catch (SQLException e) {
             throw new SQLException(e);
         }

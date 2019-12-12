@@ -61,13 +61,13 @@ public class CampaignDAOImpl implements CampaignDAO {
             while (resultSet.next()) {
                 campaignDTOList.add(
                         new CampaignDTO(
-                                resultSet.getInt(1),
-                                resultSet.getString(2),
-                                resultSet.getString(3),
-                                resultSet.getString(4),
-                                resultSet.getInt(5),
-                                resultSet.getString(6),
-                                resultSet.getInt(7),
+                                resultSet.getInt("CAMPAIGN_ID"),
+                                resultSet.getString("CAMPAIGN_NAME"),
+                                resultSet.getString("CATEGORY_NAME"),
+                                resultSet.getString("USERNAME"),
+                                resultSet.getInt("AMOUNT_OF_QUESTIONS"),
+                                resultSet.getString("TIMESTAMP_CREATED"),
+                                resultSet.getInt("STATE"),
                                 null
                         )
                 );
@@ -103,7 +103,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            return resultSet.getString(1);
+            return resultSet.getString("CAMPAIGN_NAME");
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -118,7 +118,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             statement.setString(1, campaignName);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            return resultSet.getInt(1);
+            return resultSet.getInt("CAMPAIGN_ID");
         } catch (SQLException e) {
             throw new SQLException(e);
         }

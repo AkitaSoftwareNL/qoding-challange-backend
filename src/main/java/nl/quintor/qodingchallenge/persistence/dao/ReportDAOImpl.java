@@ -32,15 +32,15 @@ public class ReportDAOImpl implements ReportDAO {
             while (resultSet.next()) {
                 participants.add(
                         new ParticipantDTO(
-                                resultSet.getInt(1),
-                                resultSet.getInt(2),
-                                resultSet.getLong(3),
-                                resultSet.getString(4),
-                                resultSet.getString(5),
-                                resultSet.getString(6),
-                                resultSet.getString(7),
-                                resultSet.getString(8),
-                                resultSet.getInt(9)
+                                resultSet.getInt("PARTICIPANTID"),
+                                resultSet.getInt("CAMPAIGN_ID"),
+                                resultSet.getLong("TIME_SPEND"),
+                                resultSet.getString("FIRSTNAME"),
+                                resultSet.getString("INSERTION"),
+                                resultSet.getString("LASTNAME"),
+                                resultSet.getString("EMAIL"),
+                                resultSet.getString("PHONENUMBER"),
+                                resultSet.getInt("CORRECT")
                         )
                 );
             }
@@ -66,10 +66,10 @@ public class ReportDAOImpl implements ReportDAO {
             while (resultSet.next()) {
                 answers.add(
                         new AnswerDTO(
-                                resultSet.getString(3),
-                                resultSet.getString(4),
-                                resultSet.getInt(5),
-                                resultSet.getString(6)
+                                resultSet.getString("GIVEN_ANSWER"),
+                                resultSet.getString("QUESTION"),
+                                resultSet.getInt("STATE"),
+                                resultSet.getString("QUESTION_TYPE")
                         )
                 );
             }
