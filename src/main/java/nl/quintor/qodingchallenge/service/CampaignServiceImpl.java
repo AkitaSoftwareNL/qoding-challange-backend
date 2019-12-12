@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 
 import static java.lang.String.format;
 
@@ -29,7 +30,11 @@ public class CampaignServiceImpl implements CampaignService {
     public void createNewCampaign(CampaignDTO campaignDTO) throws SQLException {
         if (campaignDAO.campaignExists(campaignDTO.getName())) {
             logger.warn(format("Campaign %s already exists, try an other name.", campaignDTO.getName()));
-            throw new CampaignAlreadyExistsException("The campaign " + campaignDTO.getName() + " already exists.");
+            throw new CampaignAlreadyExistsException(
+                    "the campaign already exists",
+                    format("Campaign name = %s", campaignDTO.getName()),
+                    format("Try another name like %s%04d", campaignDTO.getName(), new Random().nextInt(1001))
+            );
         }
         campaignDAO.persistCampaign(campaignDTO);
     }

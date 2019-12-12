@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
@@ -28,9 +29,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({NoCampaignFoundException.class, EmptyQuestionException.class, CampaignAlreadyExistsException.class})
+    @ExceptionHandler({NoCampaignFoundException.class, EmptyQuestionException.class})
     public ResponseEntity<Object> handleBadRequestStatus(Exception e, WebRequest request) {
         logger.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({CampaignAlreadyExistsException.class})
+    public final ResponseEntity<Object> handleCustomException(CampaignAlreadyExistsException ex) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
+                );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

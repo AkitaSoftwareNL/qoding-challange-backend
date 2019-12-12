@@ -35,7 +35,7 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleCampaignAlreadyExistsExceptionTest() {
-        var expectedResponse = handler.handleBadRequestStatus(new CampaignAlreadyExistsException(MESSAGE_FOR_EXCEPTION), webRequest);
+        var expectedResponse = handler.handleBadRequestStatus(new CampaignAlreadyExistsException(MESSAGE_FOR_EXCEPTION, "", ""), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
