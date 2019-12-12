@@ -17,8 +17,8 @@ import static java.lang.String.format;
 @Service
 public class CampaignServiceImpl implements CampaignService {
 
-    private CampaignDAO campaignDAO;
     private final Logger logger = LoggerFactory.getLogger(CampaignServiceImpl.class);
+    private CampaignDAO campaignDAO;
 
     @Override
     @Autowired

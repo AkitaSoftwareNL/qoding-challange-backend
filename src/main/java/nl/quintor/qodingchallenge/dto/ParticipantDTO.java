@@ -18,7 +18,7 @@ public class ParticipantDTO {
     }
 
     public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber) {
-        new ParticipantDTO(participantID,campaignID,timeInMillis,firstname,insertion,lastname,email,phonenumber, 0);
+        new ParticipantDTO(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, 0);
     }
 
     public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAnsweredQuestions) {

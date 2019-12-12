@@ -19,9 +19,8 @@ import static org.junit.Assert.assertFalse;
 
 class ParticipantDAOImplTest {
 
-    private ParticipantDAOImpl sut;
-
     private final int campaignID = 1;
+    private ParticipantDAOImpl sut;
 
     @BeforeEach
     void setUp() {

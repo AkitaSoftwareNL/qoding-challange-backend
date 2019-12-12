@@ -264,6 +264,20 @@ public class QuestionDAOImpl implements QuestionDAO {
 
         return possibleAnswersString;
     }
+
+    public int getQuestionAmountPerCategory(String category) throws SQLException {
+        try (
+                Connection connection = getConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) as amount FROM question where CATEGORY_NAME = ? AND state = 1");
+            statement.setString(1, category);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("amount");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
 }
 
 

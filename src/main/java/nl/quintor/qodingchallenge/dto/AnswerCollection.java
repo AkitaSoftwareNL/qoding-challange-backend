@@ -12,7 +12,8 @@ public class AnswerCollection {
     private int campaignID;
     private List<AnswerDTO> answers;
 
-    public AnswerCollection() {}
+    public AnswerCollection() {
+    }
 
     public AnswerCollection(String firstname, String insertion, String lastname, String campaignName, int campaignID, List<AnswerDTO> answers) {
         this.firstname = firstname;

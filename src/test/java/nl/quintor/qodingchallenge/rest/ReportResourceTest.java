@@ -91,7 +91,7 @@ class ReportResourceTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, campaign,"me","JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(1, campaign, "me", "JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {
@@ -125,7 +125,7 @@ class ReportResourceTest {
     }
 
     private AnswerCollection getAnswerCollection() {
-        return new AnswerCollection("Name", "","anothername", "campaign", 1, getListAnswer());
+        return new AnswerCollection("Name", "", "anothername", "campaign", 1, getListAnswer());
     }
 
 
