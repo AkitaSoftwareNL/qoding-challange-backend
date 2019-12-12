@@ -20,7 +20,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT firstname, INSERTION, lastname FROM conference WHERE participantID = ?"
+                    "SELECT FIRSTNAME, INSERTION, LASTNAME FROM CONFERENCE WHERE PARTICIPANTID = ?"
             );
             statement.setInt(1, participantID);
             ResultSet resultSet = statement.executeQuery();
@@ -40,7 +40,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO participant_of_campaign(CAMPAIGN_ID, PARTICIPANTID) VALUES (?,?)"
+                    "INSERT INTO participant_of_campaign (CAMPAIGN_ID, PARTICIPANTID) VALUES (?,?)"
             );
             statement.setInt(1, campaignID);
             statement.setInt(2, participantID);

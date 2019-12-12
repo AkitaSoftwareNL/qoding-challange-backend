@@ -99,7 +99,7 @@ public class CampaignDAOImpl implements CampaignDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT campaign_name FROM campaign WHERE CAMPAIGN_ID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT CAMPAIGN_NAME FROM campaign WHERE CAMPAIGN_ID = ?");
             statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -114,7 +114,7 @@ public class CampaignDAOImpl implements CampaignDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT campaign_id FROM campaign WHERE CAMPAIGN_NAME = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT CAMPAIGN_ID FROM campaign WHERE CAMPAIGN_NAME = ?");
             statement.setString(1, campaignName);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
