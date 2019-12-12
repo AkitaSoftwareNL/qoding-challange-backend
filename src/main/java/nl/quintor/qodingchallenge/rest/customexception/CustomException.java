@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.rest.customexception;
 
+import java.sql.SQLException;
+
 public class CustomException extends RuntimeException {
 
     private String message;

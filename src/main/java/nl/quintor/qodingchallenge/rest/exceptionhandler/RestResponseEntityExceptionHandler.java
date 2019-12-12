@@ -30,7 +30,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({CampaignAlreadyExistsException.class,
+    @ExceptionHandler({
+            CampaignAlreadyExistsException.class,
             EmptyQuestionException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
@@ -38,10 +39,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 new JSONCustomExceptionSchema(
                         ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
                 );
+        logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({NoCampaignFoundException.class,
+    @ExceptionHandler({
+            NoCampaignFoundException.class,
             NoQuestionFoundException.class,
             AnswerNotFoundException.class
     })
@@ -50,6 +53,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 new JSONCustomExceptionSchema(
                         ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
                 );
+        logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 }

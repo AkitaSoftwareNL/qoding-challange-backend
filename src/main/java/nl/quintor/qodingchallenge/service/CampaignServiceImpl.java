@@ -33,7 +33,7 @@ public class CampaignServiceImpl implements CampaignService {
             throw new CampaignAlreadyExistsException(
                     "the campaign already exists",
                     format("Campaign name = %s", campaignDTO.getName()),
-                    format("Try another name like %s%04d", campaignDTO.getName(), new Random().nextInt(1001))
+                    format("Try another name like %s%04d", campaignDTO.getName(), new Random().nextInt(9999))
             );
         }
         campaignDAO.persistCampaign(campaignDTO);
