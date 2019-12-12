@@ -35,35 +35,35 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleCampaignAlreadyExistsExceptionTest() {
-        var expectedResponse = handler.handleBadRequestStatus(new CampaignAlreadyExistsException(MESSAGE_FOR_EXCEPTION, "", ""), webRequest);
+        var expectedResponse = handler.handleCustomExceptionInternalServerError(new CampaignAlreadyExistsException(MESSAGE_FOR_EXCEPTION, "", ""), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleAnswerNotFoundExceptionTest() {
-        var expectedResponse = handler.handleNotFoundStatus(new AnswerNotFoundException(), webRequest);
+        var expectedResponse = handler.handleNotFoundStatus(new AnswerNotFoundException(MESSAGE_FOR_EXCEPTION, "", ""), webRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleNoCampaignFoundExceptionTest() {
-        var expectedResponse = handler.handleBadRequestStatus(new NoCampaignFoundException(MESSAGE_FOR_EXCEPTION), webRequest);
+        var expectedResponse = handler.handleCustomExceptionInternalServerError(new NoCampaignFoundException(MESSAGE_FOR_EXCEPTION, "", ""), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleEmptyQuestionException() {
-        var expectedResponse = handler.handleBadRequestStatus(new EmptyQuestionException(MESSAGE_FOR_EXCEPTION), webRequest);
+        var expectedResponse = handler.handleCustomExceptionInternalServerError(new EmptyQuestionException(MESSAGE_FOR_EXCEPTION, "", ""), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleNoQuestionFoundException() {
-        var expectedResponse = handler.handleNotFoundStatus(new NoQuestionFoundException(), webRequest);
+        var expectedResponse = handler.handleCustomExceptionInternalServerError(new NoQuestionFoundException(MESSAGE_FOR_EXCEPTION, "", ""), webRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }

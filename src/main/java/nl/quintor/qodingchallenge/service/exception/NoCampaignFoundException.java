@@ -1,7 +1,9 @@
 package nl.quintor.qodingchallenge.service.exception;
 
-public class NoCampaignFoundException extends RuntimeException {
-    public NoCampaignFoundException(String s) {
-        super(s);
+import nl.quintor.qodingchallenge.rest.customexception.CustomException;
+
+public class NoCampaignFoundException extends CustomException {
+    public NoCampaignFoundException(String message, String details, String nextAction) {
+        super(message, details, nextAction);
     }
 }

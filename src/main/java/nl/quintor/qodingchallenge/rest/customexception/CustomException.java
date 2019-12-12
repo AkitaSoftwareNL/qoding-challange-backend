@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.rest.customexception;
 
 public class CustomException extends RuntimeException {
+
     private String message;
     private String details;
     private String nextActions;

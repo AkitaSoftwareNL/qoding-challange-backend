@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static java.lang.String.format;
 
@@ -43,7 +44,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionCollection getQuestions(String category, String campaignName) throws SQLException {
         if (!campaignDAO.campaignExists(campaignName))
-            throw new NoCampaignFoundException(format("Campaign %s does not exist", campaignName));
+            throw new NoCampaignFoundException(
+                    "The campaign you searched for does not exist",
+                    format("Campaign name = %s", campaignName),
+                    "Try to use a new campaign name"
+            );
         List<QuestionDTO> questions = questionDAO.getQuestions(category, campaignDAO.getAmountOfQuestions(campaignName));
 
         for (QuestionDTO questionDTO : questions) {
@@ -72,7 +77,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void createQuestion(QuestionDTO question) throws SQLException {
         if (question.getQuestion().isEmpty()) {
-            throw new EmptyQuestionException("Question can not be empty.");
+            throw new EmptyQuestionException(
+                    "Question can not be empty",
+                    "The field question can not be empty",
+                    "Please put your question in the field Question"
+            );
         }
         String questionType = question.getQuestionType();
         for (QuestionStrategy strategy : strategies) {
