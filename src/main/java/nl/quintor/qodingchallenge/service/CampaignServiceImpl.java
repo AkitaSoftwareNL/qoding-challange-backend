@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Service
 public class CampaignServiceImpl implements CampaignService {
 
@@ -26,7 +28,7 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     public void createNewCampaign(CampaignDTO campaignDTO) throws SQLException {
         if (campaignDAO.campaignExists(campaignDTO.getName())) {
-            logger.warn("Campaign already exists, try an other name.");
+            logger.warn(format("Campaign %s already exists, try an other name.", campaignDTO.getName()));
             throw new CampaignAlreadyExistsException("The campaign " + campaignDTO.getName() + " already exists.");
         }
         campaignDAO.persistCampaign(campaignDTO);
