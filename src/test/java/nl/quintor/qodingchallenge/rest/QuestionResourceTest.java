@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.rest;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.service.ParticipantService;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +29,17 @@ class QuestionResourceTest {
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
+    private ParticipantService participantServiceMock;
 
     @BeforeEach
     void setUp() {
         this.sut = new QuestionResource();
+
         this.questionServiceMock = mock(QuestionService.class);
         this.sut.setQuestionService(questionServiceMock);
+
+        this.participantServiceMock = mock(ParticipantService.class);
+        this.sut.setParticipantService(participantServiceMock);
     }
 
     @Test
@@ -57,6 +63,7 @@ class QuestionResourceTest {
 
     @Test
     void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
+
         sut.getAnswer(getQuestionCollection());
 
         verify(questionServiceMock).setAnswer(getQuestionCollection());
