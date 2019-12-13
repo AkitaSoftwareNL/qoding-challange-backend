@@ -53,6 +53,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         }
     }
 
+    @Override
     public List<ParticipantDTO> getParticipantsPerCampaign(int campaignID) throws SQLException {
         List<ParticipantDTO> participants = new ArrayList<>();
         try (
@@ -68,14 +69,14 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             while (resultSet.next()) {
                 participants.add(
                         new ParticipantDTO(
-                                resultSet.getInt("participantid"),
-                                resultSet.getInt("campaign_id"),
-                                resultSet.getLong("time_spend"),
-                                resultSet.getString("firstname"),
-                                resultSet.getString("insertion"),
-                                resultSet.getString("lastname"),
-                                resultSet.getString("email"),
-                                resultSet.getString("phonenumber")
+                                resultSet.getInt("PARTICIPANTID"),
+                                resultSet.getInt("CAMPAIGN_ID"),
+                                resultSet.getLong("TIME_SPEND"),
+                                resultSet.getString("FIRSTNAME"),
+                                resultSet.getString("INSERTION"),
+                                resultSet.getString("LASTNAME"),
+                                resultSet.getString("EMAIL"),
+                                resultSet.getString("PHONENUMBER")
                         )
                 );
             }
