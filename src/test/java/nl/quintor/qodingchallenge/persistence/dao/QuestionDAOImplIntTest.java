@@ -163,6 +163,13 @@ class QuestionDAOImplIntTest {
         assertEquals(amountOfQuestions - 1, sut.getAllQuestions().size());
     }
 
+    @Test
+    void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
+        final int expectedResult = 3;
+
+        assertEquals(expectedResult, sut.getQuestionAmountPerCategory(category));
+    }
+
     private QuestionDTO getOpenQuestion() {
         return new QuestionDTO(10, "dit is een test vraag", category, "open", null);
     }

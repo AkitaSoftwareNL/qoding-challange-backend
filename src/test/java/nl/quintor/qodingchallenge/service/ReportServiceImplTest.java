@@ -112,7 +112,7 @@ class ReportServiceImplTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(campaignId, campaignName,"me","JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(campaignId, campaignName, "me", "JAVA", 3, "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {
@@ -137,7 +137,7 @@ class ReportServiceImplTest {
 
     private List<ParticipantDTO> getRankedParticipants() {
         List<ParticipantDTO> list = new ArrayList<>();
-        list.add(new ParticipantDTO(1, campaignId, 290,"Name", "", "lastName", "mail", "telefoonnummer", 1));
+        list.add(new ParticipantDTO(1, campaignId, 290, "Name", "", "lastName", "mail", "telefoonnummer", 1));
         return list;
     }
 
