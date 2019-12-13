@@ -12,7 +12,7 @@ public class ParticipantDTO {
     private String lastname;
     private String email;
     private String phonenumber;
-    private int AmountOfRightAnsweredQuestions;
+    private int amountOfRightAnsweredQuestions;
 
     public ParticipantDTO() {
     }
@@ -30,7 +30,7 @@ public class ParticipantDTO {
         this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
-        this.AmountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
+        this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
     public int getParticipantID() {
@@ -98,11 +98,11 @@ public class ParticipantDTO {
     }
 
     public int getAmountOfRightAnsweredQuestions() {
-        return AmountOfRightAnsweredQuestions;
+        return amountOfRightAnsweredQuestions;
     }
 
     public void setAmountOfRightAnsweredQuestions(int amountOfRightAnsweredQuestions) {
-        AmountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
+        this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ParticipantDTO {
         return participantID == that.participantID &&
                 campaignID == that.campaignID &&
                 timeInMillis == that.timeInMillis &&
-                AmountOfRightAnsweredQuestions == that.AmountOfRightAnsweredQuestions &&
+                amountOfRightAnsweredQuestions == that.amountOfRightAnsweredQuestions &&
                 Objects.equals(firstname, that.firstname) &&
                 Objects.equals(insertion, that.insertion) &&
                 Objects.equals(lastname, that.lastname) &&
@@ -123,6 +123,6 @@ public class ParticipantDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, AmountOfRightAnsweredQuestions);
+        return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, amountOfRightAnsweredQuestions);
     }
 }
