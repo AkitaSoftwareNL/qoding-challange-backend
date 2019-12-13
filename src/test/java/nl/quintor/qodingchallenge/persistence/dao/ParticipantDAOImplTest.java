@@ -81,7 +81,7 @@ class ParticipantDAOImplTest {
     }
 
     private ParticipantDTO getExistingParticipant() {
-        return new ParticipantDTO(1, 1, 10000,"Gray", null, "Snare", "gsnare0@xinhuanet.com", "2219773471");
+        return new ParticipantDTO(1, 1, 10000, "Gray", null, "Snare", "gsnare0@xinhuanet.com", "2219773471");
     }
 
     private ParticipantDTO getParticipantDTO() {
