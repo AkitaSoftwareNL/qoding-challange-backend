@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
+
+import static java.lang.String.format;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
 
-    private CampaignDAO campaignDAO;
     private final Logger logger = LoggerFactory.getLogger(CampaignServiceImpl.class);
+    private CampaignDAO campaignDAO;
 
     @Override
     @Autowired
@@ -26,8 +29,12 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     public void createNewCampaign(CampaignDTO campaignDTO) throws SQLException {
         if (campaignDAO.campaignExists(campaignDTO.getName())) {
-            logger.warn("Campaign already exists, try an other name.");
-            throw new CampaignAlreadyExistsException("The campaign " + campaignDTO.getName() + " already exists.");
+            logger.warn(format("Campaign %s already exists, try an other name.", campaignDTO.getName()));
+            throw new CampaignAlreadyExistsException(
+                    "the campaign already exists",
+                    format("Campaign name = %s", campaignDTO.getName()),
+                    format("Try another name like %s%04d", campaignDTO.getName(), new Random().nextInt(9999))
+            );
         }
         campaignDAO.persistCampaign(campaignDTO);
     }

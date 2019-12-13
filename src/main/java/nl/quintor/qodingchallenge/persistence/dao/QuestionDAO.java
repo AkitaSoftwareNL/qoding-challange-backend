@@ -30,4 +30,5 @@ public interface QuestionDAO {
 
     void setPendingAnswer(GivenAnswerDTO questionDTO) throws SQLException;
 
+    int getQuestionAmountPerCategory(String category) throws SQLException;
 }

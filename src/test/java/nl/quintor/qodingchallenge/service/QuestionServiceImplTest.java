@@ -26,7 +26,6 @@ class QuestionServiceImplTest {
     private final String campaign = "HC2 Holdings, Inc";
     private final int campaignID = 1;
     private final String category = "JAVA";
-    private final int questionLimit = 3;
     private final int questionId = 1;
     private final int pendingState = 1;
 
@@ -61,6 +60,7 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionsCallsGetQuestions() throws SQLException {
+        final int questionLimit = 3;
         when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(questionLimit);
 
         sut.getQuestions(category, campaign);

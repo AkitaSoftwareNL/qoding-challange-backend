@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
 @Service
@@ -89,7 +90,11 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             throw new SQLException(e);
         }
-        return correctAnswer.orElseThrow(AnswerNotFoundException::new);
+        return correctAnswer.orElseThrow(() -> new AnswerNotFoundException(
+                "No correct answer could be found",
+                format("For the question with questionID: %d was no correct answer found", questionID),
+                "Contact Quintor to solve this issue"
+        ));
     }
 
     @Override
@@ -178,13 +183,13 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public QuestionDTO getQuestion(int questionid) throws SQLException {
+    public QuestionDTO getQuestion(int questionID) throws SQLException {
         QuestionDTO question = new QuestionDTO();
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement("select * from question where questionid = ?");
-            statement.setInt(1, questionid);
+            statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 question.setQuestionID(resultSet.getInt(1));
@@ -194,7 +199,11 @@ public class QuestionDAOImpl implements QuestionDAO {
                 question.setGivenAnswer(resultSet.getString(5));
                 question.setStateID(resultSet.getInt(6));
             } else {
-                throw new NoQuestionFoundException();
+                throw new NoQuestionFoundException(
+                        "No question has been found",
+                        format("Question with questionID %d was not found", questionID),
+                        "Try an different questionID"
+                );
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -254,6 +263,20 @@ public class QuestionDAOImpl implements QuestionDAO {
         possibleAnswersString.add(isCorrectString);
 
         return possibleAnswersString;
+    }
+
+    public int getQuestionAmountPerCategory(String category) throws SQLException {
+        try (
+                Connection connection = getConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) as amount FROM question where CATEGORY_NAME = ? AND state = 1");
+            statement.setString(1, category);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("amount");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 }
 
