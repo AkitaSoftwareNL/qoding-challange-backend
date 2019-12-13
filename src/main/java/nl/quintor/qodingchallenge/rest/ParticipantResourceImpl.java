@@ -11,23 +11,22 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 
 @RestController
-public class ParticipantResourceImpl implements ParticipantResource {
+public class ParticipantResourceImpl {
 
     private ParticipantService participantService;
 
-    @Override
     @Autowired
     public void setParticipantService(ParticipantService participantService) {
         this.participantService = participantService;
     }
 
-    @Override
     @ResponseBody
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             path = "/login/{campaignID}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET
+    )
     public ResponseEntity login(@PathVariable int campaignID, @RequestBody ParticipantDTO participantDTO) throws SQLException {
-        participantService.addParticipant(campaignID, participantDTO);
+        participantService.participantHasAlreadyParticipatedInCampaign(campaignID, participantDTO);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 }

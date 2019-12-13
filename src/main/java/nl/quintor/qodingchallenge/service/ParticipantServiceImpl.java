@@ -27,13 +27,13 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException {
+    public void participantHasAlreadyParticipatedInCampaign(int campaignID, ParticipantDTO participantDTO) throws SQLException {
         participantDTO.setCampaignID(campaignID);
-        if(participantDAO.participantAlreadyExists(participantDTO)) {
+        if(participantDAO.participantHasAlreadyParticipatedInCampaign(participantDTO)) {
             throw new CouldNotAddParticipantException(
                     "Participant could not be added to this campaign",
-                    format("Participant name = %s %s and ID %d = \n Campaign name = %s", participantDTO.getFirstname(), participantDTO.getLastname(), participantDTO.getCampaignID(), participantDTO.getCampaignID()),
-                    "Most likely you have already participated in this campaign. If not contact the support"
+                    format("Participant name = %s %s with ID %d already exists in this campaign with campaign id = %d", participantDTO.getFirstname(), participantDTO.getLastname(), participantDTO.getCampaignID(), participantDTO.getCampaignID()),
+                    "Most likely you have already participated in this campaign. If not contact support"
             );
         }
         participantDAO.addParticipant(participantDTO);

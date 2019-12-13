@@ -15,5 +15,5 @@ public interface ParticipantDAO {
 
     void addParticipant(ParticipantDTO participantDTO) throws SQLException;
 
-    boolean participantAlreadyExists(ParticipantDTO participantDTO) throws SQLException;
+    boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO) throws SQLException;
 }

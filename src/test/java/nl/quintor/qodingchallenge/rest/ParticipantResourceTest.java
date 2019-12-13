@@ -26,10 +26,10 @@ class ParticipantResourceTest {
     }
 
     @Test
-    void loginCallsAddParticipant() throws SQLException {
+    void loginCallsParticipantHasAlreadyParticipatedInCampaign() throws SQLException {
         sut.login(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
-        verify(participantServiceMock).addParticipant(getParticipantDTO().getCampaignID(), getParticipantDTO());
+        verify(participantServiceMock).participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
     }
 
     @Test

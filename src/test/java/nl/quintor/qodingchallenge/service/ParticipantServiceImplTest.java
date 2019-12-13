@@ -33,21 +33,23 @@ class ParticipantServiceImplTest {
     }
 
     @Test
-    void addParticipantCallsParticipantAlreadyExists() throws SQLException {
-        sut.addParticipant(getParticipantDTO().getCampaignID(), getParticipantDTO());
+    void participantHasAlreadyParticipatedInCampaignCallsParticipantAlreadyExists() throws SQLException {
+        sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
-        verify(participantDAOMock).participantAlreadyExists(getParticipantDTO());
+        verify(participantDAOMock).participantHasAlreadyParticipatedInCampaign(getParticipantDTO());
     }
 
     @Test
-    void addParticipantThrowsCouldNotAddParticipantException() throws SQLException {
-        when(participantDAOMock.participantAlreadyExists(getParticipantDTO())).thenThrow(new CouldNotAddParticipantException(
-                "some message",
-                "some details",
-                "some action"
-        ));
+    void participantHasAlreadyParticipatedInCampaignThrowsCouldNotAddParticipantException() throws SQLException {
+        when(participantDAOMock.participantHasAlreadyParticipatedInCampaign(getParticipantDTO())).thenReturn(true);
+        assertThrows(CouldNotAddParticipantException.class, () -> sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO()));
+    }
 
-        assertThrows(CouldNotAddParticipantException.class, () -> sut.addParticipant(getParticipantDTO().getCampaignID(), getParticipantDTO()));
+    @Test
+    void participantHasAlreadyParticipatedInCampaignCallsParticipantHasAlreadyParticipatedInCampaignParticipantDAO() throws SQLException {
+        sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
+
+        verify(participantDAOMock).addParticipant(getParticipantDTO());
     }
 
     private ParticipantDTO getParticipantDTO() {

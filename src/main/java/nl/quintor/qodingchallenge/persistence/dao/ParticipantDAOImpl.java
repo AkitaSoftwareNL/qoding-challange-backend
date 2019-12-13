@@ -117,7 +117,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
 
 
     @Override
-    public boolean participantAlreadyExists(ParticipantDTO participantDTO) throws SQLException {
+    public boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {

@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 class ParticipantDAOImplTest {
 
     private final int campaignID = 1;
+    private final int amountOfParticipantsBeforeInsert = 4;
     private ParticipantDAOImpl sut;
 
     @BeforeEach
@@ -54,14 +54,37 @@ class ParticipantDAOImplTest {
 
     @Test
     void getParticipantPerCampaignGetsAllParticipantsPerCampaign() throws SQLException {
-        final int amountOfParticipants = 4;
-
-        assertEquals(amountOfParticipants, sut.getParticipantsPerCampaign(campaignID).size());
+        assertEquals(amountOfParticipantsBeforeInsert, sut.getParticipantsPerCampaign(campaignID).size());
     }
 
     @Test
     void getParticipantsReturnsListWithParticipants() throws SQLException {
         List<ParticipantDTO> participants = sut.getParticipantsPerCampaign(campaignID);
         assertFalse(participants.isEmpty());
+    }
+
+    @Test
+    void addParticipantAddsAnParticipantToConferenceTable() throws SQLException {
+        sut.addParticipant(getParticipantDTO());
+
+        assertEquals(amountOfParticipantsBeforeInsert + 1, sut.getParticipantsPerCampaign(1).size());
+    }
+
+    @Test
+    void participantHasAlreadyParticipatedInCampaignReturnsTrueWhenParticipantExists() throws SQLException {
+        assertTrue(sut.participantHasAlreadyParticipatedInCampaign(getExistingParticipant()));
+    }
+
+    @Test
+    void participantHasAlreadyParticipatedInCampaignReturnsFalseWhenParticipantDoesNotExists() throws SQLException {
+        assertFalse(sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO()));
+    }
+
+    private ParticipantDTO getExistingParticipant() {
+        return new ParticipantDTO(1, 1, 10000,"Gray", null, "Snare", "gsnare0@xinhuanet.com", "2219773471");
+    }
+
+    private ParticipantDTO getParticipantDTO() {
+        return new ParticipantDTO(20, 1, 100000, "name", null, "name", "name@gmail.com", "06923934");
     }
 }
