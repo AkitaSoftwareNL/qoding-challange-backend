@@ -9,6 +9,23 @@ public class JSONCustomExceptionSchema {
     private String nextAction;
     private String support;
 
+    public JSONCustomExceptionSchema() {}
+
+    public JSONCustomExceptionSchema(String message) {
+        this.message = message;
+    }
+
+    public JSONCustomExceptionSchema(String message, String details) {
+        this.message = message;
+        this.details = details;
+    }
+
+    public JSONCustomExceptionSchema(String message, String details, String nextAction) {
+        this.message = message;
+        this.details = details;
+        this.nextAction = nextAction;
+    }
+
     public JSONCustomExceptionSchema(String message, String details, String nextAction, String support) {
         this.message = message;
         this.details = details;

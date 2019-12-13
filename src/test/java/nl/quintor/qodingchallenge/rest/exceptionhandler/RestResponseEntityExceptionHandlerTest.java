@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.rest.exceptionhandler;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.rest.customexception.CustomException;
+import nl.quintor.qodingchallenge.rest.customexception.CustomExceptionWrapper;
 import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
@@ -41,7 +42,7 @@ class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    void handleCampaignAlreadyExistsExceptionTest() throws NoSuchMethodException {
+    void handleCampaignAlreadyExistsExceptionTest() {
         var expectedResponse = handler.handleCustomExceptionInternalServerError(new CampaignAlreadyExistsException(messageForException, "", ""), webRequest);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, expectedResponse.getStatusCode());
     }
@@ -77,9 +78,8 @@ class RestResponseEntityExceptionHandlerTest {
     @Test
     void returnsCorrectSchema() {
         final String messageForSupport = "https://quintor.nl/";
-        final CustomException customException = new CustomException(messageForException, "", "");
+        final CustomException customException = new CustomExceptionWrapper(messageForException, "", "");
         ResponseEntity<Object> response = handler.handleCustomExceptionInternalServerError(customException, webRequest);
-
         JSONCustomExceptionSchema exceptionResponse =
                 new JSONCustomExceptionSchema(
                         messageForException, "", "", messageForSupport

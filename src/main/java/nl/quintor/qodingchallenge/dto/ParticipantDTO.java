@@ -30,7 +30,7 @@ public class ParticipantDTO {
         this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
-        AmountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
+        this.AmountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
     public int getParticipantID() {
