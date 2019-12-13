@@ -5,6 +5,7 @@ import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException
 import nl.quintor.qodingchallenge.rest.customexception.CustomException;
 import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
+import nl.quintor.qodingchallenge.service.exception.CouldNotAddParticipantException;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.slf4j.Logger;
@@ -59,5 +60,17 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 );
         logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({
+            CouldNotAddParticipantException.class
+    })
+    public final ResponseEntity<Object> handleCustomExceptionBadRequest(CustomException ex, WebRequest webRequest) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
+                );
+        logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

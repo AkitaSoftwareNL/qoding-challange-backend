@@ -85,5 +85,65 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         }
         return participants;
     }
+
+    @Override
+    public void addParticipant(ParticipantDTO participantDTO) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statementParticipant = connection.prepareStatement("INSERT INTO PARTICIPANT VALUES (?)");
+            PreparedStatement statementParticipantOfCampaign = connection.prepareStatement("INSERT INTO PARTICIPANT_OF_CAMPAIGN (participantid, campaign_id) VALUES (?, ?)");
+            PreparedStatement statementConference = connection.prepareStatement("INSERT INTO CONFERENCE (participantid, firstname, insertion, lastname, email, phonenumber) VALUES (?,?,?,?,?,?)");
+
+            statementParticipant.setInt(1, participantDTO.getParticipantID());
+
+            statementParticipantOfCampaign.setInt(1, participantDTO.getParticipantID());
+            statementParticipantOfCampaign.setInt(2, participantDTO.getCampaignID());
+
+            statementConference.setInt(1, participantDTO.getParticipantID());
+            statementConference.setString(2, participantDTO.getFirstname());
+            statementConference.setString(3, participantDTO.getInsertion());
+            statementConference.setString(4, participantDTO.getLastname());
+            statementConference.setString(5, participantDTO.getEmail());
+            statementConference.setString(6, participantDTO.getPhonenumber());
+
+            statementParticipant.executeUpdate();
+            statementParticipantOfCampaign.executeUpdate();
+            statementConference.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+
+    @Override
+    public boolean participantAlreadyExists(ParticipantDTO participantDTO) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT poc.participantID\n" +
+                            "FROM PARTICIPANT_OF_CAMPAIGN as poc INNER JOIN CONFERENCE as C\n" +
+                            "ON poc.participantID = C.participantID\n" +
+                            "WHERE poc.campaign_ID = ? AND\n" +
+                            "c.firstname = ? AND\n" +
+                            "(c.insertion IS NULL OR c.insertion = ?) AND\n" +
+                            "c.lastname = ? AND\n" +
+                            "(c.email IS NULL OR c.email = ?) AND \n" +
+                            "(c.phonenumber IS NULL OR c.phonenumber = ?)"
+            );
+            statement.setInt(1, participantDTO.getCampaignID());
+            statement.setString(2, participantDTO.getFirstname());
+            statement.setString(3, participantDTO.getInsertion());
+            statement.setString(4, participantDTO.getLastname());
+            statement.setString(5, participantDTO.getEmail());
+            statement.setString(6, participantDTO.getPhonenumber());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return false;
+    }
 }
 

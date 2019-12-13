@@ -12,4 +12,8 @@ public interface ParticipantDAO {
     void addParticipantToCampaign(int campaignID, int participantID) throws SQLException;
 
     List<ParticipantDTO> getParticipantsPerCampaign(int campaignID) throws SQLException;
+
+    void addParticipant(ParticipantDTO participantDTO) throws SQLException;
+
+    boolean participantAlreadyExists(ParticipantDTO participantDTO) throws SQLException;
 }
