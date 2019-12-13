@@ -142,11 +142,11 @@ public class QuestionDAOImpl implements QuestionDAO {
         while (resultSet.next()) {
             questions.add(
                     new QuestionDTO(
-                            resultSet.getInt(1),
-                            resultSet.getString(3),
-                            resultSet.getString(2),
-                            resultSet.getString(4),
-                            resultSet.getString(5)
+                            resultSet.getInt("QUESTIONID"),
+                            resultSet.getString("CATEGORY_NAME"),
+                            resultSet.getString("QUESTION"),
+                            resultSet.getString("QUESTION_TYPE"),
+                            resultSet.getString("ATTACHMENT")
                     ));
         }
         return questions;
@@ -190,9 +190,9 @@ public class QuestionDAOImpl implements QuestionDAO {
                 question.setQuestionID(resultSet.getInt("QUESTIONID"));
                 question.setQuestionType(resultSet.getString("CATEGORY_NAME"));
                 question.setQuestion(resultSet.getString("QUESTION"));
-                question.setAttachment(resultSet.getString("STATE"));
+                question.setStateID(resultSet.getInt("STATE"));
                 question.setGivenAnswer(resultSet.getString("QUESTION_TYPE"));
-                question.setStateID(resultSet.getInt("ATTACHMENT"));
+                question.setAttachment(resultSet.getString("ATTACHMENT"));
             } else {
                 throw new NoQuestionFoundException();
             }
