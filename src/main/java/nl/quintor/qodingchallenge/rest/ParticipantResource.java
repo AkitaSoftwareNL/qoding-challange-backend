@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 
 @RestController
-public class ParticipantResourceImpl {
+public class ParticipantResource {
 
     private ParticipantService participantService;
 

@@ -14,12 +14,12 @@ import static org.mockito.Mockito.verify;
 
 class ParticipantResourceTest {
 
-    private ParticipantResourceImpl sut;
+    private ParticipantResource sut;
     private ParticipantServiceImpl participantServiceMock;
 
     @BeforeEach
     void setUp() {
-        this.sut = new ParticipantResourceImpl();
+        this.sut = new ParticipantResource();
 
         this.participantServiceMock = mock(ParticipantServiceImpl.class);
         this.sut.setParticipantService(participantServiceMock);
