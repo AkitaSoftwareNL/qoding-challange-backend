@@ -26,12 +26,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({SQLException.class})
     public ResponseEntity<Object> handleNotFoundStatus(Exception e, WebRequest request) {
-        JSONCustomExceptionSchema exceptionRespone =
+        JSONCustomExceptionSchema exceptionResponse =
                 new JSONCustomExceptionSchema(
                         e.getMessage()
                 );
         logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>(exceptionRespone, new HttpHeaders(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({
