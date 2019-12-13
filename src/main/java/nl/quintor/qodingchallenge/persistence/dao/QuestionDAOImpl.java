@@ -28,7 +28,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT questionid, CATEGORY_NAME, question, QUESTION_TYPE, attachment FROM Question WHERE category_name = ? AND state != 0 ORDER BY RAND() LIMIT ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
             statement.setString(1, category);
             statement.setInt(2, limit);
             questions = createQuestionDTO(statement);
@@ -49,7 +49,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 possibleAnswers.add(new PossibleAnswerDTO(
-                        resultSet.getString(1), 0));
+                        resultSet.getString("ANSWER_OPTIONS"), 0));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -81,11 +81,11 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT answer_options  FROM multiple_choice_question WHERE questionID = ? AND is_correct = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS  FROM multiple_choice_question WHERE QUESTIONID = ? AND IS_CORRECT = 1");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                correctAnswer = Optional.ofNullable(resultSet.getString(1));
+                correctAnswer = Optional.ofNullable(resultSet.getString("ANSWER_OPTIONS"));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -103,7 +103,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("insert into question(category_name, question, question_type, attachment) values (?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO question (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
             statement.setString(1, JAVA);
             statement.setString(2, question.getQuestion());
             statement.setString(3, question.getQuestionType());
@@ -120,7 +120,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT questionid, CATEGORY_NAME, question, QUESTION_TYPE, attachment FROM question WHERE STATE = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE STATE = 1");
             questions = createQuestionDTO(statement);
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -147,11 +147,11 @@ public class QuestionDAOImpl implements QuestionDAO {
         while (resultSet.next()) {
             questions.add(
                     new QuestionDTO(
-                            resultSet.getInt(1),
-                            resultSet.getString(3),
-                            resultSet.getString(2),
-                            resultSet.getString(4),
-                            resultSet.getString(5)
+                            resultSet.getInt("QUESTIONID"),
+                            resultSet.getString("CATEGORY_NAME"),
+                            resultSet.getString("QUESTION"),
+                            resultSet.getString("QUESTION_TYPE"),
+                            resultSet.getString("ATTACHMENT")
                     ));
         }
         return questions;
@@ -163,18 +163,18 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("select * from given_answer where CAMPAIGN_ID = ? and STATEID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM given_answer WHERE CAMPAIGN_ID = ? AND STATEID = ?");
             statement.setInt(1, campaignId);
             statement.setInt(2, questionState);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 givenAnswers.add(new GivenAnswerDTO(
-                        resultSet.getInt(1),
-                        resultSet.getInt(2),
-                        resultSet.getInt(3),
-                        resultSet.getInt(4),
-                        resultSet.getString(5)));
+                        resultSet.getInt("QUESTIONID"),
+                        resultSet.getInt("PARTICIPANTID"),
+                        resultSet.getInt("CAMPAIGN_ID"),
+                        resultSet.getInt("STATEID"),
+                        resultSet.getString("GIVEN_ANSWER")));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -188,16 +188,16 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("select * from question where questionid = ?");
-            statement.setInt(1, questionID);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question WHERE QUESTIONID = ?");
+            statement.setInt(1, questionid);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                question.setQuestionID(resultSet.getInt(1));
-                question.setQuestionType(resultSet.getString(2));
-                question.setQuestion(resultSet.getString(3));
-                question.setAttachment(resultSet.getString(4));
-                question.setGivenAnswer(resultSet.getString(5));
-                question.setStateID(resultSet.getInt(6));
+                question.setQuestionID(resultSet.getInt("QUESTIONID"));
+                question.setQuestionType(resultSet.getString("CATEGORY_NAME"));
+                question.setQuestion(resultSet.getString("QUESTION"));
+                question.setStateID(resultSet.getInt("STATE"));
+                question.setGivenAnswer(resultSet.getString("QUESTION_TYPE"));
+                question.setAttachment(resultSet.getString("ATTACHMENT"));
             } else {
                 throw new NoQuestionFoundException(
                         "No question has been found",
@@ -216,7 +216,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("update given_answer set STATEID = ? where QUESTIONID = ? and CAMPAIGN_ID = ? and PARTICIPANTID = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE given_answer SET STATEID = ? WHERE QUESTIONID = ? AND CAMPAIGN_ID = ? AND PARTICIPANTID = ?");
             statement.setInt(1, givenAnswerDTO.getStateId());
             statement.setInt(2, givenAnswerDTO.getQuestionId());
             statement.setInt(3, givenAnswerDTO.getCampaignId());
