@@ -13,7 +13,7 @@ public interface ParticipantDAO {
 
     List<ParticipantDTO> getParticipantsPerCampaign(int campaignID) throws SQLException;
 
-    void addParticipant(ParticipantDTO participantDTO) throws SQLException;
+    void addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException;
 
-    boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO) throws SQLException;
+    boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException;
 }

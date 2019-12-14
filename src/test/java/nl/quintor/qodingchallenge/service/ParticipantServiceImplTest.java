@@ -13,6 +13,7 @@ import static org.mockito.Mockito.*;
 
 class ParticipantServiceImplTest {
 
+    private final int CAMPAIGN_ID = 1;
     private ParticipantServiceImpl sut;
     private ParticipantDAOImpl participantDAOMock;
 
@@ -36,12 +37,12 @@ class ParticipantServiceImplTest {
     void participantHasAlreadyParticipatedInCampaignCallsParticipantAlreadyExists() throws SQLException {
         sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
-        verify(participantDAOMock).participantHasAlreadyParticipatedInCampaign(getParticipantDTO());
+        verify(participantDAOMock).participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), CAMPAIGN_ID);
     }
 
     @Test
     void participantHasAlreadyParticipatedInCampaignThrowsCouldNotAddParticipantException() throws SQLException {
-        when(participantDAOMock.participantHasAlreadyParticipatedInCampaign(getParticipantDTO())).thenReturn(true);
+        when(participantDAOMock.participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), CAMPAIGN_ID)).thenReturn(true);
         assertThrows(CouldNotAddParticipantException.class, () -> sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO()));
     }
 
@@ -49,10 +50,19 @@ class ParticipantServiceImplTest {
     void participantHasAlreadyParticipatedInCampaignCallsParticipantHasAlreadyParticipatedInCampaignParticipantDAO() throws SQLException {
         sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
-        verify(participantDAOMock).addParticipant(getParticipantDTO());
+        verify(participantDAOMock).addParticipant(getParticipantDTO(), CAMPAIGN_ID);
     }
 
     private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder().build(1, 1, 100000, "name", null, "name", "name@gmail.com", "06923934");
+        return new ParticipantDTO.Builder()
+                .id(1)
+                .participatedCampaignID(CAMPAIGN_ID)
+                .timeOf(100000)
+                .firstname("name")
+                .insertion(null)
+                .lastname("name")
+                .email("name@gmail.com")
+                .hasPhoneNumber("062083423")
+                .build();
     }
 }

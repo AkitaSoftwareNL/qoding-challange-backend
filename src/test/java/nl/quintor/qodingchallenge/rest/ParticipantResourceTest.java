@@ -40,6 +40,15 @@ class ParticipantResourceTest {
     }
 
     private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder().build(1, 1, 100000, "name", null, "name", "name@gmail.com", "06923934");
+        return new ParticipantDTO.Builder()
+                .id(1)
+                .participatedCampaignID(1)
+                .timeOf(100000)
+                .firstname("name")
+                .insertion(null)
+                .lastname("name")
+                .email("name@gmail.com")
+                .hasPhoneNumber("062083423")
+                .build();
     }
 }

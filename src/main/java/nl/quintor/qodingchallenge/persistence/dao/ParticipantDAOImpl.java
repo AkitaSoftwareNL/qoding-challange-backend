@@ -68,16 +68,16 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 participants.add(
-                        new ParticipantDTO.Builder().build(
-                                resultSet.getInt("PARTICIPANTID"),
-                                resultSet.getInt("CAMPAIGN_ID"),
-                                resultSet.getLong("TIME_SPEND"),
-                                resultSet.getString("FIRSTNAME"),
-                                resultSet.getString("INSERTION"),
-                                resultSet.getString("LASTNAME"),
-                                resultSet.getString("EMAIL"),
-                                resultSet.getString("PHONENUMBER")
-                        )
+                        new ParticipantDTO.Builder()
+                                .id(resultSet.getInt("PARTICIPANTID"))
+                                .participatedCampaignID(resultSet.getInt("CAMPAIGN_ID"))
+                                .timeOf(resultSet.getLong("TIME_SPEND"))
+                                .firstname(resultSet.getString("FIRSTNAME"))
+                                .insertion(resultSet.getString("INSERTION"))
+                                .lastname(resultSet.getString("LASTNAME"))
+                                .email(resultSet.getString("EMAIL"))
+                                .hasPhoneNumber(resultSet.getString("PHONENUMBER"))
+                                .build()
                 );
             }
         } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     }
 
     @Override
-    public void addParticipant(ParticipantDTO participantDTO) throws SQLException {
+    public void addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
@@ -98,7 +98,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             statementParticipant.setInt(1, participantDTO.getParticipantID());
 
             statementParticipantOfCampaign.setInt(1, participantDTO.getParticipantID());
-            statementParticipantOfCampaign.setInt(2, participantDTO.getCampaignID());
+            statementParticipantOfCampaign.setInt(2, campaignID);
 
             statementConference.setInt(1, participantDTO.getParticipantID());
             statementConference.setString(2, participantDTO.getFirstname());
@@ -117,7 +117,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
 
 
     @Override
-    public boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO) throws SQLException {
+    public boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
@@ -132,7 +132,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                             "(c.email IS NULL OR c.email = ?) AND \n" +
                             "(c.phonenumber IS NULL OR c.phonenumber = ?)"
             );
-            statement.setInt(1, participantDTO.getCampaignID());
+            statement.setInt(1, campaignID);
             statement.setString(2, participantDTO.getFirstname());
             statement.setString(3, participantDTO.getInsertion());
             statement.setString(4, participantDTO.getLastname());
