@@ -14,19 +14,6 @@ public class ParticipantDTO {
     private String phonenumber;
     private int amountOfRightAnsweredQuestions;
 
-    public static class Builder {
-        private int amountOfRigthAnsweredQuestions;
-
-        public Builder AmountOfRightAnsweredQuestions(int amountOfRightAnsweredQuestions) {
-            this.amountOfRigthAnsweredQuestions = amountOfRightAnsweredQuestions;
-            return this;
-        }
-
-        public ParticipantDTO build(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber) {
-            return new ParticipantDTO(this, participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber);
-        }
-    }
-
     private ParticipantDTO(Builder builder, int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber) {
         this.participantID = participantID;
         this.campaignID = campaignID;
@@ -130,5 +117,18 @@ public class ParticipantDTO {
     @Override
     public int hashCode() {
         return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, amountOfRightAnsweredQuestions);
+    }
+
+    public static class Builder {
+        private int amountOfRigthAnsweredQuestions;
+
+        public Builder AmountOfRightAnsweredQuestions(int amountOfRightAnsweredQuestions) {
+            this.amountOfRigthAnsweredQuestions = amountOfRightAnsweredQuestions;
+            return this;
+        }
+
+        public ParticipantDTO build(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber) {
+            return new ParticipantDTO(this, participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber);
+        }
     }
 }
