@@ -14,10 +14,20 @@ public class ParticipantDTO {
     private String phonenumber;
     private int amountOfRightAnsweredQuestions;
 
-    public ParticipantDTO() {
+    public static class Builder {
+        private int amountOfRigthAnsweredQuestions;
+
+        public Builder AmountOfRightAnsweredQuestions(int amountOfRightAnsweredQuestions) {
+            this.amountOfRigthAnsweredQuestions = amountOfRightAnsweredQuestions;
+            return this;
+        }
+
+        public ParticipantDTO build(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber) {
+            return new ParticipantDTO(this, participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber);
+        }
     }
 
-    public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber) {
+    private ParticipantDTO(Builder builder, int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber) {
         this.participantID = participantID;
         this.campaignID = campaignID;
         this.timeInMillis = timeInMillis;
@@ -26,18 +36,7 @@ public class ParticipantDTO {
         this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
-    }
-
-    public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAnsweredQuestions) {
-        this.participantID = participantID;
-        this.campaignID = campaignID;
-        this.timeInMillis = timeInMillis;
-        this.firstname = firstname;
-        this.insertion = insertion;
-        this.lastname = lastname;
-        this.email = email;
-        this.phonenumber = phonenumber;
-        this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
+        this.amountOfRightAnsweredQuestions = builder.amountOfRigthAnsweredQuestions;
     }
 
     public int getParticipantID() {

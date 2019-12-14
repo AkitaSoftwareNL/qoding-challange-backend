@@ -68,7 +68,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 participants.add(
-                        new ParticipantDTO(
+                        new ParticipantDTO.Builder().build(
                                 resultSet.getInt("PARTICIPANTID"),
                                 resultSet.getInt("CAMPAIGN_ID"),
                                 resultSet.getLong("TIME_SPEND"),

@@ -81,10 +81,10 @@ class ParticipantDAOImplTest {
     }
 
     private ParticipantDTO getExistingParticipant() {
-        return new ParticipantDTO(1, 1, 10000, "Gray", null, "Snare", "gsnare0@xinhuanet.com", "2219773471");
+        return new ParticipantDTO.Builder().build(1, 1, 10000, "Gray", null, "Snare", "gsnare0@xinhuanet.com", "2219773471");
     }
 
     private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO(20, 1, 100000, "name", null, "name", "name@gmail.com", "06923934");
+        return new ParticipantDTO.Builder().build(20, 1, 100000, "name", null, "name", "name@gmail.com", "06923934");
     }
 }

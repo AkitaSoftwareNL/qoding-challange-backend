@@ -101,7 +101,7 @@ class ReportResourceTest {
     }
 
     private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO(1, 2, 420000, "jan", "van", "peter", "ik@gmail.com", "069839428", 4);
+        return new ParticipantDTO.Builder().AmountOfRightAnsweredQuestions(4).build(1, 2, 420000, "jan", "van", "peter", "ik@gmail.com", "069839428");
     }
 
     private List<ParticipantDTO> getListParticipant() {

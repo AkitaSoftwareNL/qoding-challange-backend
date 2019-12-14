@@ -53,6 +53,6 @@ class ParticipantServiceImplTest {
     }
 
     private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO(1, 1, 100000, "name", null, "name", "name@gmail.com", "06923934");
+        return new ParticipantDTO.Builder().build(1, 1, 100000, "name", null, "name", "name@gmail.com", "06923934");
     }
 }

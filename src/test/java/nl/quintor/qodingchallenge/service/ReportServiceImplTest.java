@@ -137,7 +137,7 @@ class ReportServiceImplTest {
 
     private List<ParticipantDTO> getRankedParticipants() {
         List<ParticipantDTO> list = new ArrayList<>();
-        list.add(new ParticipantDTO(1, campaignId, 290, "Name", "", "lastName", "mail", "telefoonnummer", 1));
+        list.add(new ParticipantDTO.Builder().AmountOfRightAnsweredQuestions(1).build(1, campaignId, 290, "Name", "", "lastName", "mail", "telefoonnummer"));
         return list;
     }
 
