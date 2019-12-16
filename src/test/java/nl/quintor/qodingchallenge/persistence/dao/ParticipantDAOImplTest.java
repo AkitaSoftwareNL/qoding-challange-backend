@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
+import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,26 +81,30 @@ class ParticipantDAOImplTest {
         assertFalse(sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), campaignID));
     }
 
-    private ParticipantDTO getExistingParticipant() {
-        final int CAMPAIGN_ID = 1;
-        return new ParticipantDTO.Builder("Gray", "Snare")
-                .id(1)
-                .participatedCampaignID(CAMPAIGN_ID)
-                .timeOf(100000)
-                .insertion(null)
-                .email("gsnare0@xinhuanet.com")
-                .phonenumber("2219773471")
-                .build();
+    private ParticipantDTO getExistingParticipant() throws SQLException {
+        return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+                    participantDTOBuilder.firstname = "Gray";
+                    participantDTOBuilder.lastname = "Snare";
+                    participantDTOBuilder.participantID = 1;
+                    participantDTOBuilder.campaignID = 1;
+                    participantDTOBuilder.timeInMillis = 100000;
+                    participantDTOBuilder.email = "gsnare0@xinhuanet.com";
+                    participantDTOBuilder.phonenumber = "2219773471";
+                }
+        ).build();
     }
 
-    private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder("name", "name")
-                .id(20)
-                .participatedCampaignID(1)
-                .timeOf(100000)
-                .insertion(null)
-                .email("name@gmail.com")
-                .phonenumber("062083423")
-                .build();
+
+    private ParticipantDTO getParticipantDTO() throws SQLException {
+        return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+                    participantDTOBuilder.firstname = "name";
+                    participantDTOBuilder.lastname = "name";
+                    participantDTOBuilder.participantID = 20;
+                    participantDTOBuilder.campaignID = 1;
+                    participantDTOBuilder.timeInMillis = 10000;
+                    participantDTOBuilder.email = "name@gmail.com";
+                    participantDTOBuilder.phonenumber = "0693873";
+                }
+        ).build();
     }
 }

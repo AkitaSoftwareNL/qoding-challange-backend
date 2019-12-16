@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.rest;
 
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
+import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import nl.quintor.qodingchallenge.service.ParticipantServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,14 +40,16 @@ class ParticipantResourceTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
-    private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder("name", "name")
-                .id(1)
-                .participatedCampaignID(1)
-                .timeOf(100000)
-                .insertion(null)
-                .email("name@gmail.com")
-                .phonenumber("062083423")
-                .build();
+    private ParticipantDTO getParticipantDTO() throws SQLException {
+        return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+                    participantDTOBuilder.firstname = "name";
+                    participantDTOBuilder.lastname = "name";
+                    participantDTOBuilder.participantID = 1;
+                    participantDTOBuilder.campaignID = 1;
+                    participantDTOBuilder.timeInMillis = 10000;
+                    participantDTOBuilder.email = "name@gmail.com";
+                    participantDTOBuilder.phonenumber = "0693873";
+                }
+        ).build();
     }
 }

@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class ParticipantDTO {
     private int participantID;
@@ -16,16 +17,16 @@ public class ParticipantDTO {
     public ParticipantDTO() {
     }
 
-    private ParticipantDTO(Builder builder) {
-        this.participantID = builder.participantID;
-        this.campaignID = builder.campaignID;
-        this.timeInMillis = builder.timeInMillis;
-        this.firstname = builder.firstname;
-        this.insertion = builder.insertion;
-        this.lastname = builder.lastname;
-        this.email = builder.email;
-        this.phonenumber = builder.phonenumber;
-        this.amountOfRightAnsweredQuestions = builder.amountOfRightAnsweredQuestions;
+    public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAnsweredQuestions) {
+        this.participantID = participantID;
+        this.campaignID = campaignID;
+        this.timeInMillis = timeInMillis;
+        this.firstname = firstname;
+        this.insertion = insertion;
+        this.lastname = lastname;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
     public int getParticipantID() {
@@ -83,61 +84,5 @@ public class ParticipantDTO {
     @Override
     public int hashCode() {
         return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, amountOfRightAnsweredQuestions);
-    }
-
-    public static class Builder {
-        private final String firstname;
-        private final String lastname;
-        private int participantID;
-        private int campaignID;
-        private long timeInMillis;
-        private String insertion;
-        private String email;
-        private String phonenumber;
-        private int amountOfRightAnsweredQuestions;
-
-        public Builder(String firstname, String lastname) {
-            this.firstname = firstname;
-            this.lastname = lastname;
-        }
-
-        public Builder id(int participantID) {
-            this.participantID = participantID;
-            return this;
-        }
-
-        public Builder participatedCampaignID(int campaignID) {
-            this.campaignID = campaignID;
-            return this;
-        }
-
-        public Builder timeOf(long timeInMillis) {
-            this.timeInMillis = timeInMillis;
-            return this;
-        }
-
-        public Builder insertion(String insertion) {
-            this.insertion = insertion;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Builder phonenumber(String phonenumber) {
-            this.phonenumber = phonenumber;
-            return this;
-        }
-
-        public Builder answeredQuestionsCorrect(int amountOfRightAnsweredQuestions) {
-            this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
-            return this;
-        }
-
-        public ParticipantDTO build() {
-            return new ParticipantDTO(this);
-        }
     }
 }

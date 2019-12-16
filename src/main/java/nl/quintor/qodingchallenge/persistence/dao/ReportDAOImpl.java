@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerDTO;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
+import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -31,14 +32,18 @@ public class ReportDAOImpl implements ReportDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 participants.add(
-                        new ParticipantDTO.Builder(resultSet.getString("FIRSTNAME"), resultSet.getString("LASTNAME"))
-                                .id(resultSet.getInt("PARTICIPANTID"))
-                                .participatedCampaignID(resultSet.getInt("CAMPAIGN_ID"))
-                                .timeOf(resultSet.getLong("TIME_SPEND"))
-                                .insertion(resultSet.getString("INSERTION"))
-                                .email(resultSet.getString("EMAIL"))
-                                .phonenumber(resultSet.getString("PHONENUMBER"))
-                                .build()
+                        new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+                                    participantDTOBuilder.firstname = resultSet.getString("FIRSTNAME");
+                                    participantDTOBuilder.lastname = resultSet.getString("LASTNAME");
+                                    participantDTOBuilder.participantID = resultSet.getInt("PARTICIPANTID");
+                                    participantDTOBuilder.campaignID = resultSet.getInt("CAMPAIGN_ID");
+                                    participantDTOBuilder.timeInMillis = resultSet.getLong("TIME_SPEND");
+                                    participantDTOBuilder.insertion = resultSet.getString("INSERTION");
+                                    participantDTOBuilder.email = resultSet.getString("EMAIL");
+                                    participantDTOBuilder.phonenumber = resultSet.getString("PHONENUMBER");
+                                    participantDTOBuilder.amountOfRightAnsweredQuestions = resultSet.getInt("CORRECT");
+                                }
+                        ).build()
                 );
             }
         } catch (SQLException e) {
