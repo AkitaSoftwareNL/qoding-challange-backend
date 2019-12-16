@@ -6,11 +6,20 @@ import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.HttpRequestUtils;
 import nl.quintor.qodingchallenge.service.exception.ValidationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 public class CodingStrategyImpl extends QuestionStrategy {
 
+    private HttpRequestUtils requestUtils;
+
     public CodingStrategyImpl(QuestionDAO questionDAO) {
         super(questionDAO, "coding");
+        requestUtils = new HttpRequestUtils();
+    }
+
+    public void setRequestUtils(HttpRequestUtils requestUtils) {
+        this.requestUtils = requestUtils;
     }
 
     @Override
@@ -18,19 +27,21 @@ public class CodingStrategyImpl extends QuestionStrategy {
         final int CORRECT = 2;
         final int INCORRECT = 3;
         try {
-            HttpRequestUtils requestUtils = new HttpRequestUtils();
-            TestResultDTO result = (TestResultDTO) requestUtils.post("http://localhost:8090/validator/java/test", new CodingQuestionDTO(10, "public class Code {\n    public static boolean equals(int a, int b) {\n        return a == b;\n    }\n}", "import org.junit.jupiter.api.Assertions;\nimport org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Test;\n\npublic class TestCode {\n\n    private Code sut;\n\n    @BeforeEach\n    void setUp() {\n        sut = new Code();\n    }\n\n    @Test\n    void Test1() {\n        Assertions.assertTrue(sut.equals(1, 1));\n    }\n\n    @Test\n    void Test2() {\n        Assertions.assertTrue(sut.equals(2, 2));\n    }\n}\n"), TestResultDTO.class).getBody();
-            if (result != null && result.getTotalTestsFailed() == 0) {
-                question.setStateID(CORRECT);
-            } else {
+            ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", CodingQuestionDTO.mapFrom(question), TestResultDTO.class);
+            TestResultDTO testResult = (TestResultDTO) result.getBody();
+
+            if (result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
+                    testResult == null) {
                 throw new ValidationException();
+            } else {
+                if (testResult.getTotalTestsFailed() > 0) {
+                    question.setStateID(INCORRECT);
+                } else {
+                    question.setStateID(CORRECT);
+                }
             }
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().contains("417")) {
-                question.setStateID(INCORRECT);
-            } else {
-                throw new ValidationException();
-            }
+            throw new ValidationException();
         }
     }
 }

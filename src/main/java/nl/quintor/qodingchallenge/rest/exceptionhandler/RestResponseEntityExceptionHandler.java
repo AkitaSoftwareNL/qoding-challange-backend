@@ -7,6 +7,7 @@ import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema
 import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
+import nl.quintor.qodingchallenge.service.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +37,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({
             CampaignAlreadyExistsException.class,
-            EmptyQuestionException.class
+            EmptyQuestionException.class,
+            ValidationException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =

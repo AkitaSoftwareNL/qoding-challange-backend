@@ -24,6 +24,10 @@ public class CodingQuestionDTO {
         this.test = test;
     }
 
+    public static CodingQuestionDTO mapFrom(QuestionDTO questionDTO) {
+        return new CodingQuestionDTO(10, "public class Code {\n    public static boolean equals(int a, int b) {\n        return a == b;\n    }\n}", "import org.junit.jupiter.api.Assertions;\nimport org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Test;\n\npublic class TestCode {\n\n    private Code sut;\n\n    @BeforeEach\n    void setUp() {\n        sut = new Code();\n    }\n\n    @Test\n    void Test1() {\n        Assertions.assertTrue(sut.equals(1, 1));\n    }\n\n    @Test\n    void Test2() {\n        Assertions.assertTrue(sut.equals(2, 2));\n    }\n}\n");
+    }
+
     public long getMaxExecutionTime() {
         return maxExecutionTime;
     }
