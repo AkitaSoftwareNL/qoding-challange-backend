@@ -13,9 +13,9 @@ public class QuestionDTOBuilder {
     public String categoryType;
     public String questionType;
     public String attachment;
-    private List<PossibleAnswerDTO> possibleAnswers;
     public String givenAnswer;
     public int stateID;
+    private List<PossibleAnswerDTO> possibleAnswers;
 
     public QuestionDTOBuilder with(
             Builder<QuestionDTOBuilder> builder) throws SQLException {

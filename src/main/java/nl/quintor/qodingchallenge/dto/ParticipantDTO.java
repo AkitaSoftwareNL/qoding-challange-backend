@@ -1,7 +1,6 @@
 package nl.quintor.qodingchallenge.dto;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class ParticipantDTO {
     private String participantID;

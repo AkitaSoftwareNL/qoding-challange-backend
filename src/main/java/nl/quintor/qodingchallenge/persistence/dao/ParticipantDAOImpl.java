@@ -99,7 +99,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             PreparedStatement statementConference = connection.prepareStatement("INSERT INTO CONFERENCE (participantid, firstname, insertion, lastname, email, phonenumber) VALUES (?,?,?,?,?,?)");
 
             statementParticipantOfCampaign.setInt(1, campaignID);
-            statementParticipantOfCampaign.setString(2,participantID);
+            statementParticipantOfCampaign.setString(2, participantID);
 
             statementConference.setString(1, participantID);
             statementConference.setString(2, participantDTO.getFirstname());
