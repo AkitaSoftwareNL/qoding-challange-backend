@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class ReportServiceImplTest {
 
     private final int campaignId = 1;
-    private final int participantId = 1;
+    private final String participantId = "1";
     private final String campaignName = "Principal U.S. Small Cap Index ETF";
 
     private ReportDAO reportDAOMock;
@@ -141,7 +141,7 @@ class ReportServiceImplTest {
         list.add(new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "Gray";
                     participantDTOBuilder.lastname = "Snare";
-                    participantDTOBuilder.participantID = 1;
+                    participantDTOBuilder.participantID = "1";
                     participantDTOBuilder.campaignID = 1;
                     participantDTOBuilder.timeInMillis = 100000;
                     participantDTOBuilder.email = "gsnare0@xinhuanet.com";

@@ -208,8 +208,8 @@ class QuestionServiceImplTest {
 
     private List<GivenAnswerDTO> getAnswers() {
         List<GivenAnswerDTO> answers = new ArrayList<>();
-        answers.add(0, new GivenAnswerDTO(1, 1, 1, 1, "A"));
-        answers.add(1, new GivenAnswerDTO(2, 2, 2, 1, "B"));
+        answers.add(0, new GivenAnswerDTO(1, "1", 1, 1, "A"));
+        answers.add(1, new GivenAnswerDTO(2, "2", 2, 1, "B"));
         return answers;
     }
 
@@ -225,7 +225,7 @@ class QuestionServiceImplTest {
     }
 
     private QuestionCollection getQuestionCollection() throws SQLException {
-        return new QuestionCollection(1, campaignID, "test", getQuestionlist());
+        return new QuestionCollection("1", campaignID, "test", getQuestionlist());
     }
 
     private QuestionDTO getOpenQuestion() throws SQLException {

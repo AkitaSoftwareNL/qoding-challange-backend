@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
@@ -18,7 +19,7 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 public class ParticipantDAOImpl implements ParticipantDAO {
 
     @Override
-    public AnswerCollection getFirstAndLastname(int participantID) throws SQLException {
+    public AnswerCollection getFirstAndLastname(String participantID) throws SQLException {
         AnswerCollection answerCollection = new AnswerCollection();
         try (
                 Connection connection = getConnection()
@@ -26,7 +27,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT firstname, INSERTION, lastname FROM conference WHERE participantID = ?"
             );
-            statement.setInt(1, participantID);
+            statement.setString(1, participantID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             answerCollection.setFirstname(resultSet.getString(1));
@@ -39,7 +40,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     }
 
     @Override
-    public void addParticipantToCampaign(int campaignID, int participantID) throws SQLException {
+    public void addParticipantToCampaign(int campaignID, String participantID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
@@ -47,7 +48,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                     "INSERT INTO participant_of_campaign(CAMPAIGN_ID, PARTICIPANTID) VALUES (?,?)"
             );
             statement.setInt(1, campaignID);
-            statement.setInt(2, participantID);
+            statement.setString(2, participantID);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -72,7 +73,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                         new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                                     participantDTOBuilder.firstname = resultSet.getString("FIRSTNAME");
                                     participantDTOBuilder.lastname = resultSet.getString("LASTNAME");
-                                    participantDTOBuilder.participantID = resultSet.getInt("PARTICIPANTID");
+                                    participantDTOBuilder.participantID = resultSet.getString("PARTICIPANTID");
                                     participantDTOBuilder.campaignID = resultSet.getInt("CAMPAIGN_ID");
                                     participantDTOBuilder.timeInMillis = resultSet.getLong("TIME_SPEND");
                                     participantDTOBuilder.insertion = resultSet.getString("INSERTION");
@@ -90,26 +91,23 @@ public class ParticipantDAOImpl implements ParticipantDAO {
 
     @Override
     public void addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException {
+        final String participantID = UUID.randomUUID().toString();
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statementParticipant = connection.prepareStatement("INSERT INTO PARTICIPANT VALUES (?)");
-            PreparedStatement statementParticipantOfCampaign = connection.prepareStatement("INSERT INTO PARTICIPANT_OF_CAMPAIGN (participantid, campaign_id) VALUES (?, ?)");
+            PreparedStatement statementParticipantOfCampaign = connection.prepareStatement("INSERT INTO PARTICIPANT_OF_CAMPAIGN (campaign_id, PARTICIPANTID) VALUES (?, ?)");
             PreparedStatement statementConference = connection.prepareStatement("INSERT INTO CONFERENCE (participantid, firstname, insertion, lastname, email, phonenumber) VALUES (?,?,?,?,?,?)");
 
-            statementParticipant.setInt(1, participantDTO.getParticipantID());
+            statementParticipantOfCampaign.setInt(1, campaignID);
+            statementParticipantOfCampaign.setString(2,participantID);
 
-            statementParticipantOfCampaign.setInt(1, participantDTO.getParticipantID());
-            statementParticipantOfCampaign.setInt(2, campaignID);
-
-            statementConference.setInt(1, participantDTO.getParticipantID());
+            statementConference.setString(1, participantID);
             statementConference.setString(2, participantDTO.getFirstname());
             statementConference.setString(3, participantDTO.getInsertion());
             statementConference.setString(4, participantDTO.getLastname());
             statementConference.setString(5, participantDTO.getEmail());
             statementConference.setString(6, participantDTO.getPhonenumber());
 
-            statementParticipant.executeUpdate();
             statementParticipantOfCampaign.executeUpdate();
             statementConference.executeUpdate();
         } catch (SQLException e) {

@@ -39,12 +39,12 @@ class ParticipantDAOImplTest {
 
     @Test
     void getFirstAndLastNameReturnsAnAnswerCollectionWithoutAnswers() throws SQLException {
-        assertEquals(new AnswerCollection("Gray", null, "Snare", null, 0, null), sut.getFirstAndLastname(1));
+        assertEquals(new AnswerCollection("Gray", null, "Snare", null, 0, null), sut.getFirstAndLastname("1"));
     }
 
     @Test
     void addParticipantToCampaignAddsParticipantToCampaign() throws SQLException {
-        final int participantID = 15;
+        final String participantID = "15";
 
         int participantLengthBeforeAdd = sut.getParticipantsPerCampaign(1).size();
 
@@ -85,7 +85,7 @@ class ParticipantDAOImplTest {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "Gray";
                     participantDTOBuilder.lastname = "Snare";
-                    participantDTOBuilder.participantID = 1;
+                    participantDTOBuilder.participantID = "1";
                     participantDTOBuilder.campaignID = 1;
                     participantDTOBuilder.timeInMillis = 100000;
                     participantDTOBuilder.email = "gsnare0@xinhuanet.com";
@@ -99,7 +99,7 @@ class ParticipantDAOImplTest {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "name";
                     participantDTOBuilder.lastname = "name";
-                    participantDTOBuilder.participantID = 20;
+                    participantDTOBuilder.participantID = "20";
                     participantDTOBuilder.campaignID = 1;
                     participantDTOBuilder.timeInMillis = 10000;
                     participantDTOBuilder.email = "name@gmail.com";

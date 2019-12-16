@@ -58,7 +58,7 @@ class ParticipantServiceImplTest {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "name";
                     participantDTOBuilder.lastname = "name";
-                    participantDTOBuilder.participantID = 1;
+                    participantDTOBuilder.participantID = "1";
                     participantDTOBuilder.campaignID = 1;
                     participantDTOBuilder.timeInMillis = 10000;
                     participantDTOBuilder.email = "name@gmail.com";

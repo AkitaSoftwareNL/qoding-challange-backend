@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 class ReportDAOImplTest {
 
-    private final int participantId = 1;
+    private final String participantId = "1";
     private final int campaignId = 1;
 
     private ReportDAOImpl sut;

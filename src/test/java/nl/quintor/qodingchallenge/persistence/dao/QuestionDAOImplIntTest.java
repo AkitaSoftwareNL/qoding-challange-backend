@@ -28,7 +28,7 @@ class QuestionDAOImplIntTest {
     private final int questionState = 1;
     private final int questionId = 3;
     private final int amountOfQuestions = 3;
-    private final int participentId = 1;
+    private final String participentId = "1";
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;

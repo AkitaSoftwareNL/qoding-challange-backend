@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ParticipantDTO {
-    private int participantID;
+    private String participantID;
     private int campaignID;
     private long timeInMillis;
     private String firstname;
@@ -17,7 +17,7 @@ public class ParticipantDTO {
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(int participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAnsweredQuestions) {
+    public ParticipantDTO(String participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAnsweredQuestions) {
         this.participantID = participantID;
         this.campaignID = campaignID;
         this.timeInMillis = timeInMillis;
@@ -29,7 +29,7 @@ public class ParticipantDTO {
         this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
-    public int getParticipantID() {
+    public String getParticipantID() {
         return participantID;
     }
 
@@ -70,7 +70,7 @@ public class ParticipantDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ParticipantDTO that = (ParticipantDTO) o;
-        return participantID == that.participantID &&
+        return participantID.equals(that.participantID) &&
                 campaignID == that.campaignID &&
                 timeInMillis == that.timeInMillis &&
                 amountOfRightAnsweredQuestions == that.amountOfRightAnsweredQuestions &&

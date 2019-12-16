@@ -60,13 +60,13 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void setAnswer(QuestionDTO question, int campaignId, int participantID) throws SQLException {
+    public void setAnswer(QuestionDTO question, int campaignId, String participantID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO given_answer VALUES (?, ?, ?, ?, ?)");
             statement.setInt(1, question.getQuestionID());
-            statement.setInt(2, participantID);
+            statement.setString(2, participantID);
             statement.setInt(3, campaignId);
             statement.setInt(4, question.getStateID());
             statement.setString(5, question.getGivenAnswer());
@@ -174,7 +174,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             while (resultSet.next()) {
                 givenAnswers.add(new GivenAnswerDTO(
                         resultSet.getInt(1),
-                        resultSet.getInt(2),
+                        resultSet.getString(2),
                         resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getString(5)));
@@ -225,7 +225,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, givenAnswerDTO.getStateId());
             statement.setInt(2, givenAnswerDTO.getQuestionId());
             statement.setInt(3, givenAnswerDTO.getCampaignId());
-            statement.setInt(4, givenAnswerDTO.getParticipentId());
+            statement.setString(4, givenAnswerDTO.getParticipentId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);

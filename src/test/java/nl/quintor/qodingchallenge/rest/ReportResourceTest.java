@@ -19,7 +19,7 @@ class ReportResourceTest {
 
     private final int campaignId = 5;
     private final String campaign = "campaign";
-    private final int participantId = 2;
+    private final String participantId = "2";
 
     private ReportService reportServiceMock;
     private ReportResource sut;
@@ -105,7 +105,7 @@ class ReportResourceTest {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "name";
                     participantDTOBuilder.lastname = "name";
-                    participantDTOBuilder.participantID = 1;
+                    participantDTOBuilder.participantID = "1";
                     participantDTOBuilder.campaignID = 1;
                     participantDTOBuilder.timeInMillis = 10000;
                     participantDTOBuilder.email = "name@gmail.com";

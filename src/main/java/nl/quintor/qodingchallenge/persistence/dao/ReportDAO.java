@@ -9,5 +9,5 @@ import java.util.List;
 public interface ReportDAO {
     List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException;
 
-    List<AnswerDTO> getAnswersPerParticipant(int campaignID, int participantID) throws SQLException;
+    List<AnswerDTO> getAnswersPerParticipant(int campaignID, String participantID) throws SQLException;
 }

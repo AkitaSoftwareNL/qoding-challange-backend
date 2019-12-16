@@ -35,7 +35,7 @@ public class ReportDAOImpl implements ReportDAO {
                         new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                                     participantDTOBuilder.firstname = resultSet.getString("FIRSTNAME");
                                     participantDTOBuilder.lastname = resultSet.getString("LASTNAME");
-                                    participantDTOBuilder.participantID = resultSet.getInt("PARTICIPANTID");
+                                    participantDTOBuilder.participantID = resultSet.getString("PARTICIPANTID");
                                     participantDTOBuilder.campaignID = resultSet.getInt("CAMPAIGN_ID");
                                     participantDTOBuilder.timeInMillis = resultSet.getLong("TIME_SPEND");
                                     participantDTOBuilder.insertion = resultSet.getString("INSERTION");
@@ -53,7 +53,7 @@ public class ReportDAOImpl implements ReportDAO {
     }
 
     @Override
-    public List<AnswerDTO> getAnswersPerParticipant(int campaignID, int participantID) throws SQLException {
+    public List<AnswerDTO> getAnswersPerParticipant(int campaignID, String participantID) throws SQLException {
         List<AnswerDTO> answers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -63,7 +63,7 @@ public class ReportDAOImpl implements ReportDAO {
                             "ON ga.QUESTIONID = q.QUESTIONID INNER JOIN conference as c " +
                             "ON ga.PARTICIPANTID = c.PARTICIPANTID WHERE ga.CAMPAIGN_ID = ? AND ga.PARTICIPANTID = ?");
             statement.setInt(1, campaignID);
-            statement.setInt(2, participantID);
+            statement.setString(2, participantID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 answers.add(

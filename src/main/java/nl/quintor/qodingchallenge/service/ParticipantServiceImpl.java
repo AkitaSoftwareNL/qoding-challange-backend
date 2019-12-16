@@ -22,7 +22,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void addParticipantToCampaign(int campaignID, int participantID) throws SQLException {
+    public void addParticipantToCampaign(int campaignID, String participantID) throws SQLException {
         participantDAO.addParticipantToCampaign(campaignID, participantID);
     }
 

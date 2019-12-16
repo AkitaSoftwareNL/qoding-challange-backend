@@ -58,7 +58,7 @@ public class QuestionServiceImpl implements QuestionService {
                             )
                     );
         }
-        return new QuestionCollection(1, campaignDAO.getCampaignID(campaignName), campaignName, questions);
+        return new QuestionCollection("1", campaignDAO.getCampaignID(campaignName), campaignName, questions);
     }
 
     @Override
