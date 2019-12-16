@@ -61,7 +61,7 @@ class ReportResourceTest {
     }
 
     @Test
-    void getRankedParticipantsPerCampaignReturnsRankedListWithParticipantsWithStatuscodeOk() throws SQLException {
+    void getRankedParticipantsPerCampaignReturnsRankedListWithParticipantsWithStatuscodeOk() throws SQLException, IllegalAccessException {
         when(reportServiceMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedParticipantCollection());
 
         ResponseEntity<RankedParticipantCollection> result = sut.getRankedParticipantsPerCampaign(campaignId);
@@ -100,26 +100,24 @@ class ReportResourceTest {
         return campaigns;
     }
 
-    private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder()
+    private ParticipantDTO getParticipantDTO() throws IllegalAccessException {
+        return new ParticipantDTO.Builder("name", "name")
                 .id(1)
                 .participatedCampaignID(1)
                 .timeOf(100000)
-                .firstname("name")
                 .insertion(null)
-                .lastname("name")
                 .email("name@gmail.com")
                 .hasPhoneNumber("062083423")
                 .build();
     }
 
-    private List<ParticipantDTO> getListParticipant() {
+    private List<ParticipantDTO> getListParticipant() throws IllegalAccessException {
         List<ParticipantDTO> participants = new ArrayList<>();
         participants.add(getParticipantDTO());
         return participants;
     }
 
-    private RankedParticipantCollection getRankedParticipantCollection() {
+    private RankedParticipantCollection getRankedParticipantCollection() throws IllegalAccessException {
         return new RankedParticipantCollection(campaign, getListParticipant());
     }
 

@@ -68,19 +68,17 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 participants.add(
-                        new ParticipantDTO.Builder()
+                        new ParticipantDTO.Builder(resultSet.getString("FIRSTNAME"), resultSet.getString("LASTNAME"))
                                 .id(resultSet.getInt("PARTICIPANTID"))
                                 .participatedCampaignID(resultSet.getInt("CAMPAIGN_ID"))
                                 .timeOf(resultSet.getLong("TIME_SPEND"))
-                                .firstname(resultSet.getString("FIRSTNAME"))
                                 .insertion(resultSet.getString("INSERTION"))
-                                .lastname(resultSet.getString("LASTNAME"))
                                 .email(resultSet.getString("EMAIL"))
                                 .hasPhoneNumber(resultSet.getString("PHONENUMBER"))
                                 .build()
                 );
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IllegalAccessException e) {
             throw new SQLException(e);
         }
         return participants;

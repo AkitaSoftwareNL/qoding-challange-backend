@@ -26,27 +26,25 @@ class ParticipantResourceTest {
     }
 
     @Test
-    void loginCallsParticipantHasAlreadyParticipatedInCampaign() throws SQLException {
+    void loginCallsParticipantHasAlreadyParticipatedInCampaign() throws SQLException, IllegalAccessException {
         sut.login(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
         verify(participantServiceMock).participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
     }
 
     @Test
-    void loginReturnsCorrectResponseCreated() throws SQLException {
+    void loginReturnsCorrectResponseCreated() throws SQLException, IllegalAccessException {
         var response = sut.login(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
-    private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder()
+    private ParticipantDTO getParticipantDTO() throws IllegalAccessException {
+        return new ParticipantDTO.Builder("name", "name")
                 .id(1)
                 .participatedCampaignID(1)
                 .timeOf(100000)
-                .firstname("name")
                 .insertion(null)
-                .lastname("name")
                 .email("name@gmail.com")
                 .hasPhoneNumber("062083423")
                 .build();

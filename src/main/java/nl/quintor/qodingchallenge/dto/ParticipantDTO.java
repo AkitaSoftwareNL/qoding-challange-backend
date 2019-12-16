@@ -1,17 +1,21 @@
 package nl.quintor.qodingchallenge.dto;
 
+import nl.quintor.qodingchallenge.rest.customexception.CustomException;
+
 import java.util.Objects;
 
 public class ParticipantDTO {
-    private final int participantID;
-    private final int campaignID;
-    private final long timeInMillis;
-    private final String firstname;
-    private final String insertion;
-    private final String lastname;
-    private final String email;
-    private final String phonenumber;
-    private final int amountOfRightAnsweredQuestions;
+    private int participantID;
+    private int campaignID;
+    private long timeInMillis;
+    private String firstname;
+    private String insertion;
+    private String lastname;
+    private String email;
+    private String phonenumber;
+    private int amountOfRightAnsweredQuestions;
+
+    public ParticipantDTO() {}
 
     private ParticipantDTO(Builder builder) {
         this.participantID = builder.participantID;
@@ -29,15 +33,16 @@ public class ParticipantDTO {
         private int participantID;
         private int campaignID;
         private long timeInMillis;
-        private String firstname;
+        private final String firstname;
         private String insertion;
-        private String lastname;
+        private final String lastname;
         private String email;
         private String phonenumber;
         private int amountOfRightAnsweredQuestions;
 
-        public Builder() {
-
+        public Builder(String firstname, String lastname) {
+            this.firstname = firstname;
+            this.lastname = lastname;
         }
 
         public Builder id(int participantID) {
@@ -55,18 +60,8 @@ public class ParticipantDTO {
             return this;
         }
 
-        public Builder firstname(String firstname) {
-            this.firstname = firstname;
-            return this;
-        }
-
         public Builder insertion(String insertion) {
             this.insertion = insertion;
-            return this;
-        }
-
-        public Builder lastname(String lastname) {
-            this.lastname = lastname;
             return this;
         }
 
@@ -80,13 +75,17 @@ public class ParticipantDTO {
             return this;
         }
 
-        public Builder hasAnsweredQuestionsCorrect(int amountOfRightAnsweredQuestions) {
+        public Builder answeredQuestionsCorrect(int amountOfRightAnsweredQuestions) {
             this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
             return this;
         }
 
-        public ParticipantDTO build() {
-            return new ParticipantDTO(this);
+        public ParticipantDTO build() throws IllegalAccessException {
+            ParticipantDTO participant = new ParticipantDTO(this);
+            if (participant.getPhonenumber().isEmpty() && participant.getEmail().isEmpty()) {
+                throw new IllegalArgumentException();
+            }
+            return participant;
         }
     }
 

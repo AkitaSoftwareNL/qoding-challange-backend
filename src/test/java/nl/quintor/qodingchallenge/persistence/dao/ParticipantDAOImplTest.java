@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 
 class ParticipantDAOImplTest {
 
-    private final int CAMPAIGN_ID = 1;
     private final int campaignID = 1;
     private final int amountOfParticipantsBeforeInsert = 4;
     private ParticipantDAOImpl sut;
@@ -65,43 +64,40 @@ class ParticipantDAOImplTest {
     }
 
     @Test
-    void addParticipantAddsAnParticipantToConferenceTable() throws SQLException {
+    void addParticipantAddsAnParticipantToConferenceTable() throws SQLException, IllegalAccessException {
         sut.addParticipant(getParticipantDTO(), campaignID);
 
         assertEquals(amountOfParticipantsBeforeInsert + 1, sut.getParticipantsPerCampaign(1).size());
     }
 
     @Test
-    void participantHasAlreadyParticipatedInCampaignReturnsTrueWhenParticipantExists() throws SQLException {
+    void participantHasAlreadyParticipatedInCampaignReturnsTrueWhenParticipantExists() throws SQLException, IllegalAccessException {
         assertTrue(sut.participantHasAlreadyParticipatedInCampaign(getExistingParticipant(), campaignID));
     }
 
     @Test
-    void participantHasAlreadyParticipatedInCampaignReturnsFalseWhenParticipantDoesNotExists() throws SQLException {
+    void participantHasAlreadyParticipatedInCampaignReturnsFalseWhenParticipantDoesNotExists() throws SQLException, IllegalAccessException {
         assertFalse(sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), campaignID));
     }
 
-    private ParticipantDTO getExistingParticipant() {
-        return new ParticipantDTO.Builder()
+    private ParticipantDTO getExistingParticipant() throws IllegalAccessException {
+        final int CAMPAIGN_ID = 1;
+        return new ParticipantDTO.Builder("Gray", "Snare")
                 .id(1)
                 .participatedCampaignID(CAMPAIGN_ID)
                 .timeOf(100000)
-                .firstname("Gray")
                 .insertion(null)
-                .lastname("Snare")
                 .email("gsnare0@xinhuanet.com")
                 .hasPhoneNumber("2219773471")
                 .build();
     }
 
-    private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder()
+    private ParticipantDTO getParticipantDTO() throws IllegalAccessException {
+        return new ParticipantDTO.Builder("name", "name")
                 .id(20)
                 .participatedCampaignID(1)
                 .timeOf(100000)
-                .firstname("name")
                 .insertion(null)
-                .lastname("name")
                 .email("name@gmail.com")
                 .hasPhoneNumber("062083423")
                 .build();

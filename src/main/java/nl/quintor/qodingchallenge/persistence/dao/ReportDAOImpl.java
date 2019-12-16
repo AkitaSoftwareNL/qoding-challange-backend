@@ -31,19 +31,17 @@ public class ReportDAOImpl implements ReportDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 participants.add(
-                        new ParticipantDTO.Builder()
+                        new ParticipantDTO.Builder(resultSet.getString("FIRSTNAME"), resultSet.getString("LASTNAME"))
                                 .id(resultSet.getInt(1))
                                 .participatedCampaignID(resultSet.getInt(2))
                                 .timeOf(resultSet.getLong(3))
-                                .firstname(resultSet.getString(4))
                                 .insertion(resultSet.getString(5))
-                                .lastname(resultSet.getString(6))
                                 .email(resultSet.getString(7))
                                 .hasPhoneNumber(resultSet.getString(8))
                                 .build()
                 );
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IllegalAccessException e) {
             throw new SQLException(e);
         }
         return participants;

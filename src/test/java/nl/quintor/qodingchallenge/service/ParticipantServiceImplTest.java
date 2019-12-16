@@ -27,40 +27,38 @@ class ParticipantServiceImplTest {
     }
 
     @Test
-    void addParticipantToCampaignCallsParticipantDAO() throws SQLException {
+    void addParticipantToCampaignCallsParticipantDAO() throws SQLException, IllegalAccessException {
         sut.addParticipantToCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO().getParticipantID());
 
         verify(participantDAOMock).addParticipantToCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO().getParticipantID());
     }
 
     @Test
-    void participantHasAlreadyParticipatedInCampaignCallsParticipantAlreadyExists() throws SQLException {
+    void participantHasAlreadyParticipatedInCampaignCallsParticipantAlreadyExists() throws SQLException, IllegalAccessException {
         sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
         verify(participantDAOMock).participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), CAMPAIGN_ID);
     }
 
     @Test
-    void participantHasAlreadyParticipatedInCampaignThrowsCouldNotAddParticipantException() throws SQLException {
+    void participantHasAlreadyParticipatedInCampaignThrowsCouldNotAddParticipantException() throws SQLException, IllegalAccessException {
         when(participantDAOMock.participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), CAMPAIGN_ID)).thenReturn(true);
         assertThrows(CouldNotAddParticipantException.class, () -> sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO()));
     }
 
     @Test
-    void participantHasAlreadyParticipatedInCampaignCallsParticipantHasAlreadyParticipatedInCampaignParticipantDAO() throws SQLException {
+    void participantHasAlreadyParticipatedInCampaignCallsParticipantHasAlreadyParticipatedInCampaignParticipantDAO() throws SQLException, IllegalAccessException {
         sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO().getCampaignID(), getParticipantDTO());
 
         verify(participantDAOMock).addParticipant(getParticipantDTO(), CAMPAIGN_ID);
     }
 
-    private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO.Builder()
+    private ParticipantDTO getParticipantDTO() throws IllegalAccessException {
+        return new ParticipantDTO.Builder("name", "name")
                 .id(1)
                 .participatedCampaignID(CAMPAIGN_ID)
                 .timeOf(100000)
-                .firstname("name")
                 .insertion(null)
-                .lastname("name")
                 .email("name@gmail.com")
                 .hasPhoneNumber("062083423")
                 .build();
