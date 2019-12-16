@@ -41,7 +41,7 @@ public class ReportDAOImpl implements ReportDAO {
                                 .build()
                 );
             }
-        } catch (SQLException | IllegalAccessException e) {
+        } catch (SQLException e) {
             throw new SQLException(e);
         }
         return participants;

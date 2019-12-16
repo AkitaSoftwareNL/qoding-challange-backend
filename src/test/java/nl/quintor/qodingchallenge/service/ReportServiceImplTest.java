@@ -70,7 +70,7 @@ class ReportServiceImplTest {
     }
 
     @Test
-    void getRankedParticipantPerCampaignReturnsRankedParticipantCollection() throws SQLException, IllegalAccessException {
+    void getRankedParticipantPerCampaignReturnsRankedParticipantCollection() throws SQLException {
         // Mock
         when(campaignDAOMock.getCampaignName(campaignId)).thenReturn(campaignName);
         when(reportDAOMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedParticipants());
@@ -135,7 +135,7 @@ class ReportServiceImplTest {
         return new AnswerCollection("Name", "", "HC2 Holdings, Inc", campaignName, campaignId, getListAnswer());
     }
 
-    private List<ParticipantDTO> getRankedParticipants() throws IllegalAccessException {
+    private List<ParticipantDTO> getRankedParticipants() {
         List<ParticipantDTO> list = new ArrayList<>();
         list.add(new ParticipantDTO.Builder("name", "name")
                 .id(1)
@@ -149,7 +149,7 @@ class ReportServiceImplTest {
         return list;
     }
 
-    private RankedParticipantCollection getRankedparticipantCollection() throws IllegalAccessException {
+    private RankedParticipantCollection getRankedparticipantCollection() {
         return new RankedParticipantCollection(campaignName, getRankedParticipants());
     }
 }

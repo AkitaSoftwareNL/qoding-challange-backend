@@ -80,12 +80,8 @@ public class ParticipantDTO {
             return this;
         }
 
-        public ParticipantDTO build() throws IllegalAccessException {
-            ParticipantDTO participant = new ParticipantDTO(this);
-            if (participant.getPhonenumber().isEmpty() && participant.getEmail().isEmpty()) {
-                throw new IllegalArgumentException();
-            }
-            return participant;
+        public ParticipantDTO build() {
+            return new ParticipantDTO(this);
         }
     }
 
