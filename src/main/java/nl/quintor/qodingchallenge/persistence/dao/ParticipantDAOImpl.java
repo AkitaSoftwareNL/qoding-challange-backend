@@ -74,7 +74,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                                 .timeOf(resultSet.getLong("TIME_SPEND"))
                                 .insertion(resultSet.getString("INSERTION"))
                                 .email(resultSet.getString("EMAIL"))
-                                .hasPhoneNumber(resultSet.getString("PHONENUMBER"))
+                                .phonenumber(resultSet.getString("PHONENUMBER"))
                                 .build()
                 );
             }

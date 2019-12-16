@@ -143,7 +143,7 @@ class ReportServiceImplTest {
                 .timeOf(100000)
                 .insertion(null)
                 .email("name@gmail.com")
-                .hasPhoneNumber("062083423")
+                .phonenumber("062083423")
                 .build()
         );
         return list;

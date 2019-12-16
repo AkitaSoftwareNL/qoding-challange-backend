@@ -126,7 +126,7 @@ public class ParticipantDTO {
             return this;
         }
 
-        public Builder hasPhoneNumber(String phonenumber) {
+        public Builder phonenumber(String phonenumber) {
             this.phonenumber = phonenumber;
             return this;
         }

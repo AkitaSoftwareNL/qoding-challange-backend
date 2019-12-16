@@ -64,23 +64,23 @@ class ParticipantDAOImplTest {
     }
 
     @Test
-    void addParticipantAddsAnParticipantToConferenceTable() throws SQLException, IllegalAccessException {
+    void addParticipantAddsAnParticipantToConferenceTable() throws SQLException {
         sut.addParticipant(getParticipantDTO(), campaignID);
 
         assertEquals(amountOfParticipantsBeforeInsert + 1, sut.getParticipantsPerCampaign(1).size());
     }
 
     @Test
-    void participantHasAlreadyParticipatedInCampaignReturnsTrueWhenParticipantExists() throws SQLException, IllegalAccessException {
+    void participantHasAlreadyParticipatedInCampaignReturnsTrueWhenParticipantExists() throws SQLException {
         assertTrue(sut.participantHasAlreadyParticipatedInCampaign(getExistingParticipant(), campaignID));
     }
 
     @Test
-    void participantHasAlreadyParticipatedInCampaignReturnsFalseWhenParticipantDoesNotExists() throws SQLException, IllegalAccessException {
+    void participantHasAlreadyParticipatedInCampaignReturnsFalseWhenParticipantDoesNotExists() throws SQLException {
         assertFalse(sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), campaignID));
     }
 
-    private ParticipantDTO getExistingParticipant() throws IllegalAccessException {
+    private ParticipantDTO getExistingParticipant() {
         final int CAMPAIGN_ID = 1;
         return new ParticipantDTO.Builder("Gray", "Snare")
                 .id(1)
@@ -88,18 +88,18 @@ class ParticipantDAOImplTest {
                 .timeOf(100000)
                 .insertion(null)
                 .email("gsnare0@xinhuanet.com")
-                .hasPhoneNumber("2219773471")
+                .phonenumber("2219773471")
                 .build();
     }
 
-    private ParticipantDTO getParticipantDTO() throws IllegalAccessException {
+    private ParticipantDTO getParticipantDTO() {
         return new ParticipantDTO.Builder("name", "name")
                 .id(20)
                 .participatedCampaignID(1)
                 .timeOf(100000)
                 .insertion(null)
                 .email("name@gmail.com")
-                .hasPhoneNumber("062083423")
+                .phonenumber("062083423")
                 .build();
     }
 }

@@ -32,12 +32,12 @@ public class ReportDAOImpl implements ReportDAO {
             while (resultSet.next()) {
                 participants.add(
                         new ParticipantDTO.Builder(resultSet.getString("FIRSTNAME"), resultSet.getString("LASTNAME"))
-                                .id(resultSet.getInt(1))
-                                .participatedCampaignID(resultSet.getInt(2))
-                                .timeOf(resultSet.getLong(3))
-                                .insertion(resultSet.getString(5))
-                                .email(resultSet.getString(7))
-                                .hasPhoneNumber(resultSet.getString(8))
+                                .id(resultSet.getInt("PARTICIPANTID"))
+                                .participatedCampaignID(resultSet.getInt("CAMPAIGN_ID"))
+                                .timeOf(resultSet.getLong("TIME_SPEND"))
+                                .insertion(resultSet.getString("INSERTION"))
+                                .email(resultSet.getString("EMAIL"))
+                                .phonenumber(resultSet.getString("PHONENUMBER"))
                                 .build()
                 );
             }
