@@ -27,7 +27,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void participantHasAlreadyParticipatedInCampaign(int campaignID, ParticipantDTO participantDTO) throws SQLException {
+    public void addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException {
         if (participantDAO.participantHasAlreadyParticipatedInCampaign(participantDTO, campaignID)) {
             throw new CouldNotAddParticipantException(
                     "Participant could not be added to this campaign",

@@ -26,7 +26,7 @@ public class ParticipantResource {
             method = RequestMethod.POST
     )
     public ResponseEntity login(@PathVariable int campaignID, @RequestBody ParticipantDTO participantDTO) throws SQLException {
-        participantService.participantHasAlreadyParticipatedInCampaign(campaignID, participantDTO);
+        participantService.addParticipant(campaignID, participantDTO);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 }

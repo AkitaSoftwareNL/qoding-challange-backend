@@ -235,18 +235,18 @@ class QuestionServiceImplTest {
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "open";
             questionDTOBuilder.attachment = "";
-            questionDTOBuilder.stateID = pendingState;
+            questionDTOBuilder.stateID = 2;
         }).build();
     }
 
     private QuestionDTO getMultipleQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {
-            questionDTOBuilder.questionID = 2;
+            questionDTOBuilder.questionID = 1;
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "multiple";
-            questionDTOBuilder.givenAnswer = "some answer";
-            questionDTOBuilder.questionID = pendingState;
+            questionDTOBuilder.givenAnswer = "yes";
+            questionDTOBuilder.stateID = 2;
         }).build();
     }
 
@@ -263,8 +263,8 @@ class QuestionServiceImplTest {
                     questionDTOBuilder.questionID = 3;
                     questionDTOBuilder.question = "";
                     questionDTOBuilder.categoryType = category;
-                    questionDTOBuilder.questionType = "Multiple";
-                    questionDTOBuilder.givenAnswer = "some answer";
+                    questionDTOBuilder.questionType = "multiple";
+                    questionDTOBuilder.givenAnswer = "no";
                     questionDTOBuilder.stateID = pendingState;
                 }
         ).build();

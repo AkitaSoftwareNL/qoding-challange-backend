@@ -13,5 +13,5 @@ public interface ParticipantService {
 
     void addParticipantToCampaign(int campaignID, String participantID) throws SQLException;
 
-    void participantHasAlreadyParticipatedInCampaign(int campaignID, ParticipantDTO participantDTO) throws SQLException;
+    void addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException;
 }
