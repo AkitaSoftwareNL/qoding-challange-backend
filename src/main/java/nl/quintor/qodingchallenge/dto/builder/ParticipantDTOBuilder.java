@@ -5,6 +5,7 @@ import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import java.sql.SQLException;
 
 public class ParticipantDTOBuilder {
+
     public String participantID;
     public int campaignID;
     public long timeInMillis;

@@ -32,15 +32,15 @@ public class QuestionResource {
     }
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
-            path = "/campaign/{campaignName}",
+            path = "/campaign/{campaignID}",
             method = RequestMethod.GET)
-    public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable String campaignName) throws SQLException {
-        return ResponseEntity.ok().body(questionService.getQuestions("java", campaignName));
+    public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable int campaignID) throws SQLException {
+        return ResponseEntity.ok().body(questionService.getQuestions("java", campaignID));
     }
 
     @ResponseBody
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            path = "/campaign/{campaignName}",
+            path = "/campaign/{campaignID}",
             method = RequestMethod.POST)
     public ResponseEntity getAnswer(@RequestBody QuestionCollection questionCollection) throws SQLException {
         participantService.addParticipantToCampaign(questionCollection.getCampaignId(), questionCollection.getParticipantID());

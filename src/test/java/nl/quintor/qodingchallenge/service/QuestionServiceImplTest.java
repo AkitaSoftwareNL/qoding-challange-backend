@@ -44,17 +44,17 @@ class QuestionServiceImplTest {
         this.sut.setCampaignDAO(campaignDAOMock);
         this.sut.setQuestionDAO(questionDAOMock);
 
-        when(campaignDAOMock.campaignExists(campaign)).thenReturn(true);
+        when(campaignDAOMock.campaignExists(campaignID)).thenReturn(true);
     }
 
     @Test
     void getQuestionsCallsGetPossibleAnswers() throws SQLException {
         // Mock
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(getQuestionlist().size());
+        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(getQuestionlist().size());
         when(questionDAOMock.getQuestions(anyString(), anyInt())).thenReturn(getQuestionlist());
         when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
         // Test
-        sut.getQuestions(category, campaign);
+        sut.getQuestions(category, campaignID);
         // Verify
         verify(questionDAOMock, times(3)).getPossibleAnswers(questionId);
     }
@@ -62,9 +62,9 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsCallsGetQuestions() throws SQLException {
         final int questionLimit = 3;
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(questionLimit);
+        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(questionLimit);
 
-        sut.getQuestions(category, campaign);
+        sut.getQuestions(category, campaignID);
 
         verify(questionDAOMock).getQuestions(category, questionLimit);
     }
@@ -80,9 +80,10 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionThrowsNoCampaignFoundException() throws SQLException {
-        when(campaignDAOMock.campaignExists("This campaign does not exist")).thenReturn(true);
+        final int noCampaign = 1;
+        when(campaignDAOMock.campaignExists(noCampaign)).thenReturn(false);
 
-        assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, "This campaign does not exists"));
+        assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, noCampaign));
     }
 
     @Test
@@ -108,13 +109,13 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
         List<QuestionDTO> questionDTOList = getQuestionlist();
-        when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
-        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaign))).thenReturn(questionDTOList);
+        when(campaignDAOMock.getAmountOfQuestions(campaignID)).thenReturn(1);
+        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaignID))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
 
         questionDTOList.get(0).setPossibleAnswers(getPossibleAnswers());
 
-        assertEquals(questionDTOList.get(0).getPossibleAnswers(), sut.getQuestions(category, campaign).getQuestions().get(0).getPossibleAnswers());
+        assertEquals(questionDTOList.get(0).getPossibleAnswers(), sut.getQuestions(category, campaignID).getQuestions().get(0).getPossibleAnswers());
     }
 
     @Test

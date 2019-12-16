@@ -14,7 +14,7 @@ public interface QuestionService {
 
     void setQuestionDAO(QuestionDAO questionDAO);
 
-    QuestionCollection getQuestions(String category, String campaignName) throws SQLException;
+    QuestionCollection getQuestions(String category, int campaignID) throws SQLException;
 
     void setAnswer(QuestionCollection questionCollection) throws SQLException;
 

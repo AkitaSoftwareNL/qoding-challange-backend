@@ -28,7 +28,7 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public void createNewCampaign(CampaignDTO campaignDTO) throws SQLException {
-        if (campaignDAO.campaignExists(campaignDTO.getName())) {
+        if (campaignDAO.campaignExists(campaignDTO.getId())) {
             logger.warn(format("Campaign %s already exists, try an other name.", campaignDTO.getName()));
             throw new CampaignAlreadyExistsException(
                     "the campaign already exists",

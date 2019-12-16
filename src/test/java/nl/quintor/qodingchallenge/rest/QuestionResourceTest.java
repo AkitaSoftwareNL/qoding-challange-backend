@@ -45,18 +45,18 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
-        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
+        when(questionServiceMock.getQuestions(category, campaignID)).thenReturn(getQuestionCollection());
 
-        sut.sendQuestions(campaign);
+        sut.sendQuestions(campaignID);
 
-        verify(questionServiceMock).getQuestions(category, campaign);
+        verify(questionServiceMock).getQuestions(category, campaignID);
     }
 
     @Test
     void sendQuestionsReturnsQuestionCollectionAndResponseOK() throws SQLException {
-        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
+        when(questionServiceMock.getQuestions(category, campaignID)).thenReturn(getQuestionCollection());
 
-        var test = sut.sendQuestions(campaign);
+        var test = sut.sendQuestions(campaignID);
 
         assertEquals(getQuestionCollection(), test.getBody());
         assertEquals(HttpStatus.OK, test.getStatusCode());
