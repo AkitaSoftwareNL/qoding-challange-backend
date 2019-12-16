@@ -23,7 +23,7 @@ public class ParticipantResource {
     @ResponseBody
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             path = "/login/{campaignID}",
-            method = RequestMethod.GET
+            method = RequestMethod.POST
     )
     public ResponseEntity login(@PathVariable int campaignID, @RequestBody ParticipantDTO participantDTO) throws SQLException {
         participantService.participantHasAlreadyParticipatedInCampaign(campaignID, participantDTO);

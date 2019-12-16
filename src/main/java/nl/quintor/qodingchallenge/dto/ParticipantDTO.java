@@ -1,7 +1,5 @@
 package nl.quintor.qodingchallenge.dto;
 
-import nl.quintor.qodingchallenge.rest.customexception.CustomException;
-
 import java.util.Objects;
 
 public class ParticipantDTO {
@@ -15,7 +13,8 @@ public class ParticipantDTO {
     private String phonenumber;
     private int amountOfRightAnsweredQuestions;
 
-    public ParticipantDTO() {}
+    public ParticipantDTO() {
+    }
 
     private ParticipantDTO(Builder builder) {
         this.participantID = builder.participantID;
@@ -27,62 +26,6 @@ public class ParticipantDTO {
         this.email = builder.email;
         this.phonenumber = builder.phonenumber;
         this.amountOfRightAnsweredQuestions = builder.amountOfRightAnsweredQuestions;
-    }
-
-    public static class Builder {
-        private int participantID;
-        private int campaignID;
-        private long timeInMillis;
-        private final String firstname;
-        private String insertion;
-        private final String lastname;
-        private String email;
-        private String phonenumber;
-        private int amountOfRightAnsweredQuestions;
-
-        public Builder(String firstname, String lastname) {
-            this.firstname = firstname;
-            this.lastname = lastname;
-        }
-
-        public Builder id(int participantID) {
-            this.participantID = participantID;
-            return this;
-        }
-
-        public Builder participatedCampaignID(int campaignID) {
-            this.campaignID = campaignID;
-            return this;
-        }
-
-        public Builder timeOf(long timeInMillis) {
-            this.timeInMillis = timeInMillis;
-            return this;
-        }
-
-        public Builder insertion(String insertion) {
-            this.insertion = insertion;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email =email;
-            return this;
-        }
-
-        public Builder hasPhoneNumber(String phonenumber) {
-            this.phonenumber = phonenumber;
-            return this;
-        }
-
-        public Builder answeredQuestionsCorrect(int amountOfRightAnsweredQuestions) {
-            this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
-            return this;
-        }
-
-        public ParticipantDTO build() {
-            return new ParticipantDTO(this);
-        }
     }
 
     public int getParticipantID() {
@@ -140,5 +83,61 @@ public class ParticipantDTO {
     @Override
     public int hashCode() {
         return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, amountOfRightAnsweredQuestions);
+    }
+
+    public static class Builder {
+        private final String firstname;
+        private final String lastname;
+        private int participantID;
+        private int campaignID;
+        private long timeInMillis;
+        private String insertion;
+        private String email;
+        private String phonenumber;
+        private int amountOfRightAnsweredQuestions;
+
+        public Builder(String firstname, String lastname) {
+            this.firstname = firstname;
+            this.lastname = lastname;
+        }
+
+        public Builder id(int participantID) {
+            this.participantID = participantID;
+            return this;
+        }
+
+        public Builder participatedCampaignID(int campaignID) {
+            this.campaignID = campaignID;
+            return this;
+        }
+
+        public Builder timeOf(long timeInMillis) {
+            this.timeInMillis = timeInMillis;
+            return this;
+        }
+
+        public Builder insertion(String insertion) {
+            this.insertion = insertion;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder hasPhoneNumber(String phonenumber) {
+            this.phonenumber = phonenumber;
+            return this;
+        }
+
+        public Builder answeredQuestionsCorrect(int amountOfRightAnsweredQuestions) {
+            this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
+            return this;
+        }
+
+        public ParticipantDTO build() {
+            return new ParticipantDTO(this);
+        }
     }
 }
