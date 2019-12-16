@@ -189,7 +189,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM question WHERE QUESTIONID = ?");
-            statement.setInt(1, questionid);
+            statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 question.setQuestionID(resultSet.getInt("QUESTIONID"));

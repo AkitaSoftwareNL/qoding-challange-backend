@@ -7,6 +7,7 @@ import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
+import nl.quintor.qodingchallenge.service.questionstrategy.CodingStrategyImpl;
 import nl.quintor.qodingchallenge.service.questionstrategy.MultipleStrategyImpl;
 import nl.quintor.qodingchallenge.service.questionstrategy.OpenStrategyImpl;
 import nl.quintor.qodingchallenge.service.questionstrategy.QuestionStrategy;
@@ -38,6 +39,7 @@ public class QuestionServiceImpl implements QuestionService {
         this.questionDAO = questionDAO;
         strategies.add(new OpenStrategyImpl(questionDAO));
         strategies.add(new MultipleStrategyImpl(questionDAO));
+        strategies.add(new CodingStrategyImpl(questionDAO));
     }
 
     @Override
