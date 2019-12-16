@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.rest;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.service.ParticipantService;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -228,12 +229,18 @@ class QuestionResourceTest {
         return new GivenAnswerDTO();
     }
 
-    private QuestionCollection getQuestionCollection() {
+    private QuestionCollection getQuestionCollection() throws SQLException {
         return new QuestionCollection(1, 1, campaign, getQuestions());
     }
 
-    private QuestionDTO getQuestion() {
-        return new QuestionDTO(1, question, category, "open", attachment);
+    private QuestionDTO getQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+            questionDTOBuilder.questionID = 1;
+            questionDTOBuilder.question = question;
+            questionDTOBuilder.categoryType = category;
+            questionDTOBuilder.questionType = "open";
+            questionDTOBuilder.attachment = attachment;
+        }).build();
     }
 
     private List<GivenAnswerDTO> getAnswers() {
@@ -243,10 +250,10 @@ class QuestionResourceTest {
         return answers;
     }
 
-    private List<QuestionDTO> getQuestions() {
+    private List<QuestionDTO> getQuestions() throws SQLException {
         List<QuestionDTO> questions = new ArrayList<>();
-        questions.add(0, new QuestionDTO(2, question, category, "open", attachment));
-        questions.add(1, new QuestionDTO(3, question, category, "open", attachment));
+        questions.add(0, getQuestion());
+        questions.add(1, getQuestion());
         return questions;
     }
 

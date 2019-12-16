@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.springframework.stereotype.Service;
@@ -146,13 +147,15 @@ public class QuestionDAOImpl implements QuestionDAO {
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
             questions.add(
-                    new QuestionDTO(
-                            resultSet.getInt(1),
-                            resultSet.getString(3),
-                            resultSet.getString(2),
-                            resultSet.getString(4),
-                            resultSet.getString(5)
-                    ));
+                    new QuestionDTOBuilder().with(questionDTOBuilder -> {
+                                questionDTOBuilder.questionID = resultSet.getInt("QUESTIONID");
+                                questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
+                                questionDTOBuilder.question = resultSet.getString("QUESTION");
+                                questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
+                                questionDTOBuilder.attachment = resultSet.getString("attachment");
+                            }
+                    ).build()
+            );
         }
         return questions;
     }
@@ -192,12 +195,15 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                question.setQuestionID(resultSet.getInt(1));
-                question.setQuestionType(resultSet.getString(2));
-                question.setQuestion(resultSet.getString(3));
-                question.setAttachment(resultSet.getString(4));
-                question.setGivenAnswer(resultSet.getString(5));
-                question.setStateID(resultSet.getInt(6));
+                return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+                            questionDTOBuilder.questionID = resultSet.getInt("QUESTIONID");
+                            questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
+                            questionDTOBuilder.question = resultSet.getString("QUESTION");
+                            questionDTOBuilder.stateID = resultSet.getInt("STATE");
+                            questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
+                            questionDTOBuilder.attachment = resultSet.getString("ATTACHMENT");
+                        }
+                ).build();
             } else {
                 throw new NoQuestionFoundException(
                         "No question has been found",
@@ -208,7 +214,6 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             throw new SQLException(e);
         }
-        return question;
     }
 
     @Override
@@ -267,7 +272,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     public int getQuestionAmountPerCategory(String category) throws SQLException {
         try (
-                Connection connection = getConnection();
+                Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) as amount FROM question where CATEGORY_NAME = ? AND state = 1");
             statement.setString(1, category);

@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,7 @@ class QuestionDAOImplIntTest {
     void setAnswerSetsAnswer() throws SQLException {
         int oldLength = sut.getPendingAnswers(campaignId, questionState).size();
 
-        sut.setAnswer(getOpenQuestion(), campaignId, participentId);
+        sut.setAnswer(getQuestion(), campaignId, participentId);
 
         assertEquals(oldLength + 1, sut.getPendingAnswers(campaignId, questionState).size());
     }
@@ -82,7 +83,7 @@ class QuestionDAOImplIntTest {
         // Mock
 
         // Test
-        sut.persistOpenQuestion(getOpenQuestion());
+        sut.persistOpenQuestion(getQuestion());
         // Verify
         assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
     }
@@ -170,12 +171,19 @@ class QuestionDAOImplIntTest {
         assertEquals(expectedResult, sut.getQuestionAmountPerCategory(category));
     }
 
-    private QuestionDTO getOpenQuestion() {
-        return new QuestionDTO(10, "dit is een test vraag", category, "open", null);
+    private QuestionDTO getQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+            questionDTOBuilder.questionID = 1;
+            questionDTOBuilder.question = "Some question";
+            questionDTOBuilder.categoryType = category;
+            questionDTOBuilder.questionType = "open";
+            questionDTOBuilder.stateID = questionState;
+            questionDTOBuilder.givenAnswer = "some answer";
+        }).build();
     }
 
-    private QuestionDTO getMultipleQuestion() {
-        QuestionDTO question = new QuestionDTO(10, "dit is een test vraag", category, "open", null);
+    private QuestionDTO getMultipleQuestion() throws SQLException {
+        QuestionDTO question = getQuestion();
         ArrayList<PossibleAnswerDTO> possibleAnswers = new ArrayList<>() {
             {
                 add(new PossibleAnswerDTO("yes", 1));

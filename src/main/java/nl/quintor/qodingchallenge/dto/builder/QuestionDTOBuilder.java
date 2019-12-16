@@ -8,23 +8,23 @@ import java.util.List;
 
 public class QuestionDTOBuilder {
 
-    private int questionID;
-    private String question;
-    private String categoryType;
-    private String questionType;
-    private String attachment;
-    private List<PossibleAnswerDTO> possibleAnswers;
-    private String givenAnswer;
-    private int stateID;
+    public int questionID;
+    public String question;
+    public String categoryType;
+    public String questionType;
+    public String attachment;
+    public List<PossibleAnswerDTO> possibleAnswers;
+    public String givenAnswer;
+    public int stateID;
 
     public QuestionDTOBuilder with(
-            Builder<QuestionDTO> builder) throws SQLException {
+            Builder<QuestionDTOBuilder> builder) throws SQLException {
         builder.accept(this);
         return this;
     }
 
     public QuestionDTO build() {
-        return new QuestionDTO(ques tionID, question, categoryType, questionType, attachment,
+        return new QuestionDTO(questionID, question, categoryType, questionType, attachment,
                 possibleAnswers, givenAnswer, stateID);
     }
 }

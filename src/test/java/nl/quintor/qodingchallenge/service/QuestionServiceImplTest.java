@@ -4,6 +4,7 @@ import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
@@ -117,7 +118,7 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void createQuestionThrowsEmptyQuestionException() {
+    void createQuestionThrowsEmptyQuestionException() throws SQLException {
         QuestionDTO questionDTO = getEmptyQuestion();
 
         assertThrows(EmptyQuestionException.class, () -> sut.createQuestion(questionDTO));
@@ -213,27 +214,42 @@ class QuestionServiceImplTest {
     }
 
 
-    private List<QuestionDTO> getQuestionlist() {
+    private List<QuestionDTO> getQuestionlist() throws SQLException {
         List<QuestionDTO> questionList = new ArrayList<>();
-        questionList.add(new QuestionDTO(questionId, "String", category, "multiple", "String"));
-        questionList.add(new QuestionDTO(questionId, "String", category, "open", "String"));
-        QuestionDTO question = new QuestionDTO(questionId, "String", category, "multiple", "String");
+        questionList.add(getMultipleQuestion());
+        questionList.add(getOpenQuestion());
+        QuestionDTO question = getMultipleQuestion();
         question.setGivenAnswer("WrongAnswer");
         questionList.add(question);
         return questionList;
     }
 
-    private QuestionCollection getQuestionCollection() {
+    private QuestionCollection getQuestionCollection() throws SQLException {
         return new QuestionCollection(1, campaignID, "test", getQuestionlist());
     }
 
-    private QuestionDTO getOpenQuestion() {
-        return new QuestionDTO(2, "String", category, "open", "String");
+    private QuestionDTO getOpenQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+            questionDTOBuilder.questionID = questionId;
+            questionDTOBuilder.question = "Some question";
+            questionDTOBuilder.categoryType = category;
+            questionDTOBuilder.questionType = "open";
+            questionDTOBuilder.attachment = "";
+            questionDTOBuilder.stateID = pendingState;
+        }).build();
     }
 
-    private QuestionDTO getMultipleQuestion() {
-        return new QuestionDTO(2, "String", category, "multiple", "String");
+    private QuestionDTO getMultipleQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+            questionDTOBuilder.questionID = 2;
+            questionDTOBuilder.question = "Some question";
+            questionDTOBuilder.categoryType = category;
+            questionDTOBuilder.questionType = "multiple";
+            questionDTOBuilder.givenAnswer = "some answer";
+            questionDTOBuilder.questionID = pendingState;
+        }).build();
     }
+
 
     private List<PossibleAnswerDTO> getPossibleAnswers() {
         List<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
@@ -242,8 +258,15 @@ class QuestionServiceImplTest {
         return possibleAnswersList;
     }
 
-    private QuestionDTO getEmptyQuestion() {
-        return new QuestionDTO(2, "", category, "multiple", "String");
+    private QuestionDTO getEmptyQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+                    questionDTOBuilder.questionID = 3;
+                    questionDTOBuilder.question = "";
+                    questionDTOBuilder.categoryType = category;
+                    questionDTOBuilder.questionType = "Multiple";
+                    questionDTOBuilder.givenAnswer = "some answer";
+                    questionDTOBuilder.stateID = pendingState;
+                }
+        ).build();
     }
-
 }
