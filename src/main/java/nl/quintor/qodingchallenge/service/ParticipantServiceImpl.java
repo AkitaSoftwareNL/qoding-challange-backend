@@ -27,12 +27,12 @@ public class ParticipantServiceImpl implements ParticipantService {
         if (participantDAO.participantHasAlreadyParticipatedInCampaign(participantDTO, campaignID)) {
             throw new CouldNotAddParticipantException(
                     "Participant could not be added to this campaign",
-                    format("Participant name = %s %s with ID %d already exists in this campaign with campaign id = %d", participantDTO.getFirstname(), participantDTO.getLastname(), participantDTO.getCampaignID(), participantDTO.getCampaignID()),
+                    format("Participant name = %s %s with ID %d already exists in this campaign with campaign id = %d", participantDTO.getFirstname(), participantDTO.getLastname(), campaignID, participantDTO.getCampaignID()),
                     "Most likely you have already participated in this campaign. If not contact support"
             );
         }
-        return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
-            participantDTOBuilder.participantID = participantDAO.addParticipant(participantDTO, campaignID);
-        }).build();
+        return new ParticipantDTOBuilder().with(participantDTOBuilder ->
+                participantDTOBuilder.participantID = participantDAO.addParticipant(participantDTO, campaignID))
+                .build();
     }
 }
