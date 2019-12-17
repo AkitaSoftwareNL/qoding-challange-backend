@@ -15,7 +15,7 @@ public class CodingQuestionDTO {
     }
 
     public CodingQuestionDTO(String code, String test) {
-        new CodingQuestionDTO(10, code, test);
+        this(10, code, test);
     }
 
     public CodingQuestionDTO(long maxExecutionTime, String code, String test) {

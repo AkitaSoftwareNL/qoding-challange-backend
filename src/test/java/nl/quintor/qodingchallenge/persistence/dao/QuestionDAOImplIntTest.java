@@ -1,10 +1,12 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.h2.tools.RunScript;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -168,6 +170,24 @@ class QuestionDAOImplIntTest {
         final int expectedResult = 3;
 
         assertEquals(expectedResult, sut.getQuestionAmountPerCategory(category));
+    }
+
+    @Test
+    void getCodingQuestionThrowsSqlException() {
+        Assertions.assertThrows(SQLException.class, () -> sut.getCodingQuestion(999999999));
+    }
+
+    @Test
+    void getCodingQuestionThrowsNoQuestionFoundException() {
+        Assertions.assertThrows(NoQuestionFoundException.class, () -> sut.getCodingQuestion(0));
+    }
+
+    @Test
+    void getCodingQuestionGetCorrectQuestion() throws SQLException {
+        CodingQuestionDTO result = sut.getCodingQuestion(4);
+        Assertions.assertEquals("startCode",result.getCode());
+        Assertions.assertEquals("testCode",result.getTest());
+
     }
 
     private QuestionDTO getOpenQuestion() {

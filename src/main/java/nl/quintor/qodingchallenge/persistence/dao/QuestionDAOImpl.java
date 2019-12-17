@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
@@ -209,6 +210,35 @@ public class QuestionDAOImpl implements QuestionDAO {
             throw new SQLException(e);
         }
         return question;
+    }
+
+    @Override
+    public CodingQuestionDTO getCodingQuestion(int id) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("select QUESTIONID, STARTCODE, TESTCODE from PROGRAMMING_QUESTION WHERE QUESTIONID = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(
+                        resultSet.getString("STARTCODE"),
+                        resultSet.getString("TESTCODE")
+                );
+                return codingQuestionDTO;
+            } else {
+                throw new NoQuestionFoundException(
+                        "No question has been found",
+                        format("Question with questionID %d was not found", id),
+                        "Try an different questionID"
+                );
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        } catch (NoQuestionFoundException e) {
+            throw e;
+        }
+
     }
 
     @Override

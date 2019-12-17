@@ -6,6 +6,8 @@ drop table if exists QUESTION;
 
 drop table if exists TMP_MULTIPLE_CHOICE_QUESTION;
 
+drop table if exists programming_question;
+
 
 CREATE TABLE QUESTION
 (
@@ -26,6 +28,14 @@ create table MULTIPLE_CHOICE_QUESTION
   primary key (QUESTIONID, ANSWER_OPTIONS)
 );
 
+
+CREATE TABLE PROGRAMMING_QUESTION
+(
+   QUESTIONID           SMALLINT NOT NULL,
+   STARTCODE            VARCHAR(1024),
+   TESTCODE            VARCHAR(4096)
+);
+
 create table GIVEN_ANSWER
 (
   QUESTIONID    smallint      not null,
@@ -44,6 +54,7 @@ CREATE TABLE TMP_MULTIPLE_CHOICE_QUESTION
    PRIMARY KEY (QUESTIONID, ANSWER_OPTIONS)
 );
 
+
 insert into question (category_name, question, state, QUESTION_TYPE)
 values ('JAVA', 'Wat is de output van het draaien van de main methode in klasse B voor de volgende code', 1, 'open');
 insert into question (category_name, question, state, QUESTION_TYPE)
@@ -60,3 +71,7 @@ values (3, 'Nee', 0);
 
 insert into GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, STATEID, GIVEN_ANSWER)
 values (3, 1, 1, 1, 'A');
+
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Maak een string vergelijker', 1, 'program');
+INSERT INTO programming_question (QUESTIONID, STARTCODE, TESTCODE) VALUES (4, 'startCode','testCode');
+

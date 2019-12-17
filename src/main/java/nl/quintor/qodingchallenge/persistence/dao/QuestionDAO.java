@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
@@ -27,6 +28,8 @@ public interface QuestionDAO {
     List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 
     QuestionDTO getQuestion(int questionid) throws SQLException;
+
+    CodingQuestionDTO getCodingQuestion(int id) throws SQLException;
 
     void setPendingAnswer(GivenAnswerDTO questionDTO) throws SQLException;
 
