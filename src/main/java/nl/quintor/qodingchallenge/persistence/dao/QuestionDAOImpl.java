@@ -225,7 +225,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, givenAnswerDTO.getStateId());
             statement.setInt(2, givenAnswerDTO.getQuestionId());
             statement.setInt(3, givenAnswerDTO.getCampaignId());
-            statement.setString(4, givenAnswerDTO.getParticipentId());
+            statement.setString(4, givenAnswerDTO.getParticipantId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);

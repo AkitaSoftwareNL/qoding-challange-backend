@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class GivenAnswerDTO {
     private int questionId;
-    private String participentId;
+    private String participantId;
     private int campaignId;
     private int stateId;
     private String givenAnswer;
@@ -12,9 +12,9 @@ public class GivenAnswerDTO {
     public GivenAnswerDTO() {
     }
 
-    public GivenAnswerDTO(int questionId, String participentId, int campaignId, int stateId, String givenAnswer) {
+    public GivenAnswerDTO(int questionId, String participantId, int campaignId, int stateId, String givenAnswer) {
         this.questionId = questionId;
-        this.participentId = participentId;
+        this.participantId = participantId;
         this.campaignId = campaignId;
         this.stateId = stateId;
         this.givenAnswer = givenAnswer;
@@ -28,12 +28,12 @@ public class GivenAnswerDTO {
         this.questionId = questionId;
     }
 
-    public String getParticipentId() {
-        return participentId;
+    public String getParticipantId() {
+        return participantId;
     }
 
-    public void setParticipentId(String participentId) {
-        this.participentId = participentId;
+    public void setParticipantId(String participantId) {
+        this.participantId = participantId;
     }
 
     public int getCampaignId() {
@@ -68,12 +68,12 @@ public class GivenAnswerDTO {
         return questionId == that.questionId &&
                 campaignId == that.campaignId &&
                 stateId == that.stateId &&
-                Objects.equals(participentId, that.participentId) &&
+                Objects.equals(participantId, that.participantId) &&
                 Objects.equals(givenAnswer, that.givenAnswer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionId, participentId, campaignId, stateId, givenAnswer);
+        return Objects.hash(questionId, participantId, campaignId, stateId, givenAnswer);
     }
 }
