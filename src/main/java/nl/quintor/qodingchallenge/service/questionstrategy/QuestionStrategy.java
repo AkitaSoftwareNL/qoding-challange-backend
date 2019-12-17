@@ -16,7 +16,7 @@ public abstract class QuestionStrategy {
     }
 
     public boolean isType(String typeToCheck) {
-        return this.type.equals(typeToCheck);
+        return this.type.equalsIgnoreCase(typeToCheck);
     }
 
     public void persistQuestion(QuestionDTO question) throws SQLException {

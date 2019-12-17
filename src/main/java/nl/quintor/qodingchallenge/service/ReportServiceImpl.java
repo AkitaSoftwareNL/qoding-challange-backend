@@ -51,7 +51,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public AnswerCollection getAnswersPerParticipant(int campaignID, int participantID) throws SQLException {
+    public AnswerCollection getAnswersPerParticipant(int campaignID, String participantID) throws SQLException {
         AnswerCollection answerCollection = participantDAO.getFirstAndLastname(participantID);
         answerCollection.setCampaignName(campaignDAO.getCampaignName(campaignID));
         answerCollection.setCampaignID(campaignID);

@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerDTO;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
+import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -31,17 +32,18 @@ public class ReportDAOImpl implements ReportDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 participants.add(
-                        new ParticipantDTO(
-                                resultSet.getInt("PARTICIPANTID"),
-                                resultSet.getInt("CAMPAIGN_ID"),
-                                resultSet.getLong("TIME_SPEND"),
-                                resultSet.getString("FIRSTNAME"),
-                                resultSet.getString("INSERTION"),
-                                resultSet.getString("LASTNAME"),
-                                resultSet.getString("EMAIL"),
-                                resultSet.getString("PHONENUMBER"),
-                                resultSet.getInt("CORRECT")
-                        )
+                        new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+                                    participantDTOBuilder.firstname = resultSet.getString("FIRSTNAME");
+                                    participantDTOBuilder.lastname = resultSet.getString("LASTNAME");
+                                    participantDTOBuilder.participantID = resultSet.getString("PARTICIPANTID");
+                                    participantDTOBuilder.campaignID = resultSet.getInt("CAMPAIGN_ID");
+                                    participantDTOBuilder.timeInMillis = resultSet.getLong("TIME_SPEND");
+                                    participantDTOBuilder.insertion = resultSet.getString("INSERTION");
+                                    participantDTOBuilder.email = resultSet.getString("EMAIL");
+                                    participantDTOBuilder.phonenumber = resultSet.getString("PHONENUMBER");
+                                    participantDTOBuilder.amountOfRightAnsweredQuestions = resultSet.getInt("CORRECT");
+                                }
+                        ).build()
                 );
             }
         } catch (SQLException e) {
@@ -51,7 +53,7 @@ public class ReportDAOImpl implements ReportDAO {
     }
 
     @Override
-    public List<AnswerDTO> getAnswersPerParticipant(int campaignID, int participantID) throws SQLException {
+    public List<AnswerDTO> getAnswersPerParticipant(int campaignID, String participantID) throws SQLException {
         List<AnswerDTO> answers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -61,7 +63,7 @@ public class ReportDAOImpl implements ReportDAO {
                             "ON ga.QUESTIONID = q.QUESTIONID INNER JOIN conference as c " +
                             "ON ga.PARTICIPANTID = c.PARTICIPANTID WHERE ga.CAMPAIGN_ID = ? AND ga.PARTICIPANTID = ?");
             statement.setInt(1, campaignID);
-            statement.setInt(2, participantID);
+            statement.setString(2, participantID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 answers.add(

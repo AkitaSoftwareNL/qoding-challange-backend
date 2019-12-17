@@ -4,6 +4,7 @@ import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
@@ -43,17 +44,17 @@ class QuestionServiceImplTest {
         this.sut.setCampaignDAO(campaignDAOMock);
         this.sut.setQuestionDAO(questionDAOMock);
 
-        when(campaignDAOMock.campaignExists(campaign)).thenReturn(true);
+        when(campaignDAOMock.campaignExists(campaignID)).thenReturn(true);
     }
 
     @Test
     void getQuestionsCallsGetPossibleAnswers() throws SQLException {
         // Mock
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(getQuestionlist().size());
+        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(getQuestionlist().size());
         when(questionDAOMock.getQuestions(anyString(), anyInt())).thenReturn(getQuestionlist());
         when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
         // Test
-        sut.getQuestions(category, campaign);
+        sut.getQuestions(category, campaignID);
         // Verify
         verify(questionDAOMock, times(3)).getPossibleAnswers(questionId);
     }
@@ -61,9 +62,9 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsCallsGetQuestions() throws SQLException {
         final int questionLimit = 3;
-        when(campaignDAOMock.getAmountOfQuestions(anyString())).thenReturn(questionLimit);
+        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(questionLimit);
 
-        sut.getQuestions(category, campaign);
+        sut.getQuestions(category, campaignID);
 
         verify(questionDAOMock).getQuestions(category, questionLimit);
     }
@@ -79,9 +80,10 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionThrowsNoCampaignFoundException() throws SQLException {
-        when(campaignDAOMock.campaignExists("This campaign does not exist")).thenReturn(true);
+        final int noCampaign = 1;
+        when(campaignDAOMock.campaignExists(noCampaign)).thenReturn(false);
 
-        assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, "This campaign does not exists"));
+        assertThrows(NoCampaignFoundException.class, () -> sut.getQuestions(category, noCampaign));
     }
 
     @Test
@@ -107,17 +109,17 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
         List<QuestionDTO> questionDTOList = getQuestionlist();
-        when(campaignDAOMock.getAmountOfQuestions(campaign)).thenReturn(1);
-        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaign))).thenReturn(questionDTOList);
+        when(campaignDAOMock.getAmountOfQuestions(campaignID)).thenReturn(1);
+        when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaignID))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
 
         questionDTOList.get(0).setPossibleAnswers(getPossibleAnswers());
 
-        assertEquals(questionDTOList.get(0).getPossibleAnswers(), sut.getQuestions(category, campaign).getQuestions().get(0).getPossibleAnswers());
+        assertEquals(questionDTOList.get(0).getPossibleAnswers(), sut.getQuestions(category, campaignID).getQuestions().get(0).getPossibleAnswers());
     }
 
     @Test
-    void createQuestionThrowsEmptyQuestionException() {
+    void createQuestionThrowsEmptyQuestionException() throws SQLException {
         QuestionDTO questionDTO = getEmptyQuestion();
 
         assertThrows(EmptyQuestionException.class, () -> sut.createQuestion(questionDTO));
@@ -207,33 +209,48 @@ class QuestionServiceImplTest {
 
     private List<GivenAnswerDTO> getAnswers() {
         List<GivenAnswerDTO> answers = new ArrayList<>();
-        answers.add(0, new GivenAnswerDTO(1, 1, 1, 1, "A"));
-        answers.add(1, new GivenAnswerDTO(2, 2, 2, 1, "B"));
+        answers.add(0, new GivenAnswerDTO(1, "1", 1, 1, "A"));
+        answers.add(1, new GivenAnswerDTO(2, "2", 2, 1, "B"));
         return answers;
     }
 
 
-    private List<QuestionDTO> getQuestionlist() {
+    private List<QuestionDTO> getQuestionlist() throws SQLException {
         List<QuestionDTO> questionList = new ArrayList<>();
-        questionList.add(new QuestionDTO(questionId, "String", category, "multiple", "String"));
-        questionList.add(new QuestionDTO(questionId, "String", category, "open", "String"));
-        QuestionDTO question = new QuestionDTO(questionId, "String", category, "multiple", "String");
+        questionList.add(getMultipleQuestion());
+        questionList.add(getOpenQuestion());
+        QuestionDTO question = getMultipleQuestion();
         question.setGivenAnswer("WrongAnswer");
         questionList.add(question);
         return questionList;
     }
 
-    private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, campaignID, "test", getQuestionlist());
+    private QuestionCollection getQuestionCollection() throws SQLException {
+        return new QuestionCollection("1", campaignID, "test", getQuestionlist());
     }
 
-    private QuestionDTO getOpenQuestion() {
-        return new QuestionDTO(2, "String", category, "open", "String");
+    private QuestionDTO getOpenQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+            questionDTOBuilder.questionID = questionId;
+            questionDTOBuilder.question = "Some question";
+            questionDTOBuilder.categoryType = category;
+            questionDTOBuilder.questionType = "open";
+            questionDTOBuilder.attachment = "";
+            questionDTOBuilder.stateID = 2;
+        }).build();
     }
 
-    private QuestionDTO getMultipleQuestion() {
-        return new QuestionDTO(2, "String", category, "multiple", "String");
+    private QuestionDTO getMultipleQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+            questionDTOBuilder.questionID = 1;
+            questionDTOBuilder.question = "Some question";
+            questionDTOBuilder.categoryType = category;
+            questionDTOBuilder.questionType = "multiple";
+            questionDTOBuilder.givenAnswer = "";
+            questionDTOBuilder.stateID = 2;
+        }).build();
     }
+
 
     private List<PossibleAnswerDTO> getPossibleAnswers() {
         List<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
@@ -242,8 +259,15 @@ class QuestionServiceImplTest {
         return possibleAnswersList;
     }
 
-    private QuestionDTO getEmptyQuestion() {
-        return new QuestionDTO(2, "", category, "multiple", "String");
+    private QuestionDTO getEmptyQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+                    questionDTOBuilder.questionID = 3;
+                    questionDTOBuilder.question = "";
+                    questionDTOBuilder.categoryType = category;
+                    questionDTOBuilder.questionType = "multiple";
+                    questionDTOBuilder.givenAnswer = "no";
+                    questionDTOBuilder.stateID = pendingState;
+                }
+        ).build();
     }
-
 }

@@ -5,27 +5,23 @@ public class CustomException extends RuntimeException {
     private String message;
     private String details;
     private String nextActions;
-    private String support;
 
     protected CustomException() {
     }
 
     protected CustomException(String message) {
         this.message = message;
-        support = "https://quintor.nl/";
     }
 
     protected CustomException(String message, String details) {
         this.message = message;
         this.details = details;
-        support = "https://quintor.nl/";
     }
 
-    protected CustomException(String message, String details, String nextActions) {
+    public CustomException(String message, String details, String nextActions) {
         this.message = message;
         this.details = details;
         this.nextActions = nextActions;
-        support = "https://quintor.nl/";
     }
 
     @Override
@@ -54,10 +50,6 @@ public class CustomException extends RuntimeException {
     }
 
     public String getSupport() {
-        return support;
-    }
-
-    public void setSupport(String support) {
-        this.support = support;
+        return "https://quintor.nl/";
     }
 }

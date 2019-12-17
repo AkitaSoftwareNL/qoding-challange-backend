@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 class CampaignDAOImplIntTest {
 
     private final int amountOfCampaigns = 3;
-    private final String campaignName = "HC2 Holdings, Inc";
+    private final int campaignID = 1;
 
     private CampaignDAO sut;
 
@@ -37,7 +37,7 @@ class CampaignDAOImplIntTest {
 
     @Test
     void campaignExistReturnsTrueWhenCampaignExists() throws SQLException {
-        var expectedResult = sut.campaignExists(campaignName);
+        var expectedResult = sut.campaignExists(campaignID);
 
         assertTrue(expectedResult);
     }
@@ -46,14 +46,14 @@ class CampaignDAOImplIntTest {
     void campaignExistReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
         final String noCampaign = "Some non existing campaign";
 
-        var expectedResult = sut.campaignExists(noCampaign);
+        var expectedResult = sut.campaignExists(0);
 
         assertFalse(expectedResult);
     }
 
     @Test
     void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
-        var actualResult = sut.getAmountOfQuestions(campaignName);
+        var actualResult = sut.getAmountOfQuestions(campaignID);
 
         assertEquals(1, actualResult);
     }
@@ -67,7 +67,7 @@ class CampaignDAOImplIntTest {
 
     @Test
     void campaignExitsReturnsTrueWhenCampaignExists() throws SQLException {
-        assertTrue(sut.campaignExists(campaignName));
+        assertTrue(sut.campaignExists(campaignID));
     }
 
     @Test
@@ -81,18 +81,17 @@ class CampaignDAOImplIntTest {
     void campaignExitsReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
         final String NO_CAMPAIGN = "Some non existing campaign";
 
-        assertFalse(sut.campaignExists(NO_CAMPAIGN));
+        assertFalse(sut.campaignExists(0));
     }
 
     @Test
     void getCampaignNameGetsCampaignName() throws SQLException {
-        assertEquals(campaignName, sut.getCampaignName(1));
         assertEquals("Syros Pharmaceuticals, Inc", sut.getCampaignName(2));
     }
 
     @Test
     void getCampaignIDgetsCampaignID() throws SQLException {
-        assertEquals(1, sut.getCampaignID(campaignName));
+        assertEquals(2, sut.getCampaignID("Syros Pharmaceuticals, Inc"));
     }
 
     private CampaignDTO getCampaign() {

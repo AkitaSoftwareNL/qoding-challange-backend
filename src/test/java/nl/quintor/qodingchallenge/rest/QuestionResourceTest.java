@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.rest;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.service.ParticipantService;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,18 +45,18 @@ class QuestionResourceTest {
 
     @Test
     void sendQuestionCallsQuestionServiceGetQuestions() throws SQLException {
-        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
+        when(questionServiceMock.getQuestions(category, campaignID)).thenReturn(getQuestionCollection());
 
-        sut.sendQuestions(campaign);
+        sut.sendQuestions(campaignID);
 
-        verify(questionServiceMock).getQuestions(category, campaign);
+        verify(questionServiceMock).getQuestions(category, campaignID);
     }
 
     @Test
     void sendQuestionsReturnsQuestionCollectionAndResponseOK() throws SQLException {
-        when(questionServiceMock.getQuestions(category, campaign)).thenReturn(getQuestionCollection());
+        when(questionServiceMock.getQuestions(category, campaignID)).thenReturn(getQuestionCollection());
 
-        var test = sut.sendQuestions(campaign);
+        var test = sut.sendQuestions(campaignID);
 
         assertEquals(getQuestionCollection(), test.getBody());
         assertEquals(HttpStatus.OK, test.getStatusCode());
@@ -228,25 +229,31 @@ class QuestionResourceTest {
         return new GivenAnswerDTO();
     }
 
-    private QuestionCollection getQuestionCollection() {
-        return new QuestionCollection(1, 1, campaign, getQuestions());
+    private QuestionCollection getQuestionCollection() throws SQLException {
+        return new QuestionCollection("1", 1, campaign, getQuestions());
     }
 
-    private QuestionDTO getQuestion() {
-        return new QuestionDTO(1, question, category, "open", attachment);
+    private QuestionDTO getQuestion() throws SQLException {
+        return new QuestionDTOBuilder().with(questionDTOBuilder -> {
+            questionDTOBuilder.questionID = 1;
+            questionDTOBuilder.question = question;
+            questionDTOBuilder.categoryType = category;
+            questionDTOBuilder.questionType = "open";
+            questionDTOBuilder.attachment = attachment;
+        }).build();
     }
 
     private List<GivenAnswerDTO> getAnswers() {
         List<GivenAnswerDTO> answers = new ArrayList<>();
-        answers.add(0, new GivenAnswerDTO(1, 1, 1, 1, "A"));
-        answers.add(1, new GivenAnswerDTO(2, 2, 2, 1, "B"));
+        answers.add(0, new GivenAnswerDTO(1, "1", 1, 1, "A"));
+        answers.add(1, new GivenAnswerDTO(2, "2", 2, 1, "B"));
         return answers;
     }
 
-    private List<QuestionDTO> getQuestions() {
+    private List<QuestionDTO> getQuestions() throws SQLException {
         List<QuestionDTO> questions = new ArrayList<>();
-        questions.add(0, new QuestionDTO(2, question, category, "open", attachment));
-        questions.add(1, new QuestionDTO(3, question, category, "open", attachment));
+        questions.add(0, getQuestion());
+        questions.add(1, getQuestion());
         return questions;
     }
 

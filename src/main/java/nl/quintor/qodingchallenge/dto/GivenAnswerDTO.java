@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class GivenAnswerDTO {
     private int questionId;
-    private int participentId;
+    private String participantId;
     private int campaignId;
     private int stateId;
     private String givenAnswer;
@@ -12,9 +12,9 @@ public class GivenAnswerDTO {
     public GivenAnswerDTO() {
     }
 
-    public GivenAnswerDTO(int questionId, int participentId, int campaignId, int stateId, String givenAnswer) {
+    public GivenAnswerDTO(int questionId, String participantId, int campaignId, int stateId, String givenAnswer) {
         this.questionId = questionId;
-        this.participentId = participentId;
+        this.participantId = participantId;
         this.campaignId = campaignId;
         this.stateId = stateId;
         this.givenAnswer = givenAnswer;
@@ -28,12 +28,12 @@ public class GivenAnswerDTO {
         this.questionId = questionId;
     }
 
-    public int getParticipentId() {
-        return participentId;
+    public String getParticipantId() {
+        return participantId;
     }
 
-    public void setParticipentId(int participentId) {
-        this.participentId = participentId;
+    public void setParticipantId(String participantId) {
+        this.participantId = participantId;
     }
 
     public int getCampaignId() {
@@ -66,14 +66,14 @@ public class GivenAnswerDTO {
         if (o == null || getClass() != o.getClass()) return false;
         GivenAnswerDTO that = (GivenAnswerDTO) o;
         return questionId == that.questionId &&
-                participentId == that.participentId &&
                 campaignId == that.campaignId &&
                 stateId == that.stateId &&
+                Objects.equals(participantId, that.participantId) &&
                 Objects.equals(givenAnswer, that.givenAnswer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionId, participentId, campaignId, stateId, givenAnswer);
+        return Objects.hash(questionId, participantId, campaignId, stateId, givenAnswer);
     }
 }

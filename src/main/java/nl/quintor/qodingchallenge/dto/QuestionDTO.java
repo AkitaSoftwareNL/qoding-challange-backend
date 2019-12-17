@@ -17,14 +17,15 @@ public class QuestionDTO {
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
         this.questionType = questionType;
         this.attachment = attachment;
-        this.givenAnswer = "";
-        this.stateID = 1;
+        this.possibleAnswers = possibleAnswers;
+        this.givenAnswer = givenAnswer;
+        this.stateID = stateID;
     }
 
     public int getQuestionID() {
@@ -52,11 +53,7 @@ public class QuestionDTO {
     }
 
     public String getAttachment() {
-        if (attachment != null && attachment.isEmpty()) {
-            return null;
-        } else {
-            return attachment;
-        }
+        return attachment;
     }
 
     public void setAttachment(String attachment) {

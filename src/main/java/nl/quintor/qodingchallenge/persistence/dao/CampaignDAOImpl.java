@@ -16,17 +16,15 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 public class CampaignDAOImpl implements CampaignDAO {
 
     @Override
-    public boolean campaignExists(String name) throws SQLException {
+    public boolean campaignExists(int id) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT 1 FROM campaign WHERE CAMPAIGN_NAME = ?");
-            statement.setString(1, name);
+                    "SELECT 1 FROM campaign WHERE CAMPAIGN_ID = ?");
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            }
+            if (resultSet.next()) return true;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -43,7 +41,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                             "VALUES (?, 'JAVA', 'conferentie', 'admin', ?, null, 1)");
             statement.setString(1, campaignDTO.getName());
             statement.setInt(2, campaignDTO.getAmountOfQuestions());
-            statement.execute();
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -79,13 +77,13 @@ public class CampaignDAOImpl implements CampaignDAO {
     }
 
     @Override
-    public int getAmountOfQuestions(String campaignName) throws SQLException {
+    public int getAmountOfQuestions(int campaignID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE CAMPAIGN_NAME = ?");
-            statement.setString(1, campaignName);
+                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE CAMPAIGN_ID = ?");
+            statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("AMOUNT_OF_QUESTIONS");

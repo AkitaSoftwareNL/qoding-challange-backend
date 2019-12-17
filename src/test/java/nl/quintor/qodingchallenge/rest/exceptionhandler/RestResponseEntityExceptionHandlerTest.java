@@ -5,9 +5,7 @@ import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException
 import nl.quintor.qodingchallenge.rest.customexception.CustomException;
 import nl.quintor.qodingchallenge.rest.customexception.CustomExceptionWrapper;
 import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
-import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
-import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
-import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
+import nl.quintor.qodingchallenge.service.exception.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -49,16 +47,16 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleAnswerNotFoundExceptionTest() {
-        var expectedResponse = handler.handleNotFoundStatus(new AnswerNotFoundException(messageForException, "", ""), webRequest);
+        var expectedResponse = handler.handleCustomExceptionNotFound(new AnswerNotFoundException(messageForException, "", ""), webRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }
 
     @Test
     void handleNoCampaignFoundExceptionTest() {
-        var expectedResponse = handler.handleCustomExceptionInternalServerError(new NoCampaignFoundException(messageForException, "", ""), webRequest);
+        var expectedResponse = handler.handleCustomExceptionNotFound(new NoCampaignFoundException(messageForException, "", ""), webRequest);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, expectedResponse.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
     }
 
     @Test
@@ -70,9 +68,23 @@ class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void handleNoQuestionFoundException() {
-        var expectedResponse = handler.handleCustomExceptionInternalServerError(new NoQuestionFoundException(messageForException, "", ""), webRequest);
+        var expectedResponse = handler.handleCustomExceptionNotFound(new NoQuestionFoundException(messageForException, "", ""), webRequest);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, expectedResponse.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, expectedResponse.getStatusCode());
+    }
+
+    @Test
+    void handleCouldNotAddParticipantException() {
+        var expectedResult = handler.handleCustomExceptionBadRequest(new CouldNotAddParticipantException(messageForException, "", ""), webRequest);
+
+        assertEquals(HttpStatus.BAD_REQUEST, expectedResult.getStatusCode());
+    }
+
+    @Test
+    void handleCampaignDoesNotExistException() {
+        var expectedResult = handler.handleCustomExceptionInternalServerError(new CampaignDoesNotExistsException(messageForException, "", ""), webRequest);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, expectedResult.getStatusCode());
     }
 
     @Test

@@ -11,7 +11,7 @@ import java.util.List;
 public interface QuestionDAO {
     List<QuestionDTO> getQuestions(String category, int limit) throws SQLException;
 
-    void setAnswer(QuestionDTO question, int campaignId, int participantID) throws SQLException;
+    void setAnswer(QuestionDTO question, int campaignId, String participantID) throws SQLException;
 
     String getCorrectAnswer(int questionID) throws SQLException;
 
