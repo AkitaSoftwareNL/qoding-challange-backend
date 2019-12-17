@@ -32,7 +32,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public void addParticipantToCampaign(int campaignID, String participantID) throws SQLException {
-        if(!campaignDAO.campaignExists(campaignID)) {
+        if (!campaignDAO.campaignExists(campaignID)) {
             throw new CampaignDoesNotExistsException(
                     "The campaign does not exist",
                     "The campaign you are trying to enter has expired",
