@@ -30,7 +30,6 @@ class QuestionResourceTest {
 
     private QuestionResource sut;
     private QuestionService questionServiceMock;
-    private ParticipantService participantServiceMock;
 
     @BeforeEach
     void setUp() {
@@ -38,9 +37,6 @@ class QuestionResourceTest {
 
         this.questionServiceMock = mock(QuestionService.class);
         this.sut.setQuestionService(questionServiceMock);
-
-        this.participantServiceMock = mock(ParticipantService.class);
-        this.sut.setParticipantService(participantServiceMock);
     }
 
     @Test
