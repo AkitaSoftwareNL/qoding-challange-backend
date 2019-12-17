@@ -20,26 +20,14 @@ class ParticipantServiceImplTest {
     private final int campaignId = 1;
     private ParticipantServiceImpl sut;
     private ParticipantDAOImpl participantDAOMock;
-    private CampaignDAOImpl campaignDAOMock;
 
     @BeforeEach
     void setUp() {
         this.sut = new ParticipantServiceImpl();
 
         this.participantDAOMock = mock(ParticipantDAOImpl.class);
-        this.campaignDAOMock = mock(CampaignDAOImpl.class);
 
         this.sut.setParticipantDAO(participantDAOMock);
-        this.sut.setCampaignDAO(campaignDAOMock);
-    }
-
-    @Test
-    void addParticipantToCampaignCallsParticipantDAO() throws SQLException {
-        when(campaignDAOMock.campaignExists(campaignId)).thenReturn(true);
-
-        sut.addParticipantToCampaign(campaignId, getParticipantDTO().getParticipantID());
-
-        verify(participantDAOMock).addParticipantToCampaign(campaignId, getParticipantDTO().getParticipantID());
     }
 
     @Test
@@ -59,12 +47,6 @@ class ParticipantServiceImplTest {
     void participantHasAlreadyParticipatedInCampaignCallsParticipantHasAlreadyParticipatedInCampaignParticipantDAO() throws SQLException {
         sut.addParticipant(getParticipantDTO().getCampaignID(), getParticipantDTO());
         verify(participantDAOMock).addParticipant(getParticipantDTO(), campaignId);
-    }
-
-    @Test
-    void addParticipantToCampaignThrowsCampaignDoesNotExistException() throws SQLException {
-        when(campaignDAOMock.campaignExists(campaignId)).thenReturn(false);
-        assertThrows(CampaignDoesNotExistsException.class, () -> sut.addParticipantToCampaign(campaignId, UUID.randomUUID().toString()));
     }
 
     private ParticipantDTO getParticipantDTO() throws SQLException {

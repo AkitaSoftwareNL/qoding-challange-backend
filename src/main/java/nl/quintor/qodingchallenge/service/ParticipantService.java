@@ -12,10 +12,5 @@ public interface ParticipantService {
     @Autowired
     void setParticipantDAO(ParticipantDAO participantDAO);
 
-    @Autowired
-    void setCampaignDAO(CampaignDAO campaignDAO);
-
-    void addParticipantToCampaign(int campaignID, String participantID) throws SQLException;
-
-    void addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException;
+    String addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException;
 }

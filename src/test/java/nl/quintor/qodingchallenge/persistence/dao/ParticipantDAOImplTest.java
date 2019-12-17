@@ -1,7 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
-import nl.quintor.qodingchallenge.dto.AnswerDTO;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.RankedParticipantCollection;
 import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
@@ -89,6 +88,28 @@ class ParticipantDAOImplTest {
         assertFalse(sut.participantHasAlreadyParticipatedInCampaign(getParticipantDTO(), campaignID));
     }
 
+    @Test
+    void getParticipantsReturnsListWithParticipants() throws SQLException {
+        List<ParticipantDTO> participants = sut.getRankedParticipantsPerCampaign(campaignID);
+        assertFalse(participants.isEmpty());
+    }
+
+    @Test
+    void addParticipantAddsAnParticipant() throws SQLException {
+        final int amountBeforeInsert = 4;
+
+       sut.addParticipant(getParticipantDTO(), campaignID);
+
+       assertEquals(amountBeforeInsert + 1, sut.getRankedParticipantsPerCampaign(campaignID).size());
+    }
+
+    @Test
+    void addParticipantCreatesUniqueID() throws SQLException {
+        List<ParticipantDTO> participants = sut.getRankedParticipantsPerCampaign(campaignID);
+
+        assertNotEquals(participants.get(0).getParticipantID(), participants.get(1).getParticipantID(), participants.get(2).getParticipantID());
+    }
+
     private ParticipantDTO getExistingParticipant() throws SQLException {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "Gray";
@@ -107,7 +128,6 @@ class ParticipantDAOImplTest {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "name";
                     participantDTOBuilder.lastname = "name";
-                    participantDTOBuilder.participantID = "20";
                     participantDTOBuilder.campaignID = 1;
                     participantDTOBuilder.timeInMillis = 10000;
                     participantDTOBuilder.email = "name@gmail.com";

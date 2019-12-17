@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
+import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;

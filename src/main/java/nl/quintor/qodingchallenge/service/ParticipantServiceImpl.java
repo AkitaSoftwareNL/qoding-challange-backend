@@ -16,7 +16,6 @@ import static java.lang.String.format;
 public class ParticipantServiceImpl implements ParticipantService {
 
     private ParticipantDAO participantDAO;
-    private CampaignDAO campaignDAO;
 
     @Override
     @Autowired
@@ -25,25 +24,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    @Autowired
-    public void setCampaignDAO(CampaignDAO campaignDAO) {
-        this.campaignDAO = campaignDAO;
-    }
-
-    @Override
-    public void addParticipantToCampaign(int campaignID, String participantID) throws SQLException {
-        if (!campaignDAO.campaignExists(campaignID)) {
-            throw new CampaignDoesNotExistsException(
-                    "The campaign does not exist",
-                    "The campaign you are trying to enter has expired",
-                    "If the campaign has not yet expired please contact support"
-            );
-        }
-        participantDAO.addParticipantToCampaign(campaignID, participantID);
-    }
-
-    @Override
-    public void addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException {
+    public String addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException {
         if (participantDAO.participantHasAlreadyParticipatedInCampaign(participantDTO, campaignID)) {
             throw new CouldNotAddParticipantException(
                     "Participant could not be added to this campaign",
@@ -51,6 +32,6 @@ public class ParticipantServiceImpl implements ParticipantService {
                     "Most likely you have already participated in this campaign. If not contact support"
             );
         }
-        participantDAO.addParticipant(participantDTO, campaignID);
+        return participantDAO.addParticipant(participantDTO, campaignID);
     }
 }

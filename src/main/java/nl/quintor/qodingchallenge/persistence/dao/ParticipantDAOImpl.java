@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
@@ -37,22 +38,6 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             throw new SQLException(e);
         }
         return answerCollection;
-    }
-
-    @Override
-    public void addParticipantToCampaign(int campaignID, String participantID) throws SQLException {
-        try (
-                Connection connection = getConnection()
-        ) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO participant_of_campaign (CAMPAIGN_ID, PARTICIPANTID) VALUES (?,?)"
-            );
-            statement.setInt(1, campaignID);
-            statement.setString(2, participantID);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new SQLException(e);
-        }
     }
 
     @Override
@@ -91,7 +76,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     }
 
     @Override
-    public void addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException {
+    public String addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException {
         final String participantID = UUID.randomUUID().toString();
         try (
                 Connection connection = getConnection()
@@ -114,6 +99,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+        return participantID;
     }
 
 
