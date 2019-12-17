@@ -21,10 +21,6 @@ public class QuestionResource {
     private QuestionService questionService;
 
     @Autowired
-    public void setParticipantService(ParticipantService participantService) {
-    }
-
-    @Autowired
     public void setQuestionService(QuestionService questionService) {
         this.questionService = questionService;
     }

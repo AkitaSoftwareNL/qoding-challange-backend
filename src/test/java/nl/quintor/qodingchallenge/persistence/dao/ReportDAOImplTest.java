@@ -1,8 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerDTO;
-import nl.quintor.qodingchallenge.dto.ParticipantDTO;
-import nl.quintor.qodingchallenge.dto.RankedParticipantCollection;
 import nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactoryWrapper;
 import nl.quintor.qodingchallenge.persistence.connection.IConnectionPoolFactoryWrapper;
 import org.h2.tools.RunScript;

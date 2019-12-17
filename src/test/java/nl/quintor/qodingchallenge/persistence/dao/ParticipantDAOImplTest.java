@@ -98,9 +98,9 @@ class ParticipantDAOImplTest {
     void addParticipantAddsAnParticipant() throws SQLException {
         final int amountBeforeInsert = 4;
 
-       sut.addParticipant(getParticipantDTO(), campaignID);
+        sut.addParticipant(getParticipantDTO(), campaignID);
 
-       assertEquals(amountBeforeInsert + 1, sut.getRankedParticipantsPerCampaign(campaignID).size());
+        assertEquals(amountBeforeInsert + 1, sut.getRankedParticipantsPerCampaign(campaignID).size());
     }
 
     @Test

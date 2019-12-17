@@ -2,15 +2,12 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
-import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
 import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAOImpl;
-import nl.quintor.qodingchallenge.service.exception.CampaignDoesNotExistsException;
 import nl.quintor.qodingchallenge.service.exception.CouldNotAddParticipantException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;

@@ -1,8 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerDTO;
-import nl.quintor.qodingchallenge.dto.ParticipantDTO;
-import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
