@@ -26,8 +26,11 @@ public class CodingStrategyImpl extends QuestionStrategy {
     public void validateAnswer(QuestionDTO question) throws ValidationException {
         final int CORRECT = 2;
         final int INCORRECT = 3;
+
+        CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), "");
+        
         try {
-            ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", CodingQuestionDTO.mapFrom(question), TestResultDTO.class);
+            ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", codingQuestionDTO, TestResultDTO.class);
             TestResultDTO testResult = (TestResultDTO) result.getBody();
 
             if (result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
@@ -41,7 +44,7 @@ public class CodingStrategyImpl extends QuestionStrategy {
                 }
             }
         } catch (Exception e) {
-            throw new ValidationException();
+            throw new ValidationException(e.getMessage());
         }
     }
 }

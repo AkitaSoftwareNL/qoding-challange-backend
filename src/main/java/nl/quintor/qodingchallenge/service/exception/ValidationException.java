@@ -10,11 +10,11 @@ public class ValidationException extends CustomException {
         super(MESSAGE);
     }
 
-    public ValidationException(String message, String details) {
+    public ValidationException(String details) {
         super(MESSAGE, details);
     }
 
-    public ValidationException(String message, String details, String nextActions) {
+    public ValidationException(String details, String nextActions) {
         super(MESSAGE, details, nextActions);
     }
 }
