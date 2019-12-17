@@ -1,9 +1,8 @@
 package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
-import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAO;
-import nl.quintor.qodingchallenge.service.exception.CampaignDoesNotExistsException;
 import nl.quintor.qodingchallenge.service.exception.CouldNotAddParticipantException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public String addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException {
+    public ParticipantDTO addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException {
         if (participantDAO.participantHasAlreadyParticipatedInCampaign(participantDTO, campaignID)) {
             throw new CouldNotAddParticipantException(
                     "Participant could not be added to this campaign",
@@ -32,6 +31,8 @@ public class ParticipantServiceImpl implements ParticipantService {
                     "Most likely you have already participated in this campaign. If not contact support"
             );
         }
-        return participantDAO.addParticipant(participantDTO, campaignID);
+        return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+            participantDTOBuilder.participantID = participantDAO.addParticipant(participantDTO, campaignID);
+        }).build();
     }
 }

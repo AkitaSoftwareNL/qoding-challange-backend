@@ -26,8 +26,8 @@ public class ParticipantResource {
             path = "/login/{campaignID}",
             method = RequestMethod.POST
     )
-    public ResponseEntity<String> login(@PathVariable int campaignID, @RequestBody ParticipantDTO participantDTO) throws SQLException {
-        final String UUID = participantService.addParticipant(campaignID, participantDTO);
-        return new ResponseEntity<>(UUID, HttpStatus.CREATED);
+    public ResponseEntity<ParticipantDTO> login(@PathVariable int campaignID, @RequestBody ParticipantDTO participantDTO) throws SQLException {
+        final ParticipantDTO participant = participantService.addParticipant(campaignID, participantDTO);
+        return new ResponseEntity<>(participant, HttpStatus.CREATED);
     }
 }
