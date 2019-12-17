@@ -6,11 +6,14 @@ import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.HttpRequestUtils;
 import nl.quintor.qodingchallenge.service.exception.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class CodingStrategyImpl extends QuestionStrategy {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CodingStrategyImpl.class);
     private HttpRequestUtils requestUtils;
 
     public CodingStrategyImpl(QuestionDAO questionDAO) {
@@ -43,7 +46,9 @@ public class CodingStrategyImpl extends QuestionStrategy {
                 }
             }
         } catch (Exception e) {
-            throw new ValidationException(e.getMessage());
+            var error = new ValidationException(e.getMessage());
+            LOGGER.error(error.getMessage() + " : " + error.getDetails());
+            throw error;
         }
 
     }
