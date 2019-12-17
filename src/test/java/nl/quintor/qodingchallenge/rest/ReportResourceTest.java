@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.rest;
 
 import nl.quintor.qodingchallenge.dto.*;
+import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import nl.quintor.qodingchallenge.service.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class ReportResourceTest {
 
     private final int campaignId = 5;
     private final String campaign = "campaign";
-    private final int participantId = 2;
+    private final String participantId = "2";
 
     private ReportService reportServiceMock;
     private ReportResource sut;
@@ -100,17 +101,26 @@ class ReportResourceTest {
         return campaigns;
     }
 
-    private ParticipantDTO getParticipantDTO() {
-        return new ParticipantDTO(1, 2, 420000, "jan", "van", "peter", "ik@gmail.com", "069839428", 4);
+    private ParticipantDTO getParticipantDTO() throws SQLException {
+        return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+                    participantDTOBuilder.firstname = "name";
+                    participantDTOBuilder.lastname = "name";
+                    participantDTOBuilder.participantID = "1";
+                    participantDTOBuilder.campaignID = 1;
+                    participantDTOBuilder.timeInMillis = 10000;
+                    participantDTOBuilder.email = "name@gmail.com";
+                    participantDTOBuilder.phonenumber = "0693873";
+                }
+        ).build();
     }
 
-    private List<ParticipantDTO> getListParticipant() {
+    private List<ParticipantDTO> getListParticipant() throws SQLException {
         List<ParticipantDTO> participants = new ArrayList<>();
         participants.add(getParticipantDTO());
         return participants;
     }
 
-    private RankedParticipantCollection getRankedParticipantCollection() {
+    private RankedParticipantCollection getRankedParticipantCollection() throws SQLException {
         return new RankedParticipantCollection(campaign, getListParticipant());
     }
 

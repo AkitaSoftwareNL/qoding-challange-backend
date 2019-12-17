@@ -25,5 +25,5 @@ public interface ReportService {
 
     RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) throws SQLException;
 
-    AnswerCollection getAnswersPerParticipant(int campaignID, int participantID) throws SQLException;
+    AnswerCollection getAnswersPerParticipant(int campaignID, String participantID) throws SQLException;
 }

@@ -41,14 +41,14 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionCollection getQuestions(String category, String campaignName) throws SQLException {
-        if (!campaignDAO.campaignExists(campaignName))
+    public QuestionCollection getQuestions(String category, int campaignID) throws SQLException {
+        if (!campaignDAO.campaignExists(campaignID))
             throw new NoCampaignFoundException(
                     "The campaign you searched for does not exist",
-                    format("Campaign name = %s", campaignName),
+                    format("Campaign name = %s", campaignID),
                     "Try to use a new campaign name"
             );
-        List<QuestionDTO> questions = questionDAO.getQuestions(category, campaignDAO.getAmountOfQuestions(campaignName));
+        List<QuestionDTO> questions = questionDAO.getQuestions(category, campaignDAO.getAmountOfQuestions(campaignID));
 
         for (QuestionDTO questionDTO : questions) {
             questionDTO
@@ -58,7 +58,7 @@ public class QuestionServiceImpl implements QuestionService {
                             )
                     );
         }
-        return new QuestionCollection(1, campaignDAO.getCampaignID(campaignName), campaignName, questions);
+        return new QuestionCollection("1", campaignID, campaignDAO.getCampaignName(campaignID), questions);
     }
 
     @Override

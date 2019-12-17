@@ -4,9 +4,7 @@ import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.rest.customexception.CustomException;
 import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
-import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
-import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
-import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
+import nl.quintor.qodingchallenge.service.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -24,19 +22,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     private final Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
-    @ExceptionHandler({SQLException.class})
-    public ResponseEntity<Object> handleNotFoundStatus(Exception e, WebRequest request) {
-        JSONCustomExceptionSchema exceptionResponse =
-                new JSONCustomExceptionSchema(
-                        e.getMessage()
-                );
-        logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler({
             CampaignAlreadyExistsException.class,
-            EmptyQuestionException.class
+            EmptyQuestionException.class,
+            CampaignDoesNotExistsException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =
@@ -59,5 +48,27 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 );
         logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({
+            CouldNotAddParticipantException.class
+    })
+    public final ResponseEntity<Object> handleCustomExceptionBadRequest(CustomException ex, WebRequest webRequest) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
+                );
+        logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<Object> handleNotFoundStatus(Exception e, WebRequest request) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        e.getMessage()
+                );
+        logger.error(e.fillInStackTrace().toString());
+        return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 }

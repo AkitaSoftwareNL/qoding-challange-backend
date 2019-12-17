@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,7 +34,7 @@ class CampaignServiceImplTest {
     void getCreatecampaignCallToDaoCampaignExists() throws SQLException {
         sut.createNewCampaign(getCampaignDTO());
 
-        verify(campaignDAOStub).campaignExists(anyString());
+        verify(campaignDAOStub).campaignExists(anyInt());
     }
 
     @Test
@@ -46,7 +46,7 @@ class CampaignServiceImplTest {
 
     @Test
     void createNewCampaignThrowsCampaignAlreadyExistsException() throws SQLException {
-        when(campaignDAOStub.campaignExists(campaign))
+        when(campaignDAOStub.campaignExists(1))
                 .thenReturn(true);
 
         assertThrows(CampaignAlreadyExistsException.class, () -> sut.createNewCampaign(getCampaignDTO()));

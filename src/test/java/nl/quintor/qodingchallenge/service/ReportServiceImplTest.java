@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.*;
+import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ReportDAO;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.*;
 class ReportServiceImplTest {
 
     private final int campaignId = 1;
-    private final int participantId = 1;
+    private final String participantId = "1";
     private final String campaignName = "Principal U.S. Small Cap Index ETF";
 
     private ReportDAO reportDAOMock;
@@ -135,13 +136,22 @@ class ReportServiceImplTest {
         return new AnswerCollection("Name", "", "HC2 Holdings, Inc", campaignName, campaignId, getListAnswer());
     }
 
-    private List<ParticipantDTO> getRankedParticipants() {
+    private List<ParticipantDTO> getRankedParticipants() throws SQLException {
         List<ParticipantDTO> list = new ArrayList<>();
-        list.add(new ParticipantDTO(1, campaignId, 290, "Name", "", "lastName", "mail", "telefoonnummer", 1));
+        list.add(new ParticipantDTOBuilder().with(participantDTOBuilder -> {
+                    participantDTOBuilder.firstname = "Gray";
+                    participantDTOBuilder.lastname = "Snare";
+                    participantDTOBuilder.participantID = "1";
+                    participantDTOBuilder.campaignID = 1;
+                    participantDTOBuilder.timeInMillis = 100000;
+                    participantDTOBuilder.email = "gsnare0@xinhuanet.com";
+                    participantDTOBuilder.phonenumber = "2219773471";
+                }).build()
+        );
         return list;
     }
 
-    private RankedParticipantCollection getRankedparticipantCollection() {
+    private RankedParticipantCollection getRankedparticipantCollection() throws SQLException {
         return new RankedParticipantCollection(campaignName, getRankedParticipants());
     }
 }
