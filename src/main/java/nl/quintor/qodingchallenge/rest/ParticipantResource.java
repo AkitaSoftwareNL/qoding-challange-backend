@@ -22,11 +22,12 @@ public class ParticipantResource {
 
     @ResponseBody
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/login/{campaignID}",
             method = RequestMethod.POST
     )
-    public ResponseEntity login(@PathVariable int campaignID, @RequestBody ParticipantDTO participantDTO) throws SQLException {
-        participantService.addParticipant(campaignID, participantDTO);
-        return new ResponseEntity(HttpStatus.CREATED);
+    public ResponseEntity<ParticipantDTO> login(@PathVariable int campaignID, @RequestBody ParticipantDTO participantDTO) throws SQLException {
+        final ParticipantDTO participant = participantService.addParticipant(campaignID, participantDTO);
+        return new ResponseEntity<>(participant, HttpStatus.CREATED);
     }
 }

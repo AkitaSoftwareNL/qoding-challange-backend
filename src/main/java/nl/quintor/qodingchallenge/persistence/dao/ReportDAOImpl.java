@@ -18,41 +18,6 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 public class ReportDAOImpl implements ReportDAO {
 
     @Override
-    public List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
-        List<ParticipantDTO> participants = new ArrayList<>();
-        try (
-                Connection connection = getConnection()
-        ) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID" +
-                            ",poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER, " +
-                            "(SELECT COUNT(*) FROM given_answer  WHERE poc.CAMPAIGN_ID = CAMPAIGN_ID AND poc.PARTICIPANTID = PARTICIPANTID AND STATEID = 1) AS CORRECT " +
-                            "FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
-            statement.setInt(1, campaignID);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                participants.add(
-                        new ParticipantDTOBuilder().with(participantDTOBuilder -> {
-                                    participantDTOBuilder.firstname = resultSet.getString("FIRSTNAME");
-                                    participantDTOBuilder.lastname = resultSet.getString("LASTNAME");
-                                    participantDTOBuilder.participantID = resultSet.getString("PARTICIPANTID");
-                                    participantDTOBuilder.campaignID = resultSet.getInt("CAMPAIGN_ID");
-                                    participantDTOBuilder.timeInMillis = resultSet.getLong("TIME_SPEND");
-                                    participantDTOBuilder.insertion = resultSet.getString("INSERTION");
-                                    participantDTOBuilder.email = resultSet.getString("EMAIL");
-                                    participantDTOBuilder.phonenumber = resultSet.getString("PHONENUMBER");
-                                    participantDTOBuilder.amountOfRightAnsweredQuestions = resultSet.getInt("CORRECT");
-                                }
-                        ).build()
-                );
-            }
-        } catch (SQLException e) {
-            throw new SQLException(e);
-        }
-        return participants;
-    }
-
-    @Override
     public List<AnswerDTO> getAnswersPerParticipant(int campaignID, String participantID) throws SQLException {
         List<AnswerDTO> answers = new ArrayList<>();
         try (

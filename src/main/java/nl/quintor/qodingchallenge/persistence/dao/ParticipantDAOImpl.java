@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
@@ -40,32 +41,16 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     }
 
     @Override
-    public void addParticipantToCampaign(int campaignID, String participantID) throws SQLException {
-        try (
-                Connection connection = getConnection()
-        ) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO participant_of_campaign (CAMPAIGN_ID, PARTICIPANTID) VALUES (?,?)"
-            );
-            statement.setInt(1, campaignID);
-            statement.setString(2, participantID);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new SQLException(e);
-        }
-    }
-
-    @Override
-    public List<ParticipantDTO> getParticipantsPerCampaign(int campaignID) throws SQLException {
+    public List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
         List<ParticipantDTO> participants = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM participant_of_campaign as poc inner join conference as c \n" +
-                            "on poc.PARTICIPANTID = c.PARTICIPANTID\n" +
-                            "WHERE poc.CAMPAIGN_ID = ?;"
-            );
+                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID" +
+                            ",poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER, " +
+                            "(SELECT COUNT(*) FROM given_answer  WHERE poc.CAMPAIGN_ID = CAMPAIGN_ID AND poc.PARTICIPANTID = PARTICIPANTID AND STATEID = 1) AS CORRECT " +
+                            "FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
             statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -79,6 +64,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                                     participantDTOBuilder.insertion = resultSet.getString("INSERTION");
                                     participantDTOBuilder.email = resultSet.getString("EMAIL");
                                     participantDTOBuilder.phonenumber = resultSet.getString("PHONENUMBER");
+                                    participantDTOBuilder.amountOfRightAnsweredQuestions = resultSet.getInt("CORRECT");
                                 }
                         ).build()
                 );
@@ -90,7 +76,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
     }
 
     @Override
-    public void addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException {
+    public String addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException {
         final String participantID = UUID.randomUUID().toString();
         try (
                 Connection connection = getConnection()
@@ -113,6 +99,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+        return participantID;
     }
 
 

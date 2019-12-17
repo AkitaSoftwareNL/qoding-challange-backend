@@ -67,14 +67,14 @@ class ReportServiceImplTest {
     void getRankedParticipantsPerCampaignCallsReportDAOGetRankedParticipantsPerCampaign() throws SQLException {
         sut.getRankedParticipantsPerCampaign(campaignId);
 
-        verify(reportDAOMock).getRankedParticipantsPerCampaign(campaignId);
+        verify(participantDAOMock).getRankedParticipantsPerCampaign(campaignId);
     }
 
     @Test
     void getRankedParticipantPerCampaignReturnsRankedParticipantCollection() throws SQLException {
         // Mock
         when(campaignDAOMock.getCampaignName(campaignId)).thenReturn(campaignName);
-        when(reportDAOMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedParticipants());
+        when(participantDAOMock.getRankedParticipantsPerCampaign(campaignId)).thenReturn(getRankedParticipants());
         // Test
         var testValue = sut.getRankedParticipantsPerCampaign(campaignId);
         // Verify

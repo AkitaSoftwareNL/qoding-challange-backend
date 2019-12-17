@@ -18,12 +18,10 @@ import java.util.List;
 @RestController
 public class QuestionResource {
 
-    private ParticipantService participantService;
     private QuestionService questionService;
 
     @Autowired
     public void setParticipantService(ParticipantService participantService) {
-        this.participantService = participantService;
     }
 
     @Autowired
@@ -43,7 +41,6 @@ public class QuestionResource {
             path = "/campaign/{campaignID}",
             method = RequestMethod.POST)
     public ResponseEntity getAnswer(@RequestBody QuestionCollection questionCollection) throws SQLException {
-        participantService.addParticipantToCampaign(questionCollection.getCampaignId(), questionCollection.getParticipantID());
         questionService.setAnswer(questionCollection);
         return new ResponseEntity(HttpStatus.OK);
     }
