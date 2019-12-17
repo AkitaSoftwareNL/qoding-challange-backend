@@ -29,7 +29,6 @@ class ReportDAOImplTest {
 
     private ReportDAOImpl sut;
 
-    private List<ParticipantDTO> participants = spy(new ArrayList<>());
     private List<AnswerDTO> answers = spy(new ArrayList<>());
     private IConnectionPoolFactoryWrapper connectionPoolFactoryWrapper;
 
@@ -49,37 +48,6 @@ class ReportDAOImplTest {
         }
 
         answers.add(sut.getAnswersPerParticipant(campaignId, participantId).get(0));
-        participants.add(sut.getRankedParticipantsPerCampaign(campaignId).get(0));
-    }
-
-    @Test
-    void getRankedParticipantsReturnsListWithParticipants() throws SQLException {
-        int sizeOfParticipants = 3;
-
-        when(participants.size()).thenReturn(sizeOfParticipants);
-
-        assertEquals(participants.size(), sut.getRankedParticipantsPerCampaign(campaignId).size());
-    }
-
-    @Test
-    void getRankedParticipantReturnsListWithAnParticipant() throws SQLException {
-        assertEquals(participants.get(0), sut.getRankedParticipantsPerCampaign(campaignId).get(0));
-    }
-
-    @Test
-    void getRankedParticipantReturnsOrderedParticipantList() throws SQLException {
-        final long[] min = {0};
-        getRankedParticipantCollection().getParticipants().iterator().forEachRemaining(participantDTO -> {
-            if (min[0] == 0) min[0] = participantDTO.getTimeInMillis();
-            if (min[0] > participantDTO.getTimeInMillis()) {
-                min[0] = participantDTO.getTimeInMillis();
-            }
-            try {
-                assertEquals(min[0], sut.getRankedParticipantsPerCampaign(campaignId).get(0).getTimeInMillis());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     @Test
@@ -94,9 +62,5 @@ class ReportDAOImplTest {
     @Test
     void getAnswersPerParticipantReturnsListWithAnAnswer() throws SQLException {
         assertEquals(answers.get(0), sut.getAnswersPerParticipant(campaignId, participantId).get(0));
-    }
-
-    private RankedParticipantCollection getRankedParticipantCollection() throws SQLException {
-        return new RankedParticipantCollection("JFALL", sut.getRankedParticipantsPerCampaign(campaignId));
     }
 }

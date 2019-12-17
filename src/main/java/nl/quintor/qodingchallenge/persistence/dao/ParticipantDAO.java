@@ -11,7 +11,7 @@ public interface ParticipantDAO {
 
     void addParticipantToCampaign(int campaignID, String participantID) throws SQLException;
 
-    List<ParticipantDTO> getParticipantsPerCampaign(int campaignID) throws SQLException;
+    List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException;
 
     void addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException;
 

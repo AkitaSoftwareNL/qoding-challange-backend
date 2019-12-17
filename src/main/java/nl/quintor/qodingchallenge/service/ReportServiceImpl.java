@@ -46,7 +46,7 @@ public class ReportServiceImpl implements ReportService {
     public RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
         return new RankedParticipantCollection(
                 campaignDAO.getCampaignName(campaignID),
-                reportDAO.getRankedParticipantsPerCampaign(campaignID)
+                participantDAO.getRankedParticipantsPerCampaign(campaignID)
         );
     }
 
