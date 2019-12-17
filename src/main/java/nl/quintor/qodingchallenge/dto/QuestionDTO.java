@@ -53,11 +53,7 @@ public class QuestionDTO {
     }
 
     public String getAttachment() {
-        if (attachment != null && attachment.isEmpty()) {
-            return null;
-        } else {
-            return attachment;
-        }
+        return attachment;
     }
 
     public void setAttachment(String attachment) {

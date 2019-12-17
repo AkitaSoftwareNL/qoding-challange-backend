@@ -1,7 +1,9 @@
 package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
+import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
 import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAO;
+import nl.quintor.qodingchallenge.service.exception.CampaignDoesNotExistsException;
 import nl.quintor.qodingchallenge.service.exception.CouldNotAddParticipantException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import static java.lang.String.format;
 public class ParticipantServiceImpl implements ParticipantService {
 
     private ParticipantDAO participantDAO;
+    private CampaignDAO campaignDAO;
 
     @Override
     @Autowired
@@ -22,7 +25,20 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
+    @Autowired
+    public void setCampaignDAO(CampaignDAO campaignDAO) {
+        this.campaignDAO = campaignDAO;
+    }
+
+    @Override
     public void addParticipantToCampaign(int campaignID, String participantID) throws SQLException {
+        if(!campaignDAO.campaignExists(campaignID)) {
+            throw new CampaignDoesNotExistsException(
+                    "The campaign does not exist",
+                    "The campaign you are trying to enter has expired",
+                    "If the campaign has not yet expired please contact support"
+            );
+        }
         participantDAO.addParticipantToCampaign(campaignID, participantID);
     }
 

@@ -246,7 +246,7 @@ class QuestionServiceImplTest {
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "multiple";
-            questionDTOBuilder.givenAnswer = "yes";
+            questionDTOBuilder.givenAnswer = "";
             questionDTOBuilder.stateID = 2;
         }).build();
     }

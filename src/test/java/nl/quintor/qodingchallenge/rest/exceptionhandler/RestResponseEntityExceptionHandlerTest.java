@@ -5,10 +5,7 @@ import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException
 import nl.quintor.qodingchallenge.rest.customexception.CustomException;
 import nl.quintor.qodingchallenge.rest.customexception.CustomExceptionWrapper;
 import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
-import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
-import nl.quintor.qodingchallenge.service.exception.CouldNotAddParticipantException;
-import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
-import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
+import nl.quintor.qodingchallenge.service.exception.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -81,6 +78,13 @@ class RestResponseEntityExceptionHandlerTest {
         var expectedResult = handler.handleCustomExceptionBadRequest(new CouldNotAddParticipantException(messageForException, "", ""), webRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, expectedResult.getStatusCode());
+    }
+
+    @Test
+    void handleCampaignDoesNotExistException() {
+        var expectedResult = handler.handleCustomExceptionInternalServerError(new CampaignDoesNotExistsException(messageForException, "", ""), webRequest);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, expectedResult.getStatusCode());
     }
 
     @Test
