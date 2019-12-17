@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service.questionstrategy;
 
+import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
@@ -11,8 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import java.sql.SQLException;
+
+import static org.mockito.ArgumentMatchers.*;
 
 class CodingStrategyImplTest {
 
@@ -21,8 +23,9 @@ class CodingStrategyImplTest {
     private HttpRequestUtils mockedHttpRequestUtils;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException {
         mockedQuestionDAO = Mockito.mock(QuestionDAO.class);
+        Mockito.when(mockedQuestionDAO.getCodingQuestion(anyInt())).thenReturn(new CodingQuestionDTO());
         mockedHttpRequestUtils = Mockito.mock(HttpRequestUtils.class);
         sut = new CodingStrategyImpl(mockedQuestionDAO);
     }
@@ -54,6 +57,7 @@ class CodingStrategyImplTest {
         );
         QuestionDTO questionDTO = new QuestionDTO();
         sut.setRequestUtils(mockedHttpRequestUtils);
+
         sut.validateAnswer(questionDTO);
         Assertions.assertEquals(3, questionDTO.getStateID());
     }

@@ -28,7 +28,7 @@ class QuestionDAOImplIntTest {
     private final int campaignId = 1;
     private final int questionState = 1;
     private final int questionId = 3;
-    private final int amountOfQuestions = 3;
+    private final int amountOfQuestions = 4;
     private final int participentId = 1;
     private final String category = "JAVA";
 
@@ -167,14 +167,9 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
-        final int expectedResult = 3;
+        final int expectedResult = 4;
 
         assertEquals(expectedResult, sut.getQuestionAmountPerCategory(category));
-    }
-
-    @Test
-    void getCodingQuestionThrowsSqlException() {
-        Assertions.assertThrows(SQLException.class, () -> sut.getCodingQuestion(999999999));
     }
 
     @Test
@@ -185,8 +180,8 @@ class QuestionDAOImplIntTest {
     @Test
     void getCodingQuestionGetCorrectQuestion() throws SQLException {
         CodingQuestionDTO result = sut.getCodingQuestion(4);
-        Assertions.assertEquals("startCode",result.getCode());
-        Assertions.assertEquals("testCode",result.getTest());
+        Assertions.assertEquals("startCode", result.getCode());
+        Assertions.assertEquals("testCode", result.getTest());
 
     }
 

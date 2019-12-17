@@ -72,6 +72,6 @@ values (3, 'Nee', 0);
 insert into GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, STATEID, GIVEN_ANSWER)
 values (3, 1, 1, 1, 'A');
 
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Maak een string vergelijker', 1, 'program');
 INSERT INTO programming_question (QUESTIONID, STARTCODE, TESTCODE) VALUES (4, 'startCode','testCode');
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Maak een string vergelijker', 1, 'program');
 

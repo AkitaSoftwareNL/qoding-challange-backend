@@ -214,6 +214,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public CodingQuestionDTO getCodingQuestion(int id) throws SQLException {
+        Optional<CodingQuestionDTO> codingQuestionDTO = Optional.empty();
         try (
                 Connection connection = getConnection()
         ) {
@@ -221,23 +222,21 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(
+                codingQuestionDTO = Optional.of(new CodingQuestionDTO(
                         resultSet.getString("STARTCODE"),
                         resultSet.getString("TESTCODE")
-                );
-                return codingQuestionDTO;
-            } else {
-                throw new NoQuestionFoundException(
-                        "No question has been found",
-                        format("Question with questionID %d was not found", id),
-                        "Try an different questionID"
-                );
+                ));
             }
         } catch (SQLException e) {
             throw new SQLException(e);
-        } catch (NoQuestionFoundException e) {
-            throw e;
         }
+        return codingQuestionDTO.orElseThrow(() -> {
+            throw new NoQuestionFoundException(
+                    "No question has been found",
+                    format("Question with questionID %d was not found", id),
+                    "Try an different questionID"
+            );
+        });
 
     }
 
