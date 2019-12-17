@@ -108,8 +108,8 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             statementConference.setString(5, participantDTO.getEmail());
             statementConference.setString(6, participantDTO.getPhonenumber());
 
-            statementParticipantOfCampaign.executeUpdate();
             statementConference.executeUpdate();
+            statementParticipantOfCampaign.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
         }
