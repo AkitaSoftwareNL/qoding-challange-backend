@@ -4,7 +4,6 @@ import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
-import nl.quintor.qodingchallenge.service.ParticipantService;
 import nl.quintor.qodingchallenge.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
