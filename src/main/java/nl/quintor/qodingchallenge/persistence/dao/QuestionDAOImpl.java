@@ -159,7 +159,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
-
+                                    questionDTOBuilder.startCode = "";
                                 }
                             }
                     ).build()

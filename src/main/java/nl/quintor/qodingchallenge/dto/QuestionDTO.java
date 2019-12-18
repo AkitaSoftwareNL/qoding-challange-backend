@@ -30,6 +30,10 @@ public class QuestionDTO {
         this.startCode = startCode;
     }
 
+    public String getStartCode() {
+        return startCode;
+    }
+
     public int getQuestionID() {
         return questionID;
     }
