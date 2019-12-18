@@ -25,7 +25,7 @@ public class QuestionDTO {
         this.attachment = attachment;
         this.possibleAnswers = possibleAnswers;
         this.givenAnswer = givenAnswer;
-        this.stateID = stateID;
+        this.stateID = 1;
     }
 
     public int getQuestionID() {
