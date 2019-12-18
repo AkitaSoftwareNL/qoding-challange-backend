@@ -35,15 +35,16 @@ public class CodingStrategyImpl extends QuestionStrategy {
             ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", codingQuestionDTO, TestResultDTO.class);
             TestResultDTO testResult = (TestResultDTO) result.getBody();
 
-            if (result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
-                    testResult.getTotalTestsFailed() > 0) {
-                question.setStateID(INCORRECT);
-            } else {
+            if (!(result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
+                    testResult.getTotalTestsFailed() > 0)) {
                 question.setStateID(CORRECT);
+            } else {
+                question.setStateID(INCORRECT);
             }
         } catch (Exception e) {
             var error = new ValidationException(e.getMessage());
             LOGGER.error(error.getMessage() + " : " + error.getDetails());
+            question.setStateID(INCORRECT);
         }
 
     }

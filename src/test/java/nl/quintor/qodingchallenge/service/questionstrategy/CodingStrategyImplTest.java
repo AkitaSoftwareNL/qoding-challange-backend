@@ -31,12 +31,12 @@ class CodingStrategyImplTest {
     }
 
     @Test
-    void validateAnswerThrowsValidationException() {
+    void validateAnswerSetsQuestionStateToIncorrectWhenExceptionIsThrown() {
         Mockito.when(mockedHttpRequestUtils.post(anyString(), any(), any())).thenThrow(ValidationException.class);
         sut.setRequestUtils(mockedHttpRequestUtils);
-        Assertions.assertThrows(ValidationException.class, () -> {
-            sut.validateAnswer(new QuestionDTO());
-        });
+        QuestionDTO questionDTO = new QuestionDTO();
+        sut.validateAnswer(questionDTO);
+        Assertions.assertEquals(3, questionDTO.getStateID());
     }
 
     @Test
