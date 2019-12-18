@@ -17,7 +17,7 @@ public class CodingStrategyImpl extends QuestionStrategy {
     private HttpRequestUtils requestUtils;
 
     public CodingStrategyImpl(QuestionDAO questionDAO) {
-        super(questionDAO, "coding");
+        super(questionDAO, "program");
         requestUtils = new HttpRequestUtils();
     }
 
@@ -36,19 +36,14 @@ public class CodingStrategyImpl extends QuestionStrategy {
             TestResultDTO testResult = (TestResultDTO) result.getBody();
 
             if (result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
-                    testResult == null) {
-                throw new ValidationException();
+                    testResult.getTotalTestsFailed() > 0) {
+                question.setStateID(INCORRECT);
             } else {
-                if (testResult.getTotalTestsFailed() > 0) {
-                    question.setStateID(INCORRECT);
-                } else {
-                    question.setStateID(CORRECT);
-                }
+                question.setStateID(CORRECT);
             }
         } catch (Exception e) {
             var error = new ValidationException(e.getMessage());
             LOGGER.error(error.getMessage() + " : " + error.getDetails());
-            throw error;
         }
 
     }
