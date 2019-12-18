@@ -186,6 +186,17 @@ class QuestionDAOImplIntTest {
 
     }
 
+    @Test
+    void countQuestionsGetsRightAmountOfQuestions() throws SQLException {
+        int expectedAmount = 4;
+        // Mock
+
+        // Test
+        int actualAmount = sut.countQuestions();
+        // Verify
+        assertEquals(expectedAmount, actualAmount);
+    }
+
     private QuestionDTO getQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {
             questionDTOBuilder.questionID = 1;
@@ -208,4 +219,5 @@ class QuestionDAOImplIntTest {
         question.setPossibleAnswers(possibleAnswers);
         return question;
     }
+
 }
