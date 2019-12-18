@@ -25,6 +25,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler({
             CampaignAlreadyExistsException.class,
             EmptyQuestionException.class,
+            ValidationException.class,
             CampaignDoesNotExistsException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {

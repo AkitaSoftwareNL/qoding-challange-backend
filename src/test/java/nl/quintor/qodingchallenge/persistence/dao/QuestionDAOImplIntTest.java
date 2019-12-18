@@ -1,11 +1,13 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.h2.tools.RunScript;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +29,7 @@ class QuestionDAOImplIntTest {
     private final int campaignId = 1;
     private final int questionState = 1;
     private final int questionId = 3;
-    private final int amountOfQuestions = 3;
+    private final int amountOfQuestions = 4;
     private final String participentId = "1";
     private final String category = "JAVA";
 
@@ -166,9 +168,22 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
-        final int expectedResult = 3;
+        final int expectedResult = 4;
 
         assertEquals(expectedResult, sut.getQuestionAmountPerCategory(category));
+    }
+
+    @Test
+    void getCodingQuestionThrowsNoQuestionFoundException() {
+        Assertions.assertThrows(NoQuestionFoundException.class, () -> sut.getCodingQuestion(0));
+    }
+
+    @Test
+    void getCodingQuestionGetCorrectQuestion() throws SQLException {
+        CodingQuestionDTO result = sut.getCodingQuestion(4);
+        Assertions.assertEquals("startCode", result.getCode());
+        Assertions.assertEquals("testCode", result.getTest());
+
     }
 
     private QuestionDTO getQuestion() throws SQLException {
