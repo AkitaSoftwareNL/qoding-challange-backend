@@ -33,7 +33,7 @@ public class ReportDAOImpl implements ReportDAO {
                         new AnswerDTO(
                                 resultSet.getString("GIVEN_ANSWER"),
                                 resultSet.getString("QUESTION"),
-                                resultSet.getInt("STATE"),
+                                resultSet.getInt("STATEID"),
                                 resultSet.getString("QUESTION_TYPE")
                         )
                 );

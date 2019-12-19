@@ -29,7 +29,7 @@ class QuestionServiceImplTest {
 
     private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
-    private ParticipantDAO participantDAO;
+    private ParticipantDAO participantDAOMock;
     private QuestionServiceImpl sut;
 
     @BeforeEach
@@ -38,11 +38,11 @@ class QuestionServiceImplTest {
 
         this.campaignDAOMock = mock(CampaignDAOImpl.class);
         this.questionDAOMock = mock(QuestionDAOImpl.class);
-        this.participantDAO = mock(ParticipantDAOImpl.class);
+        this.participantDAOMock = mock(ParticipantDAOImpl.class);
 
         this.sut.setCampaignDAO(campaignDAOMock);
         this.sut.setQuestionDAO(questionDAOMock);
-        this.sut.setParticipantDAO(participantDAO);
+        this.sut.setParticipantDAO(participantDAOMock);
 
         when(campaignDAOMock.campaignExists(campaignID)).thenReturn(true);
     }
@@ -205,6 +205,16 @@ class QuestionServiceImplTest {
         sut.removeQuestion(questionId);
         // Verify
         verify(questionDAOMock).removeQuestion(questionId);
+    }
+
+    @Test
+    void setAnswerCallsAddTimeToParticipant() throws SQLException {
+        // Mock
+        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
+        // Test
+        sut.setAnswer(getQuestionCollection());
+        // Verify
+        verify(participantDAOMock).addTimeToParticipant(getQuestionCollection().getParticipantID());
     }
 
     private List<GivenAnswerDTO> getAnswers() {
