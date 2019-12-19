@@ -14,4 +14,6 @@ public interface ParticipantDAO {
     String addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException;
 
     boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException;
+
+    void addTimeToParticipant(String participantID) throws SQLException;
 }

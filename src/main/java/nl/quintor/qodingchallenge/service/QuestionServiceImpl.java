@@ -4,6 +4,7 @@ import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
+import nl.quintor.qodingchallenge.persistence.dao.ParticipantDAO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
@@ -25,6 +26,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private QuestionDAO questionDAO;
     private CampaignDAO campaignDAO;
+    private ParticipantDAO participantDAO;
     private List<QuestionStrategy> strategies = new ArrayList<>();
 
     @Override
@@ -40,6 +42,12 @@ public class QuestionServiceImpl implements QuestionService {
         strategies.add(new OpenStrategyImpl(questionDAO));
         strategies.add(new MultipleStrategyImpl(questionDAO));
         strategies.add(new ProgramStrategyImpl(questionDAO));
+    }
+
+    @Override
+    @Autowired
+    public void setParticipantDAO(ParticipantDAO participantDAO) {
+        this.participantDAO = participantDAO;
     }
 
     @Override
@@ -65,6 +73,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void setAnswer(QuestionCollection questionCollection) throws SQLException {
+        participantDAO.addTimeToParticipant(questionCollection.getParticipantID());
         for (QuestionDTO question : questionCollection.getQuestions()) {
             for (QuestionStrategy strategy : strategies) {
                 if (strategy.isType(question.getQuestionType())) {
