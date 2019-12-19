@@ -89,7 +89,7 @@ class QuestionResourceTest {
         // Verify
         var testValue = sut.createQuestion(getQuestion());
         // Test
-        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+        assertEquals(HttpStatus.CREATED, testValue.getStatusCode());
     }
 
     @Test

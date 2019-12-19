@@ -2,12 +2,14 @@ package nl.quintor.qodingchallenge.service.questionstrategy;
 
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
+import nl.quintor.qodingchallenge.service.QuestionState;
+import nl.quintor.qodingchallenge.service.QuestionType;
 
 import java.sql.SQLException;
 
 public class MultipleStrategyImpl extends QuestionStrategy {
     public MultipleStrategyImpl(QuestionDAO questionDAO) {
-        super(questionDAO, "multiple");
+        super(questionDAO, QuestionType.MULTIPLE);
     }
 
     @Override
@@ -17,14 +19,11 @@ public class MultipleStrategyImpl extends QuestionStrategy {
 
     @Override
     public void validateAnswer(QuestionDTO question) throws SQLException {
-        final int CORRECT = 2;
-        final int INCORRECT = 3;
-
         String correctAnswer = questionDAO.getCorrectAnswer(question.getQuestionID());
         if (correctAnswer.equals(question.getGivenAnswer())) {
-            question.setStateID(CORRECT);
+            question.setStateID(QuestionState.CORRECT.getState());
         } else {
-            question.setStateID(INCORRECT);
+            question.setStateID(QuestionState.INCORRECT.getState());
         }
     }
 }

@@ -40,6 +40,13 @@ class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
+    void handleIllegalEnumStateException() {
+        var expectedResponse = handler.handleCustomExceptionInternalServerError(new IllegalEnumStateException(messageForException, "", ""), webRequest);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, expectedResponse.getStatusCode());
+    }
+
+    @Test
     void handleCampaignAlreadyExistsExceptionTest() {
         var expectedResponse = handler.handleCustomExceptionInternalServerError(new CampaignAlreadyExistsException(messageForException, "", ""), webRequest);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, expectedResponse.getStatusCode());

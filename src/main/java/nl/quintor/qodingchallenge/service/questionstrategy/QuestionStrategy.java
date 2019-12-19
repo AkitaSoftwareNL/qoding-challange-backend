@@ -2,21 +2,22 @@ package nl.quintor.qodingchallenge.service.questionstrategy;
 
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
+import nl.quintor.qodingchallenge.service.QuestionType;
 
 import java.sql.SQLException;
 
 public abstract class QuestionStrategy {
 
-    protected QuestionDAO questionDAO;
-    private String type;
+    QuestionDAO questionDAO;
+    private QuestionType type;
 
-    QuestionStrategy(QuestionDAO questionDAO, String type) {
+    QuestionStrategy(QuestionDAO questionDAO, QuestionType type) {
         this.questionDAO = questionDAO;
         this.type = type;
     }
 
     public boolean isType(String typeToCheck) {
-        return this.type.equalsIgnoreCase(typeToCheck);
+        return QuestionType.getEnumAsString(typeToCheck).equalsIgnoreCase(type.toString());
     }
 
     public void persistQuestion(QuestionDTO question) throws SQLException {
