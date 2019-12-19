@@ -1,4 +1,4 @@
-package nl.quintor.qodingchallenge.utils;
+package nl.quintor.qodingchallenge.util;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
