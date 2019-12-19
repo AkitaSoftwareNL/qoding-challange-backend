@@ -1,8 +1,8 @@
-package nl.quintor.qodingchallenge.utils;
+package nl.quintor.qodingchallenge.util;
 
-class TimeUtilsWrapper {
+public class TimeUtilsWrapper {
 
-    boolean dateValidate(String inputDate, String format, String... formats) {
+    public boolean dateValidate(String inputDate, String format, String... formats) {
         return TimeUtils.dateValidate(inputDate, format, formats);
     }
 }

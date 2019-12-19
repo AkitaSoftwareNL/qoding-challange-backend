@@ -27,7 +27,7 @@ public class TimeUtils {
         return format("%d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
     }
 
-    static boolean dateValidate(String inputDate, String format, String... formats) {
+    public static boolean dateValidate(String inputDate, String format, String... formats) {
         String[] datePattern = new String[formats.length + 1];
         try {
             datePattern[0] = format;

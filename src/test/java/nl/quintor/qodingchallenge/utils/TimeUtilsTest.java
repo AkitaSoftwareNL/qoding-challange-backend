@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.utils;
 
+import nl.quintor.qodingchallenge.util.TimeUtils;
+import nl.quintor.qodingchallenge.util.TimeUtilsWrapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
