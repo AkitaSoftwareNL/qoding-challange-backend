@@ -303,7 +303,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) as amount FROM question where CATEGORY_NAME = ? AND state = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM question WHERE CATEGORY_NAME = ? AND STATE = 1");
             statement.setString(1, category);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -318,7 +318,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) as amount FROM question where state = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM question WHERE STATE = 1");
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("AMOUNT");

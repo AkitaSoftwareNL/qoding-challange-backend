@@ -188,7 +188,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void countQuestionsGetsRightAmountOfQuestions() throws SQLException {
-        int expectedAmount = 4;
+        final int expectedAmount = 4;
         // Mock
 
         // Test

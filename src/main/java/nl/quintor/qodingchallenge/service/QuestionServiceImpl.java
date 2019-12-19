@@ -120,6 +120,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public String countQuestions() throws SQLException {
-        return questionDAO.countQuestions()+"";
+        return Integer.toString(questionDAO.countQuestions());
     }
 }

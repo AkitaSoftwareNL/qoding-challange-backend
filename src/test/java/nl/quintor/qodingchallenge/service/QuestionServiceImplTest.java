@@ -24,6 +24,7 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
+    public static final int EXPECTION_AMOUNT_OF_QUESTIONS = 22;
     private final String campaign = "HC2 Holdings, Inc";
     private final int campaignID = 1;
     private final String category = "JAVA";
@@ -108,13 +109,12 @@ class QuestionServiceImplTest {
 
     @Test
     void countQuestionsReturnRightAmountOfQuestions() throws SQLException {
-        int expectedValue = 22;
         // Mock
-        when(questionDAOMock.countQuestions()).thenReturn(expectedValue);
+        when(questionDAOMock.countQuestions()).thenReturn(EXPECTION_AMOUNT_OF_QUESTIONS);
         // Test
         var testValue = sut.countQuestions();
         // Verify
-        assertEquals(expectedValue+"", testValue);
+        assertEquals(Integer.toString(EXPECTION_AMOUNT_OF_QUESTIONS), testValue);
     }
 
     @Test
