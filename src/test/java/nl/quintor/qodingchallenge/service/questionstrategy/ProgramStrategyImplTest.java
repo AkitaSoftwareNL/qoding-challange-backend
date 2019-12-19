@@ -16,9 +16,9 @@ import java.sql.SQLException;
 
 import static org.mockito.ArgumentMatchers.*;
 
-class CodingStrategyImplTest {
+class ProgramStrategyImplTest {
 
-    private CodingStrategyImpl sut;
+    private ProgramStrategyImpl sut;
     private QuestionDAO mockedQuestionDAO;
     private HttpRequestUtils mockedHttpRequestUtils;
 
@@ -27,7 +27,7 @@ class CodingStrategyImplTest {
         mockedQuestionDAO = Mockito.mock(QuestionDAO.class);
         Mockito.when(mockedQuestionDAO.getCodingQuestion(anyInt())).thenReturn(new CodingQuestionDTO());
         mockedHttpRequestUtils = Mockito.mock(HttpRequestUtils.class);
-        sut = new CodingStrategyImpl(mockedQuestionDAO);
+        sut = new ProgramStrategyImpl(mockedQuestionDAO);
     }
 
     @Test

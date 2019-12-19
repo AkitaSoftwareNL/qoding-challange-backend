@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class CodingStrategyImpl extends QuestionStrategy {
+public class ProgramStrategyImpl extends QuestionStrategy {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CodingStrategyImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProgramStrategyImpl.class);
     private HttpRequestUtils requestUtils;
 
-    public CodingStrategyImpl(QuestionDAO questionDAO) {
+    public ProgramStrategyImpl(QuestionDAO questionDAO) {
         super(questionDAO, "program");
         requestUtils = new HttpRequestUtils();
     }
@@ -35,11 +35,11 @@ public class CodingStrategyImpl extends QuestionStrategy {
             ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", codingQuestionDTO, TestResultDTO.class);
             TestResultDTO testResult = (TestResultDTO) result.getBody();
 
-            if (!(result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
-                    testResult.getTotalTestsFailed() > 0)) {
-                question.setStateID(CORRECT);
-            } else {
+            if (result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
+                    testResult.getTotalTestsFailed() > 0) {
                 question.setStateID(INCORRECT);
+            } else {
+                question.setStateID(CORRECT);
             }
         } catch (Exception e) {
             var error = new ValidationException(e.getMessage());
