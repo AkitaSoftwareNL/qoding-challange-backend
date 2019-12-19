@@ -28,7 +28,7 @@ public class CodingStrategyImpl extends QuestionStrategy {
     }
 
     @Override
-    public void validateAnswer(QuestionDTO question) throws ValidationException {
+    public void validateAnswer(QuestionDTO question) {
         try {
             CodingQuestionDTO questionInDatabase = questionDAO.getCodingQuestion(question.getQuestionID());
             CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), questionInDatabase.getTest());
@@ -46,6 +46,7 @@ public class CodingStrategyImpl extends QuestionStrategy {
                 }
             }
         } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
             var error = new ValidationException(e.getMessage());
             LOGGER.error(error.getMessage() + " : " + error.getDetails());
             throw error;
