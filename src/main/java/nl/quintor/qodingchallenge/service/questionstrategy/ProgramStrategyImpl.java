@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class CodingStrategyImpl extends QuestionStrategy {
+public class ProgramStrategyImpl extends QuestionStrategy {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CodingStrategyImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProgramStrategyImpl.class);
     private HttpRequestUtils requestUtils;
 
-    public CodingStrategyImpl(QuestionDAO questionDAO) {
+    public ProgramStrategyImpl(QuestionDAO questionDAO) {
         super(questionDAO, QuestionType.PROGRAM);
         requestUtils = new HttpRequestUtils();
     }
@@ -36,20 +36,16 @@ public class CodingStrategyImpl extends QuestionStrategy {
             TestResultDTO testResult = (TestResultDTO) result.getBody();
 
             if (result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
-                    testResult == null) {
-                throw new ValidationException();
+                    testResult.getTotalTestsFailed() > 0) {
+                question.setStateID(QuestionState.INCORRECT.getState());
             } else {
-                if (testResult.getTotalTestsFailed() > 0) {
-                    question.setStateID(QuestionState.INCORRECT.getState());
-                } else {
-                    question.setStateID(QuestionState.CORRECT.getState());
-                }
+                question.setStateID(QuestionState.CORRECT.getState());
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             var error = new ValidationException(e.getMessage());
             LOGGER.error(error.getMessage() + " : " + error.getDetails());
-            throw error;
+            question.setStateID(QuestionState.INCORRECT.getState());
         }
 
     }

@@ -147,13 +147,20 @@ public class QuestionDAOImpl implements QuestionDAO {
         List<QuestionDTO> questions = new ArrayList<>();
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
+
             questions.add(
                     new QuestionDTOBuilder().with(questionDTOBuilder -> {
-                                questionDTOBuilder.questionID = resultSet.getInt("QUESTIONID");
+                                int id = resultSet.getInt("QUESTIONID");
+                                questionDTOBuilder.questionID = id;
                                 questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
                                 questionDTOBuilder.question = resultSet.getString("QUESTION");
                                 questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
                                 questionDTOBuilder.attachment = resultSet.getString("attachment");
+                                try {
+                                    questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
+                                } catch (NoQuestionFoundException e) {
+                                    questionDTOBuilder.startCode = "";
+                                }
                             }
                     ).build()
             );

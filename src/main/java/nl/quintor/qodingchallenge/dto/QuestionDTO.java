@@ -10,6 +10,7 @@ public class QuestionDTO {
     private String categoryType;
     private String questionType;
     private String attachment;
+    private String startCode;
     private List<PossibleAnswerDTO> possibleAnswers;
     private String givenAnswer;
     private int stateID;
@@ -17,7 +18,7 @@ public class QuestionDTO {
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID, String startCode) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
@@ -26,6 +27,11 @@ public class QuestionDTO {
         this.possibleAnswers = possibleAnswers;
         this.givenAnswer = givenAnswer;
         this.stateID = 1;
+        this.startCode = startCode;
+    }
+
+    public String getStartCode() {
+        return startCode;
     }
 
     public int getQuestionID() {

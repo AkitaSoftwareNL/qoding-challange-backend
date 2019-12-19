@@ -4,6 +4,7 @@ import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
+import nl.quintor.qodingchallenge.service.QuestionState;
 import nl.quintor.qodingchallenge.service.exception.ValidationException;
 import nl.quintor.qodingchallenge.utils.HttpRequestUtils;
 import org.junit.jupiter.api.Assertions;
@@ -16,9 +17,9 @@ import java.sql.SQLException;
 
 import static org.mockito.ArgumentMatchers.*;
 
-class CodingStrategyImplTest {
+class ProgramStrategyImplTest {
 
-    private CodingStrategyImpl sut;
+    private ProgramStrategyImpl sut;
     private QuestionDAO mockedQuestionDAO;
     private HttpRequestUtils mockedHttpRequestUtils;
 
@@ -27,14 +28,16 @@ class CodingStrategyImplTest {
         mockedQuestionDAO = Mockito.mock(QuestionDAO.class);
         Mockito.when(mockedQuestionDAO.getCodingQuestion(anyInt())).thenReturn(new CodingQuestionDTO());
         mockedHttpRequestUtils = Mockito.mock(HttpRequestUtils.class);
-        sut = new CodingStrategyImpl(mockedQuestionDAO);
+        sut = new ProgramStrategyImpl(mockedQuestionDAO);
     }
 
     @Test
-    void validateAnswerThrowsValidationException() {
+    void validateAnswerSetsQuestionStateToIncorrectWhenExceptionIsThrown() {
         Mockito.when(mockedHttpRequestUtils.post(anyString(), any(), any())).thenThrow(ValidationException.class);
         sut.setRequestUtils(mockedHttpRequestUtils);
-        Assertions.assertThrows(ValidationException.class, () -> sut.validateAnswer(new QuestionDTO()));
+        QuestionDTO questionDTO = new QuestionDTO();
+        sut.validateAnswer(questionDTO);
+        Assertions.assertEquals(QuestionState.INCORRECT.getState(), questionDTO.getStateID());
     }
 
     @Test
@@ -45,7 +48,7 @@ class CodingStrategyImplTest {
         QuestionDTO questionDTO = new QuestionDTO();
         sut.setRequestUtils(mockedHttpRequestUtils);
         sut.validateAnswer(questionDTO);
-        Assertions.assertEquals(2, questionDTO.getStateID());
+        Assertions.assertEquals(QuestionState.CORRECT.getState(), questionDTO.getStateID());
     }
 
     @Test
@@ -57,6 +60,6 @@ class CodingStrategyImplTest {
         sut.setRequestUtils(mockedHttpRequestUtils);
 
         sut.validateAnswer(questionDTO);
-        Assertions.assertEquals(3, questionDTO.getStateID());
+        Assertions.assertEquals(QuestionState.INCORRECT.getState(), questionDTO.getStateID());
     }
 }
