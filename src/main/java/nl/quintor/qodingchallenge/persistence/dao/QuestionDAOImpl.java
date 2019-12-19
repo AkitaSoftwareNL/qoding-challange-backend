@@ -299,6 +299,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         return possibleAnswersString;
     }
 
+    @Override
     public int getQuestionAmountPerCategory(String category) throws SQLException {
         try (
                 Connection connection = getConnection()
