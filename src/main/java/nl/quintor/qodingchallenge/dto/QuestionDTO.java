@@ -69,7 +69,7 @@ public class QuestionDTO {
     }
 
     public String getGivenAnswer() {
-        return givenAnswer;
+        return givenAnswer == null || givenAnswer.length() <= 0 ? "" : givenAnswer;
     }
 
     public void setGivenAnswer(String givenAnswer) {
