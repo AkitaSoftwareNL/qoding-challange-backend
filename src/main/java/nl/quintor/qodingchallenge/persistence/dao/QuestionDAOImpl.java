@@ -108,7 +108,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO question (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
             statement.setString(1, JAVA);
             statement.setString(2, question.getQuestion());
-            statement.setString(3, question.getQuestionType());
+            statement.setString(3, question.getQuestionType().toLowerCase());
             statement.setString(4, question.getAttachment());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -271,7 +271,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setString(1, "JAVA");
             statement.setString(2, question.getQuestion());
-            statement.setString(3, question.getQuestionType());
+            statement.setString(3, question.getQuestionType().toLowerCase());
             statement.setString(4, question.getAttachment());
             statement.setString(5, possibleAnswersString.get(0));
             statement.setString(6, possibleAnswersString.get(1));

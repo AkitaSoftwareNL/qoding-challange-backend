@@ -4,8 +4,10 @@ import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
-import nl.quintor.qodingchallenge.utils.HttpRequestUtils;
+import nl.quintor.qodingchallenge.service.QuestionState;
+import nl.quintor.qodingchallenge.service.QuestionType;
 import nl.quintor.qodingchallenge.service.exception.ValidationException;
+import nl.quintor.qodingchallenge.utils.HttpRequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,18 +19,16 @@ public class CodingStrategyImpl extends QuestionStrategy {
     private HttpRequestUtils requestUtils;
 
     public CodingStrategyImpl(QuestionDAO questionDAO) {
-        super(questionDAO, "coding");
+        super(questionDAO, QuestionType.PROGRAM);
         requestUtils = new HttpRequestUtils();
     }
 
-    public void setRequestUtils(HttpRequestUtils requestUtils) {
+    void setRequestUtils(HttpRequestUtils requestUtils) {
         this.requestUtils = requestUtils;
     }
 
     @Override
-    public void validateAnswer(QuestionDTO question) throws ValidationException {
-        final int CORRECT = 2;
-        final int INCORRECT = 3;
+    public void validateAnswer(QuestionDTO question) {
         try {
             CodingQuestionDTO questionInDatabase = questionDAO.getCodingQuestion(question.getQuestionID());
             CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), questionInDatabase.getTest());
@@ -40,12 +40,13 @@ public class CodingStrategyImpl extends QuestionStrategy {
                 throw new ValidationException();
             } else {
                 if (testResult.getTotalTestsFailed() > 0) {
-                    question.setStateID(INCORRECT);
+                    question.setStateID(QuestionState.INCORRECT.getState());
                 } else {
-                    question.setStateID(CORRECT);
+                    question.setStateID(QuestionState.CORRECT.getState());
                 }
             }
         } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
             var error = new ValidationException(e.getMessage());
             LOGGER.error(error.getMessage() + " : " + error.getDetails());
             throw error;
