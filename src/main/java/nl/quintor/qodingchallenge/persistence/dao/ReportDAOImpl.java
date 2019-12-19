@@ -22,7 +22,7 @@ public class ReportDAOImpl implements ReportDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT ga.GIVEN_ANSWER, q.QUESTION, ga.STATE, q.QUESTION_TYPE FROM given_answer as ga INNER JOIN question q " +
+                    "SELECT ga.GIVEN_ANSWER, q.QUESTION, ga.STATEID, q.QUESTION_TYPE FROM given_answer as ga INNER JOIN question q " +
                             "ON ga.QUESTIONID = q.QUESTIONID INNER JOIN conference as c " +
                             "ON ga.PARTICIPANTID = c.PARTICIPANTID WHERE ga.CAMPAIGN_ID = ? AND ga.PARTICIPANTID = ?");
             statement.setInt(1, campaignID);
