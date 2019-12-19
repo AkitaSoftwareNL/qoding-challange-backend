@@ -18,6 +18,8 @@ import static org.mockito.ArgumentMatchers.*;
 
 class ProgramStrategyImplTest {
 
+    private static final int INCORRECT = 3;
+    private static final int CORRECT = 2;
     private ProgramStrategyImpl sut;
     private QuestionDAO mockedQuestionDAO;
     private HttpRequestUtils mockedHttpRequestUtils;
@@ -36,7 +38,7 @@ class ProgramStrategyImplTest {
         sut.setRequestUtils(mockedHttpRequestUtils);
         QuestionDTO questionDTO = new QuestionDTO();
         sut.validateAnswer(questionDTO);
-        Assertions.assertEquals(3, questionDTO.getStateID());
+        Assertions.assertEquals(INCORRECT, questionDTO.getStateID());
     }
 
     @Test
@@ -47,7 +49,7 @@ class ProgramStrategyImplTest {
         QuestionDTO questionDTO = new QuestionDTO();
         sut.setRequestUtils(mockedHttpRequestUtils);
         sut.validateAnswer(questionDTO);
-        Assertions.assertEquals(2, questionDTO.getStateID());
+        Assertions.assertEquals(CORRECT, questionDTO.getStateID());
     }
 
     @Test
