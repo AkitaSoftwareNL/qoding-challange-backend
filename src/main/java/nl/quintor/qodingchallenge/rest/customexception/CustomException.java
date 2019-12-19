@@ -18,7 +18,7 @@ public class CustomException extends RuntimeException {
         this.details = details;
     }
 
-    public CustomException(String message, String details, String nextActions) {
+    protected CustomException(String message, String details, String nextActions) {
         this.message = message;
         this.details = details;
         this.nextActions = nextActions;

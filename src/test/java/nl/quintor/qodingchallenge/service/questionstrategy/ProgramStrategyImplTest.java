@@ -4,7 +4,7 @@ import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
-import nl.quintor.qodingchallenge.service.HttpRequestUtils;
+import nl.quintor.qodingchallenge.utils.HttpRequestUtils;
 import nl.quintor.qodingchallenge.service.exception.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
