@@ -5,10 +5,7 @@ import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
-import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
-import nl.quintor.qodingchallenge.persistence.dao.CampaignDAOImpl;
-import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
-import nl.quintor.qodingchallenge.persistence.dao.QuestionDAOImpl;
+import nl.quintor.qodingchallenge.persistence.dao.*;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
 import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +29,7 @@ class QuestionServiceImplTest {
 
     private QuestionDAO questionDAOMock;
     private CampaignDAO campaignDAOMock;
+    private ParticipantDAO participantDAO;
     private QuestionServiceImpl sut;
 
     @BeforeEach
@@ -40,9 +38,11 @@ class QuestionServiceImplTest {
 
         this.campaignDAOMock = mock(CampaignDAOImpl.class);
         this.questionDAOMock = mock(QuestionDAOImpl.class);
+        this.participantDAO = mock(ParticipantDAOImpl.class);
 
         this.sut.setCampaignDAO(campaignDAOMock);
         this.sut.setQuestionDAO(questionDAOMock);
+        this.sut.setParticipantDAO(participantDAO);
 
         when(campaignDAOMock.campaignExists(campaignID)).thenReturn(true);
     }

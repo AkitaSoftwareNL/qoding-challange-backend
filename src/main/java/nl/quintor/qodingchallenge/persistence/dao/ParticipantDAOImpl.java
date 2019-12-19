@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
+import nl.quintor.qodingchallenge.utils.TimeUtils;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -131,5 +132,22 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         }
         return false;
     }
+
+    @Override
+    public void addTimeToParticipant(String participantID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE participant_of_campaign SET TIME_ENDED = ? WHERE PARTICIPANTID = ?"
+            );
+            statement.setString(1, TimeUtils.getTimeStamp());
+            statement.setString(2, participantID);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
 }
+
 
