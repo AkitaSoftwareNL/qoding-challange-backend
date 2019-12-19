@@ -4,6 +4,7 @@ import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
+import nl.quintor.qodingchallenge.service.QuestionState;
 import nl.quintor.qodingchallenge.service.exception.ValidationException;
 import nl.quintor.qodingchallenge.utils.HttpRequestUtils;
 import org.junit.jupiter.api.Assertions;
@@ -18,8 +19,6 @@ import static org.mockito.ArgumentMatchers.*;
 
 class ProgramStrategyImplTest {
 
-    private final int incorrect = 3;
-    private final int correct = 2;
     private ProgramStrategyImpl sut;
     private QuestionDAO mockedQuestionDAO;
     private HttpRequestUtils mockedHttpRequestUtils;
@@ -38,7 +37,7 @@ class ProgramStrategyImplTest {
         sut.setRequestUtils(mockedHttpRequestUtils);
         QuestionDTO questionDTO = new QuestionDTO();
         sut.validateAnswer(questionDTO);
-        Assertions.assertEquals(incorrect, questionDTO.getStateID());
+        Assertions.assertEquals(QuestionState.INCORRECT.getState(), questionDTO.getStateID());
     }
 
     @Test
@@ -49,7 +48,7 @@ class ProgramStrategyImplTest {
         QuestionDTO questionDTO = new QuestionDTO();
         sut.setRequestUtils(mockedHttpRequestUtils);
         sut.validateAnswer(questionDTO);
-        Assertions.assertEquals(correct, questionDTO.getStateID());
+        Assertions.assertEquals(QuestionState.CORRECT.getState(), questionDTO.getStateID());
     }
 
     @Test
@@ -61,6 +60,6 @@ class ProgramStrategyImplTest {
         sut.setRequestUtils(mockedHttpRequestUtils);
 
         sut.validateAnswer(questionDTO);
-        Assertions.assertEquals(incorrect, questionDTO.getStateID());
+        Assertions.assertEquals(QuestionState.INCORRECT.getState(), questionDTO.getStateID());
     }
 }
