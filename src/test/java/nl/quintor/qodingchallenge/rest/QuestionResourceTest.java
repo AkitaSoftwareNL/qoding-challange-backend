@@ -19,7 +19,6 @@ import static org.mockito.Mockito.*;
 
 class QuestionResourceTest {
 
-    public static final String AMOUNT_OF_QUESTIONS_IN_STRING = "33";
     private final String category = "java";
     private final String campaign = "campaign";
     private final String attachment = "attachment";
@@ -224,11 +223,12 @@ class QuestionResourceTest {
     @Test
     void countQuestionsReturnsRightAmountOfQuestions() throws SQLException {
         // Mock
-        when(questionServiceMock.countQuestions()).thenReturn(AMOUNT_OF_QUESTIONS_IN_STRING);
+        final String expectedAmountOfQuestions = "33";
+        when(questionServiceMock.countQuestions()).thenReturn(expectedAmountOfQuestions);
         // Test
         var testValue = sut.countQuestions();
         // Verify
-        assertEquals(AMOUNT_OF_QUESTIONS_IN_STRING, testValue.getBody());
+        assertEquals(expectedAmountOfQuestions, testValue.getBody());
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
     }
 
