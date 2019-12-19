@@ -12,6 +12,8 @@ import static java.lang.String.format;
 
 public class TimeUtils {
 
+    private TimeUtils() {}
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TimeUtils.class);
 
     public static String getTimeStamp() {
@@ -31,7 +33,9 @@ public class TimeUtils {
         String[] datePattern = new String[formats.length + 1];
         try {
             datePattern[0] = format;
-            if (formats.length - 1 >= 0) System.arraycopy(formats, 1, datePattern, 1, formats.length - 1);
+            if (formats.length - 1 >= 0) {
+                System.arraycopy(formats, 1, datePattern, 1, formats.length - 1);
+            }
             for (String pattern : datePattern) {
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern);
                 Date date = sdf.parse(inputDate);
@@ -40,10 +44,9 @@ public class TimeUtils {
                     return true;
                 }
             }
-        } catch (ParseException ex) {
-            return false;
+        } catch (ParseException e) {
+            LOGGER.error(e.getMessage(), e);
         }
         return false;
-
     }
 }
