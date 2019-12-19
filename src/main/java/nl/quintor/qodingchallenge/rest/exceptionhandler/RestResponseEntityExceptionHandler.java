@@ -25,7 +25,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler({
             CampaignAlreadyExistsException.class,
             EmptyQuestionException.class,
-            ValidationException.class,
             CampaignDoesNotExistsException.class,
             IllegalEnumStateException.class
     })

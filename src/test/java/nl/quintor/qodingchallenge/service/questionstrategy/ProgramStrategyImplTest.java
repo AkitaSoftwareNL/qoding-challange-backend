@@ -5,7 +5,6 @@ import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.QuestionState;
-import nl.quintor.qodingchallenge.service.exception.ValidationException;
 import nl.quintor.qodingchallenge.util.HttpRequestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ class ProgramStrategyImplTest {
 
     @Test
     void validateAnswerSetsQuestionStateToIncorrectWhenExceptionIsThrown() {
-        Mockito.when(mockedHttpRequestUtils.post(anyString(), any(), any())).thenThrow(ValidationException.class);
+        Mockito.when(mockedHttpRequestUtils.post(anyString(), any(), any())).thenThrow(RuntimeException.class);
         sut.setRequestUtils(mockedHttpRequestUtils);
         QuestionDTO questionDTO = new QuestionDTO();
         sut.validateAnswer(questionDTO);

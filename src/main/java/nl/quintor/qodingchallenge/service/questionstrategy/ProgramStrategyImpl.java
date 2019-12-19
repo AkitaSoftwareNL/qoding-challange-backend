@@ -6,7 +6,6 @@ import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.QuestionState;
 import nl.quintor.qodingchallenge.service.QuestionType;
-import nl.quintor.qodingchallenge.service.exception.ValidationException;
 import nl.quintor.qodingchallenge.util.HttpRequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +42,6 @@ public class ProgramStrategyImpl extends QuestionStrategy {
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            var error = new ValidationException(e.getMessage());
-            LOGGER.error(error.getMessage() + " : " + error.getDetails());
             question.setStateID(QuestionState.INCORRECT.getState());
         }
 
