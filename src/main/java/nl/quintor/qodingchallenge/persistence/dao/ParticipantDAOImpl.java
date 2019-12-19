@@ -3,7 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
-import nl.quintor.qodingchallenge.utils.TimeUtils;
+import nl.quintor.qodingchallenge.util.TimeUtils;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
