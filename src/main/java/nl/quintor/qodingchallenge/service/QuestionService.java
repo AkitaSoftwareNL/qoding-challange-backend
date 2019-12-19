@@ -29,4 +29,6 @@ public interface QuestionService {
     QuestionDTO getQuestion(int questionid) throws SQLException;
 
     void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException;
+
+    String countQuestions() throws SQLException;
 }

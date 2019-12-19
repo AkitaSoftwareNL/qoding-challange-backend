@@ -306,15 +306,30 @@ public class QuestionDAOImpl implements QuestionDAO {
         return possibleAnswersString;
     }
 
+    @Override
     public int getQuestionAmountPerCategory(String category) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) as amount FROM question where CATEGORY_NAME = ? AND state = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM question WHERE CATEGORY_NAME = ? AND STATE = 1");
             statement.setString(1, category);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            return resultSet.getInt("amount");
+            return resultSet.getInt("AMOUNT");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    @Override
+    public int countQuestions() throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM question WHERE STATE = 1");
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("AMOUNT");
         } catch (SQLException e) {
             throw new SQLException(e);
         }

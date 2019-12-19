@@ -107,6 +107,27 @@ class QuestionServiceImplTest {
     }
 
     @Test
+    void countQuestionsReturnRightAmountOfQuestions() throws SQLException {
+        // Mock
+        final int expectedAmountOfQuestions = 22;
+        when(questionDAOMock.countQuestions()).thenReturn(expectedAmountOfQuestions);
+        // Test
+        var testValue = sut.countQuestions();
+        // Verify
+        assertEquals(Integer.toString(expectedAmountOfQuestions), testValue);
+    }
+
+    @Test
+    void countQuestionsCallsCountQuestions() throws SQLException {
+        // Mock
+
+        // Test
+        sut.getAllQuestions();
+        // Verify
+        verify(questionDAOMock).getAllQuestions();
+    }
+
+    @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
         List<QuestionDTO> questionDTOList = getQuestionlist();
         when(campaignDAOMock.getAmountOfQuestions(campaignID)).thenReturn(1);

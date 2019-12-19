@@ -220,6 +220,27 @@ class QuestionResourceTest {
         assertEquals(HttpStatus.OK, testValue.getStatusCode());
     }
 
+    @Test
+    void countQuestionsReturnsRightAmountOfQuestions() throws SQLException {
+        // Mock
+        final String expectedAmountOfQuestions = "33";
+        when(questionServiceMock.countQuestions()).thenReturn(expectedAmountOfQuestions);
+        // Test
+        var testValue = sut.countQuestions();
+        // Verify
+        assertEquals(expectedAmountOfQuestions, testValue.getBody());
+        assertEquals(HttpStatus.OK, testValue.getStatusCode());
+    }
+
+    @Test
+    void countQuestionsCallsCountQuestions() throws SQLException {
+        // Mock
+        // Test
+        sut.countQuestions();
+        // Verify
+        verify(questionServiceMock).countQuestions();
+    }
+
     private GivenAnswerDTO getAnswerDTO() {
         return new GivenAnswerDTO();
     }

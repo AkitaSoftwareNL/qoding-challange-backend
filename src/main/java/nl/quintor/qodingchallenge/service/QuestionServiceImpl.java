@@ -117,4 +117,9 @@ public class QuestionServiceImpl implements QuestionService {
     public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException {
         questionDAO.setPendingAnswer(givenAnswerDTO);
     }
+
+    @Override
+    public String countQuestions() throws SQLException {
+        return Integer.toString(questionDAO.countQuestions());
+    }
 }

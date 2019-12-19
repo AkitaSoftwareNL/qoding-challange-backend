@@ -88,4 +88,13 @@ public class QuestionResource {
         questionService.removeQuestion(questionID);
         return ResponseEntity.ok().body(questionService.getAllQuestions());
     }
+
+    @RequestMapping(path = "/questions/count",
+            method = RequestMethod.GET,
+            produces = MediaType.TEXT_PLAIN_VALUE
+            )
+    public ResponseEntity<String> countQuestions() throws SQLException {
+        String questionAmount = questionService.countQuestions();
+        return ResponseEntity.ok().body(questionAmount);
+    }
 }
