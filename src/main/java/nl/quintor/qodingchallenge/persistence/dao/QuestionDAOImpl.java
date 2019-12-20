@@ -7,9 +7,10 @@ import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +24,8 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 
 @Service
 public class QuestionDAOImpl implements QuestionDAO {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionDAOImpl.class);
 
 
     @Override
@@ -160,6 +163,8 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
+                                    LOGGER.info("No startcode has been found");
+                                    LOGGER.debug(e.getMessage(), e);
                                     questionDTOBuilder.startCode = "";
                                 }
                             }

@@ -4,7 +4,6 @@ import nl.quintor.qodingchallenge.dto.AnswerDTO;
 import nl.quintor.qodingchallenge.service.QuestionState;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

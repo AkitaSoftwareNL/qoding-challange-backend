@@ -6,7 +6,6 @@ import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import nl.quintor.qodingchallenge.util.TimeUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
