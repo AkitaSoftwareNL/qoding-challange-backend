@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
+import nl.quintor.qodingchallenge.service.QuestionState;
 import nl.quintor.qodingchallenge.util.TimeUtils;
 import org.springframework.stereotype.Service;
 
@@ -47,11 +48,12 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID" +
-                            ",poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER, " +
-                            "(SELECT COUNT(*) FROM given_answer  WHERE poc.CAMPAIGN_ID = CAMPAIGN_ID AND poc.PARTICIPANTID = PARTICIPANTID AND STATEID = 1) AS CORRECT " +
+                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID, poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER, \n" +
+                            "(SELECT COUNT(*) FROM given_answer AS ga WHERE CAMPAIGN_ID = ? AND ga.PARTICIPANTID = poc.PARTICIPANTID AND STATEID = ?) AS CORRECT\n" +
                             "FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
             statement.setInt(1, campaignID);
+            statement.setInt(2, QuestionState.CORRECT.getState());
+            statement.setInt(3, campaignID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 participants.add(
