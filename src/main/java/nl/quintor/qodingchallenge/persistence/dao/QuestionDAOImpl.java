@@ -163,7 +163,8 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
-                                    LOGGER.debug(format("No startcode has been found \n %s", e.getMessage()));
+                                    LOGGER.info("No startcode has been found");
+                                    LOGGER.debug(e.getMessage(), e);
                                     questionDTOBuilder.startCode = "";
                                 }
                             }
