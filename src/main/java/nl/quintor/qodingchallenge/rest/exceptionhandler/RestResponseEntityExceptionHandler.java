@@ -1,8 +1,10 @@
 package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
-import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
-import nl.quintor.qodingchallenge.service.exception.NoCampaignFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import nl.quintor.qodingchallenge.rest.customexception.CustomException;
+import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
+import nl.quintor.qodingchallenge.service.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -18,29 +20,56 @@ import java.sql.SQLException;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+
+    @ExceptionHandler({
+            CampaignAlreadyExistsException.class,
+            EmptyQuestionException.class,
+            CampaignDoesNotExistsException.class,
+            IllegalEnumStateException.class
+    })
+    public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
+                );
+        logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({
+            NoCampaignFoundException.class,
+            NoQuestionFoundException.class,
+            AnswerNotFoundException.class
+    })
+    public final ResponseEntity<Object> handleCustomExceptionNotFound(CustomException ex, WebRequest webRequest) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
+                );
+        logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({
+            CouldNotAddParticipantException.class
+    })
+    public final ResponseEntity<Object> handleCustomExceptionBadRequest(CustomException ex, WebRequest webRequest) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
+                );
+        logger.error(ex.getMessage(), ex.getDetails(), ex.fillInStackTrace().toString());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler({SQLException.class})
-    public ResponseEntity<Object> handleSQLException(Exception e, WebRequest request) {
+    public ResponseEntity<Object> handleNotFoundStatus(Exception e, WebRequest request) {
+        JSONCustomExceptionSchema exceptionResponse =
+                new JSONCustomExceptionSchema(
+                        e.getMessage()
+                );
         logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>("An exception has occured with the database", new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({CampaignAlreadyExistsException.class})
-    public ResponseEntity<Object> handleCampaignAlreadyExistsException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({AnswerNotFoundException.class})
-    public ResponseEntity<Object> handleAnswerNotFoundException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({NoCampaignFoundException.class})
-    public ResponseEntity<Object> handleNoCampaignFoundException(Exception e, WebRequest request) {
-        logger.error(e.fillInStackTrace().toString());
-        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 }

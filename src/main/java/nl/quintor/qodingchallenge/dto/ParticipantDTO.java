@@ -1,71 +1,87 @@
 package nl.quintor.qodingchallenge.dto;
 
-public class ParticipantDTO {
+import java.util.Objects;
 
-    private int participantID;
+public class ParticipantDTO {
+    private String participantID;
+    private int campaignID;
+    private long timeInMillis;
     private String firstname;
     private String insertion;
     private String lastname;
     private String email;
-    private int phonenumber;
+    private String phonenumber;
+    private int amountOfRightAnsweredQuestions;
 
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(int participantID, String firstname, String insertion, String lastname, String email, int phonenumber) {
+    public ParticipantDTO(String participantID, int campaignID, long timeInMillis, String firstname, String insertion, String lastname, String email, String phonenumber, int amountOfRightAnsweredQuestions) {
         this.participantID = participantID;
+        this.campaignID = campaignID;
+        this.timeInMillis = timeInMillis;
         this.firstname = firstname;
         this.insertion = insertion;
         this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
+        this.amountOfRightAnsweredQuestions = amountOfRightAnsweredQuestions;
     }
 
-    public int getParticipantID() {
+    public String getParticipantID() {
         return participantID;
     }
 
-    public void setParticipantID(int participantID) {
-        this.participantID = participantID;
+    public int getCampaignID() {
+        return campaignID;
+    }
+
+    public long getTimeInMillis() {
+        return timeInMillis;
     }
 
     public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
     public String getInsertion() {
         return insertion;
-    }
-
-    public void setInsertion(String insertion) {
-        this.insertion = insertion;
     }
 
     public String getLastname() {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getPhonenumber() {
+    public String getPhonenumber() {
         return phonenumber;
     }
 
-    public void setPhonenumber(int phonenumber) {
-        this.phonenumber = phonenumber;
+    public int getAmountOfRightAnsweredQuestions() {
+        return amountOfRightAnsweredQuestions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParticipantDTO that = (ParticipantDTO) o;
+        return participantID.equals(that.participantID) &&
+                campaignID == that.campaignID &&
+                timeInMillis == that.timeInMillis &&
+                amountOfRightAnsweredQuestions == that.amountOfRightAnsweredQuestions &&
+                Objects.equals(firstname, that.firstname) &&
+                Objects.equals(insertion, that.insertion) &&
+                Objects.equals(lastname, that.lastname) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(phonenumber, that.phonenumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(participantID, campaignID, timeInMillis, firstname, insertion, lastname, email, phonenumber, amountOfRightAnsweredQuestions);
     }
 }

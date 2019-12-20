@@ -1,7 +1,9 @@
 package nl.quintor.qodingchallenge.service.exception;
 
-public class CampaignAlreadyExistsException extends RuntimeException {
-    public CampaignAlreadyExistsException(String s) {
-        super(s);
+import nl.quintor.qodingchallenge.rest.customexception.CustomException;
+
+public class CampaignAlreadyExistsException extends CustomException {
+    public CampaignAlreadyExistsException(String message, String details, String nextAction) {
+        super(message, details, nextAction);
     }
 }

@@ -4,16 +4,20 @@ drop table if exists GIVEN_ANSWER;
 
 drop table if exists QUESTION;
 
+drop table if exists TMP_MULTIPLE_CHOICE_QUESTION;
 
-create table QUESTION
+drop table if exists programming_question;
+
+
+CREATE TABLE QUESTION
 (
-  QUESTIONID    smallint     not null,
-  CATEGORY_NAME varchar(255) not null,
-  QUESTION      varchar(255) not null,
-  STATE         bool         not null,
-  QUESTION_TYPE varchar(255),
-  ATTACHMENT    varchar(4096),
-  primary key (QUESTIONID)
+  QUESTIONID    SMALLINT     NOT NULL AUTO_INCREMENT,
+  CATEGORY_NAME VARCHAR(255) NOT NULL,
+  QUESTION      VARCHAR(255) NOT NULL,
+  STATE         BOOL         NOT NULL default 1,
+  QUESTION_TYPE VARCHAR(255),
+  ATTACHMENT    VARCHAR(4096),
+  PRIMARY KEY (QUESTIONID)
 );
 
 create table MULTIPLE_CHOICE_QUESTION
@@ -24,29 +28,50 @@ create table MULTIPLE_CHOICE_QUESTION
   primary key (QUESTIONID, ANSWER_OPTIONS)
 );
 
+
+CREATE TABLE PROGRAMMING_QUESTION
+(
+   QUESTIONID           SMALLINT NOT NULL,
+   STARTCODE            VARCHAR(1024),
+   TESTCODE            VARCHAR(4096)
+);
+
 create table GIVEN_ANSWER
 (
   QUESTIONID    smallint      not null,
   PARTICIPANTID smallint      not null,
-  NAME          varchar(255)  not null,
+  CAMPAIGN_ID   int  not null,
   STATEID       smallint      not null,
   GIVEN_ANSWER  varchar(1024) not null,
-  primary key (QUESTIONID, PARTICIPANTID, NAME)
+  primary key (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID)
 );
 
-insert into question (questionID, category_name, question, state, QUESTION_TYPE)
-values (1, 'JAVA', 'Wat is de output van het draaien van de main methode in klasse B voor de volgende code', 1, 'open');
-insert into question (questionID, category_name, question, state, QUESTION_TYPE)
-values (2, 'JAVA',
+CREATE TABLE TMP_MULTIPLE_CHOICE_QUESTION
+(
+   QUESTIONID           SMALLINT NOT NULL,
+   ANSWER_OPTIONS       VARCHAR(255) NOT NULL,
+   IS_CORRECT           BOOL NOT NULL,
+   PRIMARY KEY (QUESTIONID, ANSWER_OPTIONS)
+);
+
+
+insert into question (category_name, question, state, QUESTION_TYPE)
+values ('JAVA', 'Wat is de output van het draaien van de main methode in klasse B voor de volgende code', 1, 'open');
+insert into question (category_name, question, state, QUESTION_TYPE)
+values ('JAVA',
         'Juist of onjuist, er bestaat ter allen tijd een instantie van de class singelton. Licht je antwoord toe', 1,
         'open');
-insert into question (questionID, category_name, question, state, QUESTION_TYPE)
-values (3, 'JAVA', 'Kan je meerdere catch statements gebruiken voor EEN try', 1, 'multiple');
+insert into question (category_name, question, state, QUESTION_TYPE)
+values ('JAVA', 'Kan je meerdere catch statements gebruiken voor EEN try', 1, 'multiple');
 
 insert into multiple_choice_question (questionID, ANSWER_OPTIONS, is_correct)
 values (3, 'Ja', 1);
 insert into multiple_choice_question (questionID, ANSWER_OPTIONS, is_correct)
 values (3, 'Nee', 0);
 
-insert into GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, NAME, STATEID, GIVEN_ANSWER)
-values (3, 1, 'HC2 Holdings, Inc', 1, 'A');
+insert into GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, STATEID, GIVEN_ANSWER)
+values (3, 1, 1, 1, 'A');
+
+INSERT INTO programming_question (QUESTIONID, STARTCODE, TESTCODE) VALUES (4, 'startCode','testCode');
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Maak een string vergelijker', 1, 'program');
+

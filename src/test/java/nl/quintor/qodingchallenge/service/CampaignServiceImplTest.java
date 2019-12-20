@@ -2,7 +2,7 @@ package nl.quintor.qodingchallenge.service;
 
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.persistence.dao.CampaignDAO;
-import org.junit.jupiter.api.BeforeEach;
+import nl.quintor.qodingchallenge.service.exception.CampaignAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,57 +14,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CampaignServiceImplTest {
 
-    private final List<CampaignDTO> campaignDTOList = new ArrayList<>();
-    private final CampaignDTO campaignDTO = new CampaignDTO("JFALL - 2020", 5, "admin", "JAVA", null);
+    private final String campaign = "campaign - 2020";
+
     @InjectMocks
     CampaignServiceImpl sut;
+
     @Mock
     private CampaignDAO campaignDAOStub;
 
-    @BeforeEach
-    void setUp() {
-        campaignDTOList.add(
-                new CampaignDTO("JFALL - 2019", 3, "admin", "JAVA", null)
-        );
-        campaignDTOList.add(
-                campaignDTO
-        );
-    }
-
     @Test
     void getCreatecampaignCallToDaoCampaignExists() throws SQLException {
-        sut.createNewCampaign(anyString());
+        sut.createNewCampaign(getCampaignDTO());
 
-        verify(campaignDAOStub).campaignExists(anyString());
+        verify(campaignDAOStub).campaignExists(anyInt());
     }
 
     @Test
-    void getCreatecampaignCallToDaoPersistCampaign() throws SQLException {
-        sut.createNewCampaign(anyString());
+    void getCreateCampaignCallToDaoPersistCampaign() throws SQLException {
+        sut.createNewCampaign(getCampaignDTO());
 
-        verify(campaignDAOStub).persistCampaign(anyString());
+        verify(campaignDAOStub).persistCampaign(getCampaignDTO());
     }
 
     @Test
-    void returnsListWhenGettingAllCampaignsAfterCreation() throws SQLException {
-        when(campaignDAOStub.getAllCampaigns())
-                .thenReturn(campaignDTOList);
+    void createNewCampaignThrowsCampaignAlreadyExistsException() throws SQLException {
+        when(campaignDAOStub.campaignExists(1))
+                .thenReturn(true);
 
-        assertEquals(campaignDAOStub.getAllCampaigns(), sut.createNewCampaign(anyString()));
+        assertThrows(CampaignAlreadyExistsException.class, () -> sut.createNewCampaign(getCampaignDTO()));
+    }
+
+    @Test
+    void showCampaignCallsGetAllCampaigns() throws SQLException {
+        // Mock
+
+        // Test
+        sut.showCampaign();
+        // Verify
+        verify(campaignDAOStub).getAllCampaigns();
     }
 
     @Test
     void returnsListWhenGettingAllCampaigns() throws SQLException {
         when(campaignDAOStub.getAllCampaigns())
-                .thenReturn(campaignDTOList);
+                .thenReturn(getCampaignDtoList());
 
         assertEquals(campaignDAOStub.getAllCampaigns(), sut.showCampaign());
+    }
+
+    private CampaignDTO getCampaignDTO() {
+        return new CampaignDTO(1, campaign, "me", "JAVA", 3, "12/2/2019", 1, null);
+    }
+
+    private List<CampaignDTO> getCampaignDtoList() {
+        List<CampaignDTO> campaignDTOList = new ArrayList<>();
+        campaignDTOList.add(
+                getCampaignDTO()
+        );
+        return campaignDTOList;
     }
 }

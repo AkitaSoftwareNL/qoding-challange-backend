@@ -1,28 +1,37 @@
 package nl.quintor.qodingchallenge.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class QuestionDTO {
 
     private int questionID;
     private String question;
+    private String categoryType;
     private String questionType;
     private String attachment;
-    private List<String> possibleAnswer;
+    private String startCode;
+    private List<PossibleAnswerDTO> possibleAnswers;
     private String givenAnswer;
     private int stateID;
 
     public QuestionDTO() {
-
     }
 
-    public QuestionDTO(int questionID, String question, String questionType, String attachment) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID, String startCode) {
         this.questionID = questionID;
         this.question = question;
+        this.categoryType = categoryType;
         this.questionType = questionType;
         this.attachment = attachment;
-        this.givenAnswer = "";
+        this.possibleAnswers = possibleAnswers;
+        this.givenAnswer = givenAnswer;
         this.stateID = 1;
+        this.startCode = startCode;
+    }
+
+    public String getStartCode() {
+        return startCode;
     }
 
     public int getQuestionID() {
@@ -57,16 +66,16 @@ public class QuestionDTO {
         this.attachment = attachment;
     }
 
-    public List<String> getPossibleAnswer() {
-        return possibleAnswer;
+    public List<PossibleAnswerDTO> getPossibleAnswers() {
+        return possibleAnswers;
     }
 
-    public void setPossibleAnswer(List<String> possibleAnswer) {
-        this.possibleAnswer = possibleAnswer;
+    public void setPossibleAnswers(List<PossibleAnswerDTO> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
     }
 
     public String getGivenAnswer() {
-        return givenAnswer;
+        return givenAnswer == null || givenAnswer.length() <= 0 ? "" : givenAnswer;
     }
 
     public void setGivenAnswer(String givenAnswer) {
@@ -81,4 +90,31 @@ public class QuestionDTO {
         this.stateID = stateID;
     }
 
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuestionDTO that = (QuestionDTO) o;
+        return questionID == that.questionID &&
+                stateID == that.stateID &&
+                Objects.equals(question, that.question) &&
+                Objects.equals(categoryType, that.categoryType) &&
+                Objects.equals(questionType, that.questionType) &&
+                Objects.equals(attachment, that.attachment) &&
+                Objects.equals(possibleAnswers, that.possibleAnswers) &&
+                Objects.equals(givenAnswer, that.givenAnswer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(questionID, question, categoryType, questionType, attachment, possibleAnswers, givenAnswer, stateID);
+    }
 }
