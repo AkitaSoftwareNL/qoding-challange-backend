@@ -12,9 +12,10 @@ import static java.lang.String.format;
 
 public final class TimeUtils {
 
-    private TimeUtils() {}
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TimeUtils.class);
+
+    private TimeUtils() {
+    }
 
     public static String getTimeStamp() {
         LocalDateTime now = LocalDateTime.now();

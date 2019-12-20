@@ -13,7 +13,7 @@ import java.util.List;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
-@Resource
+@Service
 public class ReportDAOImpl implements ReportDAO {
 
     @Override

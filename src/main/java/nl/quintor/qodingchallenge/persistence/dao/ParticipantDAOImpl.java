@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
-@Resource
+@Service
 public class ParticipantDAOImpl implements ParticipantDAO {
 
     @Override

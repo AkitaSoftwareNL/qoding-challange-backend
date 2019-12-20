@@ -21,7 +21,7 @@ import java.util.Optional;
 import static java.lang.String.format;
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 
-@Resource
+@Service
 public class QuestionDAOImpl implements QuestionDAO {
 
 
