@@ -3,7 +3,6 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
