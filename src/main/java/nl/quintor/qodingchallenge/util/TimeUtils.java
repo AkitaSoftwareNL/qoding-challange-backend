@@ -10,7 +10,7 @@ import java.util.Date;
 
 import static java.lang.String.format;
 
-public class TimeUtils {
+public final class TimeUtils {
 
     private TimeUtils() {}
 

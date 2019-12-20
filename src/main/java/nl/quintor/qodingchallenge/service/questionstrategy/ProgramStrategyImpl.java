@@ -6,23 +6,26 @@ import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.QuestionState;
 import nl.quintor.qodingchallenge.service.QuestionType;
-import nl.quintor.qodingchallenge.util.HttpRequestUtils;
+import nl.quintor.qodingchallenge.util.HttpRequestMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class ProgramStrategyImpl extends QuestionStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProgramStrategyImpl.class);
-    private HttpRequestUtils requestUtils;
+    private HttpRequestMethods requestUtils;
 
     public ProgramStrategyImpl(QuestionDAO questionDAO) {
         super(questionDAO, QuestionType.PROGRAM);
-        requestUtils = new HttpRequestUtils();
+        requestUtils = new HttpRequestMethods();
     }
 
-    void setRequestUtils(HttpRequestUtils requestUtils) {
+    void setRequestUtils(HttpRequestMethods requestUtils) {
         this.requestUtils = requestUtils;
     }
 
@@ -32,7 +35,7 @@ public class ProgramStrategyImpl extends QuestionStrategy {
             CodingQuestionDTO questionInDatabase = questionDAO.getCodingQuestion(question.getQuestionID());
             CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), questionInDatabase.getTest());
             ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", codingQuestionDTO, TestResultDTO.class);
-            TestResultDTO testResult = (TestResultDTO) result.getBody();
+            TestResultDTO testResult = (TestResultDTO) Objects.requireNonNull(result.getBody());
 
             if (result.getStatusCode() == HttpStatus.EXPECTATION_FAILED ||
                     testResult.getTotalTestsFailed() > 0) {

@@ -5,7 +5,7 @@ import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import nl.quintor.qodingchallenge.dto.TestResultDTO;
 import nl.quintor.qodingchallenge.persistence.dao.QuestionDAO;
 import nl.quintor.qodingchallenge.service.QuestionState;
-import nl.quintor.qodingchallenge.util.HttpRequestUtils;
+import nl.quintor.qodingchallenge.util.HttpRequestMethods;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,20 +20,20 @@ class ProgramStrategyImplTest {
 
     private ProgramStrategyImpl sut;
     private QuestionDAO mockedQuestionDAO;
-    private HttpRequestUtils mockedHttpRequestUtils;
+    private HttpRequestMethods mockedHttpRequestMethods;
 
     @BeforeEach
     void setUp() throws SQLException {
         mockedQuestionDAO = Mockito.mock(QuestionDAO.class);
         Mockito.when(mockedQuestionDAO.getCodingQuestion(anyInt())).thenReturn(new CodingQuestionDTO());
-        mockedHttpRequestUtils = Mockito.mock(HttpRequestUtils.class);
+        mockedHttpRequestMethods = Mockito.mock(HttpRequestMethods.class);
         sut = new ProgramStrategyImpl(mockedQuestionDAO);
     }
 
     @Test
     void validateAnswerSetsQuestionStateToIncorrectWhenExceptionIsThrown() {
-        Mockito.when(mockedHttpRequestUtils.post(anyString(), any(), any())).thenThrow(RuntimeException.class);
-        sut.setRequestUtils(mockedHttpRequestUtils);
+        Mockito.when(mockedHttpRequestMethods.post(anyString(), any(), any())).thenThrow(RuntimeException.class);
+        sut.setRequestUtils(mockedHttpRequestMethods);
         QuestionDTO questionDTO = new QuestionDTO();
         sut.validateAnswer(questionDTO);
         Assertions.assertEquals(QuestionState.INCORRECT.getState(), questionDTO.getStateID());
@@ -41,22 +41,22 @@ class ProgramStrategyImplTest {
 
     @Test
     void validateAnswerSetsQuestionStateToCorrect() {
-        Mockito.when(mockedHttpRequestUtils.post(anyString(), any(), any())).thenReturn(
+        Mockito.when(mockedHttpRequestMethods.post(anyString(), any(), any())).thenReturn(
                 ResponseEntity.ok(new TestResultDTO(1, 1, 0))
         );
         QuestionDTO questionDTO = new QuestionDTO();
-        sut.setRequestUtils(mockedHttpRequestUtils);
+        sut.setRequestUtils(mockedHttpRequestMethods);
         sut.validateAnswer(questionDTO);
         Assertions.assertEquals(QuestionState.CORRECT.getState(), questionDTO.getStateID());
     }
 
     @Test
     void validateAnswerSetsQuestionStateToIncorrect() {
-        Mockito.when(mockedHttpRequestUtils.post(anyString(), any(), any())).thenReturn(
+        Mockito.when(mockedHttpRequestMethods.post(anyString(), any(), any())).thenReturn(
                 ResponseEntity.ok(new TestResultDTO(1, 0, 1))
         );
         QuestionDTO questionDTO = new QuestionDTO();
-        sut.setRequestUtils(mockedHttpRequestUtils);
+        sut.setRequestUtils(mockedHttpRequestMethods);
 
         sut.validateAnswer(questionDTO);
         Assertions.assertEquals(QuestionState.INCORRECT.getState(), questionDTO.getStateID());
