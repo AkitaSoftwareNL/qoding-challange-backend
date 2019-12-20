@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
 import static org.junit.Assert.*;
@@ -138,5 +140,16 @@ class ParticipantDAOImplTest {
 
     private RankedParticipantCollection getRankedParticipantCollection() throws SQLException {
         return new RankedParticipantCollection("JFALL", sut.getRankedParticipantsPerCampaign(campaignID));
+    }
+
+    @Test
+    void addTimeToParticipantAddsTimeParticipantToCampaign() throws SQLException {
+        final String participantWithoutEndTime = "2";
+        sut.addTimeToParticipant(participantWithoutEndTime);
+        final List<ParticipantDTO> participants = sut.getRankedParticipantsPerCampaign(1);
+        final Optional<ParticipantDTO> testValue = participants.stream().filter(participantDTO -> participantDTO.getParticipantID().equals(participantWithoutEndTime)).findAny();
+
+
+        assertTrue(testValue.orElse(new ParticipantDTO()).getTimeInMillis() != 0);
     }
 }

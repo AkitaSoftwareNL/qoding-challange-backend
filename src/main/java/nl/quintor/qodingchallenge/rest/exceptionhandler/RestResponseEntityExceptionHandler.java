@@ -28,7 +28,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             CampaignDoesNotExistsException.class,
             IllegalEnumStateException.class
     })
-    public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
+    protected final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =
                 new JSONCustomExceptionSchema(
                         ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
