@@ -54,7 +54,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS, TIMESTAMP_CREATED, STATE FROM campaign");
+                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS, TIMESTAMP_CREATED, STATE FROM campaign WHERE STATE != 0");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 campaignDTOList.add(
