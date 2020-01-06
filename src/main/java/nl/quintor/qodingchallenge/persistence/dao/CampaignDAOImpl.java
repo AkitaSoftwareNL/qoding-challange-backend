@@ -127,7 +127,7 @@ public class CampaignDAOImpl implements CampaignDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE campaign SET STATE = 1 WHERE CAMPAIGN_ID = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE campaign SET STATE = 0 WHERE CAMPAIGN_ID = ?");
             statement.setInt(1, campaignID);
             statement.executeUpdate();
         } catch (SQLException e) {
