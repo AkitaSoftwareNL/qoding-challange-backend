@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,13 +13,13 @@ public class QuestionDTO {
     private String attachment;
     private String startCode;
     private List<PossibleAnswerDTO> possibleAnswers;
-    private String givenAnswer;
+    private String[] givenAnswer;
     private int stateID;
 
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID, String startCode) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswer, int stateID, String startCode) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
@@ -74,11 +75,16 @@ public class QuestionDTO {
         this.possibleAnswers = possibleAnswers;
     }
 
-    public String getGivenAnswer() {
-        return givenAnswer == null || givenAnswer.length() <= 0 ? "" : givenAnswer;
+    public String[] getGivenAnswer() {
+        if (givenAnswer == null || givenAnswer.length <= 0) {
+            givenAnswer = new String[1];
+            givenAnswer[0] = "";
+            return givenAnswer;
+        }
+        return givenAnswer;
     }
 
-    public void setGivenAnswer(String givenAnswer) {
+    public void setGivenAnswer(String[] givenAnswer) {
         this.givenAnswer = givenAnswer;
     }
 
@@ -110,7 +116,7 @@ public class QuestionDTO {
                 Objects.equals(questionType, that.questionType) &&
                 Objects.equals(attachment, that.attachment) &&
                 Objects.equals(possibleAnswers, that.possibleAnswers) &&
-                Objects.equals(givenAnswer, that.givenAnswer);
+                Arrays.equals(givenAnswer, that.givenAnswer);
     }
 
     @Override

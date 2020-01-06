@@ -17,4 +17,6 @@ public interface CampaignDAO {
     String getCampaignName(int campaignID) throws SQLException;
 
     int getCampaignID(String campaignName) throws SQLException;
+
+    void deleteCampaign(int campaignID) throws SQLException;
 }

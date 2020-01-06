@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuestionDAOImplIntTest {
@@ -75,9 +74,9 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getCorrectAnswerGivesAllCorrectAnswers() throws SQLException {
-        String actualResult = sut.getCorrectAnswer(questionId);
+        PossibleAnswerDTO actualResult = sut.getCorrectAnswers(questionId).get(0);
 
-        assertFalse(actualResult.isEmpty());
+        assertNotNull(actualResult);
     }
 
     @Test
@@ -204,7 +203,7 @@ class QuestionDAOImplIntTest {
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "open";
             questionDTOBuilder.stateID = questionState;
-            questionDTOBuilder.givenAnswer = "some answer";
+            questionDTOBuilder.givenAnswer = new String[]{"some answer"};
         }).build();
     }
 

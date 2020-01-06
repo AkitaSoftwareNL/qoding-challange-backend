@@ -121,4 +121,17 @@ public class CampaignDAOImpl implements CampaignDAO {
             throw new SQLException(e);
         }
     }
+
+    @Override
+    public void deleteCampaign(int campaignID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE campaign SET STATE = 1 WHERE CAMPAIGN_ID = ?");
+            statement.setInt(1, campaignID);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
 }

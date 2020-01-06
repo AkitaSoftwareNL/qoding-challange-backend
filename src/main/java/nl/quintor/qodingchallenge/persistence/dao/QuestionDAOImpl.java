@@ -74,7 +74,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setString(2, participantID);
             statement.setInt(3, campaignId);
             statement.setInt(4, question.getStateID());
-            statement.setString(5, question.getGivenAnswer());
+            statement.setString(5, question.getGivenAnswer()[0]);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -82,25 +82,33 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public String getCorrectAnswer(int questionID) throws SQLException {
-        Optional<String> correctAnswer = Optional.empty();
+    public ArrayList<PossibleAnswerDTO> getCorrectAnswers(int questionID) throws SQLException {
+        ArrayList<PossibleAnswerDTO> correctAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS  FROM multiple_choice_question WHERE QUESTIONID = ? AND IS_CORRECT = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS, IS_CORRECT FROM multiple_choice_question WHERE QUESTIONID = ?");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                correctAnswer = Optional.ofNullable(resultSet.getString("ANSWER_OPTIONS"));
+                correctAnswers.add(
+                        new PossibleAnswerDTO(
+                                resultSet.getString("ANSWER_OPTIONS"),
+                                resultSet.getInt("IS_CORRECT")
+                        )
+                );
             }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
-        return correctAnswer.orElseThrow(() -> new AnswerNotFoundException(
-                "No correct answer could be found",
-                format("For the question with questionID: %d was no correct answer found", questionID),
-                "Contact Quintor to solve this issue"
-        ));
+        if (correctAnswers.isEmpty()) {
+            throw new AnswerNotFoundException(
+                    "No correct answer could be found",
+                    format("For the question with questionID: %d was no correct answer found", questionID),
+                    "Please contact support to solve this issue"
+            );
+        }
+        return correctAnswers;
     }
 
     @Override

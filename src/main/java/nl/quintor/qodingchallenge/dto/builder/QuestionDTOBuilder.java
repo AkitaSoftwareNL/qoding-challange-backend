@@ -13,7 +13,7 @@ public class QuestionDTOBuilder {
     public String categoryType;
     public String questionType;
     public String attachment;
-    public String givenAnswer;
+    public String[] givenAnswer;
     public int stateID;
     public String startCode;
     private List<PossibleAnswerDTO> possibleAnswers;

@@ -52,7 +52,7 @@ class QuestionServiceImplTest {
         // Mock
         when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(getQuestionlist().size());
         when(questionDAOMock.getQuestions(anyString(), anyInt())).thenReturn(getQuestionlist());
-        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
+        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
         // Test
         sut.getQuestions(category, campaignID);
         // Verify
@@ -71,11 +71,11 @@ class QuestionServiceImplTest {
 
     @Test
     void setAnswerCallsGetCorrectAnswerCorrect() throws SQLException {
-        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
+        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
 
         sut.setAnswer(getQuestionCollection());
 
-        verify(questionDAOMock, times(2)).getCorrectAnswer(questionId);
+        verify(questionDAOMock, times(2)).getCorrectAnswers(questionId);
     }
 
     @Test
@@ -231,7 +231,7 @@ class QuestionServiceImplTest {
     @Test
     void setAnswerCallsAddTimeToParticipant() throws SQLException {
         // Mock
-        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
+        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
         // Test
         sut.setAnswer(getQuestionCollection());
         // Verify
@@ -251,7 +251,7 @@ class QuestionServiceImplTest {
         questionList.add(getMultipleQuestion());
         questionList.add(getOpenQuestion());
         QuestionDTO question = getMultipleQuestion();
-        question.setGivenAnswer("WrongAnswer");
+        question.setGivenAnswer(new String[]{"WrongAnswer"});
         questionList.add(question);
         return questionList;
     }
@@ -277,14 +277,14 @@ class QuestionServiceImplTest {
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "multiple";
-            questionDTOBuilder.givenAnswer = "";
+            questionDTOBuilder.givenAnswer = new String[] {""};
             questionDTOBuilder.stateID = 2;
         }).build();
     }
 
 
-    private List<PossibleAnswerDTO> getPossibleAnswers() {
-        List<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
+    private ArrayList<PossibleAnswerDTO> getPossibleAnswers() {
+        ArrayList<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
         possibleAnswersList.add(new PossibleAnswerDTO("yes", 1));
         possibleAnswersList.add(new PossibleAnswerDTO("no", 0));
         return possibleAnswersList;
@@ -296,7 +296,7 @@ class QuestionServiceImplTest {
                     questionDTOBuilder.question = "";
                     questionDTOBuilder.categoryType = category;
                     questionDTOBuilder.questionType = "multiple";
-                    questionDTOBuilder.givenAnswer = "no";
+                    questionDTOBuilder.givenAnswer = new String[]{"no"};
                     questionDTOBuilder.stateID = pendingState;
                 }
         ).build();

@@ -13,4 +13,6 @@ public interface CampaignService {
     void createNewCampaign(CampaignDTO campaignDTO) throws SQLException;
 
     List<CampaignDTO> showCampaign() throws SQLException;
+
+    void deleteCampaign(int campaignID) throws SQLException;
 }

@@ -32,7 +32,7 @@ public class ProgramStrategyImpl extends QuestionStrategy {
     public void validateAnswer(QuestionDTO question) {
         try {
             CodingQuestionDTO questionInDatabase = questionDAO.getCodingQuestion(question.getQuestionID());
-            CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), questionInDatabase.getTest());
+            CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer()[0], questionInDatabase.getTest());
             ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", codingQuestionDTO, TestResultDTO.class);
             TestResultDTO testResult = (TestResultDTO) Objects.requireNonNull(result.getBody());
 
