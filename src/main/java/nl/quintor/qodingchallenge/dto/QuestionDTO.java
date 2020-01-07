@@ -14,24 +14,22 @@ public class QuestionDTO {
     private List<PossibleAnswerDTO> possibleAnswers;
     private String givenAnswer;
     private int stateID;
+    private String unitTest;
 
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID, String startCode) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, String startCode, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID, String unitTest) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
         this.questionType = questionType;
         this.attachment = attachment;
+        this.startCode = startCode;
         this.possibleAnswers = possibleAnswers;
         this.givenAnswer = givenAnswer;
-        this.stateID = 1;
-        this.startCode = startCode;
-    }
-
-    public String getStartCode() {
-        return startCode;
+        this.stateID = stateID;
+        this.unitTest = unitTest;
     }
 
     public int getQuestionID() {
@@ -50,6 +48,14 @@ public class QuestionDTO {
         this.question = question;
     }
 
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
+    }
+
     public String getQuestionType() {
         return questionType;
     }
@@ -66,6 +72,14 @@ public class QuestionDTO {
         this.attachment = attachment;
     }
 
+    public String getStartCode() {
+        return startCode;
+    }
+
+    public void setStartCode(String startCode) {
+        this.startCode = startCode;
+    }
+
     public List<PossibleAnswerDTO> getPossibleAnswers() {
         return possibleAnswers;
     }
@@ -75,7 +89,7 @@ public class QuestionDTO {
     }
 
     public String getGivenAnswer() {
-        return givenAnswer == null || givenAnswer.length() <= 0 ? "" : givenAnswer;
+        return givenAnswer;
     }
 
     public void setGivenAnswer(String givenAnswer) {
@@ -90,12 +104,12 @@ public class QuestionDTO {
         this.stateID = stateID;
     }
 
-    public String getCategoryType() {
-        return categoryType;
+    public String getUnitTest() {
+        return unitTest;
     }
 
-    public void setCategoryType(String categoryType) {
-        this.categoryType = categoryType;
+    public void setUnitTest(String unitTest) {
+        this.unitTest = unitTest;
     }
 
     @Override

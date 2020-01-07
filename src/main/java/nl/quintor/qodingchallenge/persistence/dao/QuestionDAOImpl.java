@@ -340,6 +340,32 @@ public class QuestionDAOImpl implements QuestionDAO {
             throw new SQLException(e);
         }
     }
+
+    @Override
+    public synchronized void persistProgramQuestion(QuestionDTO question) throws SQLException {
+        final String JAVA = "JAVA";
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement insertQuestion = connection.prepareStatement("INSERT INTO question (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
+            PreparedStatement selectStatement = connection.prepareStatement("SELECT QUESTIONID FROM question ORDER BY QUESTIONID DESC");
+            PreparedStatement insertProgramming = connection.prepareStatement("INSERT INTO programming_question (QUESTIONID, STARTCODE, TESTCODE) VALUES (?, ?, ?)");
+            insertQuestion.setString(1, JAVA);
+            insertQuestion.setString(2, question.getQuestion());
+            insertQuestion.setString(3, question.getQuestionType().toLowerCase());
+            insertQuestion.setString(4, question.getAttachment());
+            insertQuestion.executeUpdate();
+            ResultSet resultSet = selectStatement.executeQuery();
+            resultSet.next();
+            int questionID = resultSet.getInt("QUESTIONID");
+            insertProgramming.setInt(1, questionID);
+            insertProgramming.setString(2, question.getStartCode());
+            insertProgramming.setString(3, question.getUnitTest());
+            insertProgramming.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
 }
 
 

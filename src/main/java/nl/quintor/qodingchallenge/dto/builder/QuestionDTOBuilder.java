@@ -17,6 +17,7 @@ public class QuestionDTOBuilder {
     public int stateID;
     public String startCode;
     private List<PossibleAnswerDTO> possibleAnswers;
+    public String unitTest;
 
     public QuestionDTOBuilder with(
             Builder<QuestionDTOBuilder> builder) throws SQLException {
@@ -26,6 +27,6 @@ public class QuestionDTOBuilder {
 
     public QuestionDTO build() {
         return new QuestionDTO(questionID, question, categoryType, questionType, attachment,
-                possibleAnswers, givenAnswer, stateID, startCode);
+                givenAnswer, possibleAnswers, startCode, stateID, unitTest);
     }
 }

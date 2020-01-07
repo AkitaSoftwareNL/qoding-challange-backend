@@ -36,4 +36,6 @@ public interface QuestionDAO {
     int getQuestionAmountPerCategory(String category) throws SQLException;
 
     int countQuestions() throws SQLException;
+
+    void persistProgramQuestion(QuestionDTO question) throws SQLException;
 }
