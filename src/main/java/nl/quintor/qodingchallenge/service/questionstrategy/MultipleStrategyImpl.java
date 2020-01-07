@@ -8,7 +8,6 @@ import nl.quintor.qodingchallenge.service.QuestionType;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class MultipleStrategyImpl extends QuestionStrategy {
     public MultipleStrategyImpl(QuestionDAO questionDAO) {
@@ -25,14 +24,15 @@ public class MultipleStrategyImpl extends QuestionStrategy {
         ArrayList<PossibleAnswerDTO> correctAnswers = questionDAO.getCorrectAnswers(question.getQuestionID());
         String[] givenAnswers = question.getGivenAnswer();
 
-        if(correctAnswers.size() != givenAnswers.length) {
+        if (correctAnswers.size() != givenAnswers.length) {
             question.setStateID(QuestionState.INCORRECT.getState());
             return;
         }
 
-        loopBunny : for(String givenAnswer : givenAnswers) {
-            for(PossibleAnswerDTO correctAnswer : correctAnswers) {
-                if(correctAnswer.getPossibleAnswer().equals(givenAnswer)) {
+        loopBunny:
+        for (String givenAnswer : givenAnswers) {
+            for (PossibleAnswerDTO correctAnswer : correctAnswers) {
+                if (correctAnswer.getPossibleAnswer().equals(givenAnswer)) {
                     continue loopBunny;
                 }
             }

@@ -76,6 +76,16 @@ class CampaignResourceTest {
         checkRequest(actualResult);
     }
 
+    @Test
+    void returnsCorrectStatusAndEntity() throws SQLException {
+        when(campaignServiceMock.showCampaign())
+                .thenReturn(getCampaignList());
+        ResponseEntity<List<CampaignDTO>> actualResult = sut.deleteCampaign(2);
+
+        assertEquals(actualResult.getStatusCode(), HttpStatus.OK);
+        assertEquals(actualResult.getBody(), campaignServiceMock.showCampaign());
+    }
+
     private void checkRequest(ResponseEntity<List<CampaignDTO>> actualResult) {
         assertEquals(HttpStatus.OK, actualResult.getStatusCode());
         assertEquals(getCampaignList(), actualResult.getBody());

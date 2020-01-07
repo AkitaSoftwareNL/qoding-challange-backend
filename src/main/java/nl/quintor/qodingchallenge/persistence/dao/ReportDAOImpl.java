@@ -26,7 +26,7 @@ public class ReportDAOImpl implements ReportDAO {
                             "                            ON ga.QUESTIONID = q.QUESTIONID INNER JOIN conference as c\n" +
                             "                            ON ga.PARTICIPANTID = c.PARTICIPANTID INNER JOIN given_answer_state as gas\n" +
                             "                            ON ga.PARTICIPANTID = gas.PARTICIPANTID AND ga.CAMPAIGN_ID = gas.CAMPAIGN_ID AND ga.PARTICIPANTID = gas.PARTICIPANTID\n" +
-                            "                            WHERE ga.CAMPAIGN_ID = ? AND ga.PARTICIPANTID = ? group by ga.given_answer, gas.STATEID, q.QUESTION, ga.GIVEN_ANSWER, q.QUESTION_TYPE");
+                            "                            WHERE ga.CAMPAIGN_ID = ? AND ga.PARTICIPANTID = ? group by ga.given_answer, gas.stateID");
             statement.setInt(1, campaignID);
             statement.setString(2, participantID);
             ResultSet resultSet = statement.executeQuery();
