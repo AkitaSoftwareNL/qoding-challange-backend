@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuestionDAOImplIntTest {
@@ -29,7 +30,7 @@ class QuestionDAOImplIntTest {
     private final int questionState = 1;
     private final int questionId = 3;
     private final int amountOfQuestions = 4;
-    private final String participentId = "1";
+    private final String participantId = "1";
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
@@ -67,7 +68,7 @@ class QuestionDAOImplIntTest {
     void setAnswerSetsAnswer() throws SQLException {
         int oldLength = sut.getPendingAnswers(campaignId, questionState).size();
 
-        sut.setAnswer(getQuestion(), campaignId, participentId);
+        sut.setAnswer(getQuestion(), campaignId, participantId);
 
         assertEquals(oldLength + 1, sut.getPendingAnswers(campaignId, questionState).size());
     }
@@ -135,7 +136,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionReturnQuestionThrowsNoQuestionFound() throws NoQuestionFoundException {
-        int falseId = 50;
+        final int falseId = 50;
         //Mock
 
         //Test
@@ -150,7 +151,7 @@ class QuestionDAOImplIntTest {
         //Mock
         var oldLengthValue = sut.getPendingAnswers(campaignId, questionState).size();
         //Test
-        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participentId, campaignId, correctState, "Test"));
+        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participantId, campaignId, correctState, "Test"));
         //Verify
         assertEquals(oldLengthValue - 1, sut.getPendingAnswers(campaignId, questionState).size());
     }

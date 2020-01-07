@@ -71,13 +71,6 @@ class CampaignDAOImplIntTest {
     }
 
     @Test
-    void perstistCampaignAddsCampain() throws SQLException {
-        sut.persistCampaign(getCampaign());
-
-        assertEquals(amountOfCampaigns + 1, sut.getAllCampaigns().size());
-    }
-
-    @Test
     void campaignExitsReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
         final String NO_CAMPAIGN = "Some non existing campaign";
 
