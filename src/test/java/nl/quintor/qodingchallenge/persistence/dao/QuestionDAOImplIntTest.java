@@ -30,7 +30,7 @@ class QuestionDAOImplIntTest {
     private final int questionState = 1;
     private final int questionId = 3;
     private final int amountOfQuestions = 4;
-    private final String participantId = "1";
+    private final String participantId = "1452950a-8059-4bd1-b397-d2bd765d6b9b";
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
@@ -112,7 +112,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getPendingAnswersReturnPendingAnswers() throws SQLException {
-        int expectedLength = 1;
+        int expectedLength = 80;
         //Mock
 
         //Test
@@ -147,7 +147,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setPendingAnswerAddAmountPlusOne() throws SQLException {
-        int correctState = 2;
+        final int correctState = 2;
         //Mock
         var oldLengthValue = sut.getPendingAnswers(campaignId, questionState).size();
         //Test
@@ -199,7 +199,7 @@ class QuestionDAOImplIntTest {
 
     private QuestionDTO getQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {
-            questionDTOBuilder.questionID = 1;
+            questionDTOBuilder.questionID = 2000;
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "open";
