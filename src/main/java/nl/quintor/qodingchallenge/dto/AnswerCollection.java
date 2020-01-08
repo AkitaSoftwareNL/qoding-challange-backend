@@ -77,16 +77,23 @@ public class AnswerCollection {
         return this;
     }
 
+    /**
+     * Filters the answers member variable
+     * answers may contain duplicate questions with different answers
+     * This algorithm filters all the duplicate questions from the list and adds the answers to one String
+     *
+     * @return list with distinct question and all answers for that question combined in same order as received
+     */
     public List<AnswerDTO> filter() {
         HashMap<String, String> map = new HashMap<>();
         answers.forEach(answerDTO -> {
-            String currentQuestion = answerDTO.getQuestion();
-            if (!map.containsKey(currentQuestion)) {
+                    String currentQuestion = answerDTO.getQuestion();
+                    if (!map.containsKey(currentQuestion)) {
                         map.put(answerDTO.getQuestion(), answerDTO.getGivenAnswer());
                     } else {
-                String oldValue = map.get(currentQuestion);
-                String newValue = oldValue + ", " + answerDTO.getGivenAnswer();
-                map.replace(currentQuestion, oldValue, newValue);
+                        String oldValue = map.get(currentQuestion);
+                        String newValue = oldValue + ", " + answerDTO.getGivenAnswer();
+                        map.replace(currentQuestion, oldValue, newValue);
                     }
                 }
         );
