@@ -31,19 +31,25 @@ public class ProgramStrategyImpl extends QuestionStrategy {
     }
 
     @Override
-    public void validateAnswer(QuestionDTO question) {
-        boolean result = runUnitTest(question);
-
-        if (result) question.setStateID(QuestionState.CORRECT.getState());
+    public void validateAnswer(QuestionDTO question) throws SQLException {
+        CodingQuestionDTO questionInDatabase = questionDAO.getCodingQuestion(question.getQuestionID());
+        CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), questionInDatabase.getTest());
+        boolean testResult = runUnitTest(codingQuestionDTO);
+        if (testResult) question.setStateID(QuestionState.CORRECT.getState());
         else question.setStateID(QuestionState.INCORRECT.getState());
-
     }
 
-    private boolean runUnitTest(QuestionDTO question) {
+    @Override
+    public void persistQuestion(QuestionDTO question) throws SQLException {
+        CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), question.getUnitTest());
+        boolean result = runUnitTest(codingQuestionDTO);
+        if (result) questionDAO.persistProgramQuestion(question);
+        else throw new CannotPersistQuestionException("Could not persist programming message.", "Could either not compile the tests of the tests failed.", "Alter Unit Tests.");
+    }
+
+    private boolean runUnitTest(CodingQuestionDTO question) {
         try {
-            CodingQuestionDTO questionInDatabase = questionDAO.getCodingQuestion(question.getQuestionID());
-            CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), questionInDatabase.getTest());
-            ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", codingQuestionDTO, TestResultDTO.class);
+            ResponseEntity<?> result = requestUtils.post("http://localhost:8090/validator/java/test", question, TestResultDTO.class);
             TestResultDTO testResult = (TestResultDTO) Objects.requireNonNull(result.getBody());
 
             return result.getStatusCode() != HttpStatus.EXPECTATION_FAILED &&
@@ -51,15 +57,6 @@ public class ProgramStrategyImpl extends QuestionStrategy {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             return false;
-        }
-    }
-
-    @Override
-    public void persistQuestion(QuestionDTO question) throws SQLException {
-        boolean result = runUnitTest(question);
-        if (result) questionDAO.persistProgramQuestion(question);
-        else {
-            throw new CannotPersistQuestionException("Could not persist programming message.", "Could either not compile the tests of the tests failed.", "Alter Unit Tests.");
         }
     }
 }

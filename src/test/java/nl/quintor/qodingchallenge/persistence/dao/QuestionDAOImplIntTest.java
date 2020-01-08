@@ -157,7 +157,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void removeQuestionRemovesQuesion() throws SQLException {
+    void removeQuestionRemovesQuestion() throws SQLException {
         // Mock
 
         // Test
@@ -195,6 +195,16 @@ class QuestionDAOImplIntTest {
         int actualAmount = sut.countQuestions();
         // Verify
         assertEquals(expectedAmount, actualAmount);
+    }
+
+    @Test
+    void persistProgramQuestionPersistsProgramQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistProgramQuestion(getQuestion());
+        // Verify
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
     }
 
     private QuestionDTO getQuestion() throws SQLException {
