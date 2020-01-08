@@ -1,6 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.AmountOfQuestionType;
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeDTO;
 import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import org.h2.tools.RunScript;
@@ -100,6 +100,6 @@ class CampaignDAOImplIntTest {
 
 
     private CampaignDTO getCampaign() {
-        return new CampaignDTO(1, "JFALL - 2019", "employee", "JAVA", new AmountOfQuestionTypeCollection(new AmountOfQuestionType[0]), "06-12-2019", 1, null);
+        return new CampaignDTO(1, "JFALL - 2019", "employee", "JAVA", new AmountOfQuestionTypeCollection(new AmountOfQuestionTypeDTO[0]), "06-12-2019", 1, null);
     }
 }

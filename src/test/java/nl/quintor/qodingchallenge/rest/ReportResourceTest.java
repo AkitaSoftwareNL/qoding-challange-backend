@@ -92,7 +92,7 @@ class ReportResourceTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, campaign, "me", "JAVA", new AmountOfQuestionTypeCollection(new AmountOfQuestionType[0]), "12/2/2019", 1, null);
+        return new CampaignDTO(1, campaign, "me", "JAVA", new AmountOfQuestionTypeCollection(new AmountOfQuestionTypeDTO[0]), "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {

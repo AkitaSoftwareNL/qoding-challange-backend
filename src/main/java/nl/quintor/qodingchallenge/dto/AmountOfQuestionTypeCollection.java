@@ -4,17 +4,17 @@ import java.util.Arrays;
 
 public class AmountOfQuestionTypeCollection {
 
-    public AmountOfQuestionType[] collection;
+    public AmountOfQuestionTypeDTO[] collection;
 
-    public AmountOfQuestionTypeCollection(AmountOfQuestionType[] collection) {
+    public AmountOfQuestionTypeCollection(AmountOfQuestionTypeDTO[] collection) {
         this.collection = collection;
     }
 
-    public AmountOfQuestionType[] getCollection() {
+    public AmountOfQuestionTypeDTO[] getCollection() {
         return collection;
     }
 
-    public void setCollection(AmountOfQuestionType[] collection) {
+    public void setCollection(AmountOfQuestionTypeDTO[] collection) {
         this.collection = collection;
     }
 

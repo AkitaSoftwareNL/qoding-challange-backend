@@ -2,11 +2,11 @@ package nl.quintor.qodingchallenge.dto;
 
 import java.util.Objects;
 
-public class AmountOfQuestionType {
+public class AmountOfQuestionTypeDTO {
     public String type;
     public int amount;
 
-    public AmountOfQuestionType(String type, int amount) {
+    public AmountOfQuestionTypeDTO(String type, int amount) {
         this.type = type;
         this.amount = amount;
     }
@@ -32,7 +32,7 @@ public class AmountOfQuestionType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AmountOfQuestionType that = (AmountOfQuestionType) o;
+        AmountOfQuestionTypeDTO that = (AmountOfQuestionTypeDTO) o;
         return amount == that.amount &&
                 Objects.equals(type, that.type);
     }
