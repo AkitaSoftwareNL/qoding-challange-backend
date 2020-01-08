@@ -13,7 +13,7 @@ public class QuestionDTOBuilder {
     public String categoryType;
     public String questionType;
     public String attachment;
-    public String[] givenAnswer;
+    private String[] givenAnswers;
     public int stateID;
     public String startCode;
     private List<PossibleAnswerDTO> possibleAnswers;
@@ -26,6 +26,6 @@ public class QuestionDTOBuilder {
 
     public QuestionDTO build() {
         return new QuestionDTO(questionID, question, categoryType, questionType, attachment,
-                possibleAnswers, givenAnswer, stateID, startCode);
+                possibleAnswers, givenAnswers, stateID, startCode);
     }
 }
