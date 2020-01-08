@@ -1,12 +1,10 @@
 package nl.quintor.qodingchallenge.dto;
 
+import nl.quintor.qodingchallenge.util.HashMapUtils;
+
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class AnswerCollection {
@@ -70,11 +68,6 @@ public class AnswerCollection {
         this.campaignID = campaignID;
     }
 
-    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
-    }
-
     public List<AnswerDTO> getAnswers() {
         return this.answers;
     }
@@ -87,16 +80,17 @@ public class AnswerCollection {
     public List<AnswerDTO> filter() {
         HashMap<String, String> map = new HashMap<>();
         answers.forEach(answerDTO -> {
-                    if (!map.containsValue(answerDTO.getQuestion())) {
+            if (!map.containsKey(answerDTO.getQuestion())) {
                         map.put(answerDTO.getQuestion(), answerDTO.getGivenAnswer());
                     } else {
                         String oldValue = map.get(answerDTO.getQuestion());
-                        map.replace(answerDTO.getQuestion(), oldValue, oldValue + ", " + answerDTO.getGivenAnswer());
+                String newValue = oldValue + ", " + answerDTO.getGivenAnswer();
+                map.replace(answerDTO.getQuestion(), oldValue, newValue);
                     }
                 }
         );
         answers = answers.stream()
-                .filter(distinctByKey(AnswerDTO::getQuestion))
+                .filter(HashMapUtils.distinctByKey(AnswerDTO::getQuestion))
                 .collect(Collectors.toList());
 
         answers.forEach(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())));
