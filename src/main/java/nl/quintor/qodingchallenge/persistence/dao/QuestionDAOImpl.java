@@ -1,9 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
-import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
@@ -27,17 +24,25 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionDAOImpl.class);
 
-
     @Override
-    public List<QuestionDTO> getQuestions(String category, int limit) throws SQLException {
-        List<QuestionDTO> questions;
+    public List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) throws SQLException {
+        List<QuestionDTO> questions = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
-            statement.setString(1, category);
-            statement.setInt(2, limit);
-            questions = createQuestionDTO(statement);
+            for (AmountOfQuestionTypeDTO questionType : limit.collection) {
+                PreparedStatement statement;
+                if (questionType.type.equalsIgnoreCase("total")) {
+                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+                    statement.setInt(2, questionType.amount - questions.size());
+                } else {
+                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+                    statement.setInt(2, questionType.amount);
+                }
+                statement.setString(1, category);
+                questions.addAll(createQuestionDTO(statement));
+                System.out.println(limit);
+            }
         } catch (SQLException e) {
             throw new SQLException(e);
         }

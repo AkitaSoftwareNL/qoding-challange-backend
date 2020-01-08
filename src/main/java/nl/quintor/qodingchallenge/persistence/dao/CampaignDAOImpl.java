@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeDTO;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +79,7 @@ public class CampaignDAOImpl implements CampaignDAO {
     }
 
     @Override
-    public int getAmountOfQuestions(int campaignID) throws SQLException {
+    public AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
@@ -86,7 +88,9 @@ public class CampaignDAOImpl implements CampaignDAO {
             statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            return resultSet.getInt("AMOUNT_OF_QUESTIONS");
+            var temp = new AmountOfQuestionTypeDTO[1];
+            temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+            return new AmountOfQuestionTypeCollection(temp);//resultSet.getInt("AMOUNT_OF_QUESTIONS");
         } catch (SQLException e) {
             throw new SQLException(e);
         }

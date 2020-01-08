@@ -1,7 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeDTO;
 import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeDTO;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,9 +55,12 @@ class CampaignDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
+        var temp = new AmountOfQuestionTypeDTO[1];
+        temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+
         var actualResult = sut.getAmountOfQuestions(campaignID);
 
-        assertEquals(1, actualResult);
+        assertEquals(new AmountOfQuestionTypeCollection(temp), actualResult);
     }
 
     @Test

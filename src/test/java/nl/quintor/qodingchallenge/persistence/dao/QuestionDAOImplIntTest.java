@@ -1,9 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
-import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.h2.tools.RunScript;
@@ -50,9 +47,11 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        List<QuestionDTO> questionDTOList = sut.getQuestions(category, amountOfQuestions);
+        var temp = new AmountOfQuestionTypeDTO[1];
+        temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+        List<QuestionDTO> questionDTOList = sut.getQuestions(category, new AmountOfQuestionTypeCollection(temp));
 
-        assertEquals(amountOfQuestions, questionDTOList.size());
+        assertEquals(new AmountOfQuestionTypeCollection(temp).getTotal(), questionDTOList.size());
     }
 
     @Test

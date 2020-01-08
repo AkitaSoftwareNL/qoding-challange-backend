@@ -11,7 +11,6 @@ public class AmountOfQuestionTypeDTO {
         this.amount = amount;
     }
 
-
     public String getType() {
         return type;
     }

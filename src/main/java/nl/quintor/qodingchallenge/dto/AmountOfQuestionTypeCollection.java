@@ -18,6 +18,16 @@ public class AmountOfQuestionTypeCollection {
         this.collection = collection;
     }
 
+    public int getTotal() {
+        int total = 0;
+
+        for (var amountType : collection) {
+            total += amountType.amount;
+        }
+
+        return total;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
