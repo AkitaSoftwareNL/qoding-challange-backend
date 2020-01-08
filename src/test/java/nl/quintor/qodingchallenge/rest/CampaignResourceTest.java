@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.rest;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionType;
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import nl.quintor.qodingchallenge.service.CampaignService;
 import org.junit.jupiter.api.Test;
@@ -100,7 +102,7 @@ class CampaignResourceTest {
     }
 
     private CampaignDTO getCampaign() {
-        return new CampaignDTO(1, "JFALL", "me", "JAVA", 3, "12/2/2019", 1, null);
+        return new CampaignDTO(1, "JFALL", "me", "JAVA", new AmountOfQuestionTypeCollection(new AmountOfQuestionType[0]), "12/2/2019", 1, null);
     }
 
 }

@@ -40,7 +40,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                     "INSERT INTO campaign(CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
                             "VALUES (?, 'JAVA', 'conferentie', 'admin', ?, null, 1)");
             statement.setString(1, campaignDTO.getName());
-            statement.setInt(2, campaignDTO.getAmountOfQuestions());
+            statement.setInt(2, 1); // campaignDTO.getAmountOfQuestions()
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -63,7 +63,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                                 resultSet.getString("CAMPAIGN_NAME"),
                                 resultSet.getString("CATEGORY_NAME"),
                                 resultSet.getString("USERNAME"),
-                                resultSet.getInt("AMOUNT_OF_QUESTIONS"),
+                                null,//                                resultSet.getInt("AMOUNT_OF_QUESTIONS"),
                                 resultSet.getString("TIMESTAMP_CREATED"),
                                 resultSet.getInt("STATE"),
                                 null
