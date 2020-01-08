@@ -80,12 +80,13 @@ public class AnswerCollection {
     public List<AnswerDTO> filter() {
         HashMap<String, String> map = new HashMap<>();
         answers.forEach(answerDTO -> {
-            if (!map.containsKey(answerDTO.getQuestion())) {
+            String currentQuestion = answerDTO.getQuestion();
+            if (!map.containsKey(currentQuestion)) {
                         map.put(answerDTO.getQuestion(), answerDTO.getGivenAnswer());
                     } else {
-                        String oldValue = map.get(answerDTO.getQuestion());
+                String oldValue = map.get(currentQuestion);
                 String newValue = oldValue + ", " + answerDTO.getGivenAnswer();
-                map.replace(answerDTO.getQuestion(), oldValue, newValue);
+                map.replace(currentQuestion, oldValue, newValue);
                     }
                 }
         );
@@ -93,7 +94,9 @@ public class AnswerCollection {
                 .filter(HashMapUtils.distinctByKey(AnswerDTO::getQuestion))
                 .collect(Collectors.toList());
 
-        answers.forEach(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())));
+        answers.forEach(answerDTO ->
+                answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion()))
+        );
 
         return answers;
     }
