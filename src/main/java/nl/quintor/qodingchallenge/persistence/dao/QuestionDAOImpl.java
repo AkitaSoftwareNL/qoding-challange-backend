@@ -33,11 +33,12 @@ public class QuestionDAOImpl implements QuestionDAO {
             for (AmountOfQuestionTypeDTO questionType : limit.collection) {
                 PreparedStatement statement;
                 if (questionType.type.equalsIgnoreCase("total")) {
-                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM question join question_type on question_type.id = question.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
                     statement.setInt(2, questionType.amount - questions.size());
                 } else {
-                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
-                    statement.setInt(2, questionType.amount);
+                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM question join question_type on question_type.id = question.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND Type = ? AND STATE != 0 ORDER BY RAND() limit ?;");
+                    statement.setString(2, questionType.type);
+                    statement.setInt(3, questionType.amount);
                 }
                 statement.setString(1, category);
                 questions.addAll(createQuestionDTO(statement));
@@ -147,7 +148,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE STATE = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM question join question_type on question_type.id = question.QUESTION_TYPE WHERE STATE = 1");
             questions = createQuestionDTO(statement);
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -179,7 +180,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 questionDTOBuilder.questionID = id;
                                 questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
                                 questionDTOBuilder.question = resultSet.getString("QUESTION");
-                                questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
+                                questionDTOBuilder.questionType = resultSet.getString("TYPE");
                                 questionDTOBuilder.attachment = resultSet.getString("attachment");
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
@@ -227,7 +228,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question WHERE QUESTIONID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question join question_type on question_type.id = question.QUESTION_TYPE WHERE QUESTIONID = ?");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -236,7 +237,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                             questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
                             questionDTOBuilder.question = resultSet.getString("QUESTION");
                             questionDTOBuilder.stateID = resultSet.getInt("STATE");
-                            questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
+                            questionDTOBuilder.questionType = resultSet.getString("TYPE");
                             questionDTOBuilder.attachment = resultSet.getString("ATTACHMENT");
                         }
                 ).build();

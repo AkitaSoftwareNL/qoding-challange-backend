@@ -83,11 +83,14 @@ public class CampaignDAOImpl implements CampaignDAO {
         try (
                 Connection connection = getConnection()
         ) {
+            ArrayList<AmountOfQuestionTypeDTO> collection = new ArrayList<>();
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE CAMPAIGN_ID = ?");
+                    "select campaign_id, amount_of_questions.Amount, question_type.type from amount_of_questions join question_type on question_type.id = amount_of_questions.type where campaign_id = ?;");
             statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
+            while (resultSet.next()) {
+                System.out.print(resultSet.getInt("Amount"));
+            }
             var temp = new AmountOfQuestionTypeDTO[1];
             temp[0] = new AmountOfQuestionTypeDTO("open", 1);
             return new AmountOfQuestionTypeCollection(temp);//resultSet.getInt("AMOUNT_OF_QUESTIONS");

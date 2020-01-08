@@ -39,7 +39,9 @@ class ReportDAOImplTest {
         try (
                 Connection connection = getConnection()
         ) {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testReportDDL.sql");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("DDL.sql");
+            RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
+            inputStream = getClass().getClassLoader().getResourceAsStream("DLL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
             e.printStackTrace();

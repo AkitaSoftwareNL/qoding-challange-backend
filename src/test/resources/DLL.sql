@@ -1,83 +1,291 @@
-drop table if exists conference;
-drop table if exists given_answer;
-drop table if exists given_answer_state;
-drop table if exists question;
-drop table if exists participant_of_campaign;
+/*test for sprint review*/
+/*delete from given_answer where PARTICIPANTID = 1*/
 
-CREATE TABLE CONFERENCE
-(
-   PARTICIPANTID        varchar(36) NOT NULL,
-   FIRSTNAME            VARCHAR(255) NOT NULL,
-   INSERTION            VARCHAR(20),
-   LASTNAME             VARCHAR(255) NOT NULL,
-   EMAIL                VARCHAR(255),
-   PHONENUMBER          BIGINT,
-   PRIMARY KEY (PARTICIPANTID)
-);
+DELETE
+FROM given_answer;
+DELETE
+FROM given_answer_state;
+DELETE
+FROM participant_of_campaign;
+DELETE FROM amount_of_questions;
+DELETE
+FROM campaign;
+DELETE
+FROM employee;
+DELETE
+FROM campaign_type;
+DELETE
+FROM multiple_choice_question;
+DELETE
+FROM PROGRAMMING_QUESTION;
+DELETE
+FROM STATE;
+DELETE
+FROM conference;
+DELETE
+FROM question;
+DELETE FROM question_type;
+DELETE
+FROM category;
+ALTER TABLE campaign
+    AUTO_INCREMENT = 1;
+ALTER TABLE question
+    AUTO_INCREMENT = 1;
 
-CREATE TABLE GIVEN_ANSWER_STATE
-(
-   QUESTIONID           SMALLINT NOT NULL,
-   PARTICIPANTID        VARCHAR(36) NOT NULL,
-   CAMPAIGN_ID          INT,
-   STATEID              SMALLINT NOT NULL,
-   PRIMARY KEY (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID)
-);
+INSERT INTO employee (USERNAME, PASSWORD)
+VALUES ('admin', 'password123');
+INSERT INTO employee (USERNAME, PASSWORD)
+VALUES ('hcollerd1', 'mbownde1');
+INSERT INTO employee (USERNAME, PASSWORD)
+VALUES ('apudney2', 'mwissby2');
+INSERT INTO employee (USERNAME, PASSWORD)
+VALUES ('brubinsohn3', 'hfriett3');
+INSERT INTO employee (USERNAME, PASSWORD)
+VALUES ('zpoole4', 'mhatchell4');
 
-CREATE TABLE GIVEN_ANSWER
-(
-   AUTOID               INT AUTO_INCREMENT,
-   QUESTIONID           SMALLINT NOT NULL,
-   PARTICIPANTID        VARCHAR(36) NOT NULL,
-   CAMPAIGN_ID          INT,
-   GIVEN_ANSWER         VARCHAR(1024) NOT NULL,
-   PRIMARY KEY (AUTOID),
-   constraint FK_GIVEN_ANSWER6 foreign key (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID) references GIVEN_ANSWER_STATE(QUESTIONID, PARTICIPANTID, CAMPAIGN_ID)
-);
+INSERT INTO category (CATEGORY_NAME)
+VALUES ('JAVA');
+INSERT INTO category (CATEGORY_NAME)
+VALUES ('.NET');
+INSERT INTO category (CATEGORY_NAME)
+VALUES ('Python');
 
-CREATE TABLE QUESTION
-(
-   QUESTIONID           SMALLINT NOT NULL AUTO_INCREMENT,
-   CATEGORY_NAME        VARCHAR(255) NOT NULL,
-   QUESTION             VARCHAR(255) NOT NULL,
-   STATE                BOOL NOT NULL DEFAULT 1,
-   QUESTION_TYPE        VARCHAR(255),
-   ATTACHMENT           VARCHAR(4096),
-   PRIMARY KEY (QUESTIONID)
-);
+INSERT INTO campaign_type (CAMPAIGN_TYPE)
+VALUES ('conferentie');
+INSERT INTO CAMPAIGN_TYPE (CAMPAIGN_TYPE)
+VALUES ('kennissessie');
 
-CREATE TABLE PARTICIPANT_OF_CAMPAIGN
-(
-   PARTICIPANTID        varchar(36) NOT NULL,
-   CAMPAIGN_ID          INT,
-   TIME_STARTED         TIMESTAMP NOT NULL DEFAULT now(),
-   TIME_ENDED           TIMESTAMP NULL,
-   TIME_SPEND           BIGINT AS (TIMESTAMPDIFF(MICROSECOND ,TIME_STARTED, TIME_ENDED)),
-   PRIMARY KEY (PARTICIPANTID, CAMPAIGN_ID)
-);
+INSERT INTO campaign (CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, TIMELIMIT, STATE)
+VALUES ('HC2 Holdings, Inc', 'JAVA', 'conferentie', 'admin', 1, true);
+INSERT INTO campaign (CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, TIMELIMIT, STATE)
+VALUES ('Syros Pharmaceuticals, Inc', '.NET', 'conferentie', 'hcollerd1', 2, true);
+INSERT INTO campaign (CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, TIMELIMIT, STATE)
+VALUES ('Principal U.S. Small Cap Index ETF', 'Python', 'conferentie', 'apudney2', 3, false);
 
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Wat is de output van het draaien van de main methode in klasse B voor de volgende code', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Juist of onjuist, er bestaat ter allen tijd een instantie van de class singelton. Licht je antwoord toe', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Kan je meerdere catch STATEments gebruiken voor EEN try', 1, 'multiple');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Wat is dependency injection', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'Welke methode moet je ook omschrijven als je de equals() methode overschrijft', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE, ATTACHMENT) VALUES ('JAVA', 'Welke methodes moeten geimplenmenteerd worden door een klasse die de volgende interfaces implenmenteerd', 1, 'multiple', 'interface first \n{void() method() throws IOException \n } interface first \n {void() method() throws IOException \n}');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'In faucibus. Morbi vehicula. Pellentesque tincidunt tempus risus. Donec egestas.', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'dictum eleifend, nunc risus varius orci, in consequat enim diam', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'euismod urna. Nullam lobortis quam a felis ullamcorper viverra. Maecenas', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet', 1, 'open');
-INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE) VALUES ('JAVA', 'gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet', 1, 'multiple');
+INSERT INTO question_type (TYPE) VALUES ('open'), ('multiple'), ('program'), ('total');
 
-INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER) VALUES ('8063be67-7fec-47c4-a9ab-e3d03a9968b3', 'Gray', null, 'Snare', 'gsnare0@xinhuanet.com', 2219773471);
-INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER) VALUES ('453453', 'Germayne', null, 'Greated', 'ggreated1@google.com.hk', 3896612994);
-INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER) VALUES ('3453535', 'Neda', 'ncommander2', 'Commander', 'ncommander2@google.co.jp', 8823491928);
-INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER) VALUES ('345345345', 'Dav', 'dsilverlock3', 'Silverlock', 'dsilverlock3@discuz.net', 6325212856);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(1, 1, 3);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(1, 2, 3);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(1, 3, 3);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(1, 4, 9);
 
-INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED) VALUES (1, 1, '2019-12-04 15:00:23', '2019-12-04 16:00:23');
-INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED) VALUES (2, 1, '2019-12-04 15:00:23', '2019-12-04 18:00:23');
-INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED) VALUES (3, 1, '2019-12-04 15:00:23', '2019-12-04 17:00:23');
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(2, 1, 4);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(2, 2, 2);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(2, 3, 3);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(2, 4, 9);
 
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(3, 1, 1);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(3, 2, 1);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(3, 3, 1);
+INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES
+(3, 4, 8);
+
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE, ATTACHMENT)
+VALUES ('JAVA', 'Wat is de output van het draaien van de main methode in klasse B voor de volgende code', 1, 3,
+        '//Bestand a.java
+        package p1;
+        class A {
+        protected int i = 10;
+        public int getint(){
+        return i;
+        }
+        }
+
+        //Bestand b.java
+        package p2;
+        import p1.*
+        class B extends A
+        public void process (A a){
+        a.i = a.i * 2;
+        }
+
+        public static void main(String [] args){
+        A a = new B();
+        B b = new B();
+        b.process(a);
+        system.out.println(a.getI());
+        }
+        }');
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA',
+        'Juist of onjuist, er bestaat ter allen tijd een instantie van de class singelton. Licht je antwoord toe', 1,
+        1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Kan je meerdere catch STATEments gebruiken voor EEN try', 1, 2);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Wat is dependency injection', 1, 1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Welke methode moet je ook omschrijven als je de equals() methode overschrijft', 1, 1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE, ATTACHMENT)
+VALUES ('JAVA',
+        'Welke methodes moeten geimplenmenteerd worden door een klasse die de volgende interfaces implenmenteerd', 1,
+        2,
+        'interface first \n{void() method() throws IOException \n } interface first \n {void() method() throws IOException \n}');
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Moet er bij het maken van een class altijd een constructor gemaakt worden? licht je antwoord toe', 1,
+       1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Bij het testen met junit, waarom is het niet netjes om static te gebruiken?', 1, 1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Welk command binnen maven gebruik je om een .war bestand te genereren', 1, 1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA',
+        'Als een short het nummer 32,767 bevat en je de waarde wilt opslaan in de byte, welke error wordt er gegeven',
+        1, 1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Welke oprator binnen java wordt gebruikt voor modulus', 1, 1);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Waar of niet waar, kan je een char array in een string zetten', 1, 2);
+
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Maak een string vergelijker', 1, 3);
+INSERT INTO programming_question (QUESTIONID, STARTCODE, TESTCODE)
+VALUES (13, 'public class Code {
+    public static boolean equals(String a, String b) {
+        // imp
+    }
+}',
+'import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class TestCode {
+
+    private Code sut;
+
+    @BeforeEach
+    void setUp() {
+        sut = new Code();
+    }
+
+    @Test
+    void Test1() {
+        Assertions.assertTrue(sut.equals("1", "1"));
+    }
+
+    @Test
+    void Test2() {
+        Assertions.assertTrue(sut.equals("2", "2"));
+    }
+}
+');
+
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
+VALUES ('JAVA', 'Welk van de volgende twee statements zijn verkeerd over arrays in Java', 1, 2);
+INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE, ATTACHMENT)
+VALUES ('JAVA', 'welk van de volgende beweringen zijn waar over packages', 1, 2, '
+1) Elke class is deel van een package.
+2) Alle classes in een file zijn deel van een package.
+3) als er geen package is aangemaakt,
+   worden alle classes in een file in speciale onbenoemde package gezet
+4) Als er geen package is aangemaakt,
+   wordt er een package gemaakt met de naam van de folder en wordt de file erin gezet');
+
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (3, 'Ja', 1);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (3, 'Nee', 0);
+
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (6, 'Beide', 1);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (6, 'Eerst', 0);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (6, 'Twee', 0);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (6, 'Error', 0);
+
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (12, 'Waar', 1);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (12, 'Niet waar', 0);
+
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (14, 'een java array is geen object', 1);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (14, 'de lengte van een array kan worden aangepast na het maken van een array', 0);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (14, 'arrays staan op de heap', 1);
+
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (15, '1', 1);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (15, '2', 1);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (15, '3', 1);
+INSERT INTO multiple_choice_question (QUESTIONID, ANSWER_OPTIONS, IS_CORRECT)
+VALUES (15, '4', 0);
+
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('8063be67-7fec-47c4-a9ab-e3d03a9968b3', 'Gray', null, 'Snare', 'gsnare0@xinhuanet.com', 2219773471);
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('1452950a-8059-4bd1-b397-d2bd765d6b9b', 'Germayne', null, 'Greated', 'ggreated1@google.com.hk', 3896612994);
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('9722a79b-7494-4ef2-a56e-31a27f63911c', 'Neda', 'ncommander2', 'Commander', 'ncommander2@google.co.jp',
+        8823491928);
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('00a94bb8-d00c-4244-bdf5-2051a18af5b3', 'Dav', 'dsilverlock3', 'Silverlock', 'dsilverlock3@discuz.net',
+        6325212856);
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('5ffab0bf-770d-40ea-9b31-be2a0c32ac33', 'Aimee', 'Ooba', 'Capner', 'acapner0@chicagotribune.com', 5806737459);
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('f65a7374-1af8-4c23-8d40-1bb3cc986c04', 'Tristan', 'Jabberstorm', 'Doohey', 'tdoohey1@infoseek.co.jp',
+        1108986529);
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('080da1cc-db10-4da8-958c-fe983255cff4', 'Gilberto', 'Yodel', 'Presland', 'gpresland2@economist.com',
+        4708705667);
+INSERT INTO conference (PARTICIPANTID, FIRSTNAME, INSERTION, LASTNAME, EMAIL, PHONENUMBER)
+VALUES ('6dbead39-df20-4c81-acec-eaefe11663ca', 'Ted', 'Realbuzz', 'Traise', 'ttraise3@nbcnews.com', 2924248629);
+
+/*If you add test data to given_answer for a campaign, the participent needs to be added in this table*/
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, '2019-12-04 15:00:23', '2019-12-04 16:00:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, '2019-12-04 15:00:23', '2019-12-04 17:00:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('9722a79b-7494-4ef2-a56e-31a27f63911c', 1, '2019-12-04 15:00:23', '2019-12-05 18:03:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('00a94bb8-d00c-4244-bdf5-2051a18af5b3', 1, '2019-12-04 15:00:23', '2019-12-04 16:00:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('5ffab0bf-770d-40ea-9b31-be2a0c32ac33', 1, '2019-12-04 15:00:23', '2019-12-04 17:00:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('f65a7374-1af8-4c23-8d40-1bb3cc986c04', 1, '2019-12-04 15:00:23', '2019-12-05 18:03:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('080da1cc-db10-4da8-958c-fe983255cff4', 1, '2019-12-04 15:00:23', '2019-12-04 16:00:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('6dbead39-df20-4c81-acec-eaefe11663ca', 1, '2019-12-04 15:00:23', '2019-12-04 17:00:23');
+
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('8063be67-7fec-47c4-a9ab-e3d03a9968b3', 2, '2019-12-04 15:00:23', '2019-12-04 16:00:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('1452950a-8059-4bd1-b397-d2bd765d6b9b', 2, '2019-12-04 15:00:23', '2019-12-04 17:00:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('9722a79b-7494-4ef2-a56e-31a27f63911c', 2, '2019-12-04 15:00:23', '2019-12-05 18:03:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('00a94bb8-d00c-4244-bdf5-2051a18af5b3', 2, '2019-12-04 15:00:23', '2019-12-04 16:00:23');
+
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('8063be67-7fec-47c4-a9ab-e3d03a9968b3', 3, '2019-12-04 15:00:23', '2019-12-05 18:03:23');
+INSERT INTO PARTICIPANT_OF_CAMPAIGN (PARTICIPANTID, CAMPAIGN_ID, TIME_STARTED, TIME_ENDED)
+VALUES ('1452950a-8059-4bd1-b397-d2bd765d6b9b', 3, '2019-12-04 15:00:23', '2019-12-04 16:00:23');
+
+INSERT INTO STATE (STATEID, STATE_NAME)
+VALUES (1, 'pending');
+INSERT INTO STATE (STATEID, STATE_NAME)
+VALUES (2, 'correct');
+INSERT INTO STATE (STATEID, STATE_NAME)
+VALUES (3, 'incorrect');
 
 INSERT INTO GIVEN_ANSWER_STATE (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, STATEID)
 VALUES (1, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
@@ -91,7 +299,7 @@ VALUES (1, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
        (9, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
        (10, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
        (11, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
-       (12, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
+       (12, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 3),
        (13, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
        (14, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 2),
        (15, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 2);
@@ -170,7 +378,7 @@ values (1, '9722a79b-7494-4ef2-a56e-31a27f63911c', 1, 1),
        (12, '9722a79b-7494-4ef2-a56e-31a27f63911c', 1, 2),
        (13, '9722a79b-7494-4ef2-a56e-31a27f63911c', 1, 1),
        (14, '9722a79b-7494-4ef2-a56e-31a27f63911c', 1, 2),
-       (15, '9722a79b-7494-4ef2-a56e-31a27f63911c', 1, 1);
+       (15, '9722a79b-7494-4ef2-a56e-31a27f63911c', 1, 2);
 
 insert into given_answer (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, GIVEN_ANSWER)
 values (1, '9722a79b-7494-4ef2-a56e-31a27f63911c', 1, 'T'),
