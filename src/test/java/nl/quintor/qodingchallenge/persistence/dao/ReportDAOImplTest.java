@@ -50,7 +50,7 @@ class ReportDAOImplTest {
 
     @Test
     void getAnswersPerParticipantsReturnListWithAnswers() throws SQLException {
-        final int sizeOfAnswers = 24;
+        final int sizeOfAnswers = 18;
 
         when(answers.size()).thenReturn(sizeOfAnswers);
 
