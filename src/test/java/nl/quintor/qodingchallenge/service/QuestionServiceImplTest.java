@@ -277,7 +277,7 @@ class QuestionServiceImplTest {
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "multiple";
-            questionDTOBuilder.givenAnswer = new String[]{""};
+            questionDTOBuilder.givenAnswers = new String[]{""};
             questionDTOBuilder.stateID = 2;
         }).build();
     }
@@ -296,7 +296,7 @@ class QuestionServiceImplTest {
                     questionDTOBuilder.question = "";
                     questionDTOBuilder.categoryType = category;
                     questionDTOBuilder.questionType = "multiple";
-                    questionDTOBuilder.givenAnswer = new String[]{"no"};
+            questionDTOBuilder.givenAnswers = new String[]{"no"};
                     questionDTOBuilder.stateID = pendingState;
                 }
         ).build();

@@ -204,7 +204,7 @@ class QuestionDAOImplIntTest {
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "open";
             questionDTOBuilder.stateID = questionState;
-            questionDTOBuilder.givenAnswer = new String[]{"some answer"};
+            questionDTOBuilder.givenAnswers = new String[]{"some answer"};
         }).build();
     }
 
