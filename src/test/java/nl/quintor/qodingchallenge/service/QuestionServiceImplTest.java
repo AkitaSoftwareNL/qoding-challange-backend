@@ -21,7 +21,6 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
-    private final String campaign = "HC2 Holdings, Inc";
     private final int campaignID = 1;
     private final String category = "JAVA";
     private final int questionId = 1;
