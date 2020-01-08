@@ -80,7 +80,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement1.setInt(1, question.getQuestionID());
             statement1.setString(2, participantID);
             statement1.setInt(3, campaignId);
-            statement1.setString(4, question.getGivenAnswer()[0]);
+            statement1.setString(4, question.getGivenAnswers()[0]);
 
             statement.executeUpdate();
             statement1.executeUpdate();

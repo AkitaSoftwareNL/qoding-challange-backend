@@ -22,7 +22,7 @@ public class MultipleStrategyImpl extends QuestionStrategy {
     @Override
     public void validateAnswer(QuestionDTO question) throws SQLException {
         ArrayList<PossibleAnswerDTO> correctAnswers = questionDAO.getCorrectAnswers(question.getQuestionID());
-        String[] givenAnswers = question.getGivenAnswer();
+        String[] givenAnswers = question.getGivenAnswers();
 
         if (correctAnswers.size() != givenAnswers.length) {
             question.setStateID(QuestionState.INCORRECT.getState());

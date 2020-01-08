@@ -13,20 +13,20 @@ public class QuestionDTO {
     private String attachment;
     private String startCode;
     private List<PossibleAnswerDTO> possibleAnswers;
-    private String[] givenAnswer;
+    private String[] givenAnswers;
     private int stateID;
 
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswer, int stateID, String startCode) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, int stateID, String startCode) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
         this.questionType = questionType;
         this.attachment = attachment;
         this.possibleAnswers = possibleAnswers;
-        this.givenAnswer = givenAnswer;
+        this.givenAnswers = givenAnswers;
         this.stateID = 1;
         this.startCode = startCode;
     }
@@ -75,17 +75,17 @@ public class QuestionDTO {
         this.possibleAnswers = possibleAnswers;
     }
 
-    public String[] getGivenAnswer() {
-        if (givenAnswer == null || givenAnswer.length <= 0) {
-            givenAnswer = new String[1];
-            givenAnswer[0] = "";
-            return givenAnswer;
+    public String[] getGivenAnswers() {
+        if (givenAnswers == null || givenAnswers.length <= 0) {
+            givenAnswers = new String[1];
+            givenAnswers[0] = "";
+            return givenAnswers;
         }
-        return givenAnswer;
+        return givenAnswers;
     }
 
-    public void setGivenAnswer(String[] givenAnswer) {
-        this.givenAnswer = givenAnswer;
+    public void setGivenAnswers(String[] givenAnswers) {
+        this.givenAnswers = givenAnswers;
     }
 
     public int getStateID() {
@@ -116,11 +116,11 @@ public class QuestionDTO {
                 Objects.equals(questionType, that.questionType) &&
                 Objects.equals(attachment, that.attachment) &&
                 Objects.equals(possibleAnswers, that.possibleAnswers) &&
-                Arrays.equals(givenAnswer, that.givenAnswer);
+                Arrays.equals(givenAnswers, that.givenAnswers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionID, question, categoryType, questionType, attachment, possibleAnswers, givenAnswer, stateID);
+        return Objects.hash(questionID, question, categoryType, questionType, attachment, possibleAnswers, givenAnswers, stateID);
     }
 }

@@ -251,7 +251,7 @@ class QuestionServiceImplTest {
         questionList.add(getMultipleQuestion());
         questionList.add(getOpenQuestion());
         QuestionDTO question = getMultipleQuestion();
-        question.setGivenAnswer(new String[]{"WrongAnswer"});
+        question.setGivenAnswers(new String[]{"WrongAnswer"});
         questionList.add(question);
         return questionList;
     }
