@@ -53,7 +53,7 @@ class QuestionDAOImplIntTest {
         temp.add(new AmountOfQuestionTypeDTO("open", 1));
         List<QuestionDTO> questionDTOList = sut.getQuestions(category, new AmountOfQuestionTypeCollection(temp));
 
-        assertEquals(new AmountOfQuestionTypeCollection(temp).getTotal(), questionDTOList.size());
+        assertEquals(1, questionDTOList.size());
     }
 
     @Test
@@ -192,13 +192,17 @@ class QuestionDAOImplIntTest {
 
     @Test
     void countQuestionsGetsRightAmountOfQuestions() throws SQLException {
-        final int expectedAmount = 15;
+        var expectedAmount = new ArrayList<AmountOfQuestionTypeDTO>();
+        expectedAmount.add(new AmountOfQuestionTypeDTO("open",8));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("multiple",5));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("program",2));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("total",15));
         // Mock
 
         // Test
-        int actualAmount = sut.countQuestions();
+        AmountOfQuestionTypeCollection actualAmount = sut.countQuestions();
         // Verify
-        assertEquals(expectedAmount, actualAmount);
+        assertEquals(expectedAmount, actualAmount.collection);
     }
 
     private QuestionDTO getQuestion() throws SQLException {

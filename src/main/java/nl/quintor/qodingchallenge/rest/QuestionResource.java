@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.rest;
 
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
@@ -93,8 +94,7 @@ public class QuestionResource {
             method = RequestMethod.GET,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> countQuestions() throws SQLException {
-        String questionAmount = questionService.countQuestions();
-        return ResponseEntity.ok().body(questionAmount);
+    public ResponseEntity<AmountOfQuestionTypeCollection> countQuestions() throws SQLException {
+        return ResponseEntity.ok().body(questionService.countQuestions());
     }
 }

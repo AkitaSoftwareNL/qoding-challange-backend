@@ -33,5 +33,5 @@ public interface QuestionDAO {
 
     int getQuestionAmountPerCategory(String category) throws SQLException;
 
-    int countQuestions() throws SQLException;
+    AmountOfQuestionTypeCollection countQuestions() throws SQLException;
 }

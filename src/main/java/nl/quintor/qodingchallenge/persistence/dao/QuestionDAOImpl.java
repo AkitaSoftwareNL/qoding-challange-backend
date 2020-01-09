@@ -354,14 +354,29 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public int countQuestions() throws SQLException {
+    public AmountOfQuestionTypeCollection countQuestions() throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM question WHERE STATE = 1");
+            PreparedStatement statement = connection.prepareStatement("select count(*) as Amount , question_type.type as Type from question join question_type on question_type.id = question.QUESTION_TYPE where state = 1 group by question.QUESTION_TYPE;");
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt("AMOUNT");
+            var amounts = new ArrayList<AmountOfQuestionTypeDTO>();
+            while (resultSet.next()) {
+                String type = resultSet.getString("Type");
+                int amount = resultSet.getInt("Amount");
+
+                amounts.add(new AmountOfQuestionTypeDTO(type, amount));
+            }
+
+            int total = 0;
+
+            for (var amountType : amounts) {
+                total += amountType.amount;
+            }
+
+            amounts.add(new AmountOfQuestionTypeDTO("total", total));
+
+            return new AmountOfQuestionTypeCollection(amounts);
         } catch (SQLException e) {
             throw new SQLException(e);
         }

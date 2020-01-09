@@ -19,14 +19,14 @@ public class AmountOfQuestionTypeCollection {
         this.collection = collection;
     }
 
-    public int getTotal() {
-        int total = 0;
-
-        for (var amountType : collection) {
-            total += amountType.amount;
+    public int getAmount(String key) {
+        for (AmountOfQuestionTypeDTO typeDTO :
+                collection) {
+            if (typeDTO.type.equalsIgnoreCase(key)) {
+                return typeDTO.amount;
+            }
         }
-
-        return total;
+        return 0;
     }
 
     @Override

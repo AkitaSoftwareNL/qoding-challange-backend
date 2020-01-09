@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
@@ -35,5 +36,5 @@ public interface QuestionService {
 
     void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException;
 
-    String countQuestions() throws SQLException;
+    AmountOfQuestionTypeCollection countQuestions() throws SQLException;
 }

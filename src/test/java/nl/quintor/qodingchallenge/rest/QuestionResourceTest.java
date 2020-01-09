@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.rest;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
@@ -223,7 +224,7 @@ class QuestionResourceTest {
     @Test
     void countQuestionsReturnsRightAmountOfQuestions() throws SQLException {
         // Mock
-        final String expectedAmountOfQuestions = "33";
+        var expectedAmountOfQuestions = new AmountOfQuestionTypeCollection(new ArrayList<>());
         when(questionServiceMock.countQuestions()).thenReturn(expectedAmountOfQuestions);
         // Test
         var testValue = sut.countQuestions();

@@ -110,12 +110,12 @@ class QuestionServiceImplTest {
     @Test
     void countQuestionsReturnRightAmountOfQuestions() throws SQLException {
         // Mock
-        final int expectedAmountOfQuestions = 22;
+        var expectedAmountOfQuestions = new AmountOfQuestionTypeCollection(new ArrayList<>());
         when(questionDAOMock.countQuestions()).thenReturn(expectedAmountOfQuestions);
         // Test
         var testValue = sut.countQuestions();
         // Verify
-        assertEquals(Integer.toString(expectedAmountOfQuestions), testValue);
+        assertEquals(expectedAmountOfQuestions, testValue);
     }
 
     @Test

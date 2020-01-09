@@ -61,24 +61,16 @@ class ParticipantDAOImplTest {
 
     @Test
     void getRankedParticipantReturnsOrderedParticipantList() throws SQLException {
-//        final long[] min = {0};
-//        getRankedParticipantCollection().getParticipants().iterator().forEachRemaining(participantDTO -> {
-//            if (min[0] == 0) min[0] = participantDTO.getTimeInMillis();
-//            if (min[0] > participantDTO.getTimeInMillis()) {
-//                min[0] = participantDTO.getTimeInMillis();
-//            }
-//            try {
-//                assertEquals(min[0], sut.getRankedParticipantsPerCampaign(campaignID).get(0).getTimeInMillis());
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        });
-
-        long previousValue = Long.MAX_VALUE;
+        long previousTime = 0;
+        long previousCorrect = Long.MAX_VALUE;
         for (ParticipantDTO participant : sut.getRankedParticipantsPerCampaign(campaignID)) {
-            long currentValue = participant.getTimeInMillis();
-            assertTrue(previousValue > currentValue);
-            previousValue = currentValue;
+            long currentTime = participant.getTimeInMillis();
+            long currentCorrect = participant.getAmountOfRightAnsweredQuestions();
+
+            assertTrue(previousCorrect > currentCorrect || previousTime < currentTime);
+
+            previousTime = currentTime;
+            previousCorrect = currentCorrect;
         }
     }
 
