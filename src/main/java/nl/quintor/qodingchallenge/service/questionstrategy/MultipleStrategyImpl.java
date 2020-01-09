@@ -29,16 +29,22 @@ public class MultipleStrategyImpl extends QuestionStrategy {
             return;
         }
 
-        loopBunny:
         for (String givenAnswer : givenAnswers) {
-            for (PossibleAnswerDTO correctAnswer : correctAnswers) {
-                if (correctAnswer.getPossibleAnswer().equals(givenAnswer)) {
-                    continue loopBunny;
-                }
-            }
-            question.setStateID(QuestionState.INCORRECT.getState());
-            return;
+            checkAnswers(givenAnswer, correctAnswers, question);
         }
-        question.setStateID(QuestionState.CORRECT.getState());
+
+        if (question.getStateID() != QuestionState.INCORRECT.getState()
+                || question.getStateID() != QuestionState.PENDING.getState()) {
+            question.setStateID(QuestionState.CORRECT.getState());
+        }
+    }
+
+    private void checkAnswers(String givenAnswer, ArrayList<PossibleAnswerDTO> correctAnswers, QuestionDTO question) {
+        for (PossibleAnswerDTO correctAnswer : correctAnswers) {
+            if (correctAnswer.getPossibleAnswer().equals(givenAnswer)) {
+                return;
+            }
+        }
+        question.setStateID(QuestionState.INCORRECT.getState());
     }
 }
