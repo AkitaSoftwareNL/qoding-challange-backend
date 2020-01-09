@@ -33,7 +33,7 @@ public class ProgramStrategyImpl extends QuestionStrategy {
     @Override
     public void validateAnswer(QuestionDTO question) throws SQLException {
         CodingQuestionDTO questionInDatabase = questionDAO.getCodingQuestion(question.getQuestionID());
-        CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), questionInDatabase.getTest());
+        CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswers()[0], questionInDatabase.getTest());
         boolean testResult = runUnitTest(codingQuestionDTO);
         if (testResult) question.setStateID(QuestionState.CORRECT.getState());
         else question.setStateID(QuestionState.INCORRECT.getState());
@@ -41,7 +41,7 @@ public class ProgramStrategyImpl extends QuestionStrategy {
 
     @Override
     public void persistQuestion(QuestionDTO question) throws SQLException {
-        CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswer(), question.getUnitTest());
+        CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswers()[0], question.getUnitTest());
         boolean result = runUnitTest(codingQuestionDTO);
         if (result) questionDAO.persistProgramQuestion(question);
         else throw new CannotPersistQuestionException("Could not persist programming message.", "Could either not compile the tests of the tests failed.", "Alter Unit Tests.");

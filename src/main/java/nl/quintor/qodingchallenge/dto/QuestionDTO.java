@@ -20,16 +20,17 @@ public class QuestionDTO {
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, int stateID, String startCode) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, String startCode, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, String unitTest) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
         this.questionType = questionType;
         this.attachment = attachment;
+        this.startCode = startCode;
         this.possibleAnswers = possibleAnswers;
         this.givenAnswers = givenAnswers;
+        this.unitTest = unitTest;
         this.stateID = 1;
-        this.startCode = startCode;
     }
 
     public String getStartCode() {
@@ -103,6 +104,18 @@ public class QuestionDTO {
 
     public void setCategoryType(String categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public void setStartCode(String startCode) {
+        this.startCode = startCode;
+    }
+
+    public String getUnitTest() {
+        return unitTest;
+    }
+
+    public void setUnitTest(String unitTest) {
+        this.unitTest = unitTest;
     }
 
     @Override
