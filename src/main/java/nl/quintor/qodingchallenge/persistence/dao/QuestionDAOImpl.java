@@ -69,38 +69,54 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO given_answer VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO given_answer_state VALUES (?, ?, ? ,?)");
+            PreparedStatement statement1 = connection.prepareStatement("INSERT INTO given_answer (questionID, PARTICIPANTID, campaign_ID, given_answer) VALUES (?, ?, ?, ? )");
+
             statement.setInt(1, question.getQuestionID());
             statement.setString(2, participantID);
             statement.setInt(3, campaignId);
             statement.setInt(4, question.getStateID());
-            statement.setString(5, question.getGivenAnswer());
+
+            statement1.setInt(1, question.getQuestionID());
+            statement1.setString(2, participantID);
+            statement1.setInt(3, campaignId);
+            statement1.setString(4, question.getGivenAnswers()[0]);
+
             statement.executeUpdate();
+            statement1.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
         }
     }
 
     @Override
-    public String getCorrectAnswer(int questionID) throws SQLException {
-        Optional<String> correctAnswer = Optional.empty();
+    public ArrayList<PossibleAnswerDTO> getCorrectAnswers(int questionID) throws SQLException {
+        ArrayList<PossibleAnswerDTO> correctAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS  FROM multiple_choice_question WHERE QUESTIONID = ? AND IS_CORRECT = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS, IS_CORRECT FROM multiple_choice_question WHERE QUESTIONID = ?");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                correctAnswer = Optional.ofNullable(resultSet.getString("ANSWER_OPTIONS"));
+                correctAnswers.add(
+                        new PossibleAnswerDTO(
+                                resultSet.getString("ANSWER_OPTIONS"),
+                                resultSet.getInt("IS_CORRECT")
+                        )
+                );
             }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
-        return correctAnswer.orElseThrow(() -> new AnswerNotFoundException(
-                "No correct answer could be found",
-                format("For the question with questionID: %d was no correct answer found", questionID),
-                "Contact Quintor to solve this issue"
-        ));
+        if (correctAnswers.isEmpty()) {
+            throw new AnswerNotFoundException(
+                    "No correct answer could be found",
+                    format("For the question with questionID: %d was no correct answer found", questionID),
+                    "Please contact support to solve this issue"
+            );
+        }
+        return correctAnswers;
     }
 
     @Override
@@ -180,11 +196,12 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM given_answer WHERE CAMPAIGN_ID = ? AND STATEID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT ga.QUESTIONID, ga.PARTICIPANTID, ga.CAMPAIGN_ID, ga.GIVEN_ANSWER, gas.STATEID FROM given_answer as ga inner join given_answer_state as gas\n" +
+                    "on ga.QUESTIONID = gas.QUESTIONID AND ga.CAMPAIGN_ID = gas.CAMPAIGN_ID AND ga.PARTICIPANTID = gas.PARTICIPANTID\n" +
+                    "where ga.CAMPAIGN_ID = ? AND gas.STATEID = ?;");
             statement.setInt(1, campaignId);
             statement.setInt(2, questionState);
             ResultSet resultSet = statement.executeQuery();
-
             while (resultSet.next()) {
                 givenAnswers.add(new GivenAnswerDTO(
                         resultSet.getInt("QUESTIONID"),
@@ -263,7 +280,9 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE given_answer SET STATEID = ? WHERE QUESTIONID = ? AND CAMPAIGN_ID = ? AND PARTICIPANTID = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE given_answer_state\n" +
+                    "SET STATEID = ? \n" +
+                    "WHERE QUESTIONID = ?  AND campaign_ID = ? AND PARTICIPANTID = ?");
             statement.setInt(1, givenAnswerDTO.getStateId());
             statement.setInt(2, givenAnswerDTO.getQuestionId());
             statement.setInt(3, givenAnswerDTO.getCampaignId());

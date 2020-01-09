@@ -21,7 +21,6 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
-    private final String campaign = "HC2 Holdings, Inc";
     private final int campaignID = 1;
     private final String category = "JAVA";
     private final int questionId = 1;
@@ -52,7 +51,7 @@ class QuestionServiceImplTest {
         // Mock
         when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(getQuestionlist().size());
         when(questionDAOMock.getQuestions(anyString(), anyInt())).thenReturn(getQuestionlist());
-        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
+        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
         // Test
         sut.getQuestions(category, campaignID);
         // Verify
@@ -71,11 +70,11 @@ class QuestionServiceImplTest {
 
     @Test
     void setAnswerCallsGetCorrectAnswerCorrect() throws SQLException {
-        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
+        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
 
         sut.setAnswer(getQuestionCollection());
 
-        verify(questionDAOMock, times(2)).getCorrectAnswer(questionId);
+        verify(questionDAOMock, times(2)).getCorrectAnswers(questionId);
     }
 
     @Test
@@ -231,7 +230,7 @@ class QuestionServiceImplTest {
     @Test
     void setAnswerCallsAddTimeToParticipant() throws SQLException {
         // Mock
-        when(questionDAOMock.getCorrectAnswer(questionId)).thenReturn("");
+        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
         // Test
         sut.setAnswer(getQuestionCollection());
         // Verify
@@ -251,7 +250,7 @@ class QuestionServiceImplTest {
         questionList.add(getMultipleQuestion());
         questionList.add(getOpenQuestion());
         QuestionDTO question = getMultipleQuestion();
-        question.setGivenAnswer("WrongAnswer");
+        question.setGivenAnswers(new String[]{"WrongAnswer"});
         questionList.add(question);
         return questionList;
     }
@@ -277,14 +276,14 @@ class QuestionServiceImplTest {
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "multiple";
-            questionDTOBuilder.givenAnswer = "";
+            questionDTOBuilder.givenAnswers = new String[]{""};
             questionDTOBuilder.stateID = 2;
         }).build();
     }
 
 
-    private List<PossibleAnswerDTO> getPossibleAnswers() {
-        List<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
+    private ArrayList<PossibleAnswerDTO> getPossibleAnswers() {
+        ArrayList<PossibleAnswerDTO> possibleAnswersList = new ArrayList<>();
         possibleAnswersList.add(new PossibleAnswerDTO("yes", 1));
         possibleAnswersList.add(new PossibleAnswerDTO("no", 0));
         return possibleAnswersList;
@@ -296,7 +295,7 @@ class QuestionServiceImplTest {
                     questionDTOBuilder.question = "";
                     questionDTOBuilder.categoryType = category;
                     questionDTOBuilder.questionType = "multiple";
-                    questionDTOBuilder.givenAnswer = "no";
+            questionDTOBuilder.givenAnswers = new String[]{"no"};
                     questionDTOBuilder.stateID = pendingState;
                 }
         ).build();

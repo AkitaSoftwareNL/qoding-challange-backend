@@ -67,6 +67,15 @@ class CampaignServiceImplTest {
                 .thenReturn(getCampaignDtoList());
     }
 
+    @Test
+    void deleteCampaignCallsCampaignDAODeleteCampaign() throws SQLException {
+        final int campaignID = 5;
+
+        sut.deleteCampaign(campaignID);
+
+        verify(campaignDAOStub).deleteCampaign(campaignID);
+    }
+
     private CampaignDTO getCampaignDTO() {
         return new CampaignDTO(1, campaign, "me", "JAVA", 3, "12/2/2019", 1, null);
     }
