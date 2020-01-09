@@ -369,6 +369,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement("SELECT COUNT(IS_CORRECT) as CORRECT FROM multiple_choice_question WHERE IS_CORRECT = 1 AND QUESTIONID = ?");
+            statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("CORRECT") > 1;

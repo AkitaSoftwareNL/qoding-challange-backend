@@ -197,6 +197,13 @@ class QuestionDAOImplIntTest {
         assertEquals(expectedAmount, actualAmount);
     }
 
+    @Test
+    void getAmountOfRightAnswersPerQuestion() throws SQLException {
+        final boolean expectedResult = true;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(questionId));
+    }
+
     private QuestionDTO getQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {
             questionDTOBuilder.questionID = 2000;
