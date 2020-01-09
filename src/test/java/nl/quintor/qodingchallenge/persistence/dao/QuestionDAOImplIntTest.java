@@ -198,10 +198,18 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void getAmountOfRightAnswersPerQuestion() throws SQLException {
-        final boolean expectedResult = true;
+    void getAmountOfRightAnswersPerQuestionReturnsFalseWhenOneAnswerIsCorrect() throws SQLException {
+        final boolean expectedResult = false;
 
         assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(questionId));
+    }
+
+    @Test
+    void getAmountOfRightAnswersPerQuestionReturnsTrueWhenMultipleAnswerIsCorrect() throws SQLException {
+        final int testQuestionID = 15;
+        final boolean expectedResult = true;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(testQuestionID));
     }
 
     private QuestionDTO getQuestion() throws SQLException {
