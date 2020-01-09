@@ -48,4 +48,6 @@ public class CampaignServiceImpl implements CampaignService {
     public void deleteCampaign(int campaignID) throws SQLException {
         campaignDAO.deleteCampaign(campaignID);
     }
+
+
 }

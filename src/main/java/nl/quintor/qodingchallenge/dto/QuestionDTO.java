@@ -15,6 +15,7 @@ public class QuestionDTO {
     private List<PossibleAnswerDTO> possibleAnswers;
     private String[] givenAnswers;
     private int stateID;
+    private String unitTest;
 
     public QuestionDTO() {
     }
