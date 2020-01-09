@@ -175,7 +175,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
                                 questionDTOBuilder.question = resultSet.getString("QUESTION");
                                 questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
-                                questionDTOBuilder.attachment = resultSet.getString("attachment");
+                        questionDTOBuilder.attachment = resultSet.getString("ATTACHMENT");
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
@@ -355,6 +355,23 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("AMOUNT");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    /**
+     * @return true when there are multiple correct answers
+     */
+    @Override
+    public boolean getAmountOfRightAnswersPerQuestion(int questionID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(IS_CORRECT) as CORRECT FROM multiple_choice_question WHERE IS_CORRECT = 1 AND QUESTIONID = ?");
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("CORRECT") > 1;
         } catch (SQLException e) {
             throw new SQLException(e);
         }

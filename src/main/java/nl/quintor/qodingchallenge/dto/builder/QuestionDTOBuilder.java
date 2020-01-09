@@ -16,6 +16,7 @@ public class QuestionDTOBuilder {
     public String[] givenAnswers;
     public int stateID;
     public String startCode;
+    private boolean hasMultipleAnswers;
     private List<PossibleAnswerDTO> possibleAnswers;
 
     public QuestionDTOBuilder with(
@@ -26,6 +27,6 @@ public class QuestionDTOBuilder {
 
     public QuestionDTO build() {
         return new QuestionDTO(questionID, question, categoryType, questionType, attachment,
-                possibleAnswers, givenAnswers, stateID, startCode);
+                possibleAnswers, givenAnswers, stateID, startCode, hasMultipleAnswers);
     }
 }

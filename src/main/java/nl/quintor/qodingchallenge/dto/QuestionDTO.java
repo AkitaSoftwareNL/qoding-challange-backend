@@ -15,11 +15,12 @@ public class QuestionDTO {
     private List<PossibleAnswerDTO> possibleAnswers;
     private String[] givenAnswers;
     private int stateID;
+    private boolean hasMultipleAnswers;
 
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, int stateID, String startCode) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, int stateID, String startCode, boolean hasMultipleAnswers) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
@@ -29,6 +30,7 @@ public class QuestionDTO {
         this.givenAnswers = givenAnswers;
         this.stateID = 1;
         this.startCode = startCode;
+        this.hasMultipleAnswers = hasMultipleAnswers;
     }
 
     public String getStartCode() {
@@ -104,6 +106,18 @@ public class QuestionDTO {
         this.categoryType = categoryType;
     }
 
+    public void setStartCode(String startCode) {
+        this.startCode = startCode;
+    }
+
+    public boolean isHasMultipleAnswers() {
+        return hasMultipleAnswers;
+    }
+
+    public void setHasMultipleAnswers(boolean hasMultipleAnswers) {
+        this.hasMultipleAnswers = hasMultipleAnswers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,16 +125,20 @@ public class QuestionDTO {
         QuestionDTO that = (QuestionDTO) o;
         return questionID == that.questionID &&
                 stateID == that.stateID &&
+                hasMultipleAnswers == that.hasMultipleAnswers &&
                 Objects.equals(question, that.question) &&
                 Objects.equals(categoryType, that.categoryType) &&
                 Objects.equals(questionType, that.questionType) &&
                 Objects.equals(attachment, that.attachment) &&
+                Objects.equals(startCode, that.startCode) &&
                 Objects.equals(possibleAnswers, that.possibleAnswers) &&
                 Arrays.equals(givenAnswers, that.givenAnswers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionID, question, categoryType, questionType, attachment, possibleAnswers, givenAnswers, stateID);
+        int result = Objects.hash(questionID, question, categoryType, questionType, attachment, startCode, possibleAnswers, stateID, hasMultipleAnswers);
+        result = 31 * result + Arrays.hashCode(givenAnswers);
+        return result;
     }
 }

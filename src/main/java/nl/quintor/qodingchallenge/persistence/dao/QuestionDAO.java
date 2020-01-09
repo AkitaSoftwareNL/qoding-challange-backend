@@ -37,4 +37,6 @@ public interface QuestionDAO {
     int getQuestionAmountPerCategory(String category) throws SQLException;
 
     int countQuestions() throws SQLException;
+
+    boolean getAmountOfRightAnswersPerQuestion(int questionID) throws SQLException;
 }
