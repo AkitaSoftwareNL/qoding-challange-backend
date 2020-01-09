@@ -92,7 +92,7 @@ public class QuestionResource {
 
     @RequestMapping(path = "/questions/count",
             method = RequestMethod.GET,
-            produces = MediaType.TEXT_PLAIN_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<AmountOfQuestionTypeCollection> countQuestions() throws SQLException {
         return ResponseEntity.ok().body(questionService.countQuestions());
