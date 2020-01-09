@@ -6,6 +6,9 @@ public class AmountOfQuestionTypeDTO {
     public String type;
     public int amount;
 
+    public AmountOfQuestionTypeDTO() {
+    }
+
     public AmountOfQuestionTypeDTO(String type, int amount) {
         this.type = type;
         this.amount = amount;

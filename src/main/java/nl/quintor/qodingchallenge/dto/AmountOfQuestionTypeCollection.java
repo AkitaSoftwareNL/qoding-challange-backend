@@ -7,6 +7,9 @@ public class AmountOfQuestionTypeCollection {
 
     public ArrayList<AmountOfQuestionTypeDTO> collection;
 
+    public AmountOfQuestionTypeCollection() {
+    }
+
     public AmountOfQuestionTypeCollection(ArrayList<AmountOfQuestionTypeDTO> collection) {
         this.collection = collection;
     }
@@ -20,8 +23,7 @@ public class AmountOfQuestionTypeCollection {
     }
 
     public int getAmount(String key) {
-        for (AmountOfQuestionTypeDTO typeDTO :
-                collection) {
+        for (AmountOfQuestionTypeDTO typeDTO : collection) {
             if (typeDTO.type.equalsIgnoreCase(key)) {
                 return typeDTO.amount;
             }

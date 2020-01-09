@@ -30,6 +30,11 @@ public class AnswerCollection {
         this.answers = answers;
     }
 
+    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -68,11 +73,6 @@ public class AnswerCollection {
 
     public void setCampaignID(int campaignID) {
         this.campaignID = campaignID;
-    }
-
-    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     public List<AnswerDTO> getAnswers() {
