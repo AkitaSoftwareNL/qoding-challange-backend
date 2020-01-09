@@ -125,8 +125,7 @@ class ParticipantDAOImplTest {
                 }
         ).build();
     }
-
-
+    
     private ParticipantDTO getParticipantDTO() throws SQLException {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "name";
@@ -149,7 +148,6 @@ class ParticipantDAOImplTest {
         sut.addTimeToParticipant(participantWithoutEndTime);
         final List<ParticipantDTO> participants = sut.getRankedParticipantsPerCampaign(1);
         final Optional<ParticipantDTO> testValue = participants.stream().filter(participantDTO -> participantDTO.getParticipantID().equals(participantWithoutEndTime)).findAny();
-
 
         assertTrue(testValue.orElse(new ParticipantDTO()).getTimeInMillis() != 0);
     }

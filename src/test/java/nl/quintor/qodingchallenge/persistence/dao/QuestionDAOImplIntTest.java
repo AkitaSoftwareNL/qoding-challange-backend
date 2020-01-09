@@ -69,7 +69,10 @@ class QuestionDAOImplIntTest {
     void setAnswerSetsAnswer() throws SQLException {
         int oldLength = sut.getPendingAnswers(campaignId, questionState).size();
 
-        sut.setAnswer(getQuestion(), campaignId, participantId);
+        var q = getQuestion();
+        q.setQuestionID(1);
+
+        sut.setAnswer(q, 1, participantId);
 
         assertEquals(oldLength + 1, sut.getPendingAnswers(campaignId, questionState).size());
     }
@@ -200,7 +203,7 @@ class QuestionDAOImplIntTest {
 
     private QuestionDTO getQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {
-            questionDTOBuilder.questionID = 2000;
+            questionDTOBuilder.questionID = 1;
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "open";

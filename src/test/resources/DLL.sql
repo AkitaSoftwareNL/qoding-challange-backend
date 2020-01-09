@@ -298,9 +298,8 @@ VALUES (1, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 'Hello world'),
        (15, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, '3');
 
 insert into GIVEN_ANSWER_STATE (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, STATEID)
-values (1, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 1),
-       (2, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 1),
-       (3, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 2),
+values (2, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 1),
+       (3, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 1),
        (4, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 1),
        (5, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 1),
        (6, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 3),
@@ -315,8 +314,7 @@ values (1, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 1),
        (15, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 2);
 
 insert into given_answer (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, GIVEN_ANSWER)
-values (1, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 'U'),
-       (2, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 'N'),
+values (2, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 'N'),
        (3, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 'Ja'),
        (4, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 'H'),
        (5, '1452950a-8059-4bd1-b397-d2bd765d6b9b', 1, 'p'),

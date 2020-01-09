@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 class CampaignDAOImplIntTest {
 
-    private final int amountOfCampaigns = 3;
+    private final int amountOfCampaigns = 2;
     private final int campaignID = 1;
 
     private CampaignDAO sut;
@@ -108,6 +108,9 @@ class CampaignDAOImplIntTest {
     private CampaignDTO getCampaign() {
         var temp = new ArrayList<AmountOfQuestionTypeDTO>();
         temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        temp.add(new AmountOfQuestionTypeDTO("multiple", 1));
+        temp.add(new AmountOfQuestionTypeDTO("program", 1));
+        temp.add(new AmountOfQuestionTypeDTO("total", 3));
         return new CampaignDTO(4, "JFALL - 2019", "employee", "JAVA", new AmountOfQuestionTypeCollection(temp), "06-12-2019", 1, null);
     }
 }
