@@ -4,6 +4,7 @@ import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import nl.quintor.qodingchallenge.service.QuestionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -134,7 +135,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO question (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
             statement.setString(1, JAVA);
             statement.setString(2, question.getQuestion());
-            statement.setString(3, question.getQuestionType().toLowerCase());
+            statement.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
             statement.setString(4, question.getAttachment());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -309,7 +310,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setString(1, "JAVA");
             statement.setString(2, question.getQuestion());
-            statement.setString(3, question.getQuestionType().toLowerCase());
+            statement.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
             statement.setString(4, question.getAttachment());
             statement.setString(5, possibleAnswersString.get(0));
             statement.setString(6, possibleAnswersString.get(1));

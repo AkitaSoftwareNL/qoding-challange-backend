@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
@@ -57,8 +58,8 @@ class CampaignDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
-        var temp = new AmountOfQuestionTypeDTO[1];
-        temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
 
         var actualResult = sut.getAmountOfQuestions(campaignID);
 
@@ -105,6 +106,8 @@ class CampaignDAOImplIntTest {
 
 
     private CampaignDTO getCampaign() {
-        return new CampaignDTO(1, "JFALL - 2019", "employee", "JAVA", new AmountOfQuestionTypeCollection(new AmountOfQuestionTypeDTO[0]), "06-12-2019", 1, null);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        return new CampaignDTO(4, "JFALL - 2019", "employee", "JAVA", new AmountOfQuestionTypeCollection(temp), "06-12-2019", 1, null);
     }
 }

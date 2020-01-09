@@ -92,7 +92,9 @@ class ReportResourceTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(1, campaign, "me", "JAVA", new AmountOfQuestionTypeCollection(new AmountOfQuestionTypeDTO[0]), "12/2/2019", 1, null);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        return new CampaignDTO(1, campaign, "me", "JAVA", new AmountOfQuestionTypeCollection(temp), "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {

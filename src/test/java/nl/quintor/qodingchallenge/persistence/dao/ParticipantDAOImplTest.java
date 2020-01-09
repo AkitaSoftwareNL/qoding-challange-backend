@@ -48,7 +48,7 @@ class ParticipantDAOImplTest {
 
     @Test
     void getRankedParticipantsReturnsListWithParticipants() throws SQLException {
-        int sizeOfParticipants = 4;
+        int sizeOfParticipants = 8;
 
         when(participants.size()).thenReturn(sizeOfParticipants);
 
@@ -78,7 +78,7 @@ class ParticipantDAOImplTest {
 
     @Test
     void getFirstAndLastNameReturnsAnAnswerCollectionWithoutAnswers() throws SQLException {
-        assertEquals(new AnswerCollection("Gray", null, "Snare", null, 0, null), sut.getFirstAndLastname("1"));
+        assertEquals(new AnswerCollection("Gray", null, "Snare", null, 0, null), sut.getFirstAndLastname("8063be67-7fec-47c4-a9ab-e3d03a9968b3"));
     }
 
     @Test
@@ -99,7 +99,7 @@ class ParticipantDAOImplTest {
 
     @Test
     void addParticipantAddsAnParticipant() throws SQLException {
-        final int amountBeforeInsert = 4;
+        final int amountBeforeInsert = 8;
 
         sut.addParticipant(getParticipantDTO(), campaignID);
 

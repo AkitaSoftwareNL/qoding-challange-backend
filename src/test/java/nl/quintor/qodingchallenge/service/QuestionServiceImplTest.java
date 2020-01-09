@@ -47,8 +47,8 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsCallsGetPossibleAnswers() throws SQLException {
         // Mock
-        var temp = new AmountOfQuestionTypeDTO[1];
-        temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
         when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(new AmountOfQuestionTypeCollection(temp));
         when(questionDAOMock.getQuestions(anyString(), any())).thenReturn(getQuestionlist());
         when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
@@ -60,8 +60,8 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionsCallsGetQuestions() throws SQLException {
-        var temp = new AmountOfQuestionTypeDTO[1];
-        temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
 
         when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(new AmountOfQuestionTypeCollection(temp));
 
@@ -131,8 +131,8 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
         List<QuestionDTO> questionDTOList = getQuestionlist();
-        var temp = new AmountOfQuestionTypeDTO[1];
-        temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
         when(campaignDAOMock.getAmountOfQuestions(campaignID)).thenReturn(new AmountOfQuestionTypeCollection(temp));
         when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaignID))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());

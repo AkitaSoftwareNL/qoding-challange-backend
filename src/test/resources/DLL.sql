@@ -151,35 +151,7 @@ VALUES ('JAVA', 'Waar of niet waar, kan je een char array in een string zetten',
 INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
 VALUES ('JAVA', 'Maak een string vergelijker', 1, 3);
 INSERT INTO programming_question (QUESTIONID, STARTCODE, TESTCODE)
-VALUES (13, 'public class Code {
-    public static boolean equals(String a, String b) {
-        // imp
-    }
-}',
-'import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-public class TestCode {
-
-    private Code sut;
-
-    @BeforeEach
-    void setUp() {
-        sut = new Code();
-    }
-
-    @Test
-    void Test1() {
-        Assertions.assertTrue(sut.equals("1", "1"));
-    }
-
-    @Test
-    void Test2() {
-        Assertions.assertTrue(sut.equals("2", "2"));
-    }
-}
-');
+VALUES (13, 'startCode','testCode');
 
 INSERT INTO question (CATEGORY_NAME, QUESTION, STATE, QUESTION_TYPE)
 VALUES ('JAVA', 'Welk van de volgende twee statements zijn verkeerd over arrays in Java', 1, 2);

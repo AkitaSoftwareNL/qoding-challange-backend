@@ -26,7 +26,7 @@ class QuestionDAOImplIntTest {
     private final int campaignId = 1;
     private final int questionState = 1;
     private final int questionId = 3;
-    private final int amountOfQuestions = 4;
+    private final int amountOfQuestions = 15;
     private final String participantId = "1452950a-8059-4bd1-b397-d2bd765d6b9b";
     private final String category = "JAVA";
 
@@ -49,8 +49,8 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        var temp = new AmountOfQuestionTypeDTO[1];
-        temp[0] = new AmountOfQuestionTypeDTO("open", 1);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
         List<QuestionDTO> questionDTOList = sut.getQuestions(category, new AmountOfQuestionTypeCollection(temp));
 
         assertEquals(new AmountOfQuestionTypeCollection(temp).getTotal(), questionDTOList.size());
@@ -113,7 +113,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getPendingAnswersReturnPendingAnswers() throws SQLException {
-        int expectedLength = 80;
+        int expectedLength = 75;
         //Mock
 
         //Test
@@ -169,7 +169,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
-        final int expectedResult = 4;
+        final int expectedResult = 15;
 
         assertEquals(expectedResult, sut.getQuestionAmountPerCategory(category));
     }
@@ -181,7 +181,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getCodingQuestionGetCorrectQuestion() throws SQLException {
-        CodingQuestionDTO result = sut.getCodingQuestion(4);
+        CodingQuestionDTO result = sut.getCodingQuestion(13);
         Assertions.assertEquals("startCode", result.getCode());
         Assertions.assertEquals("testCode", result.getTest());
 
@@ -189,7 +189,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void countQuestionsGetsRightAmountOfQuestions() throws SQLException {
-        final int expectedAmount = 4;
+        final int expectedAmount = 15;
         // Mock
 
         // Test

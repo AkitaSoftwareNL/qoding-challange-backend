@@ -1,20 +1,21 @@
 package nl.quintor.qodingchallenge.dto;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class AmountOfQuestionTypeCollection {
 
-    public AmountOfQuestionTypeDTO[] collection;
+    public ArrayList<AmountOfQuestionTypeDTO> collection;
 
-    public AmountOfQuestionTypeCollection(AmountOfQuestionTypeDTO[] collection) {
+    public AmountOfQuestionTypeCollection(ArrayList<AmountOfQuestionTypeDTO> collection) {
         this.collection = collection;
     }
 
-    public AmountOfQuestionTypeDTO[] getCollection() {
+    public ArrayList<AmountOfQuestionTypeDTO> getCollection() {
         return collection;
     }
 
-    public void setCollection(AmountOfQuestionTypeDTO[] collection) {
+    public void setCollection(ArrayList<AmountOfQuestionTypeDTO> collection) {
         this.collection = collection;
     }
 
@@ -33,19 +34,18 @@ public class AmountOfQuestionTypeCollection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AmountOfQuestionTypeCollection that = (AmountOfQuestionTypeCollection) o;
-        return Arrays.equals(collection, that.collection);
+        return Objects.equals(collection, that.collection);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(collection);
+        return Objects.hash(collection);
     }
 
     @Override
-    public String
-    toString() {
+    public String toString() {
         return "AmountOfQuestionTypeCollection{" +
-                "collection=" + Arrays.toString(collection) +
+                "collection=" + collection +
                 '}';
     }
 }
