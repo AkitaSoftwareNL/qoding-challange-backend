@@ -97,10 +97,12 @@ public class AnswerCollection {
                     }
                 }
         );
-        return answers.stream()
+        answers = answers.stream()
                 .filter(HashMapUtils.distinctByKey(AnswerDTO::getQuestion))
                 .peek(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())))
                 .collect(Collectors.toList());
+
+        return answers;
     }
 
     @Override
