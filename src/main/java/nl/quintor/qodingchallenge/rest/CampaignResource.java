@@ -39,4 +39,12 @@ public class CampaignResource {
     public ResponseEntity<List<CampaignDTO>> showCampaign() throws SQLException {
         return new ResponseEntity<>(campaignService.showCampaign(), HttpStatus.OK);
     }
+
+    @RequestMapping(path = "/campaign/delete/{campaignID}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CampaignDTO>> deleteCampaign(@PathVariable int campaignID) throws SQLException {
+        campaignService.deleteCampaign(campaignID);
+        return ResponseEntity.ok().body(campaignService.showCampaign());
+    }
 }

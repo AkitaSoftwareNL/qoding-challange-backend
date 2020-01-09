@@ -43,4 +43,9 @@ public class CampaignServiceImpl implements CampaignService {
     public List<CampaignDTO> showCampaign() throws SQLException {
         return campaignDAO.getAllCampaigns();
     }
+
+    @Override
+    public void deleteCampaign(int campaignID) throws SQLException {
+        campaignDAO.deleteCampaign(campaignID);
+    }
 }

@@ -6,6 +6,7 @@ import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface QuestionDAO {
@@ -13,7 +14,7 @@ public interface QuestionDAO {
 
     void setAnswer(QuestionDTO question, int campaignId, String participantID) throws SQLException;
 
-    String getCorrectAnswer(int questionID) throws SQLException;
+    ArrayList<PossibleAnswerDTO> getCorrectAnswers(int questionID) throws SQLException;
 
     List<PossibleAnswerDTO> getPossibleAnswers(int questionID) throws SQLException;
 

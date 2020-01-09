@@ -54,7 +54,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS, TIMESTAMP_CREATED, STATE FROM campaign");
+                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS, TIMESTAMP_CREATED, STATE FROM campaign WHERE STATE != 0");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 campaignDTOList.add(
@@ -117,6 +117,19 @@ public class CampaignDAOImpl implements CampaignDAO {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("CAMPAIGN_ID");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    @Override
+    public void deleteCampaign(int campaignID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE campaign SET STATE = 0 WHERE CAMPAIGN_ID = ?");
+            statement.setInt(1, campaignID);
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
         }

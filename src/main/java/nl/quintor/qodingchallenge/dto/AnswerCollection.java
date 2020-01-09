@@ -1,7 +1,11 @@
 package nl.quintor.qodingchallenge.dto;
 
+import nl.quintor.qodingchallenge.util.HashMapUtils;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AnswerCollection {
 
@@ -65,11 +69,40 @@ public class AnswerCollection {
     }
 
     public List<AnswerDTO> getAnswers() {
-        return answers;
+        return this.answers;
     }
 
-    public void setAnswers(List<AnswerDTO> answers) {
+    public AnswerCollection setAnswers(List<AnswerDTO> answers) {
         this.answers = answers;
+        return this;
+    }
+
+    /**
+     * Filters the answers member variable
+     * answers may contain duplicate questions with different answers
+     * This algorithm filters all the duplicate questions from the list and adds the answers to one String
+     *
+     * @return list with distinct question and all answers for that question combined in same order as received
+     */
+    public List<AnswerDTO> filter() {
+        HashMap<String, String> map = new HashMap<>();
+        answers.forEach(answerDTO -> {
+                    String currentQuestion = answerDTO.getQuestion();
+                    if (!map.containsKey(currentQuestion)) {
+                        map.put(answerDTO.getQuestion(), answerDTO.getGivenAnswer());
+                    } else {
+                        String oldValue = map.get(currentQuestion);
+                        String newValue = oldValue + ", " + answerDTO.getGivenAnswer();
+                        map.replace(currentQuestion, oldValue, newValue);
+                    }
+                }
+        );
+        answers = answers.stream()
+                .filter(HashMapUtils.distinctByKey(AnswerDTO::getQuestion))
+                .peek(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())))
+                .collect(Collectors.toList());
+
+        return answers;
     }
 
     @Override

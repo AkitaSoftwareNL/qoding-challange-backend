@@ -48,9 +48,9 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID, poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER, \n" +
-                            "(SELECT COUNT(*) FROM given_answer AS ga WHERE CAMPAIGN_ID = ? AND ga.PARTICIPANTID = poc.PARTICIPANTID AND STATEID = ?) AS CORRECT\n" +
-                            "FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
+                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID, poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER,\n" +
+                            "                            (SELECT COUNT(*) FROM given_answer_state AS gas WHERE CAMPAIGN_ID = ? AND gas.PARTICIPANTID = poc.PARTICIPANTID AND gas.STATEID = ?) AS CORRECT\n" +
+                            "                            FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
             statement.setInt(1, campaignID);
             statement.setInt(2, QuestionState.CORRECT.getState());
             statement.setInt(3, campaignID);

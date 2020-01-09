@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 class ReportDAOImplTest {
 
-    private final String participantId = "1";
+    private final String participantId = "8063be67-7fec-47c4-a9ab-e3d03a9968b3";
     private final int campaignId = 1;
 
     private ReportDAOImpl sut;
@@ -50,7 +50,7 @@ class ReportDAOImplTest {
 
     @Test
     void getAnswersPerParticipantsReturnListWithAnswers() throws SQLException {
-        int sizeOfAnswers = 3;
+        final int sizeOfAnswers = 18;
 
         when(answers.size()).thenReturn(sizeOfAnswers);
 
