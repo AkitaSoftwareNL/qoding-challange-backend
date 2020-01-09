@@ -20,7 +20,7 @@ public class QuestionDTO {
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, int stateID, String startCode) {
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, String startCode, String unitTest) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
@@ -28,8 +28,21 @@ public class QuestionDTO {
         this.attachment = attachment;
         this.possibleAnswers = possibleAnswers;
         this.givenAnswers = givenAnswers;
+        this.unitTest = unitTest;
         this.stateID = 1;
         this.startCode = startCode;
+    }
+
+    public void setStartCode(String startCode) {
+        this.startCode = startCode;
+    }
+
+    public String getUnitTest() {
+        return unitTest;
+    }
+
+    public void setUnitTest(String unitTest) {
+        this.unitTest = unitTest;
     }
 
     public String getStartCode() {

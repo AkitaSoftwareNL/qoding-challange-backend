@@ -27,7 +27,6 @@ public class QuestionDTOBuilder {
 
     public QuestionDTO build() {
         return new QuestionDTO(questionID, question, categoryType, questionType, attachment,
-                possibleAnswers, givenAnswers, stateID, startCode);
-                givenAnswer, possibleAnswers, startCode, stateID, unitTest);
+                possibleAnswers, givenAnswers, startCode, unitTest);
     }
 }
