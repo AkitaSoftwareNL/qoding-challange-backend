@@ -309,7 +309,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 connection.setAutoCommit(false);
 
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO question(category_name, question, question_type, attachment) values (?, ?, ?, ?);");
-                PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO tmp_multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
+                PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
 
                 statement.setString(1, "JAVA");
                 statement.setString(2, question.getQuestion());
@@ -318,7 +318,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 
                 statement.executeUpdate();
 
-                statementMultiple.setInt(1, question.getQuestionID());
+                int questionID = getQuestionID(connection, question.getQuestion());
+
+                statementMultiple.setInt(1, questionID);
 
                 for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
                     statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
@@ -333,6 +335,21 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+    }
+
+    private int getQuestionID(Connection connection, String question) throws SQLException {
+        Optional<Integer> questionID = Optional.empty();
+        PreparedStatement statement = connection.prepareStatement("SELECT question.QUESTIONID FROM question WHERE QUESTION = ?");
+        statement.setString(1, question);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            questionID = Optional.of(resultSet.getInt("QUESTIONID"));
+        }
+        return questionID.orElseThrow(() -> new NoQuestionFoundException(
+                "QuestionID not found",
+                format("QuestionID from question %s has not been found", question),
+                "The question is most likely not valid, try a different question"
+        ));
     }
 
     @Deprecated
