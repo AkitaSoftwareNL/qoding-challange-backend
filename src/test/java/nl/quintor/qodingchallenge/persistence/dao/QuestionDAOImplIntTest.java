@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuestionDAOImplIntTest {
@@ -98,6 +97,15 @@ class QuestionDAOImplIntTest {
         var testValue = sut.getAllQuestions();
         // Verify
         assertEquals(amountOfQuestions, testValue.size());
+    }
+
+    @Test
+    void makeStringReturnsOneString() throws SQLException {
+        List<PossibleAnswerDTO> possibleAnswerDTOS = getMultipleQuestion().getPossibleAnswers();
+        String delimeter = ",";
+
+        var result = sut.makeString(possibleAnswerDTOS, delimeter);
+        assertFalse(result.contains(","));
     }
 
     @Test
@@ -202,6 +210,7 @@ class QuestionDAOImplIntTest {
         assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(testQuestionID));
     }
 
+    @Test
     void persistProgramQuestionPersistsProgramQuestion() throws SQLException {
         // Mock
 
@@ -210,6 +219,18 @@ class QuestionDAOImplIntTest {
         // Verify
         assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
     }
+
+    @Test
+    void persistMultipleQuestionPersistMultipleChoiceQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistMultipleQuestion(getMultipleQuestion());
+        // Verify
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
+    }
+
+
 
     private QuestionDTO getQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {

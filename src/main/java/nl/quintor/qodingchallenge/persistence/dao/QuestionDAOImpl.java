@@ -305,34 +305,38 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            try {
-                connection.setAutoCommit(false);
-
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO question(category_name, question, question_type, attachment) values (?, ?, ?, ?);");
-                PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
-
-                statement.setString(1, "JAVA");
-                statement.setString(2, question.getQuestion());
-                statement.setString(3, question.getQuestionType().toLowerCase());
-                statement.setString(4, question.getAttachment());
-
-                statement.executeUpdate();
-
-                int questionID = getQuestionID(connection, question.getQuestion());
-
-                statementMultiple.setInt(1, questionID);
-
-                for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
-                    statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
-                    statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
-                    statementMultiple.executeUpdate();
-                }
-                connection.commit();
-            } catch (SQLException e) {
-                connection.rollback();
-                throw new SQLException(e);
-            }
+            insertQuestion(connection, question);
         } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    private void insertQuestion(Connection connection, QuestionDTO question) throws SQLException {
+        try {
+            connection.setAutoCommit(false);
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO question(category_name, question, question_type, attachment) values (?, ?, ?, ?);");
+            PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
+
+            statement.setString(1, "JAVA");
+            statement.setString(2, question.getQuestion());
+            statement.setString(3, question.getQuestionType().toLowerCase());
+            statement.setString(4, question.getAttachment());
+
+            statement.executeUpdate();
+
+            int questionID = getQuestionID(connection, question.getQuestion());
+
+            statementMultiple.setInt(1, questionID);
+
+            for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
+                statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
+                statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
+                statementMultiple.executeUpdate();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
             throw new SQLException(e);
         }
     }
@@ -353,7 +357,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Deprecated
-    private List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
+    public List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
         List<String> possibleAnswersString = new ArrayList<>();
         String possibleAnswerString = delimiter;
         String isCorrectString = delimiter;
