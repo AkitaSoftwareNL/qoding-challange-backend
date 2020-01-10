@@ -325,6 +325,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                     statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
                     statementMultiple.executeUpdate();
                 }
+                connection.commit();
             } catch (SQLException e) {
                 connection.rollback();
                 throw new SQLException(e);
