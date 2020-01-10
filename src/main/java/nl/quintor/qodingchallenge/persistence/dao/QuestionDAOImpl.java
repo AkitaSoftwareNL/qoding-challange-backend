@@ -295,26 +295,36 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
-        final String delimiter = "&";
-        List<String> possibleAnswersString = makeString(question.getPossibleAnswers(), delimiter);
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
+            connection.setAutoCommit(false);
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO question(category_name, question, question_type, attachment) values (?, ?, ?, ?);");
+            PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO tmp_multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
+
             statement.setString(1, "JAVA");
             statement.setString(2, question.getQuestion());
             statement.setString(3, question.getQuestionType().toLowerCase());
             statement.setString(4, question.getAttachment());
-            statement.setString(5, possibleAnswersString.get(0));
-            statement.setString(6, possibleAnswersString.get(1));
-            statement.setInt(7, question.getPossibleAnswers().size());
-            statement.setString(8, delimiter);
+
             statement.executeUpdate();
+
+            statementMultiple.setInt(1, question.getQuestionID());
+
+            for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
+                statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
+                statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
+                statementMultiple.executeUpdate();
+            }
+
+            connection.rollback();
         } catch (SQLException e) {
             throw new SQLException(e);
         }
     }
 
+    @Deprecated
     private List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
         List<String> possibleAnswersString = new ArrayList<>();
         String possibleAnswerString = delimiter;
