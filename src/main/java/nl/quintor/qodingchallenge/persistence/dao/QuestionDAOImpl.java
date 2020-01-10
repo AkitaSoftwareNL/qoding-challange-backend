@@ -293,32 +293,41 @@ public class QuestionDAOImpl implements QuestionDAO {
         }
     }
 
+    /**
+     * <p>Sets the question with corresponding values in the database.
+     *
+     * @param question question to be inserted.
+     * @throws SQLException if connection fails, and when data cannot be added to the database.
+     * @rollback When an exception occurs all the data that was previously added in this scope will be reverted.
+     */
     @Override
     public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
-            connection.setAutoCommit(false);
+            try {
+                connection.setAutoCommit(false);
 
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO question(category_name, question, question_type, attachment) values (?, ?, ?, ?);");
-            PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO tmp_multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO question(category_name, question, question_type, attachment) values (?, ?, ?, ?);");
+                PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO tmp_multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
 
-            statement.setString(1, "JAVA");
-            statement.setString(2, question.getQuestion());
-            statement.setString(3, question.getQuestionType().toLowerCase());
-            statement.setString(4, question.getAttachment());
+                statement.setString(1, "JAVA");
+                statement.setString(2, question.getQuestion());
+                statement.setString(3, question.getQuestionType().toLowerCase());
+                statement.setString(4, question.getAttachment());
 
-            statement.executeUpdate();
+                statement.executeUpdate();
 
-            statementMultiple.setInt(1, question.getQuestionID());
+                statementMultiple.setInt(1, question.getQuestionID());
 
-            for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
-                statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
-                statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
-                statementMultiple.executeUpdate();
+                for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
+                    statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
+                    statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
+                    statementMultiple.executeUpdate();
+                }
+            } catch (SQLException e) {
+                connection.rollback();
             }
-
-            connection.rollback();
         } catch (SQLException e) {
             throw new SQLException(e);
         }
