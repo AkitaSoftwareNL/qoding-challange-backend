@@ -78,9 +78,9 @@ public class AnswerCollection {
     }
 
     /**
-     * Filters the answers member variable
-     * answers may contain duplicate questions with different answers
-     * This algorithm filters all the duplicate questions from the list and adds the answers to one String
+     * <p>Filters the answers member variable.
+     * Answers may contain duplicate questions with different answers.
+     * This algorithm filters all the duplicate questions from the list and adds the answers to one String.
      *
      * @return list with distinct question and all answers for that question combined in same order as received
      */
