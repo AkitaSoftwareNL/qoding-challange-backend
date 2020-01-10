@@ -84,7 +84,7 @@ public class AnswerCollection {
         return this;
     }
 
-    public List<AnswerDTO> filter() {
+    public void filter() {
         HashMap<String, String> map = new HashMap<>();
         answers.forEach(answerDTO -> {
                     if (!map.containsValue(answerDTO.getQuestion())) {
@@ -100,8 +100,6 @@ public class AnswerCollection {
                 .collect(Collectors.toList());
 
         answers.forEach(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())));
-
-        return answers;
     }
 
     @Override

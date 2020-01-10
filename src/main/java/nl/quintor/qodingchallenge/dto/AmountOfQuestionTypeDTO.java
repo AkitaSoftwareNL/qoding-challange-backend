@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class AmountOfQuestionTypeDTO {
@@ -12,6 +14,11 @@ public class AmountOfQuestionTypeDTO {
     public AmountOfQuestionTypeDTO(String type, int amount) {
         this.type = type;
         this.amount = amount;
+    }
+
+    public AmountOfQuestionTypeDTO(ResultSet resultset) throws SQLException {
+        this.amount = resultset.getInt("Amount");
+        this.type = resultset.getString("Type");
     }
 
     public String getType() {

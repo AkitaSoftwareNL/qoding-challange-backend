@@ -2,6 +2,7 @@ package nl.quintor.qodingchallenge.rest.customexception;
 
 public class CustomException extends RuntimeException {
 
+    private static final String SUPPORT = "https://quintor.nl/";
     private String message;
     private String details;
     private String nextActions;
@@ -50,6 +51,6 @@ public class CustomException extends RuntimeException {
     }
 
     public String getSupport() {
-        return "https://quintor.nl/";
+        return SUPPORT;
     }
 }

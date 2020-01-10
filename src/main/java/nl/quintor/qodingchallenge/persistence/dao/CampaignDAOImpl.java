@@ -119,10 +119,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             ResultSet amountSet = amountState.executeQuery();
             var amounts = new ArrayList<AmountOfQuestionTypeDTO>();
             while (amountSet.next()) {
-                String type = amountSet.getString("Type");
-                int amount = amountSet.getInt("Amount");
-
-                amounts.add(new AmountOfQuestionTypeDTO(type, amount));
+                amounts.add(new AmountOfQuestionTypeDTO(amountSet));
             }
 
             return new AmountOfQuestionTypeCollection(amounts);

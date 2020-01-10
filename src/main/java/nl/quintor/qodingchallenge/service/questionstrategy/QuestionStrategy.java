@@ -17,7 +17,7 @@ public abstract class QuestionStrategy {
     }
 
     public boolean isType(String typeToCheck) {
-        return QuestionType.getEnumAsString(typeToCheck).equalsIgnoreCase(type.toString());
+        return type.getState() == QuestionType.getEnumAsInt(typeToCheck);
     }
 
     public void persistQuestion(QuestionDTO question) throws SQLException {

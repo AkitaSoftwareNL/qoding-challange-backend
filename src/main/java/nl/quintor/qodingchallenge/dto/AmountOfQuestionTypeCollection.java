@@ -31,6 +31,15 @@ public class AmountOfQuestionTypeCollection {
         return 0;
     }
 
+    public int getTotal() {
+        int total = 0;
+
+        for (var item : collection) {
+            total += item.amount;
+        }
+        return total;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

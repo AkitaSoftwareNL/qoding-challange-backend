@@ -36,7 +36,8 @@ public class QuestionResource {
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             path = "/campaign/{campaignID}",
             method = RequestMethod.POST)
-    public ResponseEntity getAnswer(@RequestBody QuestionCollection questionCollection) throws SQLException {
+    public ResponseEntity getAnswer(@PathVariable int campaignID, @RequestBody QuestionCollection questionCollection) throws SQLException {
+        questionCollection.setCampaignId(campaignID);
         questionService.setAnswer(questionCollection);
         return new ResponseEntity(HttpStatus.OK);
     }

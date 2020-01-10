@@ -61,14 +61,14 @@ class QuestionResourceTest {
     @Test
     void getAnswerCallsQuestionServiceSetAnswer() throws SQLException {
 
-        sut.getAnswer(getQuestionCollection());
+        sut.getAnswer(getQuestionCollection().getCampaignId(), getQuestionCollection());
 
         verify(questionServiceMock).setAnswer(getQuestionCollection());
     }
 
     @Test
     void getAnswerReturnsResponseOK() throws SQLException {
-        var test = sut.getAnswer(getQuestionCollection());
+        var test = sut.getAnswer(getQuestionCollection().getCampaignId(), getQuestionCollection());
 
         assertEquals(HttpStatus.OK, test.getStatusCode());
     }

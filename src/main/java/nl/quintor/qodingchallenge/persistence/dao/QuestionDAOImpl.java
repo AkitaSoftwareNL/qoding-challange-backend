@@ -34,7 +34,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         ) {
             for (AmountOfQuestionTypeDTO questionType : limit.collection) {
                 PreparedStatement statement;
-                int total = questionType.amount - (limit.getAmount("open") + limit.getAmount("multiple") + limit.getAmount("program"));
+                int total = questionType.amount - (limit.getTotal() - limit.getAmount("total"));
                 if (questionType.type.equalsIgnoreCase("total") && total > 0) {
                     statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM question join question_type on question_type.id = question.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
                     statement.setInt(2, total);
@@ -364,14 +364,10 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
             var amounts = new ArrayList<AmountOfQuestionTypeDTO>();
             while (resultSet.next()) {
-                String type = resultSet.getString("Type");
-                int amount = resultSet.getInt("Amount");
-
-                amounts.add(new AmountOfQuestionTypeDTO(type, amount));
+                amounts.add(new AmountOfQuestionTypeDTO(resultSet));
             }
 
             int total = 0;
-
             for (var amountType : amounts) {
                 total += amountType.amount;
             }
