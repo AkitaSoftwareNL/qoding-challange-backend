@@ -38,5 +38,7 @@ public interface QuestionDAO {
 
     int countQuestions() throws SQLException;
 
+    boolean getAmountOfRightAnswersPerQuestion(int questionID) throws SQLException;
+
     void persistProgramQuestion(QuestionDTO question) throws SQLException;
 }

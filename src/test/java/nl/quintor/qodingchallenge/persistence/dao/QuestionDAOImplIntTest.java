@@ -101,16 +101,6 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void persistMultipleQuestionThrowsSQLException() {
-        // Mock
-
-        // Test
-
-        // Verify
-        assertThrows(SQLException.class, () -> sut.persistMultipleQuestion(getMultipleQuestion()));
-    }
-
-    @Test
     void getPendingAnswersReturnPendingAnswers() throws SQLException {
         int expectedLength = 80;
         //Mock
@@ -198,6 +188,20 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
+    void getAmountOfRightAnswersPerQuestionReturnsFalseWhenOneAnswerIsCorrect() throws SQLException {
+        final boolean expectedResult = false;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(questionId));
+    }
+
+    @Test
+    void getAmountOfRightAnswersPerQuestionReturnsTrueWhenMultipleAnswerIsCorrect() throws SQLException {
+        final int testQuestionID = 15;
+        final boolean expectedResult = true;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(testQuestionID));
+    }
+
     void persistProgramQuestionPersistsProgramQuestion() throws SQLException {
         // Mock
 

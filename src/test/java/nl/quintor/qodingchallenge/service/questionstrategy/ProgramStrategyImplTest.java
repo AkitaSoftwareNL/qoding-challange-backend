@@ -71,7 +71,7 @@ class ProgramStrategyImplTest {
         QuestionDTO questionDTO = new QuestionDTO();
         sut.setRequestUtils(mockedHttpRequestMethods);
 
-        assertThrows(CannotPersistQuestionException.class, () -> sut.persistQuestion(questionDTO) );
+        assertThrows(CannotPersistQuestionException.class, () -> sut.persistQuestion(questionDTO));
     }
 
     @Test
@@ -82,7 +82,7 @@ class ProgramStrategyImplTest {
         QuestionDTO questionDTO = new QuestionDTO();
         sut.setRequestUtils(mockedHttpRequestMethods);
 
-        assertDoesNotThrow(() -> sut.persistQuestion(questionDTO) );
+        assertDoesNotThrow(() -> sut.persistQuestion(questionDTO));
     }
 
     @Test

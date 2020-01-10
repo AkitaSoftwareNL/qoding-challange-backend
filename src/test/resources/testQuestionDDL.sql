@@ -82,6 +82,11 @@ values (3, 'Ja', 1);
 insert into multiple_choice_question (questionID, ANSWER_OPTIONS, is_correct)
 values (3, 'Nee', 0);
 
+insert into multiple_choice_question (questionID, ANSWER_OPTIONS, is_correct)
+values (15, 'Ja', 1);
+insert into multiple_choice_question (questionID, ANSWER_OPTIONS, is_correct)
+values (15, 'Nee', 1);
+
 INSERT INTO GIVEN_ANSWER_STATE (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, STATEID)
 VALUES (1, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),
        (2, '8063be67-7fec-47c4-a9ab-e3d03a9968b3', 1, 1),

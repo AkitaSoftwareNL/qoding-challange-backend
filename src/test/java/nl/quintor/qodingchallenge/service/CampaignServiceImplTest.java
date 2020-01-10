@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
@@ -65,6 +66,8 @@ class CampaignServiceImplTest {
     void returnsListWhenGettingAllCampaigns() throws SQLException {
         when(campaignDAOStub.getAllCampaigns())
                 .thenReturn(getCampaignDtoList());
+
+        assertEquals(campaignDAOStub.getAllCampaigns(), sut.showCampaign());
     }
 
     @Test
