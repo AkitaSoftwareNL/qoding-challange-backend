@@ -17,7 +17,7 @@ public class QuestionDTOBuilder {
     public int stateID;
     public String startCode;
     private boolean hasMultipleAnswers;
-    private List<PossibleAnswerDTO> possibleAnswers;
+    public List<PossibleAnswerDTO> possibleAnswers;
     private String unitTest;
 
     public QuestionDTOBuilder with(

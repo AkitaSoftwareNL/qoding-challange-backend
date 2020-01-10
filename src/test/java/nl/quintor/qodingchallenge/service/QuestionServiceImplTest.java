@@ -233,7 +233,7 @@ class QuestionServiceImplTest {
     @Test
     void setAnswerCallsAddTimeToParticipant() throws SQLException {
         // Mock
-        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
+        when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getRightAnswer());
         // Test
         sut.setAnswer(getQuestionCollection());
         // Verify
@@ -279,7 +279,8 @@ class QuestionServiceImplTest {
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "multiple";
-            questionDTOBuilder.givenAnswers = new String[]{""};
+            questionDTOBuilder.givenAnswers = new String[]{"yes"};
+            questionDTOBuilder.possibleAnswers = getPossibleAnswers();
             questionDTOBuilder.stateID = 2;
         }).build();
     }
@@ -302,5 +303,11 @@ class QuestionServiceImplTest {
                     questionDTOBuilder.stateID = pendingState;
                 }
         ).build();
+    }
+
+    private ArrayList<PossibleAnswerDTO> getRightAnswer() {
+        ArrayList<PossibleAnswerDTO> list = new ArrayList<>();
+        list.add(new PossibleAnswerDTO("yes", 1));
+        return list;
     }
 }
