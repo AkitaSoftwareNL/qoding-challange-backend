@@ -327,6 +327,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 }
             } catch (SQLException e) {
                 connection.rollback();
+                throw new SQLException(e);
             }
         } catch (SQLException e) {
             throw new SQLException(e);
