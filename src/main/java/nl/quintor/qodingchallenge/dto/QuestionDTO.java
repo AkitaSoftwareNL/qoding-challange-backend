@@ -16,11 +16,13 @@ public class QuestionDTO {
     private String[] givenAnswers;
     private int stateID;
     private boolean hasMultipleAnswers;
+    private String unitTest;
 
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, int stateID, String startCode, boolean hasMultipleAnswers) {
+
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, String startCode, String unitTest, boolean hasMultipleAnswers) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
@@ -28,9 +30,18 @@ public class QuestionDTO {
         this.attachment = attachment;
         this.possibleAnswers = possibleAnswers;
         this.givenAnswers = givenAnswers;
+        this.unitTest = unitTest;
         this.stateID = 1;
         this.startCode = startCode;
         this.hasMultipleAnswers = hasMultipleAnswers;
+    }
+
+    public String getUnitTest() {
+        return unitTest;
+    }
+
+    public void setUnitTest(String unitTest) {
+        this.unitTest = unitTest;
     }
 
     public String getStartCode() {

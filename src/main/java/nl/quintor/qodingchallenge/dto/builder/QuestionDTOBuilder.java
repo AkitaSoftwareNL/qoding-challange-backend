@@ -18,6 +18,7 @@ public class QuestionDTOBuilder {
     public String startCode;
     private boolean hasMultipleAnswers;
     private List<PossibleAnswerDTO> possibleAnswers;
+    private String unitTest;
 
     public QuestionDTOBuilder with(
             Builder<QuestionDTOBuilder> builder) throws SQLException {
@@ -27,6 +28,7 @@ public class QuestionDTOBuilder {
 
     public QuestionDTO build() {
         return new QuestionDTO(questionID, question, categoryType, questionType, attachment,
-                possibleAnswers, givenAnswers, stateID, startCode, hasMultipleAnswers);
+                possibleAnswers, givenAnswers, startCode, unitTest, hasMultipleAnswers);
+
     }
 }
