@@ -83,8 +83,6 @@ class CampaignDAOImplIntTest {
 
     @Test
     void campaignExitsReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
-        final String NO_CAMPAIGN = "Some non existing campaign";
-
         assertFalse(sut.campaignExists(0));
     }
 

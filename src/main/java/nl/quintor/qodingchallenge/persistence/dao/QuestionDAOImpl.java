@@ -59,7 +59,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS FROM MULTIPLE_CHOICE_QUESTION WHERE QUESTIONID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS FROM multiple_choice_question WHERE QUESTIONID = ? ORDER BY RAND()");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -89,7 +89,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement1.setInt(1, question.getQuestionID());
             statement1.setString(2, participantID);
             statement1.setInt(3, campaignId);
-            statement1.setString(4, question.getGivenAnswer()[0]);
+            statement1.setString(4, question.getGivenAnswers()[0]);
 
             statement.executeUpdate();
             statement1.executeUpdate();
@@ -184,7 +184,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
                                 questionDTOBuilder.question = resultSet.getString("QUESTION");
                                 questionDTOBuilder.questionType = resultSet.getString("TYPE");
-                                questionDTOBuilder.attachment = resultSet.getString("attachment");
+                                questionDTOBuilder.attachment = resultSet.getString("ATTACHMENT");
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
@@ -302,29 +302,71 @@ public class QuestionDAOImpl implements QuestionDAO {
         }
     }
 
+    /**
+     * <p>Sets the question with corresponding values in the database.
+     *
+     * @param question question to be inserted.
+     * @throws SQLException if connection fails, and when data cannot be added to the database.
+     * @rollback When an exception occurs all the data that was previously added in this scope will be reverted.
+     */
     @Override
     public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
-        final String delimiter = "&";
-        List<String> possibleAnswersString = makeString(question.getPossibleAnswers(), delimiter);
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("CALL SP_MultipleChoiceQuestion(?, ?, ?, ?, ?, ?, ?, ?)");
-            statement.setString(1, "JAVA");
-            statement.setString(2, question.getQuestion());
-            statement.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
-            statement.setString(4, question.getAttachment());
-            statement.setString(5, possibleAnswersString.get(0));
-            statement.setString(6, possibleAnswersString.get(1));
-            statement.setInt(7, question.getPossibleAnswers().size());
-            statement.setString(8, delimiter);
-            statement.executeUpdate();
+            insertQuestion(connection, question);
         } catch (SQLException e) {
             throw new SQLException(e);
         }
     }
 
-    private List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
+    private void insertQuestion(Connection connection, QuestionDTO question) throws SQLException {
+        try {
+            connection.setAutoCommit(false);
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO question(category_name, question, question_type, attachment) values (?, ?, ?, ?);");
+            PreparedStatement statementMultiple = connection.prepareStatement("INSERT INTO multiple_choice_question(QUESTIONID, ANSWER_OPTIONS, IS_CORRECT) values (?, ?, ?);");
+
+            statement.setString(1, "JAVA");
+            statement.setString(2, question.getQuestion());
+            statement.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
+            statement.setString(4, question.getAttachment());
+
+            statement.executeUpdate();
+
+            int questionID = getQuestionID(connection, question.getQuestion());
+
+            statementMultiple.setInt(1, questionID);
+
+            for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
+                statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
+                statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
+                statementMultiple.executeUpdate();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw new SQLException(e);
+        }
+    }
+
+    private int getQuestionID(Connection connection, String question) throws SQLException {
+        Optional<Integer> questionID = Optional.empty();
+        PreparedStatement statement = connection.prepareStatement("SELECT question.QUESTIONID FROM question WHERE QUESTION = ?");
+        statement.setString(1, question);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            questionID = Optional.of(resultSet.getInt("QUESTIONID"));
+        }
+        return questionID.orElseThrow(() -> new NoQuestionFoundException(
+                "QuestionID not found",
+                format("QuestionID from question %s has not been found", question),
+                "The question is most likely not valid, try a different question"
+        ));
+    }
+
+    @Deprecated
+    public List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
         List<String> possibleAnswersString = new ArrayList<>();
         String possibleAnswerString = delimiter;
         String isCorrectString = delimiter;
@@ -375,6 +417,52 @@ public class QuestionDAOImpl implements QuestionDAO {
             amounts.add(new AmountOfQuestionTypeDTO("total", total));
 
             return new AmountOfQuestionTypeCollection(amounts);
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    /**
+     * @return true when there are multiple correct answers
+     */
+    @Override
+    public boolean getAmountOfRightAnswersPerQuestion(int questionID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(IS_CORRECT) as CORRECT FROM multiple_choice_question WHERE IS_CORRECT = 1 AND QUESTIONID = ?");
+            statement.setInt(1, questionID);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("CORRECT") > 1;
+        }
+    }
+
+    @Override
+    public synchronized void persistProgramQuestion(QuestionDTO question) throws SQLException {
+        final String JAVA = "JAVA";
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement insertQuestion = connection.prepareStatement("INSERT INTO question (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
+            insertQuestion.setString(1, JAVA);
+            insertQuestion.setString(2, question.getQuestion());
+            insertQuestion.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
+            insertQuestion.setString(4, question.getAttachment());
+            insertQuestion.executeUpdate();
+
+
+            PreparedStatement selectStatement = connection.prepareStatement("SELECT QUESTIONID FROM question ORDER BY QUESTIONID DESC");
+            ResultSet resultSet = selectStatement.executeQuery();
+            resultSet.next();
+            int questionID = resultSet.getInt("QUESTIONID");
+
+
+            PreparedStatement insertProgramming = connection.prepareStatement("INSERT INTO programming_question (QUESTIONID, STARTCODE, TESTCODE) VALUES (?, ?, ?)");
+            insertProgramming.setInt(1, questionID);
+            insertProgramming.setString(2, question.getStartCode());
+            insertProgramming.setString(3, question.getUnitTest());
+            insertProgramming.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
         }

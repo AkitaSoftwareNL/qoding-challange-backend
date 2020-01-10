@@ -52,7 +52,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler({
-            CouldNotAddParticipantException.class
+            CouldNotAddParticipantException.class,
+            CannotPersistQuestionException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionBadRequest(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =

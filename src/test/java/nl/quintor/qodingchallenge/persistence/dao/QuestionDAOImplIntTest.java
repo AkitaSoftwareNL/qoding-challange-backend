@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuestionDAOImplIntTest {
@@ -105,13 +104,12 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void persistMultipleQuestionThrowsSQLException() {
-        // Mock
+    void makeStringReturnsOneString() throws SQLException {
+        List<PossibleAnswerDTO> possibleAnswerDTOS = getMultipleQuestion().getPossibleAnswers();
+        String delimeter = ",";
 
-        // Test
-
-        // Verify
-        assertThrows(SQLException.class, () -> sut.persistMultipleQuestion(getMultipleQuestion()));
+        var result = sut.makeString(possibleAnswerDTOS, delimeter);
+        assertFalse(result.contains(","));
     }
 
     @Test
@@ -161,7 +159,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void removeQuestionRemovesQuesion() throws SQLException {
+    void removeQuestionRemovesQuestion() throws SQLException {
         // Mock
 
         // Test
@@ -205,6 +203,43 @@ class QuestionDAOImplIntTest {
         assertEquals(expectedAmount, actualAmount.collection);
     }
 
+    @Test
+    void getAmountOfRightAnswersPerQuestionReturnsFalseWhenOneAnswerIsCorrect() throws SQLException {
+        final boolean expectedResult = false;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(questionId));
+    }
+
+    @Test
+    void getAmountOfRightAnswersPerQuestionReturnsTrueWhenMultipleAnswerIsCorrect() throws SQLException {
+        final int testQuestionID = 15;
+        final boolean expectedResult = true;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(testQuestionID));
+    }
+
+    @Test
+    void persistProgramQuestionPersistsProgramQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistProgramQuestion(getQuestion());
+        // Verify
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
+    }
+
+    @Test
+    void persistMultipleQuestionPersistMultipleChoiceQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistMultipleQuestion(getMultipleQuestion());
+        // Verify
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
+    }
+
+
+
     private QuestionDTO getQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {
             questionDTOBuilder.questionID = 1;
@@ -212,7 +247,7 @@ class QuestionDAOImplIntTest {
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "open";
             questionDTOBuilder.stateID = questionState;
-            questionDTOBuilder.givenAnswer = new String[]{"some answer"};
+            questionDTOBuilder.givenAnswers = new String[]{"some answer"};
         }).build();
     }
 

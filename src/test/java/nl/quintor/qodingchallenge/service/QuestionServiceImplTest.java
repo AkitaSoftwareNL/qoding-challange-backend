@@ -18,7 +18,6 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceImplTest {
 
-    private final String campaign = "HC2 Holdings, Inc";
     private final int campaignID = 1;
     private final String category = "JAVA";
     private final int questionId = 1;
@@ -254,7 +253,7 @@ class QuestionServiceImplTest {
         questionList.add(getMultipleQuestion());
         questionList.add(getOpenQuestion());
         QuestionDTO question = getMultipleQuestion();
-        question.setGivenAnswer(new String[]{"WrongAnswer"});
+        question.setGivenAnswers(new String[]{"WrongAnswer"});
         questionList.add(question);
         return questionList;
     }
@@ -280,7 +279,7 @@ class QuestionServiceImplTest {
             questionDTOBuilder.question = "Some question";
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "multiple";
-            questionDTOBuilder.givenAnswer = new String[]{""};
+            questionDTOBuilder.givenAnswers = new String[]{""};
             questionDTOBuilder.stateID = 2;
         }).build();
     }
@@ -299,7 +298,7 @@ class QuestionServiceImplTest {
                     questionDTOBuilder.question = "";
                     questionDTOBuilder.categoryType = category;
                     questionDTOBuilder.questionType = "multiple";
-                    questionDTOBuilder.givenAnswer = new String[]{"no"};
+            questionDTOBuilder.givenAnswers = new String[]{"no"};
                     questionDTOBuilder.stateID = pendingState;
                 }
         ).build();

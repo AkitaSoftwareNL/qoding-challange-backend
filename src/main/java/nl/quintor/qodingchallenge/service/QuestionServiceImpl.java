@@ -68,6 +68,9 @@ public class QuestionServiceImpl implements QuestionService {
                                     questionDTO.getQuestionID()
                             )
                     );
+            questionDTO.setHasMultipleAnswers(
+                    questionDAO.getAmountOfRightAnswersPerQuestion(questionDTO.getQuestionID())
+            );
         }
         return new QuestionCollection("1", campaignID, campaignDAO.getCampaignName(campaignID), questions);
     }

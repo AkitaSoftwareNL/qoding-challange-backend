@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.dto;
 
+import nl.quintor.qodingchallenge.util.HashMapUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,22 +86,33 @@ public class AnswerCollection {
         return this;
     }
 
-    public void filter() {
+    /**
+     * <p>Filters the answers member variable.
+     * Answers may contain duplicate questions with different answers.
+     * This algorithm filters all the duplicate questions from the list and adds the answers to one String.
+     *
+     * @return list with distinct question and all answers for that question combined in same order as received
+     */
+    public List<AnswerDTO> filter() {
         HashMap<String, String> map = new HashMap<>();
         answers.forEach(answerDTO -> {
-                    if (!map.containsValue(answerDTO.getQuestion())) {
+                    String currentQuestion = answerDTO.getQuestion();
+                    if (!map.containsKey(currentQuestion)) {
                         map.put(answerDTO.getQuestion(), answerDTO.getGivenAnswer());
                     } else {
-                        String oldValue = map.get(answerDTO.getQuestion());
-                        map.replace(answerDTO.getQuestion(), oldValue, oldValue + ", " + answerDTO.getGivenAnswer());
+                        String oldValue = map.get(currentQuestion);
+                        String newValue = oldValue + ", " + answerDTO.getGivenAnswer();
+                        map.replace(currentQuestion, oldValue, newValue);
                     }
                 }
         );
         answers = answers.stream()
-                .filter(distinctByKey(AnswerDTO::getQuestion))
+                .filter(HashMapUtils.distinctByKey(AnswerDTO::getQuestion))
+                .peek(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())))
                 .collect(Collectors.toList());
 
         answers.forEach(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())));
+        return answers;
     }
 
     @Override

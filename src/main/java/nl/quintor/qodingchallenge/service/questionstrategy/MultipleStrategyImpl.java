@@ -22,23 +22,32 @@ public class MultipleStrategyImpl extends QuestionStrategy {
     @Override
     public void validateAnswer(QuestionDTO question) throws SQLException {
         ArrayList<PossibleAnswerDTO> correctAnswers = questionDAO.getCorrectAnswers(question.getQuestionID());
-        String[] givenAnswers = question.getGivenAnswer();
+        String[] givenAnswers = question.getGivenAnswers();
 
         if (correctAnswers.size() != givenAnswers.length) {
             question.setStateID(QuestionState.INCORRECT.getState());
             return;
         }
 
-        loopBunny:
         for (String givenAnswer : givenAnswers) {
-            for (PossibleAnswerDTO correctAnswer : correctAnswers) {
-                if (correctAnswer.getPossibleAnswer().equals(givenAnswer)) {
-                    continue loopBunny;
-                }
+            if (question.getStateID() != QuestionState.INCORRECT.getState()) {
+                checkAnswers(givenAnswer, correctAnswers, question);
             }
-            question.setStateID(QuestionState.INCORRECT.getState());
-            return;
+            break;
         }
-        question.setStateID(QuestionState.CORRECT.getState());
+
+        if (question.getStateID() != QuestionState.INCORRECT.getState()
+                || question.getStateID() != QuestionState.PENDING.getState()) {
+            question.setStateID(QuestionState.CORRECT.getState());
+        }
+    }
+
+    private void checkAnswers(String givenAnswer, ArrayList<PossibleAnswerDTO> correctAnswers, QuestionDTO question) {
+        for (PossibleAnswerDTO correctAnswer : correctAnswers) {
+            if (correctAnswer.getPossibleAnswer().equals(givenAnswer)) {
+                return;
+            }
+        }
+        question.setStateID(QuestionState.INCORRECT.getState());
     }
 }
