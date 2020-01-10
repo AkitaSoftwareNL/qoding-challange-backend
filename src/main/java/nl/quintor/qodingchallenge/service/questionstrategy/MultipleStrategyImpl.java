@@ -33,7 +33,6 @@ public class MultipleStrategyImpl extends QuestionStrategy {
             if (question.getStateID() != QuestionState.INCORRECT.getState()) {
                 checkAnswers(givenAnswer, correctAnswers, question);
             }
-            break;
         }
 
         if (question.getStateID() != QuestionState.INCORRECT.getState()
