@@ -1,5 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeDTO;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
@@ -16,7 +19,7 @@ import static org.junit.Assert.*;
 
 class CampaignDAOImplIntTest {
 
-    private final int amountOfCampaigns = 3;
+    private final int amountOfCampaigns = 2;
     private final int campaignID = 1;
 
     private CampaignDAO sut;
@@ -28,7 +31,9 @@ class CampaignDAOImplIntTest {
                 Connection connection = getConnection()
         ) {
 
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testCampaignDDL.sql");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("DDL.sql");
+            RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
+            inputStream = getClass().getClassLoader().getResourceAsStream("DLL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,9 +58,15 @@ class CampaignDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 3));
+        temp.add(new AmountOfQuestionTypeDTO("multiple", 3));
+        temp.add(new AmountOfQuestionTypeDTO("program", 3));
+        temp.add(new AmountOfQuestionTypeDTO("total", 9));
+
         var actualResult = sut.getAmountOfQuestions(campaignID);
 
-        assertEquals(1, actualResult);
+        assertEquals(new AmountOfQuestionTypeCollection(temp), actualResult);
     }
 
     @Test
@@ -96,6 +107,11 @@ class CampaignDAOImplIntTest {
 
 
     private CampaignDTO getCampaign() {
-        return new CampaignDTO(1, "JFALL - 2019", "employee", "JAVA", 3, "06-12-2019", 1, null);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        temp.add(new AmountOfQuestionTypeDTO("multiple", 1));
+        temp.add(new AmountOfQuestionTypeDTO("program", 1));
+        temp.add(new AmountOfQuestionTypeDTO("total", 3));
+        return new CampaignDTO(4, "JFALL - 2019", "employee", "JAVA", new AmountOfQuestionTypeCollection(temp), "06-12-2019", 1, null);
     }
 }

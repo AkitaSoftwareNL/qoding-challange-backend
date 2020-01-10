@@ -4,7 +4,11 @@ import nl.quintor.qodingchallenge.util.HashMapUtils;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class AnswerCollection {
@@ -26,6 +30,11 @@ public class AnswerCollection {
         this.campaignName = campaignName;
         this.campaignID = campaignID;
         this.answers = answers;
+    }
+
+    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     public String getFirstname() {
@@ -102,6 +111,7 @@ public class AnswerCollection {
                 .peek(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())))
                 .collect(Collectors.toList());
 
+        answers.forEach(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())));
         return answers;
     }
 

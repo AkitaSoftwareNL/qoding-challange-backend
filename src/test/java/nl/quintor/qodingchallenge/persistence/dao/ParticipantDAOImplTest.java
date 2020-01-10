@@ -2,7 +2,6 @@ package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
-import nl.quintor.qodingchallenge.dto.RankedParticipantCollection;
 import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +35,9 @@ class ParticipantDAOImplTest {
         try (
                 Connection connection = getConnection()
         ) {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testParticipantDDL.sql");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("DDL.sql");
+            RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
+            inputStream = getClass().getClassLoader().getResourceAsStream("DLL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,7 +47,7 @@ class ParticipantDAOImplTest {
 
     @Test
     void getRankedParticipantsReturnsListWithParticipants() throws SQLException {
-        int sizeOfParticipants = 4;
+        int sizeOfParticipants = 8;
 
         when(participants.size()).thenReturn(sizeOfParticipants);
 
@@ -60,23 +61,22 @@ class ParticipantDAOImplTest {
 
     @Test
     void getRankedParticipantReturnsOrderedParticipantList() throws SQLException {
-        final long[] min = {0};
-        getRankedParticipantCollection().getParticipants().iterator().forEachRemaining(participantDTO -> {
-            if (min[0] == 0) min[0] = participantDTO.getTimeInMillis();
-            if (min[0] > participantDTO.getTimeInMillis()) {
-                min[0] = participantDTO.getTimeInMillis();
-            }
-            try {
-                assertEquals(min[0], sut.getRankedParticipantsPerCampaign(campaignID).get(0).getTimeInMillis());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+        long previousTime = 0;
+        long previousCorrect = Long.MAX_VALUE;
+        for (ParticipantDTO participant : sut.getRankedParticipantsPerCampaign(campaignID)) {
+            long currentTime = participant.getTimeInMillis();
+            long currentCorrect = participant.getAmountOfRightAnsweredQuestions();
+
+            assertTrue(previousCorrect > currentCorrect || previousTime < currentTime);
+
+            previousTime = currentTime;
+            previousCorrect = currentCorrect;
+        }
     }
 
     @Test
     void getFirstAndLastNameReturnsAnAnswerCollectionWithoutAnswers() throws SQLException {
-        assertEquals(new AnswerCollection("Gray", null, "Snare", null, 0, null), sut.getFirstAndLastname("1"));
+        assertEquals(new AnswerCollection("Gray", null, "Snare", null, 0, null), sut.getFirstAndLastname("8063be67-7fec-47c4-a9ab-e3d03a9968b3"));
     }
 
     @Test
@@ -97,7 +97,7 @@ class ParticipantDAOImplTest {
 
     @Test
     void addParticipantAddsAnParticipant() throws SQLException {
-        final int amountBeforeInsert = 4;
+        final int amountBeforeInsert = 8;
 
         sut.addParticipant(getParticipantDTO(), campaignID);
 
@@ -124,7 +124,6 @@ class ParticipantDAOImplTest {
         ).build();
     }
 
-
     private ParticipantDTO getParticipantDTO() throws SQLException {
         return new ParticipantDTOBuilder().with(participantDTOBuilder -> {
                     participantDTOBuilder.firstname = "name";
@@ -137,17 +136,12 @@ class ParticipantDAOImplTest {
         ).build();
     }
 
-    private RankedParticipantCollection getRankedParticipantCollection() throws SQLException {
-        return new RankedParticipantCollection("JFALL", sut.getRankedParticipantsPerCampaign(campaignID));
-    }
-
     @Test
     void addTimeToParticipantAddsTimeParticipantToCampaign() throws SQLException {
-        final String participantWithoutEndTime = "2";
+        final String participantWithoutEndTime = "00a94bb8-d00c-4244-bdf5-2051a18af5b3";
         sut.addTimeToParticipant(participantWithoutEndTime);
         final List<ParticipantDTO> participants = sut.getRankedParticipantsPerCampaign(1);
         final Optional<ParticipantDTO> testValue = participants.stream().filter(participantDTO -> participantDTO.getParticipantID().equals(participantWithoutEndTime)).findAny();
-
 
         assertTrue(testValue.orElse(new ParticipantDTO()).getTimeInMillis() != 0);
     }

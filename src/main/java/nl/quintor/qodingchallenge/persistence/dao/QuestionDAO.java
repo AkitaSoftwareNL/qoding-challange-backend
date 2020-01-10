@@ -1,16 +1,13 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
-import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface QuestionDAO {
-    List<QuestionDTO> getQuestions(String category, int limit) throws SQLException;
+    List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) throws SQLException;
 
     void setAnswer(QuestionDTO question, int campaignId, String participantID) throws SQLException;
 
@@ -36,7 +33,7 @@ public interface QuestionDAO {
 
     int getQuestionAmountPerCategory(String category) throws SQLException;
 
-    int countQuestions() throws SQLException;
+    AmountOfQuestionTypeCollection countQuestions() throws SQLException;
 
     boolean getAmountOfRightAnswersPerQuestion(int questionID) throws SQLException;
 

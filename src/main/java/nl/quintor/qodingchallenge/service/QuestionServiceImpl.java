@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
 import nl.quintor.qodingchallenge.dto.QuestionCollection;
 import nl.quintor.qodingchallenge.dto.QuestionDTO;
@@ -131,7 +132,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public String countQuestions() throws SQLException {
-        return Integer.toString(questionDAO.countQuestions());
+    public AmountOfQuestionTypeCollection countQuestions() throws SQLException {
+        return questionDAO.countQuestions();
     }
 }

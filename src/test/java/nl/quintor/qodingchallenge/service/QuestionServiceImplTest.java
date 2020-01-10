@@ -1,9 +1,6 @@
 package nl.quintor.qodingchallenge.service;
 
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
-import nl.quintor.qodingchallenge.dto.QuestionCollection;
-import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.dao.*;
 import nl.quintor.qodingchallenge.service.exception.EmptyQuestionException;
@@ -49,8 +46,10 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsCallsGetPossibleAnswers() throws SQLException {
         // Mock
-        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(getQuestionlist().size());
-        when(questionDAOMock.getQuestions(anyString(), anyInt())).thenReturn(getQuestionlist());
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(new AmountOfQuestionTypeCollection(temp));
+        when(questionDAOMock.getQuestions(anyString(), any())).thenReturn(getQuestionlist());
         when(questionDAOMock.getCorrectAnswers(questionId)).thenReturn(getPossibleAnswers());
         // Test
         sut.getQuestions(category, campaignID);
@@ -60,12 +59,14 @@ class QuestionServiceImplTest {
 
     @Test
     void getQuestionsCallsGetQuestions() throws SQLException {
-        final int questionLimit = 3;
-        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(questionLimit);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+
+        when(campaignDAOMock.getAmountOfQuestions(anyInt())).thenReturn(new AmountOfQuestionTypeCollection(temp));
 
         sut.getQuestions(category, campaignID);
 
-        verify(questionDAOMock).getQuestions(category, questionLimit);
+        verify(questionDAOMock).getQuestions(category, new AmountOfQuestionTypeCollection(temp));
     }
 
     @Test
@@ -108,12 +109,12 @@ class QuestionServiceImplTest {
     @Test
     void countQuestionsReturnRightAmountOfQuestions() throws SQLException {
         // Mock
-        final int expectedAmountOfQuestions = 22;
+        var expectedAmountOfQuestions = new AmountOfQuestionTypeCollection(new ArrayList<>());
         when(questionDAOMock.countQuestions()).thenReturn(expectedAmountOfQuestions);
         // Test
         var testValue = sut.countQuestions();
         // Verify
-        assertEquals(Integer.toString(expectedAmountOfQuestions), testValue);
+        assertEquals(expectedAmountOfQuestions, testValue);
     }
 
     @Test
@@ -129,7 +130,9 @@ class QuestionServiceImplTest {
     @Test
     void getQuestionsGetAllPossibleAnswersByQuestion() throws SQLException {
         List<QuestionDTO> questionDTOList = getQuestionlist();
-        when(campaignDAOMock.getAmountOfQuestions(campaignID)).thenReturn(1);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        when(campaignDAOMock.getAmountOfQuestions(campaignID)).thenReturn(new AmountOfQuestionTypeCollection(temp));
         when(questionDAOMock.getQuestions(category, campaignDAOMock.getAmountOfQuestions(campaignID))).thenReturn(questionDTOList);
         when(questionDAOMock.getPossibleAnswers(questionId)).thenReturn(getPossibleAnswers());
 

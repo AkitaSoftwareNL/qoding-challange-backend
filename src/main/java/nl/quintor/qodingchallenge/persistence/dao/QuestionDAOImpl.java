@@ -1,12 +1,10 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
-import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import nl.quintor.qodingchallenge.service.QuestionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,17 +25,28 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionDAOImpl.class);
 
-
     @Override
-    public List<QuestionDTO> getQuestions(String category, int limit) throws SQLException {
-        List<QuestionDTO> questions;
+    public List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) throws SQLException {
+        List<QuestionDTO> questions = new ArrayList<>();
+        System.out.println(limit);
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
-            statement.setString(1, category);
-            statement.setInt(2, limit);
-            questions = createQuestionDTO(statement);
+            for (AmountOfQuestionTypeDTO questionType : limit.collection) {
+                PreparedStatement statement;
+                int total = questionType.amount - (limit.getTotal() - limit.getAmount("total"));
+                if (questionType.type.equalsIgnoreCase("total") && total > 0) {
+                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+                } else {
+                    statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND TYPE = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+                    statement.setInt(2, total);
+                    statement.setString(2, questionType.type);
+                    statement.setInt(3, questionType.amount);
+                }
+                statement.setString(1, category);
+                questions.addAll(createQuestionDTO(statement));
+
+            }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -69,8 +78,8 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO given_answer_state VALUES (?, ?, ? ,?)");
-            PreparedStatement statement1 = connection.prepareStatement("INSERT INTO given_answer (questionID, PARTICIPANTID, campaign_ID, given_answer) VALUES (?, ?, ?, ? )");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO GIVEN_ANSWER_STATE VALUES (?, ?, ? ,?)");
+            PreparedStatement statement1 = connection.prepareStatement("INSERT INTO GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, GIVEN_ANSWER) VALUES (?, ?, ?, ? )");
 
             statement.setInt(1, question.getQuestionID());
             statement.setString(2, participantID);
@@ -95,7 +104,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS, IS_CORRECT FROM multiple_choice_question WHERE QUESTIONID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS, IS_CORRECT FROM MULTIPLE_CHOICE_QUESTION WHERE QUESTIONID = ?");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -125,10 +134,10 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO question (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO QUESTION (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
             statement.setString(1, JAVA);
             statement.setString(2, question.getQuestion());
-            statement.setString(3, question.getQuestionType().toLowerCase());
+            statement.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
             statement.setString(4, question.getAttachment());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -142,7 +151,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT FROM question WHERE STATE = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE on QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE STATE = 1");
             questions = createQuestionDTO(statement);
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -155,7 +164,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE question SET STATE = 0 WHERE QUESTIONID = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE QUESTION SET STATE = 0 WHERE QUESTIONID = ?");
             statement.setInt(1, questionID);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -174,13 +183,13 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 questionDTOBuilder.questionID = id;
                                 questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
                                 questionDTOBuilder.question = resultSet.getString("QUESTION");
-                                questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
-                        questionDTOBuilder.attachment = resultSet.getString("ATTACHMENT");
+                                questionDTOBuilder.questionType = resultSet.getString("TYPE");
+                                questionDTOBuilder.attachment = resultSet.getString("ATTACHMENT");
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
                                     LOGGER.info("No startcode has been found");
-                                    LOGGER.debug(e.getMessage(), e);
+//                                    LOGGER.debug(e.getMessage(), e);
                                     questionDTOBuilder.startCode = "";
                                 }
                             }
@@ -222,7 +231,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM question WHERE QUESTIONID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM QUESTION JOIN QUESTION_TYPE on QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE QUESTIONID = ?");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -231,7 +240,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                             questionDTOBuilder.categoryType = resultSet.getString("CATEGORY_NAME");
                             questionDTOBuilder.question = resultSet.getString("QUESTION");
                             questionDTOBuilder.stateID = resultSet.getInt("STATE");
-                            questionDTOBuilder.questionType = resultSet.getString("QUESTION_TYPE");
+                            questionDTOBuilder.questionType = resultSet.getString("TYPE");
                             questionDTOBuilder.attachment = resultSet.getString("ATTACHMENT");
                         }
                 ).build();
@@ -253,7 +262,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("select QUESTIONID, STARTCODE, TESTCODE from PROGRAMMING_QUESTION WHERE QUESTIONID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, STARTCODE, TESTCODE FROM PROGRAMMING_QUESTION WHERE QUESTIONID = ?");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -280,9 +289,9 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE given_answer_state\n" +
+            PreparedStatement statement = connection.prepareStatement("UPDATE GIVEN_ANSWER_STATE\n" +
                     "SET STATEID = ? \n" +
-                    "WHERE QUESTIONID = ?  AND campaign_ID = ? AND PARTICIPANTID = ?");
+                    "WHERE QUESTIONID = ?  AND CAMPAIGN_ID = ? AND PARTICIPANTID = ?");
             statement.setInt(1, givenAnswerDTO.getStateId());
             statement.setInt(2, givenAnswerDTO.getQuestionId());
             statement.setInt(3, givenAnswerDTO.getCampaignId());
@@ -320,7 +329,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             statement.setString(1, "JAVA");
             statement.setString(2, question.getQuestion());
-            statement.setString(3, question.getQuestionType().toLowerCase());
+            statement.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
             statement.setString(4, question.getAttachment());
 
             statement.executeUpdate();
@@ -378,7 +387,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM question WHERE CATEGORY_NAME = ? AND STATE = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM QUESTION WHERE CATEGORY_NAME = ? AND STATE = 1");
             statement.setString(1, category);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -389,14 +398,25 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public int countQuestions() throws SQLException {
+    public AmountOfQuestionTypeCollection countQuestions() throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT FROM question WHERE STATE = 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS AMOUNT , QUESTION_TYPE.TYPE AS TYPE FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE STATE = 1 GROUP BY QUESTION.QUESTION_TYPE;");
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt("AMOUNT");
+            var amounts = new ArrayList<AmountOfQuestionTypeDTO>();
+            while (resultSet.next()) {
+                amounts.add(new AmountOfQuestionTypeDTO(resultSet));
+            }
+
+            int total = 0;
+            for (var amountType : amounts) {
+                total += amountType.amount;
+            }
+
+            amounts.add(new AmountOfQuestionTypeDTO("total", total));
+
+            return new AmountOfQuestionTypeCollection(amounts);
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -427,7 +447,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             PreparedStatement insertQuestion = connection.prepareStatement("INSERT INTO question (CATEGORY_NAME, QUESTION, QUESTION_TYPE, ATTACHMENT) VALUES (?, ?, ?, ?)");
             insertQuestion.setString(1, JAVA);
             insertQuestion.setString(2, question.getQuestion());
-            insertQuestion.setString(3, question.getQuestionType().toLowerCase());
+            insertQuestion.setInt(3, QuestionType.getEnumAsInt(question.getQuestionType()));
             insertQuestion.setString(4, question.getAttachment());
             insertQuestion.executeUpdate();
 

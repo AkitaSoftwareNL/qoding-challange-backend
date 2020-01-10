@@ -113,7 +113,9 @@ class ReportServiceImplTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(campaignId, campaignName, "me", "JAVA", 3, "12/2/2019", 1, null);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        return new CampaignDTO(campaignId, campaignName, "me", "JAVA", new AmountOfQuestionTypeCollection(temp), "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {

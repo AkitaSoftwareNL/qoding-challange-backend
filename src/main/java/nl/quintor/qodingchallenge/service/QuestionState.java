@@ -9,7 +9,7 @@ public enum QuestionState {
     INCORRECT(3),
     CORRECT(2);
 
-    public final int state;
+    private final int state;
 
     QuestionState(int state) {
         this.state = state;
