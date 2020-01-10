@@ -28,14 +28,13 @@ public class QuestionDAOImpl implements QuestionDAO {
     @Override
     public List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) throws SQLException {
         List<QuestionDTO> questions = new ArrayList<>();
-        System.out.println(limit);
         try (
                 Connection connection = getConnection()
         ) {
             for (AmountOfQuestionTypeDTO questionType : limit.collection) {
                 PreparedStatement statement;
-                int total = questionType.amount - (limit.getTotal() - limit.getAmount("total"));
-                if (questionType.type.equalsIgnoreCase("total") && total > 0) {
+                int total = questionType.amount - (limit.getTotal() - limit.getAmount(QuestionType.TOTAL.toString()));
+                if (questionType.type.equalsIgnoreCase(QuestionType.TOTAL.toString()) && total > 0) {
                     statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
                 } else {
                     statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND TYPE = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
@@ -189,7 +188,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
                                     LOGGER.info("No startcode has been found");
-//                                    LOGGER.debug(e.getMessage(), e);
+                                    LOGGER.debug(e.getMessage(), e);
                                     questionDTOBuilder.startCode = "";
                                 }
                             }
@@ -365,6 +364,14 @@ public class QuestionDAOImpl implements QuestionDAO {
         ));
     }
 
+    /**
+     * Makes one String of all possible answers.
+     *
+     * @param possibleAnswers List that contains all possible answers.
+     * @param delimiter       The separator for the String.
+     * @return One String with all possible answers.
+     * @deprecated since 0.1.
+     */
     @Deprecated
     public List<String> makeString(List<PossibleAnswerDTO> possibleAnswers, String delimiter) {
         List<String> possibleAnswersString = new ArrayList<>();
@@ -414,7 +421,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 total += amountType.amount;
             }
 
-            amounts.add(new AmountOfQuestionTypeDTO("total", total));
+            amounts.add(new AmountOfQuestionTypeDTO(QuestionType.TOTAL.toString(), total));
 
             return new AmountOfQuestionTypeCollection(amounts);
         } catch (SQLException e) {

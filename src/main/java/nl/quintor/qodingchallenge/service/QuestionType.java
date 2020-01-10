@@ -34,7 +34,7 @@ public enum QuestionType {
     /**
      * @param type String of the enum
      * @return the enum its string value to lower case
-     * @Deprecated since 0.1
+     * @deprecated since 0.1
      */
     @Deprecated
     public static String getEnumAsString(String type) {
