@@ -28,14 +28,16 @@ public class QuestionDAOImpl implements QuestionDAO {
     @Override
     public List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) throws SQLException {
         List<QuestionDTO> questions = new ArrayList<>();
+        System.out.println(limit);
         try (
                 Connection connection = getConnection()
         ) {
             for (AmountOfQuestionTypeDTO questionType : limit.collection) {
                 PreparedStatement statement;
-                if (questionType.type.equalsIgnoreCase("total")) {
+                int total = questionType.amount - (limit.getAmount("open") + limit.getAmount("multiple") + limit.getAmount("program"));
+                if (questionType.type.equalsIgnoreCase("total") && total > 0) {
                     statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM question join question_type on question_type.id = question.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
-                    statement.setInt(2, questionType.amount - questions.size());
+                    statement.setInt(2, total);
                 } else {
                     statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM question join question_type on question_type.id = question.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND Type = ? AND STATE != 0 ORDER BY RAND() limit ?;");
                     statement.setString(2, questionType.type);
@@ -43,7 +45,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 }
                 statement.setString(1, category);
                 questions.addAll(createQuestionDTO(statement));
-                System.out.println(limit);
+
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -187,7 +189,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
                                     LOGGER.info("No startcode has been found");
-                                    LOGGER.debug(e.getMessage(), e);
+//                                    LOGGER.debug(e.getMessage(), e);
                                     questionDTOBuilder.startCode = "";
                                 }
                             }

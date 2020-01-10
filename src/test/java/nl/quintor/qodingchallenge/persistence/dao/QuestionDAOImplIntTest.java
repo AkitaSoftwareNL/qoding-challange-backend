@@ -50,10 +50,10 @@ class QuestionDAOImplIntTest {
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
         var temp = new ArrayList<AmountOfQuestionTypeDTO>();
-        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        temp.add(new AmountOfQuestionTypeDTO("open", 2));
         List<QuestionDTO> questionDTOList = sut.getQuestions(category, new AmountOfQuestionTypeCollection(temp));
 
-        assertEquals(1, questionDTOList.size());
+        assertEquals(2, questionDTOList.size());
     }
 
     @Test
@@ -193,10 +193,10 @@ class QuestionDAOImplIntTest {
     @Test
     void countQuestionsGetsRightAmountOfQuestions() throws SQLException {
         var expectedAmount = new ArrayList<AmountOfQuestionTypeDTO>();
-        expectedAmount.add(new AmountOfQuestionTypeDTO("open",8));
-        expectedAmount.add(new AmountOfQuestionTypeDTO("multiple",5));
-        expectedAmount.add(new AmountOfQuestionTypeDTO("program",2));
-        expectedAmount.add(new AmountOfQuestionTypeDTO("total",15));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("open", 8));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("multiple", 5));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("program", 2));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("total", 15));
         // Mock
 
         // Test
