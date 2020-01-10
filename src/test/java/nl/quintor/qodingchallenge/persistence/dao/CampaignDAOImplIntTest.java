@@ -59,7 +59,10 @@ class CampaignDAOImplIntTest {
     @Test
     void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
         var temp = new ArrayList<AmountOfQuestionTypeDTO>();
-        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        temp.add(new AmountOfQuestionTypeDTO("open", 3));
+        temp.add(new AmountOfQuestionTypeDTO("multiple", 3));
+        temp.add(new AmountOfQuestionTypeDTO("program", 3));
+        temp.add(new AmountOfQuestionTypeDTO("total", 9));
 
         var actualResult = sut.getAmountOfQuestions(campaignID);
 
