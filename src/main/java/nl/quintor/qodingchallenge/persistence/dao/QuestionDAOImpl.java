@@ -335,9 +335,8 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             int questionID = getQuestionID(connection, question.getQuestion());
 
-            statementMultiple.setInt(1, questionID);
-
             for (PossibleAnswerDTO possibleAnswer : question.getPossibleAnswers()) {
+                statementMultiple.setInt(1, questionID);
                 statementMultiple.setString(2, possibleAnswer.getPossibleAnswer());
                 statementMultiple.setInt(3, possibleAnswer.getIsCorrect());
                 statementMultiple.executeUpdate();
