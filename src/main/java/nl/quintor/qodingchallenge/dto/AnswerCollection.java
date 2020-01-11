@@ -91,9 +91,8 @@ public class AnswerCollection {
      * Answers may contain duplicate questions with different answers.
      * This algorithm filters all the duplicate questions from the list and adds the answers to one String.
      *
-     * @return list with distinct question and all answers for that question combined in same order as received
      */
-    public List<AnswerDTO> filter() {
+    public void filter() {
         HashMap<String, String> map = new HashMap<>();
         answers.forEach(answerDTO -> {
                     String currentQuestion = answerDTO.getQuestion();
@@ -110,9 +109,6 @@ public class AnswerCollection {
                 .filter(HashMapUtils.distinctByKey(AnswerDTO::getQuestion))
                 .peek(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())))
                 .collect(Collectors.toList());
-
-        answers.forEach(answerDTO -> answerDTO.setGivenAnswer(map.get(answerDTO.getQuestion())));
-        return answers;
     }
 
     @Override
