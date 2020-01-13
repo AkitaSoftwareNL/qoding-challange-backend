@@ -92,7 +92,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 statement1.setInt(1, questionID);
                 statement1.setString(2, participantID);
                 statement1.setInt(3, campaignId);
-                statement.setString(4, givenAnswer);
+                statement1.setString(4, givenAnswer);
                 statement1.executeUpdate();
             }
         } catch (SQLException e) {
