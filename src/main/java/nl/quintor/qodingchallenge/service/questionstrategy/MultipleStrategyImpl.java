@@ -35,8 +35,7 @@ public class MultipleStrategyImpl extends QuestionStrategy {
             }
         }
 
-        if (question.getStateID() != QuestionState.INCORRECT.getState()
-                || question.getStateID() != QuestionState.PENDING.getState()) {
+        if (question.getStateID() == QuestionState.PENDING.getState()) {
             question.setStateID(QuestionState.CORRECT.getState());
         }
     }
