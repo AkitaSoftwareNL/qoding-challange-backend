@@ -103,7 +103,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS, IS_CORRECT FROM MULTIPLE_CHOICE_QUESTION WHERE QUESTIONID = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT ANSWER_OPTIONS, IS_CORRECT FROM MULTIPLE_CHOICE_QUESTION WHERE QUESTIONID = ? AND IS_CORRECT = 1");
             statement.setInt(1, questionID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
