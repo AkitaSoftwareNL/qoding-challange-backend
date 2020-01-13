@@ -11,7 +11,12 @@ public class HashMapUtils {
     }
 
     /**
-     * Checks if the key already exists in an HashMap
+     * <p>Checks if the key already exists in an HashMap
+     * For use please stream the HashMap and call the filter method,
+     * inside the filter method you can call this method to find duplicate keys.
+     *
+     * @example HashMap.stream()
+     *                 .filter(HashMapUtils.distinctByKey(Class::Method))
      *
      * @param keyExtractor Object which contains the key
      * @param <T>          Method call to get the key

@@ -4,11 +4,7 @@ import nl.quintor.qodingchallenge.util.HashMapUtils;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class AnswerCollection {
@@ -30,11 +26,6 @@ public class AnswerCollection {
         this.campaignName = campaignName;
         this.campaignID = campaignID;
         this.answers = answers;
-    }
-
-    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     public String getFirstname() {
@@ -87,9 +78,10 @@ public class AnswerCollection {
     }
 
     /**
-     * <p>Filters the answers member variable.
-     * Answers may contain duplicate questions with different answers.
-     * This algorithm filters all the duplicate questions from the list and adds the answers to one String.
+     * <p>Filters the <strong>answers</strong> member variable.
+     * <strong>Answers</strong> may contain duplicate questions with different answers.
+     * This algorithm filters all the duplicate questions from the <strong>answers</strong> list and adds the <strong>answers</strong> to one String,
+     * with a <strong>,</strong> as separator.
      *
      */
     public void filter() {
