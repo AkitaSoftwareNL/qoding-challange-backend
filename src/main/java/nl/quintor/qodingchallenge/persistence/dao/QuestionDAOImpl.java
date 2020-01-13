@@ -36,9 +36,9 @@ public class QuestionDAOImpl implements QuestionDAO {
                 int total = questionType.amount - (limit.getTotal() - limit.getAmount(QuestionType.TOTAL.toString()));
                 if (questionType.type.equalsIgnoreCase(QuestionType.TOTAL.toString()) && total > 0) {
                     statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+                    statement.setInt(2, total);
                 } else {
                     statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND TYPE = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
-                    statement.setInt(2, total);
                     statement.setString(2, questionType.type);
                     statement.setInt(3, questionType.amount);
                 }
