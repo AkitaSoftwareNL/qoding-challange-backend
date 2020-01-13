@@ -1,5 +1,13 @@
 package nl.quintor.qodingchallenge.rest.customexception;
 
+/**
+ * <p>Exception class that is used to send exception information to the front-end.
+ * When this class is inherited and handheld in the {@link nl.quintor.qodingchallenge.rest.exceptionhandler.RestResponseEntityExceptionHandler}
+ * it will be converted to a JSON Object with the following scheme {@link nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema}
+ *
+ * @see nl.quintor.qodingchallenge.rest.exceptionhandler.RestResponseEntityExceptionHandler
+ * @see nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema
+ */
 public class CustomException extends RuntimeException {
 
     private static final String SUPPORT = "https://quintor.nl/";

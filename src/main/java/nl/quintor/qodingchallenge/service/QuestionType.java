@@ -7,6 +7,17 @@ import java.util.List;
 
 import static java.lang.String.format;
 
+/**
+ * <p>The type a question has, corresponding with the values used in the database.<br>
+ * ENUM STATES:
+ * <ul>
+ *     <li>OPEN = 1</li>
+ *     <li>MULTIPLE = 2</li>
+ *     <li>PROGRAM= 3</li>
+ *     <li>TOTAL = 4 <p>total is used to generate random questions with no preferred types</p></li>
+ * </ul>
+ * <strong>When another database is used please check if the states used are still correct</strong>
+ */
 public enum QuestionType {
     OPEN(1),
     MULTIPLE(2),
