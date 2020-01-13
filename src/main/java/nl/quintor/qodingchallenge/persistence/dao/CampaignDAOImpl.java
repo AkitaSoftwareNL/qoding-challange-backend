@@ -65,12 +65,25 @@ public class CampaignDAOImpl implements CampaignDAO {
 
     @Override
     public List<CampaignDTO> getAllCampaigns() throws SQLException {
+        return getAllCampaigns(false);
+    }
+
+    @Override
+    public List<CampaignDTO> getAllCampaigns(boolean all) throws SQLException {
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, TIMESTAMP_CREATED, STATE FROM campaign WHERE STATE != 0");
+                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, TIMESTAMP_CREATED, STATE FROM campaign WHERE STATE != 0"
+            );
+
+            if (all) {
+                statement = connection.prepareStatement(
+                        "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, TIMESTAMP_CREATED, STATE FROM campaign"
+                );
+            }
+
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 var dto = new CampaignDTO(

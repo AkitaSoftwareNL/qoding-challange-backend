@@ -104,7 +104,6 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         return participantID;
     }
 
-
     @Override
     public boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException {
         try (

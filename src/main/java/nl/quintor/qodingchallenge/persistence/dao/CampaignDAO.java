@@ -13,6 +13,8 @@ public interface CampaignDAO {
 
     List<CampaignDTO> getAllCampaigns() throws SQLException;
 
+    List<CampaignDTO> getAllCampaigns(boolean all) throws SQLException;
+
     AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID) throws SQLException;
 
     String getCampaignName(int campaignID) throws SQLException;
