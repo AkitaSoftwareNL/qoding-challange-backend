@@ -68,7 +68,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public ResponseEntity<Object> handleNotFoundStatus(Exception e, WebRequest request) {
         JSONCustomExceptionSchema exceptionResponse =
                 new JSONCustomExceptionSchema(
-                        e.getMessage()
+                        "Oops something went wrong :("
                 );
         logger.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);

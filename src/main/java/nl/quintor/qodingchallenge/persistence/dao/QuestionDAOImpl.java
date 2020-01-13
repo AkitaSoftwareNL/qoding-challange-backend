@@ -121,11 +121,13 @@ public class QuestionDAOImpl implements QuestionDAO {
             throw new SQLException(e);
         }
         if (correctAnswers.isEmpty()) {
-            throw new AnswerNotFoundException(
-                    "No correct answer could be found",
+            RuntimeException runtimeException = new AnswerNotFoundException(
+                    "Oops something went wrong :(",
                     format("For the question with questionID: %d was no correct answer found", questionID),
                     "Please contact support to solve this issue"
             );
+            LOGGER.error(runtimeException.getMessage(), runtimeException);
+            throw runtimeException;
         }
         return correctAnswers;
     }
@@ -248,7 +250,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 ).build();
             } else {
                 throw new NoQuestionFoundException(
-                        "No question has been found",
+                        "No question could be found, please contact support",
                         format("Question with questionID %d was not found", questionID),
                         "Try an different questionID"
                 );
@@ -278,7 +280,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         }
         return codingQuestionDTO.orElseThrow(() -> {
             throw new NoQuestionFoundException(
-                    "No question has been found",
+                    "No question could be found, please contact support",
                     format("Question with questionID %d was not found", id),
                     "Try an different questionID"
             );
@@ -360,7 +362,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             questionID = Optional.of(resultSet.getInt("QUESTIONID"));
         }
         return questionID.orElseThrow(() -> new NoQuestionFoundException(
-                "QuestionID not found",
+                format("QuestionID for question %s could not be found", question),
                 format("QuestionID from question %s has not been found", question),
                 "The question is most likely not valid, try a different question"
         ));

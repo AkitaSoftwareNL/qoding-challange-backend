@@ -55,8 +55,8 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionCollection getQuestions(String category, int campaignID) throws SQLException {
         if (!campaignDAO.campaignExists(campaignID))
             throw new NoCampaignFoundException(
-                    "The campaign you searched for does not exist",
-                    format("Campaign name = %s", campaignID),
+                    "The campaign you tried to enter has already expired or does not exist. If none of these statements are correct please contact support.",
+                    format("Campaign id = %s", campaignID),
                     "Try to use a new campaign name"
             );
         List<QuestionDTO> questions = questionDAO.getQuestions(category, campaignDAO.getAmountOfQuestions(campaignID));
@@ -92,7 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
     public void createQuestion(QuestionDTO question) throws SQLException {
         if (question.getQuestion().isEmpty()) {
             throw new EmptyQuestionException(
-                    "Question can not be empty",
+                    "The question field cannot be empty, please enter a question",
                     "The field question can not be empty",
                     "Please put your question in the field Question"
             );

@@ -43,9 +43,13 @@ public class ProgramStrategyImpl extends QuestionStrategy {
     public void persistQuestion(QuestionDTO question) throws SQLException {
         CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswers()[0], question.getUnitTest());
         boolean result = runUnitTest(codingQuestionDTO);
-        if (result) questionDAO.persistProgramQuestion(question);
-        else
-            throw new CannotPersistQuestionException("Could not persist programming message.", "Could either not compile the tests of the tests failed.", "Alter Unit Tests.");
+        if (result) {
+            questionDAO.persistProgramQuestion(question);
+        } else {
+            throw new CannotPersistQuestionException("Could not persist programming question.",
+                    "Could either not compile the tests of the tests failed.",
+                    "Alter Unit Tests.");
+        }
     }
 
     private boolean runUnitTest(CodingQuestionDTO question) {
