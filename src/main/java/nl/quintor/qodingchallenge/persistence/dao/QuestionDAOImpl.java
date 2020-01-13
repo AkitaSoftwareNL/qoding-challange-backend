@@ -77,21 +77,24 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
+            final int questionID = question.getQuestionID();
+
             PreparedStatement statement = connection.prepareStatement("INSERT INTO GIVEN_ANSWER_STATE VALUES (?, ?, ? ,?)");
             PreparedStatement statement1 = connection.prepareStatement("INSERT INTO GIVEN_ANSWER (QUESTIONID, PARTICIPANTID, CAMPAIGN_ID, GIVEN_ANSWER) VALUES (?, ?, ?, ? )");
 
-            statement.setInt(1, question.getQuestionID());
+            statement.setInt(1, questionID);
             statement.setString(2, participantID);
             statement.setInt(3, campaignId);
             statement.setInt(4, question.getStateID());
-
-            statement1.setInt(1, question.getQuestionID());
-            statement1.setString(2, participantID);
-            statement1.setInt(3, campaignId);
-            statement1.setString(4, question.getGivenAnswers()[0]);
-
             statement.executeUpdate();
-            statement1.executeUpdate();
+
+            for (String givenAnswer : question.getGivenAnswers()) {
+                statement1.setInt(1, questionID);
+                statement1.setString(2, participantID);
+                statement1.setInt(3, campaignId);
+                statement.setString(4, givenAnswer);
+                statement1.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
