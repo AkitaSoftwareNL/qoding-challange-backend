@@ -24,7 +24,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT 1 FROM campaign WHERE CAMPAIGN_ID = ?");
+                    "SELECT 1 FROM campaign WHERE CAMPAIGN_ID = ? AND STATE != 0");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) return true;
