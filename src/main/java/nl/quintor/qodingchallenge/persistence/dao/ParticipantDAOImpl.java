@@ -62,7 +62,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                                     participantDTOBuilder.lastname = resultSet.getString("LASTNAME");
                                     participantDTOBuilder.participantID = resultSet.getString("PARTICIPANTID");
                                     participantDTOBuilder.campaignID = resultSet.getInt("CAMPAIGN_ID");
-                                    participantDTOBuilder.timeInMillis = resultSet.getLong("TIME_SPEND") / 1000;
+                                    participantDTOBuilder.timeInMillis = resultSet.getLong("TIME_SPEND");
                                     participantDTOBuilder.insertion = resultSet.getString("INSERTION");
                                     participantDTOBuilder.email = resultSet.getString("EMAIL");
                                     participantDTOBuilder.phonenumber = resultSet.getString("PHONENUMBER");
