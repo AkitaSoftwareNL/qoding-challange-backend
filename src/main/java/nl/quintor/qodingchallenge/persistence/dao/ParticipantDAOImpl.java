@@ -41,6 +41,14 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         return answerCollection;
     }
 
+    /**
+     * <p>Filters the list by the amount of correct answers a person has ASC, and the time in milliseconds DESC.
+     * Correct answers is the main filter that will be ran first, secondarily the time will be filtered
+     *
+     * @param campaignID the campaignID of the campaign that the participant are requested from.
+     * @return an ordered list with participants with the highest scoring player first.
+     * @throws SQLException when a failure occurs in the database this exception will be thrown
+     */
     @Override
     public List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
         List<ParticipantDTO> participants = new ArrayList<>();
@@ -104,7 +112,16 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         return participantID;
     }
 
-
+    /**
+     * <p>Checks if an participant has already participated in the campaign.
+     * In the database an ID is generated for a person.
+     * So the duplicate participants are found by searching for a person where all given values are duplicate.
+     *
+     * @param participantDTO participant object.
+     * @param campaignID campaign identifier.
+     * @return true if participant already participated.
+     * @throws SQLException when something occured with the database.
+     */
     @Override
     public boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException {
         try (
@@ -135,6 +152,12 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         return false;
     }
 
+    /**
+     * <p>Adds the time when an user is done with the quiz in the format <strong>YYYY-MM-DD hh:mm:ss</strong>
+     *
+     * @param participantID participant identifier.
+     * @throws SQLException when something occurs with the database or its connection.
+     */
     @Override
     public void addTimeToParticipant(String participantID) throws SQLException {
         try (

@@ -17,6 +17,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.sql.SQLException;
 
+/**
+ * <p>Maps exceptions to a given HTTP status.
+ * Returns both the HTTP status and the {@link nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema}
+ *
+ * @see nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema
+ */
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 

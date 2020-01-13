@@ -4,6 +4,16 @@ import nl.quintor.qodingchallenge.service.exception.IllegalEnumStateException;
 
 import static java.lang.String.format;
 
+/**
+ * <p>The state a question has, corresponding with the values used in the database.<br>
+ * ENUM STATES:
+ * <ul>
+ *     <li>PENDING = 1</li>
+ *     <li>INCORRECT = 2</li>
+ *     <li>CORRECT = 3</li>
+ * </ul>
+ * <strong>When another database is used please check if the states used are still correct</strong>
+ */
 public enum QuestionState {
     PENDING(1),
     INCORRECT(3),

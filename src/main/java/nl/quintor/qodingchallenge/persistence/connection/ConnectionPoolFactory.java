@@ -12,6 +12,18 @@ import java.util.Properties;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * <p>Maintains the connection with the database using a pool of connection.
+ * When a database.properties is given in the resource map it will use it automatically.<br>
+ * <p>
+ * The database.properties requires the following tags:
+ * <ul>
+ *     <li>user</li>
+ *     <li>password</li>
+ *     <li>driver</li>
+ *     <li>url</li>
+ * </ul>
+ */
 public class ConnectionPoolFactory {
 
     private static final String DATABASE_RESOURCE_LINK = "database.properties";

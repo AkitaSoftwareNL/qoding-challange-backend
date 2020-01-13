@@ -6,6 +6,12 @@ import nl.quintor.qodingchallenge.dto.QuestionDTO;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * <p>Creates a QuestionDTO not regarding the parameters.
+ * When an parameter is not given it will by default give it the value of null.
+ *
+ * <strong>Only one parameter is required to build a QuestionDTO using the builder</strong>
+ */
 public class QuestionDTOBuilder {
 
     public int questionID;
