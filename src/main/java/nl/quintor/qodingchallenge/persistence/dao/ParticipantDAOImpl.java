@@ -41,6 +41,14 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         return answerCollection;
     }
 
+    /**
+     * <p>Filters the list by the amount of correct answers a person has ASC, and the time in milliseconds DESC.
+     * Correct answers is the main filter that will be ran first, secondarily the time will be filtered
+     *
+     * @param campaignID the campaignID of the campaign that the participant are requested from.
+     * @return an ordered list with participants with the highest scoring player first.
+     * @throws SQLException when a failure occurs in the database this exception will be thrown
+     */
     @Override
     public List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
         List<ParticipantDTO> participants = new ArrayList<>();
@@ -48,9 +56,9 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID, poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER, \n" +
-                            "(SELECT COUNT(*) FROM given_answer AS ga WHERE CAMPAIGN_ID = ? AND ga.PARTICIPANTID = poc.PARTICIPANTID AND STATEID = ?) AS CORRECT\n" +
-                            "FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
+                    "SELECT poc.PARTICIPANTID, poc.CAMPAIGN_ID, poc.TIME_SPEND, c.FIRSTNAME, c.INSERTION, c.LASTNAME, c.EMAIL, c.PHONENUMBER,\n" +
+                            "                            (SELECT COUNT(*) FROM given_answer_state AS gas WHERE CAMPAIGN_ID = ? AND gas.PARTICIPANTID = poc.PARTICIPANTID AND gas.STATEID = ?) AS CORRECT\n" +
+                            "                            FROM participant_of_campaign AS poc inner join conference as c ON poc.PARTICIPANTID = c.PARTICIPANTID WHERE CAMPAIGN_ID = ? ORDER BY CORRECT DESC, TIME_SPEND");
             statement.setInt(1, campaignID);
             statement.setInt(2, QuestionState.CORRECT.getState());
             statement.setInt(3, campaignID);
@@ -104,7 +112,16 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         return participantID;
     }
 
-
+    /**
+     * <p>Checks if an participant has already participated in the campaign.
+     * In the database an ID is generated for a person.
+     * So the duplicate participants are found by searching for a person where all given values are duplicate.
+     *
+     * @param participantDTO participant object.
+     * @param campaignID campaign identifier.
+     * @return true if participant already participated.
+     * @throws SQLException when something occured with the database.
+     */
     @Override
     public boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException {
         try (
@@ -135,6 +152,12 @@ public class ParticipantDAOImpl implements ParticipantDAO {
         return false;
     }
 
+    /**
+     * <p>Adds the time when an user is done with the quiz in the format <strong>YYYY-MM-DD hh:mm:ss</strong>
+     *
+     * @param participantID participant identifier.
+     * @throws SQLException when something occurs with the database or its connection.
+     */
     @Override
     public void addTimeToParticipant(String participantID) throws SQLException {
         try (

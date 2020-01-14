@@ -44,15 +44,15 @@ class ReportServiceImplTest {
     void getAllCampaignsCallsCampaignDAOGetAllCampaigns() throws SQLException {
         sut.getAllCampaigns();
 
-        verify(campaignDAOMock).getAllCampaigns();
+        verify(campaignDAOMock).getAllCampaigns(true);
     }
 
 
     @Test
     void getAllCampaingsReturnsListWithCampaigns() throws SQLException {
-        when(campaignDAOMock.getAllCampaigns()).thenReturn(getListCampaign());
+        when(campaignDAOMock.getAllCampaigns(true)).thenReturn(getListCampaign());
 
-        assertEquals(sut.getAllCampaigns(), campaignDAOMock.getAllCampaigns());
+        assertEquals(sut.getAllCampaigns(), campaignDAOMock.getAllCampaigns(true));
     }
 
     @Test
@@ -113,7 +113,9 @@ class ReportServiceImplTest {
     }
 
     private CampaignDTO getCampaignDTO() {
-        return new CampaignDTO(campaignId, campaignName, "me", "JAVA", 3, "12/2/2019", 1, null);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 1));
+        return new CampaignDTO(campaignId, campaignName, "me", "JAVA", new AmountOfQuestionTypeCollection(temp), "12/2/2019", 1, null);
     }
 
     private List<CampaignDTO> getListCampaign() {

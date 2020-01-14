@@ -9,7 +9,7 @@ public class CampaignDTO {
     private String name;
     private String startedBy;
     private String category;
-    private int amountOfQuestions;
+    private AmountOfQuestionTypeCollection amountOfQuestions;
     private String date;
     private int state;
     private List<ParticipantDTO> participants;
@@ -17,7 +17,7 @@ public class CampaignDTO {
     public CampaignDTO() {
     }
 
-    public CampaignDTO(int id, String name, String startedBy, String category, int amountOfQuestions, String date, int state, List<ParticipantDTO> participants) {
+    public CampaignDTO(int id, String name, String startedBy, String category, AmountOfQuestionTypeCollection amountOfQuestions, String date, int state, List<ParticipantDTO> participants) {
         this.id = id;
         this.name = name;
         this.startedBy = startedBy;
@@ -60,11 +60,11 @@ public class CampaignDTO {
         this.category = category;
     }
 
-    public int getAmountOfQuestions() {
+    public AmountOfQuestionTypeCollection getAmountOfQuestions() {
         return amountOfQuestions;
     }
 
-    public void setAmountOfQuestions(int amountOfQuestions) {
+    public void setAmountOfQuestions(AmountOfQuestionTypeCollection amountOfQuestions) {
         this.amountOfQuestions = amountOfQuestions;
     }
 
@@ -98,11 +98,11 @@ public class CampaignDTO {
         if (o == null || getClass() != o.getClass()) return false;
         CampaignDTO that = (CampaignDTO) o;
         return id == that.id &&
-                amountOfQuestions == that.amountOfQuestions &&
                 state == that.state &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(startedBy, that.startedBy) &&
                 Objects.equals(category, that.category) &&
+                Objects.equals(amountOfQuestions, that.amountOfQuestions) &&
                 Objects.equals(date, that.date) &&
                 Objects.equals(participants, that.participants);
     }

@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
 
 import java.sql.SQLException;
@@ -12,9 +13,13 @@ public interface CampaignDAO {
 
     List<CampaignDTO> getAllCampaigns() throws SQLException;
 
-    int getAmountOfQuestions(int campaignID) throws SQLException;
+    List<CampaignDTO> getAllCampaigns(boolean all) throws SQLException;
+
+    AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID) throws SQLException;
 
     String getCampaignName(int campaignID) throws SQLException;
 
     int getCampaignID(String campaignName) throws SQLException;
+
+    void deleteCampaign(int campaignID) throws SQLException;
 }

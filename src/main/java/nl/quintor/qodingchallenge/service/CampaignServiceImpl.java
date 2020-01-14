@@ -31,7 +31,7 @@ public class CampaignServiceImpl implements CampaignService {
         if (campaignDAO.campaignExists(campaignDTO.getId())) {
             logger.warn(format("Campaign %s already exists, try an other name.", campaignDTO.getName()));
             throw new CampaignAlreadyExistsException(
-                    "the campaign already exists",
+                    format("The campaign with name %s you tried to create already exists, try a different name like: %s%04d", campaignDTO.getName(), campaignDTO.getName(), new Random().nextInt(9999)),
                     format("Campaign name = %s", campaignDTO.getName()),
                     format("Try another name like %s%04d", campaignDTO.getName(), new Random().nextInt(9999))
             );
@@ -43,4 +43,11 @@ public class CampaignServiceImpl implements CampaignService {
     public List<CampaignDTO> showCampaign() throws SQLException {
         return campaignDAO.getAllCampaigns();
     }
+
+    @Override
+    public void deleteCampaign(int campaignID) throws SQLException {
+        campaignDAO.deleteCampaign(campaignID);
+    }
+
+
 }

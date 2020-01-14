@@ -4,6 +4,12 @@ import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 
 import java.sql.SQLException;
 
+/**
+ * <p>Creates an ParticipantDTO not regarding the parameters.
+ * When an parameter is not given it will by default give it the value of null.
+ *
+ * <strong>Only one parameter is required to build a ParticipantDTO using the builder</strong>
+ */
 public class ParticipantDTOBuilder {
 
     public String participantID;

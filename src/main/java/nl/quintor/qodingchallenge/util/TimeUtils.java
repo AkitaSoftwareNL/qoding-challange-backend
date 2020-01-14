@@ -17,6 +17,11 @@ public final class TimeUtils {
     private TimeUtils() {
     }
 
+    /**
+     * Gives the current timestamp in format YYYY-MM-DD hh:mm:ss
+     *
+     * @return timestamp in format YYYY-MM-DD hh:mm:ss
+     */
     public static String getTimeStamp() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -30,6 +35,14 @@ public final class TimeUtils {
         return format("%d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
     }
 
+    /**
+     *
+     * @param inputDate Date to check
+     * @param format Format it must contain
+     * @param formats Format it must contain
+     *
+     * @return True when the formats given as parameters are found in the inputDate
+     */
     public static boolean dateValidate(String inputDate, String format, String... formats) {
         String[] datePattern = new String[formats.length + 1];
         try {

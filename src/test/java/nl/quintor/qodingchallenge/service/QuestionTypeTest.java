@@ -16,6 +16,20 @@ class QuestionTypeTest {
     }
 
     @Test
+    void enumReturnsRightIdPerQuestion() {
+        assertEquals(QuestionType.getEnumAsInt("OPEN"), 1);
+        assertEquals(QuestionType.getEnumAsInt("MULTIPLE"), 2);
+        assertEquals(QuestionType.getEnumAsInt("PROGRAM"), 3);
+        assertEquals(QuestionType.getEnumAsInt("TOTAL"), 4);
+    }
+
+    @Test
+    void enumGetEnumAsIntThrowsIllegalEnumStateException() {
+        assertThrows(IllegalEnumStateException.class, () -> QuestionType.getEnumAsInt("some non working string"));
+    }
+
+    @Test
+    @Deprecated
     void enumGetEnumAsStringReturnsRightEnumAsString() {
         assertEquals("program", QuestionType.getEnumAsString(QuestionType.PROGRAM.toString()));
         assertEquals("open", QuestionType.getEnumAsString(QuestionType.OPEN.toString()));
@@ -23,6 +37,7 @@ class QuestionTypeTest {
     }
 
     @Test
+    @Deprecated
     void enumGetEnumAsStringThrowsIllegalEnumStateException() {
         assertThrows(IllegalEnumStateException.class, () -> QuestionType.getEnumAsString("some non working string"));
     }

@@ -39,7 +39,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<CampaignDTO> getAllCampaigns() throws SQLException {
-        return campaignDAO.getAllCampaigns();
+        return campaignDAO.getAllCampaigns(true);
     }
 
     @Override
@@ -55,7 +55,10 @@ public class ReportServiceImpl implements ReportService {
         AnswerCollection answerCollection = participantDAO.getFirstAndLastname(participantID);
         answerCollection.setCampaignName(campaignDAO.getCampaignName(campaignID));
         answerCollection.setCampaignID(campaignID);
-        answerCollection.setAnswers(reportDAO.getAnswersPerParticipant(campaignID, participantID));
+        answerCollection
+                .setAnswers(reportDAO.getAnswersPerParticipant(campaignID, participantID))
+                .filter();
+
         return answerCollection;
     }
 }

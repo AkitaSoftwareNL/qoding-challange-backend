@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 class ReportDAOImplTest {
 
-    private final String participantId = "1";
+    private final String participantId = "8063be67-7fec-47c4-a9ab-e3d03a9968b3";
     private final int campaignId = 1;
 
     private ReportDAOImpl sut;
@@ -39,7 +39,9 @@ class ReportDAOImplTest {
         try (
                 Connection connection = getConnection()
         ) {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testReportDDL.sql");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("DDL.sql");
+            RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
+            inputStream = getClass().getClassLoader().getResourceAsStream("DLL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,7 +52,7 @@ class ReportDAOImplTest {
 
     @Test
     void getAnswersPerParticipantsReturnListWithAnswers() throws SQLException {
-        int sizeOfAnswers = 3;
+        final int sizeOfAnswers = 18;
 
         when(answers.size()).thenReturn(sizeOfAnswers);
 

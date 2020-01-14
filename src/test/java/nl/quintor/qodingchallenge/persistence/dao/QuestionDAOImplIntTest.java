@@ -1,9 +1,6 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
-import nl.quintor.qodingchallenge.dto.CodingQuestionDTO;
-import nl.quintor.qodingchallenge.dto.GivenAnswerDTO;
-import nl.quintor.qodingchallenge.dto.PossibleAnswerDTO;
-import nl.quintor.qodingchallenge.dto.QuestionDTO;
+import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import org.h2.tools.RunScript;
@@ -20,8 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuestionDAOImplIntTest {
@@ -29,8 +25,8 @@ class QuestionDAOImplIntTest {
     private final int campaignId = 1;
     private final int questionState = 1;
     private final int questionId = 3;
-    private final int amountOfQuestions = 4;
-    private final String participentId = "1";
+    private final int amountOfQuestions = 15;
+    private final String participantId = "1452950a-8059-4bd1-b397-d2bd765d6b9b";
     private final String category = "JAVA";
 
     private QuestionDAOImpl sut;
@@ -41,7 +37,9 @@ class QuestionDAOImplIntTest {
         try (
                 Connection connection = getConnection()
         ) {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testQuestionDDL.sql");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("DDL.sql");
+            RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
+            inputStream = getClass().getClassLoader().getResourceAsStream("DLL.sql");
             RunScript.execute(connection, new InputStreamReader(Objects.requireNonNull(inputStream)));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,9 +48,11 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        List<QuestionDTO> questionDTOList = sut.getQuestions(category, amountOfQuestions);
+        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
+        temp.add(new AmountOfQuestionTypeDTO("open", 2));
+        List<QuestionDTO> questionDTOList = sut.getQuestions(category, new AmountOfQuestionTypeCollection(temp));
 
-        assertEquals(amountOfQuestions, questionDTOList.size());
+        assertEquals(2, questionDTOList.size());
     }
 
     @Test
@@ -68,16 +68,19 @@ class QuestionDAOImplIntTest {
     void setAnswerSetsAnswer() throws SQLException {
         int oldLength = sut.getPendingAnswers(campaignId, questionState).size();
 
-        sut.setAnswer(getQuestion(), campaignId, participentId);
+        var q = getQuestion();
+        q.setQuestionID(1);
+
+        sut.setAnswer(q, 1, participantId);
 
         assertEquals(oldLength + 1, sut.getPendingAnswers(campaignId, questionState).size());
     }
 
     @Test
     void getCorrectAnswerGivesAllCorrectAnswers() throws SQLException {
-        String actualResult = sut.getCorrectAnswer(questionId);
+        PossibleAnswerDTO actualResult = sut.getCorrectAnswers(questionId).get(0);
 
-        assertFalse(actualResult.isEmpty());
+        assertNotNull(actualResult);
     }
 
     @Test
@@ -101,18 +104,17 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void persistMultipleQuestionThrowsSQLException() {
-        // Mock
+    void makeStringReturnsOneString() throws SQLException {
+        List<PossibleAnswerDTO> possibleAnswerDTOS = getMultipleQuestion().getPossibleAnswers();
+        String delimeter = ",";
 
-        // Test
-
-        // Verify
-        assertThrows(SQLException.class, () -> sut.persistMultipleQuestion(getMultipleQuestion()));
+        var result = sut.makeString(possibleAnswerDTOS, delimeter);
+        assertFalse(result.contains(","));
     }
 
     @Test
     void getPendingAnswersReturnPendingAnswers() throws SQLException {
-        int expectedLength = 1;
+        int expectedLength = 75;
         //Mock
 
         //Test
@@ -136,7 +138,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionReturnQuestionThrowsNoQuestionFound() throws NoQuestionFoundException {
-        int falseId = 50;
+        final int falseId = 50;
         //Mock
 
         //Test
@@ -147,17 +149,17 @@ class QuestionDAOImplIntTest {
 
     @Test
     void setPendingAnswerAddAmountPlusOne() throws SQLException {
-        int correctState = 2;
+        final int correctState = 2;
         //Mock
         var oldLengthValue = sut.getPendingAnswers(campaignId, questionState).size();
         //Test
-        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participentId, campaignId, correctState, "Test"));
+        sut.setPendingAnswer(new GivenAnswerDTO(questionId, participantId, campaignId, correctState, "Test"));
         //Verify
         assertEquals(oldLengthValue - 1, sut.getPendingAnswers(campaignId, questionState).size());
     }
 
     @Test
-    void removeQuestionRemovesQuesion() throws SQLException {
+    void removeQuestionRemovesQuestion() throws SQLException {
         // Mock
 
         // Test
@@ -168,7 +170,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
-        final int expectedResult = 4;
+        final int expectedResult = 15;
 
         assertEquals(expectedResult, sut.getQuestionAmountPerCategory(category));
     }
@@ -180,7 +182,7 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getCodingQuestionGetCorrectQuestion() throws SQLException {
-        CodingQuestionDTO result = sut.getCodingQuestion(4);
+        CodingQuestionDTO result = sut.getCodingQuestion(13);
         Assertions.assertEquals("startCode", result.getCode());
         Assertions.assertEquals("testCode", result.getTest());
 
@@ -188,14 +190,55 @@ class QuestionDAOImplIntTest {
 
     @Test
     void countQuestionsGetsRightAmountOfQuestions() throws SQLException {
-        final int expectedAmount = 4;
+        var expectedAmount = new ArrayList<AmountOfQuestionTypeDTO>();
+        expectedAmount.add(new AmountOfQuestionTypeDTO("open", 8));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("multiple", 5));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("program", 2));
+        expectedAmount.add(new AmountOfQuestionTypeDTO("total", 15));
         // Mock
 
         // Test
-        int actualAmount = sut.countQuestions();
+        AmountOfQuestionTypeCollection actualAmount = sut.countQuestions();
         // Verify
-        assertEquals(expectedAmount, actualAmount);
+        assertEquals(expectedAmount, actualAmount.collection);
     }
+
+    @Test
+    void getAmountOfRightAnswersPerQuestionReturnsFalseWhenOneAnswerIsCorrect() throws SQLException {
+        final boolean expectedResult = false;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(questionId));
+    }
+
+    @Test
+    void getAmountOfRightAnswersPerQuestionReturnsTrueWhenMultipleAnswerIsCorrect() throws SQLException {
+        final int testQuestionID = 15;
+        final boolean expectedResult = true;
+
+        assertEquals(expectedResult, sut.getAmountOfRightAnswersPerQuestion(testQuestionID));
+    }
+
+    @Test
+    void persistProgramQuestionPersistsProgramQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistProgramQuestion(getQuestion());
+        // Verify
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
+    }
+
+    @Test
+    void persistMultipleQuestionPersistMultipleChoiceQuestion() throws SQLException {
+        // Mock
+
+        // Test
+        sut.persistMultipleQuestion(getMultipleQuestion());
+        // Verify
+        assertEquals(amountOfQuestions + 1, sut.getAllQuestions().size());
+    }
+
+
 
     private QuestionDTO getQuestion() throws SQLException {
         return new QuestionDTOBuilder().with(questionDTOBuilder -> {
@@ -204,7 +247,7 @@ class QuestionDAOImplIntTest {
             questionDTOBuilder.categoryType = category;
             questionDTOBuilder.questionType = "open";
             questionDTOBuilder.stateID = questionState;
-            questionDTOBuilder.givenAnswer = "some answer";
+            questionDTOBuilder.givenAnswers = new String[]{"some answer"};
         }).build();
     }
 

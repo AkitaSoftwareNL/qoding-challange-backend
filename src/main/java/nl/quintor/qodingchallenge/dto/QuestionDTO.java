@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,22 +13,35 @@ public class QuestionDTO {
     private String attachment;
     private String startCode;
     private List<PossibleAnswerDTO> possibleAnswers;
-    private String givenAnswer;
+    private String[] givenAnswers;
     private int stateID;
+    private boolean hasMultipleAnswers;
+    private String unitTest;
 
     public QuestionDTO() {
     }
 
-    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String givenAnswer, int stateID, String startCode) {
+
+    public QuestionDTO(int questionID, String question, String categoryType, String questionType, String attachment, List<PossibleAnswerDTO> possibleAnswers, String[] givenAnswers, String startCode, String unitTest, boolean hasMultipleAnswers) {
         this.questionID = questionID;
         this.question = question;
         this.categoryType = categoryType;
         this.questionType = questionType;
         this.attachment = attachment;
         this.possibleAnswers = possibleAnswers;
-        this.givenAnswer = givenAnswer;
+        this.givenAnswers = givenAnswers;
+        this.unitTest = unitTest;
         this.stateID = 1;
         this.startCode = startCode;
+        this.hasMultipleAnswers = hasMultipleAnswers;
+    }
+
+    public String getUnitTest() {
+        return unitTest;
+    }
+
+    public void setUnitTest(String unitTest) {
+        this.unitTest = unitTest;
     }
 
     public String getStartCode() {
@@ -74,12 +88,17 @@ public class QuestionDTO {
         this.possibleAnswers = possibleAnswers;
     }
 
-    public String getGivenAnswer() {
-        return givenAnswer == null || givenAnswer.length() <= 0 ? "" : givenAnswer;
+    public String[] getGivenAnswers() {
+        if (givenAnswers == null || givenAnswers.length <= 0) {
+            givenAnswers = new String[1];
+            givenAnswers[0] = "";
+            return givenAnswers;
+        }
+        return givenAnswers;
     }
 
-    public void setGivenAnswer(String givenAnswer) {
-        this.givenAnswer = givenAnswer;
+    public void setGivenAnswers(String[] givenAnswers) {
+        this.givenAnswers = givenAnswers;
     }
 
     public int getStateID() {
@@ -98,6 +117,18 @@ public class QuestionDTO {
         this.categoryType = categoryType;
     }
 
+    public void setStartCode(String startCode) {
+        this.startCode = startCode;
+    }
+
+    public boolean isHasMultipleAnswers() {
+        return hasMultipleAnswers;
+    }
+
+    public void setHasMultipleAnswers(boolean hasMultipleAnswers) {
+        this.hasMultipleAnswers = hasMultipleAnswers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,16 +136,20 @@ public class QuestionDTO {
         QuestionDTO that = (QuestionDTO) o;
         return questionID == that.questionID &&
                 stateID == that.stateID &&
+                hasMultipleAnswers == that.hasMultipleAnswers &&
                 Objects.equals(question, that.question) &&
                 Objects.equals(categoryType, that.categoryType) &&
                 Objects.equals(questionType, that.questionType) &&
                 Objects.equals(attachment, that.attachment) &&
+                Objects.equals(startCode, that.startCode) &&
                 Objects.equals(possibleAnswers, that.possibleAnswers) &&
-                Objects.equals(givenAnswer, that.givenAnswer);
+                Arrays.equals(givenAnswers, that.givenAnswers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionID, question, categoryType, questionType, attachment, possibleAnswers, givenAnswer, stateID);
+        int result = Objects.hash(questionID, question, categoryType, questionType, attachment, startCode, possibleAnswers, stateID, hasMultipleAnswers);
+        result = 31 * result + Arrays.hashCode(givenAnswers);
+        return result;
     }
 }

@@ -17,6 +17,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.sql.SQLException;
 
+/**
+ * <p>Maps exceptions to a given HTTP status.
+ * Returns both the HTTP status and the {@link nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema}
+ *
+ * @see nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema
+ */
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -28,7 +34,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             CampaignDoesNotExistsException.class,
             IllegalEnumStateException.class
     })
-    public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
+    protected final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =
                 new JSONCustomExceptionSchema(
                         ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
@@ -52,7 +58,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler({
-            CouldNotAddParticipantException.class
+            CouldNotAddParticipantException.class,
+            CannotPersistQuestionException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionBadRequest(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =
@@ -67,7 +74,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public ResponseEntity<Object> handleNotFoundStatus(Exception e, WebRequest request) {
         JSONCustomExceptionSchema exceptionResponse =
                 new JSONCustomExceptionSchema(
-                        e.getMessage()
+                        "Oops something went wrong :("
                 );
         logger.error(e.fillInStackTrace().toString());
         return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);

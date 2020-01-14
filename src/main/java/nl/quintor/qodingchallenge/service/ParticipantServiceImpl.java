@@ -26,7 +26,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     public ParticipantDTO addParticipant(int campaignID, ParticipantDTO participantDTO) throws SQLException {
         if (participantDAO.participantHasAlreadyParticipatedInCampaign(participantDTO, campaignID)) {
             throw new CouldNotAddParticipantException(
-                    "Participant could not be added to this campaign",
+                    format("Participant %s %s has already participated in this campaign. If not participated before please contact support.", participantDTO.getFirstname(), participantDTO.getLastname()),
                     format("Participant name = %s %s with ID %d already exists in this campaign with campaign id = %d", participantDTO.getFirstname(), participantDTO.getLastname(), campaignID, participantDTO.getCampaignID()),
                     "Most likely you have already participated in this campaign. If not contact support"
             );

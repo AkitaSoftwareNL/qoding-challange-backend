@@ -1,6 +1,9 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
+import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeDTO;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.service.QuestionType;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -21,7 +24,7 @@ public class CampaignDAOImpl implements CampaignDAO {
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT 1 FROM campaign WHERE CAMPAIGN_ID = ?");
+                    "SELECT 1 FROM campaign WHERE CAMPAIGN_ID = ? AND STATE != 0");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) return true;
@@ -36,12 +39,25 @@ public class CampaignDAOImpl implements CampaignDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO campaign(CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, AMOUNT_OF_QUESTIONS, TIMELIMIT, STATE)" +
-                            "VALUES (?, 'JAVA', 'conferentie', 'admin', ?, null, 1)");
-            statement.setString(1, campaignDTO.getName());
-            statement.setInt(2, campaignDTO.getAmountOfQuestions());
-            statement.executeUpdate();
+            PreparedStatement insertCampaign = connection.prepareStatement(
+                    "INSERT INTO campaign(CAMPAIGN_NAME, CATEGORY_NAME, CAMPAIGN_TYPE, USERNAME, TIMELIMIT, STATE)" +
+                            "VALUES (?, 'JAVA', 'conferentie', 'admin', null, 1)");
+            insertCampaign.setString(1, campaignDTO.getName());
+            insertCampaign.executeUpdate();
+
+            PreparedStatement getCampaign = connection.prepareStatement("SELECT CAMPAIGN_ID FROM campaign WHERE CAMPAIGN_NAME = ? ");
+            getCampaign.setString(1, campaignDTO.getName());
+            ResultSet resultSet = getCampaign.executeQuery();
+            resultSet.next();
+            int campaignID = resultSet.getInt(1);
+
+            for (AmountOfQuestionTypeDTO amount : campaignDTO.getAmountOfQuestions().collection) {
+                PreparedStatement insertAmount = connection.prepareStatement("INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES (?, ?, ?);");
+                insertAmount.setInt(1, campaignID);
+                insertAmount.setInt(2, QuestionType.getEnumAsInt(amount.type));
+                insertAmount.setInt(3, amount.amount);
+                insertAmount.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -49,26 +65,50 @@ public class CampaignDAOImpl implements CampaignDAO {
 
     @Override
     public List<CampaignDTO> getAllCampaigns() throws SQLException {
+        return getAllCampaigns(false);
+    }
+
+    @Override
+    public List<CampaignDTO> getAllCampaigns(boolean all) throws SQLException {
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
         try (
                 Connection connection = getConnection()
         ) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, AMOUNT_OF_QUESTIONS, TIMESTAMP_CREATED, STATE FROM campaign");
+                    "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, TIMESTAMP_CREATED, STATE FROM campaign WHERE STATE != 0"
+            );
+
+            if (all) {
+                statement = connection.prepareStatement(
+                        "SELECT CAMPAIGN_ID, CAMPAIGN_NAME, CATEGORY_NAME, USERNAME, TIMESTAMP_CREATED, STATE FROM campaign"
+                );
+            }
+
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                campaignDTOList.add(
-                        new CampaignDTO(
-                                resultSet.getInt("CAMPAIGN_ID"),
-                                resultSet.getString("CAMPAIGN_NAME"),
-                                resultSet.getString("CATEGORY_NAME"),
-                                resultSet.getString("USERNAME"),
-                                resultSet.getInt("AMOUNT_OF_QUESTIONS"),
-                                resultSet.getString("TIMESTAMP_CREATED"),
-                                resultSet.getInt("STATE"),
-                                null
-                        )
+                var dto = new CampaignDTO(
+                        resultSet.getInt("CAMPAIGN_ID"),
+                        resultSet.getString("CAMPAIGN_NAME"),
+                        resultSet.getString("CATEGORY_NAME"),
+                        resultSet.getString("USERNAME"),
+                        null,
+                        resultSet.getString("TIMESTAMP_CREATED"),
+                        resultSet.getInt("STATE"),
+                        null
                 );
+
+                PreparedStatement getCampaign = connection.prepareStatement("select amount_of_questions.AMOUNT, question_type.TYPE from amount_of_questions join question_type on question_type.ID = amount_of_questions.TYPE where CAMPAIGN_ID = ?; ");
+                getCampaign.setInt(1, dto.getId());
+                ResultSet amountResultSet = getCampaign.executeQuery();
+
+                var amountOfQuestion = new ArrayList<AmountOfQuestionTypeDTO>();
+                while (amountResultSet.next()) {
+                    String type = amountResultSet.getString("TYPE");
+                    int amount = amountResultSet.getInt("AMOUNT");
+                    amountOfQuestion.add(new AmountOfQuestionTypeDTO(type, amount));
+                }
+                dto.setAmountOfQuestions(new AmountOfQuestionTypeCollection(amountOfQuestion));
+                campaignDTOList.add(dto);
             }
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -77,16 +117,25 @@ public class CampaignDAOImpl implements CampaignDAO {
     }
 
     @Override
-    public int getAmountOfQuestions(int campaignID) throws SQLException {
+    public AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID) throws SQLException {
         try (
                 Connection connection = getConnection()
         ) {
+            ArrayList<AmountOfQuestionTypeDTO> collection = new ArrayList<>();
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT AMOUNT_OF_QUESTIONS FROM campaign WHERE CAMPAIGN_ID = ?");
+                    "select campaign_id, amount_of_questions.Amount, question_type.type from amount_of_questions join question_type on question_type.id = amount_of_questions.type where campaign_id = ?;");
             statement.setInt(1, campaignID);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt("AMOUNT_OF_QUESTIONS");
+
+            PreparedStatement amountState = connection.prepareStatement("select question_type.TYPE,amount_of_questions.AMOUNT  from amount_of_questions join question_type on question_type.id = amount_of_questions.TYPE where CAMPAIGN_ID =?;");
+            amountState.setInt(1, campaignID);
+            ResultSet amountSet = amountState.executeQuery();
+            var amounts = new ArrayList<AmountOfQuestionTypeDTO>();
+            while (amountSet.next()) {
+                amounts.add(new AmountOfQuestionTypeDTO(amountSet));
+            }
+
+            return new AmountOfQuestionTypeCollection(amounts);
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -117,6 +166,19 @@ public class CampaignDAOImpl implements CampaignDAO {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("CAMPAIGN_ID");
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    @Override
+    public void deleteCampaign(int campaignID) throws SQLException {
+        try (
+                Connection connection = getConnection()
+        ) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE campaign SET STATE = 0 WHERE CAMPAIGN_ID = ?");
+            statement.setInt(1, campaignID);
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
         }
