@@ -42,7 +42,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                     questions.addAll(createQuestionDTO(statement));
                 }
             }
-            return addRandomQuestions(questions, limit.getAmount(QuestionType.TOTAL.toString()), connection, category);
+            return addRandomQuestions(questions, limit.getTotal(), connection, category);
         }
     }
 
