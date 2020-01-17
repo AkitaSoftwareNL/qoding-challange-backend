@@ -1,5 +1,6 @@
 package nl.quintor.qodingchallenge.dto;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,6 +52,11 @@ public class QuestionCollection {
 
     public void setCampaignId(int campaignId) {
         this.campaignId = campaignId;
+    }
+
+    public QuestionCollection shuffle() {
+        Collections.shuffle(questions);
+        return this;
     }
 
     @Override

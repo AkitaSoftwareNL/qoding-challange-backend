@@ -44,7 +44,6 @@ public class QuestionDAOImpl implements QuestionDAO {
                 }
                 statement.setString(1, category);
                 questions.addAll(createQuestionDTO(statement));
-
             }
         } catch (SQLException e) {
             throw new SQLException(e);
