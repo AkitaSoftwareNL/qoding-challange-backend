@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistQuestionException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.rest.customexception.CustomException;
 import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
@@ -32,9 +33,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             CampaignAlreadyExistsException.class,
             EmptyQuestionException.class,
             CampaignDoesNotExistsException.class,
-            IllegalEnumStateException.class
+            IllegalEnumStateException.class,
+            CouldNotPersistQuestionException.class
     })
-    protected final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
+    public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =
                 new JSONCustomExceptionSchema(
                         ex.getMessage(), ex.getDetails(), ex.getNextActions(), ex.getSupport()
