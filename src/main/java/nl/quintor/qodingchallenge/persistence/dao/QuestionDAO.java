@@ -21,7 +21,7 @@ public interface QuestionDAO {
 
     void removeQuestion(int questionID) throws SQLException;
 
-    void persistMultipleQuestion(QuestionDTO question) throws SQLException;
+    void persistMultipleQuestion(QuestionDTO question);
 
     List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
 

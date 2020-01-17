@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistQuestionException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.QuestionType;
 import nl.quintor.qodingchallenge.util.HashMapUtils;
@@ -351,17 +352,20 @@ public class QuestionDAOImpl implements QuestionDAO {
      * <p>Sets the question with corresponding values in the database.
      *
      * @param question question to be inserted.
-     * @throws SQLException if connection fails, and when data cannot be added to the database.
      * @rollback When an exception occurs all the data that was previously added in this scope will be reverted.
      */
     @Override
-    public void persistMultipleQuestion(QuestionDTO question) throws SQLException {
+    public void persistMultipleQuestion(QuestionDTO question) {
         try (
                 Connection connection = getConnection()
         ) {
             insertQuestion(connection, question);
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotPersistQuestionException(
+                    "Opslag fout",
+                    "Meerkeuze vraag kon niet worden toegevoegd",
+                    "Neem contact op met support"
+            );
         }
     }
 
