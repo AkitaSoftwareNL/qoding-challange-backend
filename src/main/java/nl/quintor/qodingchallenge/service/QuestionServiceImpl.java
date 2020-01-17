@@ -72,7 +72,8 @@ public class QuestionServiceImpl implements QuestionService {
                     questionDAO.getAmountOfRightAnswersPerQuestion(questionDTO.getQuestionID())
             );
         }
-        return new QuestionCollection("1", campaignID, campaignDAO.getCampaignName(campaignID), questions);
+        return new QuestionCollection("1", campaignID, campaignDAO.getCampaignName(campaignID), questions)
+                .shuffle();
     }
 
     @Override

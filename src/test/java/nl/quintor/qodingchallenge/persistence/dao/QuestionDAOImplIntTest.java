@@ -104,6 +104,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
+    @Deprecated
     void makeStringReturnsOneString() throws SQLException {
         List<PossibleAnswerDTO> possibleAnswerDTOS = getMultipleQuestion().getPossibleAnswers();
         String delimeter = ",";
@@ -200,7 +201,7 @@ class QuestionDAOImplIntTest {
         // Test
         AmountOfQuestionTypeCollection actualAmount = sut.countQuestions();
         // Verify
-        assertEquals(expectedAmount, actualAmount.collection);
+        assertEquals(expectedAmount, actualAmount.getCollection());
     }
 
     @Test

@@ -51,7 +51,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             resultSet.next();
             int campaignID = resultSet.getInt(1);
 
-            for (AmountOfQuestionTypeDTO amount : campaignDTO.getAmountOfQuestions().collection) {
+            for (AmountOfQuestionTypeDTO amount : campaignDTO.getAmountOfQuestions().getCollection()) {
                 PreparedStatement insertAmount = connection.prepareStatement("INSERT INTO amount_of_questions (CAMPAIGN_ID, TYPE, AMOUNT) VALUES (?, ?, ?);");
                 insertAmount.setInt(1, campaignID);
                 insertAmount.setInt(2, QuestionType.getEnumAsInt(amount.type));

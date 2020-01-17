@@ -6,6 +6,7 @@ import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
 import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistQuestionException;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
 import nl.quintor.qodingchallenge.service.QuestionType;
+import nl.quintor.qodingchallenge.util.HashMapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFactory.getConnection;
@@ -32,7 +34,47 @@ public class QuestionDAOImpl implements QuestionDAO {
         try (
                 Connection connection = getConnection()
         ) {
-            for (AmountOfQuestionTypeDTO questionType : limit.collection) {
+            for (AmountOfQuestionTypeDTO questionType : limit.getCollection()) {
+                if (!questionType.type.equalsIgnoreCase(QuestionType.TOTAL.toString())) {
+                    PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND TYPE = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+                    statement.setString(1, category);
+                    statement.setString(2, questionType.type);
+                    statement.setInt(3, questionType.amount);
+                    questions.addAll(createQuestionDTO(statement));
+                }
+            }
+            return addRandomQuestions(questions, limit.getAmount(QuestionType.TOTAL.toString()), connection, category);
+        }
+    }
+
+    private List<QuestionDTO> addRandomQuestions(List<QuestionDTO> questions, int total, Connection connection, String category) throws SQLException {
+        final int limit = 1;
+        if (connection.isClosed()) {
+            throw new SQLException("Conection was closed");
+        }
+        while (questions.size() < total) {
+            PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE ON QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE CATEGORY_NAME = ? AND STATE != 0 ORDER BY RAND() LIMIT ?;");
+            statement.setString(1, category);
+            statement.setInt(2, limit);
+
+            questions.add(createQuestionDTO(statement).get(0));
+            questions = questions.stream()
+                    .filter(HashMapUtils.distinctByKey(QuestionDTO::getQuestionID))
+                    .collect(Collectors.toList());
+        }
+        if (total != questions.size()) {
+            return questions.subList(total, questions.size());
+        }
+        return questions;
+    }
+
+    @Deprecated
+    public List<QuestionDTO> getQuestionsDeprecated(String category, AmountOfQuestionTypeCollection limit) throws SQLException {
+        List<QuestionDTO> questions = new ArrayList<>();
+        try (
+                Connection connection = getConnection()
+        ) {
+            for (AmountOfQuestionTypeDTO questionType : limit.getCollection()) {
                 PreparedStatement statement;
                 int total = questionType.amount - (limit.getTotal() - limit.getAmount(QuestionType.TOTAL.toString()));
                 if (questionType.type.equalsIgnoreCase(QuestionType.TOTAL.toString()) && total > 0) {
@@ -45,7 +87,6 @@ public class QuestionDAOImpl implements QuestionDAO {
                 }
                 statement.setString(1, category);
                 questions.addAll(createQuestionDTO(statement));
-
             }
         } catch (SQLException e) {
             throw new SQLException(e);
