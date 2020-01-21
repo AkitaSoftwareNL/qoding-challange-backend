@@ -40,7 +40,7 @@ public class ProgramStrategyImpl extends QuestionStrategy {
     }
 
     @Override
-    public void persistQuestion(QuestionDTO question) throws SQLException {
+    public void persistQuestion(QuestionDTO question) {
         CodingQuestionDTO codingQuestionDTO = new CodingQuestionDTO(question.getGivenAnswers()[0], question.getUnitTest());
         boolean result = runUnitTest(codingQuestionDTO);
         if (result) {

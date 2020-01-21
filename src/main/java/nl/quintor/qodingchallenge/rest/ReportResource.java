@@ -36,14 +36,14 @@ public class ReportResource {
     @RequestMapping(path = "/report/{campaignID}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RankedParticipantCollection> getRankedParticipantsPerCampaign(@PathVariable int campaignID) throws SQLException {
+    public ResponseEntity<RankedParticipantCollection> getRankedParticipantsPerCampaign(@PathVariable int campaignID) {
         return new ResponseEntity<>(reportService.getRankedParticipantsPerCampaign(campaignID), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/report/{campaignID}/{participantID}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AnswerCollection> getAnswersPerParticipant(@PathVariable int campaignID, @PathVariable String participantID) throws SQLException {
+    public ResponseEntity<AnswerCollection> getAnswersPerParticipant(@PathVariable int campaignID, @PathVariable String participantID) {
         return new ResponseEntity<>(reportService.getAnswersPerParticipant(campaignID, participantID), HttpStatus.OK);
     }
 }

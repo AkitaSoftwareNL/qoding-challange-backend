@@ -41,14 +41,14 @@ class CampaignDAOImplIntTest {
     }
 
     @Test
-    void campaignExistReturnsTrueWhenCampaignExists() throws SQLException {
+    void campaignExistReturnsTrueWhenCampaignExists() {
         var expectedResult = sut.campaignExists(campaignID);
 
         assertTrue(expectedResult);
     }
 
     @Test
-    void campaignExistReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
+    void campaignExistReturnsFalseWhenCampaignDoesNotExists() {
         final String noCampaign = "Some non existing campaign";
 
         var expectedResult = sut.campaignExists(0);
@@ -57,7 +57,7 @@ class CampaignDAOImplIntTest {
     }
 
     @Test
-    void getAmountOfQuestionsReturnsAmountOfQuestions() throws SQLException {
+    void getAmountOfQuestionsReturnsAmountOfQuestions() {
         var temp = new ArrayList<AmountOfQuestionTypeDTO>();
         temp.add(new AmountOfQuestionTypeDTO("open", 3));
         temp.add(new AmountOfQuestionTypeDTO("multiple", 3));
@@ -70,34 +70,34 @@ class CampaignDAOImplIntTest {
     }
 
     @Test
-    void persistCampaignAddsCampaign() throws SQLException {
+    void persistCampaignAddsCampaign() {
         sut.persistCampaign(getCampaign());
 
         assertEquals(amountOfCampaigns + 1, sut.getAllCampaigns().size());
     }
 
     @Test
-    void campaignExitsReturnsTrueWhenCampaignExists() throws SQLException {
+    void campaignExitsReturnsTrueWhenCampaignExists() {
         assertTrue(sut.campaignExists(campaignID));
     }
 
     @Test
-    void campaignExitsReturnsFalseWhenCampaignDoesNotExists() throws SQLException {
+    void campaignExitsReturnsFalseWhenCampaignDoesNotExists() {
         assertFalse(sut.campaignExists(0));
     }
 
     @Test
-    void getCampaignNameGetsCampaignName() throws SQLException {
+    void getCampaignNameGetsCampaignName() {
         assertEquals("Syros Pharmaceuticals, Inc", sut.getCampaignName(2));
     }
 
     @Test
-    void getCampaignIDgetsCampaignID() throws SQLException {
+    void getCampaignIDgetsCampaignID() {
         assertEquals(2, sut.getCampaignID("Syros Pharmaceuticals, Inc"));
     }
 
     @Test
-    void deleteCampaignDeletesCampaign() throws SQLException {
+    void deleteCampaignDeletesCampaign() {
         int amountOfCampaigns = sut.getAllCampaigns().size();
 
         sut.deleteCampaign(campaignID);

@@ -3,7 +3,12 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeCollection;
 import nl.quintor.qodingchallenge.dto.AmountOfQuestionTypeDTO;
 import nl.quintor.qodingchallenge.dto.CampaignDTO;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistCampaignException;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotRecievePropertyException;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotRecieveCampaignException;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotUpdateStateException;
 import nl.quintor.qodingchallenge.service.QuestionType;
+import nl.quintor.qodingchallenge.service.exception.CampaignDoesNotExistsException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -19,7 +24,7 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 public class CampaignDAOImpl implements CampaignDAO {
 
     @Override
-    public boolean campaignExists(int id) throws SQLException {
+    public boolean campaignExists(int id) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -29,13 +34,17 @@ public class CampaignDAOImpl implements CampaignDAO {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) return true;
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CampaignDoesNotExistsException(
+                    "Campagne bestaat niet",
+                    "Campagne bestaat niet, probeer een andere campagne",
+                    "Probeer een andere campagne"
+            );
         }
         return false;
     }
 
     @Override
-    public void persistCampaign(CampaignDTO campaignDTO) throws SQLException {
+    public void persistCampaign(CampaignDTO campaignDTO) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -59,17 +68,21 @@ public class CampaignDAOImpl implements CampaignDAO {
                 insertAmount.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotPersistCampaignException(
+                    "Opslaan van campagne ging mis",
+                    "Campagne kon niet worden opgeslagen",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public List<CampaignDTO> getAllCampaigns() throws SQLException {
+    public List<CampaignDTO> getAllCampaigns() {
         return getAllCampaigns(false);
     }
 
     @Override
-    public List<CampaignDTO> getAllCampaigns(boolean all) throws SQLException {
+    public List<CampaignDTO> getAllCampaigns(boolean all) {
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -111,13 +124,17 @@ public class CampaignDAOImpl implements CampaignDAO {
                 campaignDTOList.add(dto);
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecieveCampaignException(
+                    "Campagnes konden niet worden opgehaald",
+                    "Er is iets mis gegaan met het ophalen van campagnes, Neem contact op met support",
+                    "Neem contact op met support"
+            );
         }
         return campaignDTOList;
     }
 
     @Override
-    public AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID) throws SQLException {
+    public AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -137,12 +154,16 @@ public class CampaignDAOImpl implements CampaignDAO {
 
             return new AmountOfQuestionTypeCollection(amounts);
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "Hoeveelheid kon niet worden opgehaald",
+                    "Er ging iets mis bij het ophalen van de hoeveelheid vragen",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public String getCampaignName(int campaignID) throws SQLException {
+    public String getCampaignName(int campaignID) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -152,12 +173,16 @@ public class CampaignDAOImpl implements CampaignDAO {
             resultSet.next();
             return resultSet.getString("CAMPAIGN_NAME");
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "Campagne naam kon niet worden opgehaald",
+                    "Er ging iets mis bij het ophalen van de campagne naam",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public int getCampaignID(String campaignName) throws SQLException {
+    public int getCampaignID(String campaignName) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -167,12 +192,16 @@ public class CampaignDAOImpl implements CampaignDAO {
             resultSet.next();
             return resultSet.getInt("CAMPAIGN_ID");
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "Campagne kon niet worden opgehaald",
+                    "Er ging iets mis bij het ophalen van de campagne id",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public void deleteCampaign(int campaignID) throws SQLException {
+    public void deleteCampaign(int campaignID) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -180,7 +209,11 @@ public class CampaignDAOImpl implements CampaignDAO {
             statement.setInt(1, campaignID);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotUpdateStateException(
+                    "Campagne kon niet verwijderd worden",
+                    "Er ging iets mis bij het verwijderen van de campaign",
+                    "Neem contact op met support"
+            );
         }
     }
 }

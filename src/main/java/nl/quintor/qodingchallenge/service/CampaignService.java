@@ -10,9 +10,9 @@ public interface CampaignService {
 
     void setCampaignDAO(CampaignDAO campaignDAO);
 
-    void createNewCampaign(CampaignDTO campaignDTO) throws SQLException;
+    void createNewCampaign(CampaignDTO campaignDTO);
 
-    List<CampaignDTO> showCampaign() throws SQLException;
+    List<CampaignDTO> showCampaign();
 
-    void deleteCampaign(int campaignID) throws SQLException;
+    void deleteCampaign(int campaignID);
 }
