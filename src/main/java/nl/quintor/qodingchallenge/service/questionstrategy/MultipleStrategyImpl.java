@@ -15,7 +15,7 @@ public class MultipleStrategyImpl extends QuestionStrategy {
     }
 
     @Override
-    public void persistQuestion(QuestionDTO question) throws SQLException {
+    public void persistQuestion(QuestionDTO question) {
         questionDAO.persistMultipleQuestion(question);
     }
 

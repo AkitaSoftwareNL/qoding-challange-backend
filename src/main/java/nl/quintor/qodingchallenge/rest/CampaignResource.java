@@ -27,7 +27,7 @@ public class CampaignResource {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CampaignDTO>> createCampaign(@RequestBody CampaignDTO campaignDTO) throws SQLException {
+    public ResponseEntity<List<CampaignDTO>> createCampaign(@RequestBody CampaignDTO campaignDTO) {
         campaignService.createNewCampaign(campaignDTO);
         return new ResponseEntity<>(campaignService.showCampaign(), HttpStatus.OK);
     }
@@ -36,14 +36,14 @@ public class CampaignResource {
     @RequestMapping(path = "/campaign",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CampaignDTO>> showCampaign() throws SQLException {
+    public ResponseEntity<List<CampaignDTO>> showCampaign() {
         return new ResponseEntity<>(campaignService.showCampaign(), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/campaign/delete/{campaignID}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CampaignDTO>> deleteCampaign(@PathVariable int campaignID) throws SQLException {
+    public ResponseEntity<List<CampaignDTO>> deleteCampaign(@PathVariable int campaignID) {
         campaignService.deleteCampaign(campaignID);
         return ResponseEntity.ok().body(campaignService.showCampaign());
     }

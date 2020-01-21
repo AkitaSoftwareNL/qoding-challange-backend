@@ -23,7 +23,7 @@ public interface ReportService {
 
     List<CampaignDTO> getAllCampaigns() throws SQLException;
 
-    RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) throws SQLException;
+    RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID);
 
-    AnswerCollection getAnswersPerParticipant(int campaignID, String participantID) throws SQLException;
+    AnswerCollection getAnswersPerParticipant(int campaignID, String participantID);
 }

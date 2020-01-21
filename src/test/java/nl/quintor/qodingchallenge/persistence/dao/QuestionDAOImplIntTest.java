@@ -3,6 +3,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
 import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import nl.quintor.qodingchallenge.service.QuestionType;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,13 +49,23 @@ class QuestionDAOImplIntTest {
 
     @Test
     void getQuestionsReturnsQuestionsWithALimit() throws SQLException {
-        var temp = new ArrayList<AmountOfQuestionTypeDTO>();
-        temp.add(new AmountOfQuestionTypeDTO("open", 2));
-        List<QuestionDTO> questionDTOList = sut.getQuestions(category, new AmountOfQuestionTypeCollection(temp));
-
-        assertEquals(2, questionDTOList.size());
+        AmountOfQuestionTypeCollection collection = new AmountOfQuestionTypeCollection();
+        ArrayList<AmountOfQuestionTypeDTO> list = new ArrayList<>();
+        list.add(new AmountOfQuestionTypeDTO(QuestionType.OPEN.toString(), 2));
+        list.add(new AmountOfQuestionTypeDTO(QuestionType.TOTAL.toString(), 3));
+        collection.setCollection(list);
+        assertEquals(5, sut.getQuestions(category, collection).size());
     }
 
+    @Deprecated
+    void getQuestionsReturnsQuestionsWithALimitDeprecated() throws SQLException {
+        AmountOfQuestionTypeCollection collection = new AmountOfQuestionTypeCollection();
+        ArrayList<AmountOfQuestionTypeDTO> list = new ArrayList<>();
+        list.add(new AmountOfQuestionTypeDTO(QuestionType.OPEN.toString(), 2));
+        list.add(new AmountOfQuestionTypeDTO(QuestionType.TOTAL.toString(), 3));
+        collection.setCollection(list);
+        assertEquals(3, sut.getQuestionsDeprecated(category, collection).size());
+    }
     @Test
     void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
         int AMOUNT_OF_ANSWERS = 2;
@@ -104,6 +115,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
+    @Deprecated
     void makeStringReturnsOneString() throws SQLException {
         List<PossibleAnswerDTO> possibleAnswerDTOS = getMultipleQuestion().getPossibleAnswers();
         String delimeter = ",";
@@ -168,7 +180,7 @@ class QuestionDAOImplIntTest {
         assertEquals(amountOfQuestions - 1, sut.getAllQuestions().size());
     }
 
-    @Test
+    @Deprecated
     void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
         final int expectedResult = 15;
 
@@ -200,7 +212,7 @@ class QuestionDAOImplIntTest {
         // Test
         AmountOfQuestionTypeCollection actualAmount = sut.countQuestions();
         // Verify
-        assertEquals(expectedAmount, actualAmount.collection);
+        assertEquals(expectedAmount, actualAmount.getCollection());
     }
 
     @Test

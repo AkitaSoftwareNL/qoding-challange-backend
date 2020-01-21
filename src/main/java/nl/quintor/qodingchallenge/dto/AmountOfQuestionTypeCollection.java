@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class AmountOfQuestionTypeCollection {
 
-    public ArrayList<AmountOfQuestionTypeDTO> collection;
+    private ArrayList<AmountOfQuestionTypeDTO> collection;
 
     public AmountOfQuestionTypeCollection() {
     }

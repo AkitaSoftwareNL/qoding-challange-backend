@@ -52,12 +52,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionCollection getQuestions(String category, int campaignID) throws SQLException {
+    public QuestionCollection getQuestions(String category, int campaignID){
         if (!campaignDAO.campaignExists(campaignID))
             throw new NoCampaignFoundException(
-                    "The campaign you tried to enter has already expired or does not exist. If none of these statements are correct please contact support.",
-                    format("Campaign id = %s", campaignID),
-                    "Try to use a new campaign name"
+                    "De campagne die u heeft ingevoerd bestaat niet of kan al afgelopen zijn. Als geen van deze beweringen waar is neem contact op met support",
+                    format("Campagne id = %s", campaignID),
+                    "Probeer een andere campagne naam"
             );
         List<QuestionDTO> questions = questionDAO.getQuestions(category, campaignDAO.getAmountOfQuestions(campaignID));
 
@@ -72,7 +72,8 @@ public class QuestionServiceImpl implements QuestionService {
                     questionDAO.getAmountOfRightAnswersPerQuestion(questionDTO.getQuestionID())
             );
         }
-        return new QuestionCollection("1", campaignID, campaignDAO.getCampaignName(campaignID), questions);
+        return new QuestionCollection("1", campaignID, campaignDAO.getCampaignName(campaignID), questions)
+                .shuffle();
     }
 
     @Override
@@ -89,12 +90,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void createQuestion(QuestionDTO question) throws SQLException {
+    public void createQuestion(QuestionDTO question) {
         if (question.getQuestion().isEmpty()) {
             throw new EmptyQuestionException(
-                    "The question field cannot be empty, please enter a question",
-                    "The field question can not be empty",
-                    "Please put your question in the field Question"
+                    "Het vraag veld kan niet leeg zijn, probeer een vraag in te voeren",
+                    "Het veld vraag kan niet leeg zijn",
+                    "Aub voer het vraag veld in"
             );
         }
         String questionType = question.getQuestionType();
@@ -107,32 +108,32 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionDTO> getAllQuestions() throws SQLException {
+    public List<QuestionDTO> getAllQuestions() {
         return questionDAO.getAllQuestions();
     }
 
     @Override
-    public void removeQuestion(int questionID) throws SQLException {
+    public void removeQuestion(int questionID) {
         questionDAO.removeQuestion(questionID);
     }
 
     @Override
-    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException {
+    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) {
         return questionDAO.getPendingAnswers(campaignId, questionState);
     }
 
     @Override
-    public QuestionDTO getQuestion(int questionid) throws SQLException {
+    public QuestionDTO getQuestion(int questionid) {
         return questionDAO.getQuestion(questionid);
     }
 
     @Override
-    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) {
         questionDAO.setPendingAnswer(givenAnswerDTO);
     }
 
     @Override
-    public AmountOfQuestionTypeCollection countQuestions() throws SQLException {
+    public AmountOfQuestionTypeCollection countQuestions() {
         return questionDAO.countQuestions();
     }
 }

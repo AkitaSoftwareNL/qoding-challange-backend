@@ -7,35 +7,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface QuestionDAO {
-    List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) throws SQLException;
+    List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit);
 
-    void setAnswer(QuestionDTO question, int campaignId, String participantID) throws SQLException;
+    void setAnswer(QuestionDTO question, int campaignId, String participantID);
 
-    ArrayList<PossibleAnswerDTO> getCorrectAnswers(int questionID) throws SQLException;
+    ArrayList<PossibleAnswerDTO> getCorrectAnswers(int questionID);
 
-    List<PossibleAnswerDTO> getPossibleAnswers(int questionID) throws SQLException;
+    List<PossibleAnswerDTO> getPossibleAnswers(int questionID);
 
-    void persistOpenQuestion(QuestionDTO question) throws SQLException;
+    void persistOpenQuestion(QuestionDTO question);
 
-    List<QuestionDTO> getAllQuestions() throws SQLException;
+    List<QuestionDTO> getAllQuestions();
 
-    void removeQuestion(int questionID) throws SQLException;
+    void removeQuestion(int questionID);
 
-    void persistMultipleQuestion(QuestionDTO question) throws SQLException;
+    void persistMultipleQuestion(QuestionDTO question);
 
-    List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
+    List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState);
 
-    QuestionDTO getQuestion(int questionid) throws SQLException;
+    QuestionDTO getQuestion(int questionid);
 
     CodingQuestionDTO getCodingQuestion(int id) throws SQLException;
 
-    void setPendingAnswer(GivenAnswerDTO questionDTO) throws SQLException;
+    void setPendingAnswer(GivenAnswerDTO questionDTO);
 
     int getQuestionAmountPerCategory(String category) throws SQLException;
 
-    AmountOfQuestionTypeCollection countQuestions() throws SQLException;
+    AmountOfQuestionTypeCollection countQuestions();
 
-    boolean getAmountOfRightAnswersPerQuestion(int questionID) throws SQLException;
+    boolean getAmountOfRightAnswersPerQuestion(int questionID);
 
-    void persistProgramQuestion(QuestionDTO question) throws SQLException;
+    void persistProgramQuestion(QuestionDTO question);
 }
