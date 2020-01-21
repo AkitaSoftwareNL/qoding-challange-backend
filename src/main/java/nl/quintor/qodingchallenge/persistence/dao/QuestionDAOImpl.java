@@ -113,7 +113,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             }
         } catch (SQLException e) {
             throw new AnswerNotFoundException(
-              "Antwoorden konden niet worden gevonden",
+              "De antwoordmogelijkheden konden niet worden gevonden.",
               "Antwoorden konden niet worden gevonden in de database",
               "Neem contact op met support"
             );
@@ -147,7 +147,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             }
         } catch (SQLException e) {
             throw new CouldNotSetAnswerException(
-                    "Antwoord kon niet worden opgeslagen",
+                    "De antwoordmogelijkheden konden niet worden opgeslagen",
                     "Antwoord kon niet worden opgeslagen, Hierdoor zou uw score omlaag gebracht kunnen worden",
                     "Neem contact op met support"
             );
@@ -173,14 +173,14 @@ public class QuestionDAOImpl implements QuestionDAO {
             }
         } catch (SQLException e) {
             throw new AnswerNotFoundException(
-                    "Antwoord kon niet worden opgehaald",
+                    "De antwoordmogelijkheden konden niet worden gevonden",
                     "Antwoord kon niet worden opgehaald, Aub neem contact op met support",
                     "Neem contact op met support"
             );
         }
         if (correctAnswers.isEmpty()) {
             RuntimeException runtimeException = new AnswerNotFoundException(
-                    "Antwoord kon niet worden opgehaald",
+                    "De antwoordmogelijkheden konden niet worden gevonden",
                     format("Voor de vraag met questionId: %d kon geen correct antwoord gevonden worden ", questionID),
                     "Neem contact op met support"
             );
@@ -204,7 +204,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new CouldNotPersistQuestionException(
-                    "Opslag fout",
+                    "Open vraag kon niet opgeslagen worden",
                     "Open vraag kon niet worden toegevoegd",
                     "Neem contact op met support"
             );
@@ -240,7 +240,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e) {
             throw new CouldNotUpdateStateException(
                     "Was niet instaat om status te updaten",
-                    "Was niet instaat om status te updaten",
+                    "Was niet instaat om status te updaten, Dit kan komen doordat de vraag niet bestaat",
                     "Neem contact op met support"
             );
         }
@@ -262,9 +262,8 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
-                                    //TODO refactor
-                                    LOGGER.trace("No startcode has been found");
-                                    LOGGER.trace(e.getMessage(), e);
+                                    LOGGER.info("No startcode has been found");
+                                    LOGGER.debug(e.getMessage(), e);
                                     questionDTOBuilder.startCode = "";
                                 }
                             }
@@ -296,7 +295,7 @@ public class QuestionDAOImpl implements QuestionDAO {
             }
         } catch (SQLException e) {
             throw new AnswerNotFoundException(
-                    "Antwoorden konden niet worden gevonden",
+                    "De antwoordmogelijkheden konden niet worden gevonden",
                     "Antwoorden konden niet worden gevonden in de database",
                     "Neem contact op met support"
             );
@@ -546,7 +545,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (SQLException e){
             throw new CouldNotRecievePropertyException(
                     "Kon hoeveelheid niet ophalen",
-                    "Kon hoeveelheid niet ophalen",
+                    "Kon hoeveelheid niet ophalen, Dit kan komen doordat de vraag niet bestaat",
                     "Neem contact op met support"
             );
         }
@@ -579,8 +578,8 @@ public class QuestionDAOImpl implements QuestionDAO {
             insertProgramming.executeUpdate();
         } catch (SQLException e) {
             throw new CouldNotPersistQuestionException(
-                    "Opslag fout",
                     "Meerkeuze vraag kon niet worden toegevoegd",
+                    "Meerkeuze vraag kon niet worden toegevoegd, Dit kan komen door de database",
                     "Neem contact op met support"
             );
         }

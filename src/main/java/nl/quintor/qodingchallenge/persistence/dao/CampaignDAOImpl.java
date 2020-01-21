@@ -193,7 +193,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             return resultSet.getInt("CAMPAIGN_ID");
         } catch (SQLException e) {
             throw new CouldNotRecievePropertyException(
-                    "Campagne id kon niet worden opgehaald",
+                    "Campagne kon niet worden opgehaald",
                     "Er ging iets mis bij het ophalen van de campagne id",
                     "Neem contact op met support"
             );
@@ -210,8 +210,8 @@ public class CampaignDAOImpl implements CampaignDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new CouldNotUpdateStateException(
-                    "Campagne kon niet gefaseerd worden",
-                    "Er ging iets mis bij het faseren van de campaign",
+                    "Campagne kon niet verwijderd worden",
+                    "Er ging iets mis bij het verwijderen van de campaign",
                     "Neem contact op met support"
             );
         }

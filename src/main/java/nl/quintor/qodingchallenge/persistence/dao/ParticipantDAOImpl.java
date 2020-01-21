@@ -41,8 +41,8 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             answerCollection.setLastname(resultSet.getString("LASTNAME"));
         } catch (SQLException e) {
             throw new CouldNotRecievePropertyException(
-                    "Kon niet voor en achternaam ophalen",
-                    "Kon niet voor en achternaam ophalen",
+                    "De voor- en/of achternaam konden niet worden opgehaald.",
+                    "Kon niet voor- en/of achternaam ophalen",
                     "Neem contact op support"
             );
         }
@@ -133,7 +133,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
      * So the duplicate participants are found by searching for a person where all given values are duplicate.
      *
      * @param participantDTO participant object.
-     * @param campaignID     campaign identifier.
+     * @param campaignID campaign identifier.
      * @return true if participant already participated.
      */
     @Override
