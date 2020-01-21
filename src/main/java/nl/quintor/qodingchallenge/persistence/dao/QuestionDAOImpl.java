@@ -2,9 +2,7 @@ package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.*;
 import nl.quintor.qodingchallenge.dto.builder.QuestionDTOBuilder;
-import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
-import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistQuestionException;
-import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.*;
 import nl.quintor.qodingchallenge.service.QuestionType;
 import nl.quintor.qodingchallenge.util.HashMapUtils;
 import org.slf4j.Logger;
@@ -29,7 +27,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionDAOImpl.class);
 
     @Override
-    public List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) throws SQLException {
+    public List<QuestionDTO> getQuestions(String category, AmountOfQuestionTypeCollection limit) {
         List<QuestionDTO> questions = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -44,6 +42,12 @@ public class QuestionDAOImpl implements QuestionDAO {
                 }
             }
             return addRandomQuestions(questions, limit.getAmount(QuestionType.TOTAL.toString()), connection, category);
+        } catch (SQLException e){
+            throw new NoQuestionFoundException(
+                    "Geen vragen kon worden gevonden",
+                    "Geen vragen kon worden gevonden, Dit kan door de database komen",
+                    "Neem contact op met support"
+            );
         }
     }
 
@@ -95,7 +99,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<PossibleAnswerDTO> getPossibleAnswers(int questionID) throws SQLException {
+    public List<PossibleAnswerDTO> getPossibleAnswers(int questionID) {
         List<PossibleAnswerDTO> possibleAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -108,14 +112,18 @@ public class QuestionDAOImpl implements QuestionDAO {
                         resultSet.getString("ANSWER_OPTIONS"), 0));
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new AnswerNotFoundException(
+              "Antwoorden konden niet worden gevonden",
+              "Antwoorden konden niet worden gevonden in de database",
+              "Neem contact op met support"
+            );
         }
 
         return possibleAnswers;
     }
 
     @Override
-    public void setAnswer(QuestionDTO question, int campaignId, String participantID) throws SQLException {
+    public void setAnswer(QuestionDTO question, int campaignId, String participantID) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -138,12 +146,16 @@ public class QuestionDAOImpl implements QuestionDAO {
                 statement1.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotSetAnswerException(
+                    "Antwoord kon niet worden opgeslagen",
+                    "Antwoord kon niet worden opgeslagen, Hierdoor zou uw score omlaag gebracht kunnen worden",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public ArrayList<PossibleAnswerDTO> getCorrectAnswers(int questionID) throws SQLException {
+    public ArrayList<PossibleAnswerDTO> getCorrectAnswers(int questionID) {
         ArrayList<PossibleAnswerDTO> correctAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -160,13 +172,17 @@ public class QuestionDAOImpl implements QuestionDAO {
                 );
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new AnswerNotFoundException(
+                    "Antwoord kon niet worden opgehaald",
+                    "Antwoord kon niet worden opgehaald, Aub neem contact op met support",
+                    "Neem contact op met support"
+            );
         }
         if (correctAnswers.isEmpty()) {
             RuntimeException runtimeException = new AnswerNotFoundException(
-                    "Oops something went wrong :(",
-                    format("For the question with questionID: %d was no correct answer found", questionID),
-                    "Please contact support to solve this issue"
+                    "Antwoord kon niet worden opgehaald",
+                    format("Voor de vraag met questionId: %d kon geen correct antwoord gevonden worden ", questionID),
+                    "Neem contact op met support"
             );
             LOGGER.error(runtimeException.getMessage(), runtimeException);
             throw runtimeException;
@@ -175,7 +191,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void persistOpenQuestion(QuestionDTO question) throws SQLException {
+    public void persistOpenQuestion(QuestionDTO question) {
         final String JAVA = "JAVA";
         try (
                 Connection connection = getConnection()
@@ -187,12 +203,16 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setString(4, question.getAttachment());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotPersistQuestionException(
+                    "Opslag fout",
+                    "Open vraag kon niet worden toegevoegd",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public List<QuestionDTO> getAllQuestions() throws SQLException {
+    public List<QuestionDTO> getAllQuestions() {
         List<QuestionDTO> questions;
         try (
                 Connection connection = getConnection()
@@ -200,13 +220,17 @@ public class QuestionDAOImpl implements QuestionDAO {
             PreparedStatement statement = connection.prepareStatement("SELECT QUESTIONID, CATEGORY_NAME, QUESTION, TYPE, ATTACHMENT FROM QUESTION JOIN QUESTION_TYPE on QUESTION_TYPE.ID = QUESTION.QUESTION_TYPE WHERE STATE = 1");
             questions = createQuestionDTO(statement);
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new NoQuestionFoundException(
+                    "Geen vragen kon worden gevonden",
+                    "Geen vragen kon worden gevonden, Dit kan door de database komen",
+                    "Neem contact op met support"
+            );
         }
         return questions;
     }
 
     @Override
-    public void removeQuestion(int questionID) throws SQLException {
+    public void removeQuestion(int questionID) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -214,7 +238,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setInt(1, questionID);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotUpdateStateException(
+                    "Was niet instaat om status te updaten",
+                    "Was niet instaat om status te updaten",
+                    "Neem contact op met support"
+            );
         }
     }
 
@@ -234,8 +262,9 @@ public class QuestionDAOImpl implements QuestionDAO {
                                 try {
                                     questionDTOBuilder.startCode = getCodingQuestion(id).getCode();
                                 } catch (NoQuestionFoundException e) {
-                                    LOGGER.info("No startcode has been found");
-                                    LOGGER.debug(e.getMessage(), e);
+                                    //TODO refactor
+                                    LOGGER.trace("No startcode has been found");
+                                    LOGGER.trace(e.getMessage(), e);
                                     questionDTOBuilder.startCode = "";
                                 }
                             }
@@ -246,7 +275,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException {
+    public List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) {
         List<GivenAnswerDTO> givenAnswers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -266,13 +295,17 @@ public class QuestionDAOImpl implements QuestionDAO {
                         resultSet.getString("GIVEN_ANSWER")));
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new AnswerNotFoundException(
+                    "Antwoorden konden niet worden gevonden",
+                    "Antwoorden konden niet worden gevonden in de database",
+                    "Neem contact op met support"
+            );
         }
         return givenAnswers;
     }
 
     @Override
-    public QuestionDTO getQuestion(int questionID) throws SQLException {
+    public QuestionDTO getQuestion(int questionID) {
         QuestionDTO question = new QuestionDTO();
         try (
                 Connection connection = getConnection()
@@ -292,18 +325,22 @@ public class QuestionDAOImpl implements QuestionDAO {
                 ).build();
             } else {
                 throw new NoQuestionFoundException(
-                        "No question could be found, please contact support",
-                        format("Question with questionID %d was not found", questionID),
-                        "Try an different questionID"
+                        "Geen vraag kon worden gevonden ",
+                        format("Geen vraag kon worden gevonden met het id %d", questionID),
+                        "Neem contact op met support"
                 );
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new NoQuestionFoundException(
+                    "Geen vraag kon worden gevonden ",
+                    format("Geen vraag kon worden gevonden met het id %d", questionID),
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public CodingQuestionDTO getCodingQuestion(int id) throws SQLException {
+    public CodingQuestionDTO getCodingQuestion(int id) {
         Optional<CodingQuestionDTO> codingQuestionDTO = Optional.empty();
         try (
                 Connection connection = getConnection()
@@ -318,20 +355,23 @@ public class QuestionDAOImpl implements QuestionDAO {
                 ));
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new NoQuestionFoundException(
+                    "Geen vraag kon worden gevonden",
+                    "Vraag kon niet worden opgehaald",
+                    "Probeer een ander questionId"
+            );
         }
         return codingQuestionDTO.orElseThrow(() -> {
             throw new NoQuestionFoundException(
-                    "No question could be found, please contact support",
-                    format("Question with questionID %d was not found", id),
-                    "Try an different questionID"
+                    "Geen vraag kon worden gevonden",
+                    "Vraag kon niet worden opgehaald",
+                    "Probeer een ander questionId"
             );
         });
-
     }
 
     @Override
-    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException {
+    public void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -344,7 +384,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setString(4, givenAnswerDTO.getParticipantId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotSetAnswerException(
+                    "Antwoord kon niet gevonden worden",
+                    "Antwoord kon niet gevonden worden",
+                    "Neem contact op met support"
+            );
         }
     }
 
@@ -407,9 +451,9 @@ public class QuestionDAOImpl implements QuestionDAO {
             questionID = Optional.of(resultSet.getInt("QUESTIONID"));
         }
         return questionID.orElseThrow(() -> new NoQuestionFoundException(
-                format("QuestionID for question %s could not be found", question),
-                format("QuestionID from question %s has not been found", question),
-                "The question is most likely not valid, try a different question"
+                format("QuestionId voor vraag %s kon niet worden gevonden", question),
+                format("QuestionId voor vraag %s kon niet worden gevonden", question),
+                "De vraag is waarschijnlijk ongeldig, probeer een andere vraag"
         ));
     }
 
@@ -438,8 +482,8 @@ public class QuestionDAOImpl implements QuestionDAO {
         return possibleAnswersString;
     }
 
-    @Override
-    public int getQuestionAmountPerCategory(String category) throws SQLException {
+    @Deprecated
+    public int getQuestionAmountPerCategory(String category) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -449,12 +493,16 @@ public class QuestionDAOImpl implements QuestionDAO {
             resultSet.next();
             return resultSet.getInt("AMOUNT");
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "Kon vraag hoeveelheid niet ophalen",
+                    "Kon vraag hoeveelheid niet ophalen, probeer een andere vraag",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public AmountOfQuestionTypeCollection countQuestions() throws SQLException {
+    public AmountOfQuestionTypeCollection countQuestions() {
         try (
                 Connection connection = getConnection()
         ) {
@@ -474,7 +522,11 @@ public class QuestionDAOImpl implements QuestionDAO {
 
             return new AmountOfQuestionTypeCollection(amounts);
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "Kon de hoeveelheid vragen niet ophalen",
+                    "Er ging iets mis met het ophalen van de hoeveelheid vragen",
+                    "Neem contact op met support"
+            );
         }
     }
 
@@ -482,7 +534,7 @@ public class QuestionDAOImpl implements QuestionDAO {
      * @return true when there are multiple correct answers
      */
     @Override
-    public boolean getAmountOfRightAnswersPerQuestion(int questionID) throws SQLException {
+    public boolean getAmountOfRightAnswersPerQuestion(int questionID) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -491,11 +543,17 @@ public class QuestionDAOImpl implements QuestionDAO {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("CORRECT") > 1;
+        } catch (SQLException e){
+            throw new CouldNotRecievePropertyException(
+                    "Kon hoeveelheid niet ophalen",
+                    "Kon hoeveelheid niet ophalen",
+                    "Neem contact op met support"
+            );
         }
     }
 
     @Override
-    public synchronized void persistProgramQuestion(QuestionDTO question) throws SQLException {
+    public synchronized void persistProgramQuestion(QuestionDTO question) {
         final String JAVA = "JAVA";
         try (
                 Connection connection = getConnection()
@@ -520,7 +578,11 @@ public class QuestionDAOImpl implements QuestionDAO {
             insertProgramming.setString(3, question.getUnitTest());
             insertProgramming.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotPersistQuestionException(
+                    "Opslag fout",
+                    "Meerkeuze vraag kon niet worden toegevoegd",
+                    "Neem contact op met support"
+            );
         }
     }
 }

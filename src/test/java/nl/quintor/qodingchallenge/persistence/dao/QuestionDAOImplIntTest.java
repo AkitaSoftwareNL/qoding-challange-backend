@@ -56,7 +56,7 @@ class QuestionDAOImplIntTest {
     }
 
     @Test
-    void getPossibleAnswerReturnsPossibleAnswers() throws SQLException {
+    void getPossibleAnswerReturnsPossibleAnswers() {
         int AMOUNT_OF_ANSWERS = 2;
 
         List<PossibleAnswerDTO> possibleAnswers = sut.getPossibleAnswers(questionId);
@@ -169,7 +169,7 @@ class QuestionDAOImplIntTest {
         assertEquals(amountOfQuestions - 1, sut.getAllQuestions().size());
     }
 
-    @Test
+    @Deprecated
     void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
         final int expectedResult = 15;
 

@@ -38,12 +38,12 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<CampaignDTO> getAllCampaigns() throws SQLException {
+    public List<CampaignDTO> getAllCampaigns() {
         return campaignDAO.getAllCampaigns(true);
     }
 
     @Override
-    public RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
+    public RankedParticipantCollection getRankedParticipantsPerCampaign(int campaignID) {
         return new RankedParticipantCollection(
                 campaignDAO.getCampaignName(campaignID),
                 participantDAO.getRankedParticipantsPerCampaign(campaignID)
@@ -51,7 +51,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public AnswerCollection getAnswersPerParticipant(int campaignID, String participantID) throws SQLException {
+    public AnswerCollection getAnswersPerParticipant(int campaignID, String participantID) {
         AnswerCollection answerCollection = participantDAO.getFirstAndLastname(participantID);
         answerCollection.setCampaignName(campaignDAO.getCampaignName(campaignID));
         answerCollection.setCampaignID(campaignID);

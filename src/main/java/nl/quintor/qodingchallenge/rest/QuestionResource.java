@@ -28,7 +28,7 @@ public class QuestionResource {
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/campaign/{campaignID}",
             method = RequestMethod.GET)
-    public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable int campaignID) throws SQLException {
+    public ResponseEntity<QuestionCollection> sendQuestions(@PathVariable int campaignID) {
         return ResponseEntity.ok().body(questionService.getQuestions("java", campaignID));
     }
 
@@ -45,7 +45,7 @@ public class QuestionResource {
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/campaign/{campaignid}/answers/{state}",
             method = RequestMethod.GET)
-    public ResponseEntity getPendingAnswers(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState) throws SQLException {
+    public ResponseEntity getPendingAnswers(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState) {
         return ResponseEntity.ok().body(questionService.getPendingAnswers(campaignId, questionState));
     }
 
@@ -53,7 +53,7 @@ public class QuestionResource {
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             path = "/campaign/{campaignid}/answers/{state}/update",
             method = RequestMethod.POST)
-    public ResponseEntity setPendingAnswer(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState, @RequestBody GivenAnswerDTO givenAnswerDTO) throws SQLException {
+    public ResponseEntity setPendingAnswer(@PathVariable("campaignid") int campaignId, @PathVariable("state") int questionState, @RequestBody GivenAnswerDTO givenAnswerDTO) {
         questionService.setPendingAnswer(givenAnswerDTO);
         return ResponseEntity.ok().body(questionService.getPendingAnswers(campaignId, questionState));
     }
@@ -61,7 +61,7 @@ public class QuestionResource {
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/questions/{questionid}",
             method = RequestMethod.GET)
-    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) throws SQLException {
+    public ResponseEntity getQuestion(@PathVariable("questionid") int questionId) {
         return ResponseEntity.ok().body(questionService.getQuestion(questionId));
     }
 
@@ -69,7 +69,7 @@ public class QuestionResource {
     @RequestMapping(path = "/questions/create",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createQuestion(@RequestBody QuestionDTO question) throws SQLException {
+    public ResponseEntity createQuestion(@RequestBody QuestionDTO question) {
         questionService.createQuestion(question);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -78,7 +78,7 @@ public class QuestionResource {
     @RequestMapping(path = "/questions",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<QuestionDTO>> getAllQuestions() throws SQLException {
+    public ResponseEntity<List<QuestionDTO>> getAllQuestions() {
         List<QuestionDTO> questionDTOList = questionService.getAllQuestions();
         return ResponseEntity.ok().body(questionDTOList);
     }
@@ -86,7 +86,7 @@ public class QuestionResource {
     @RequestMapping(path = "/questions/delete/{questionID}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<QuestionDTO>> removeQuestion(@PathVariable("questionID") int questionID) throws SQLException {
+    public ResponseEntity<List<QuestionDTO>> removeQuestion(@PathVariable("questionID") int questionID) {
         questionService.removeQuestion(questionID);
         return ResponseEntity.ok().body(questionService.getAllQuestions());
     }
@@ -95,7 +95,7 @@ public class QuestionResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<AmountOfQuestionTypeCollection> countQuestions() throws SQLException {
+    public ResponseEntity<AmountOfQuestionTypeCollection> countQuestions() {
         return ResponseEntity.ok().body(questionService.countQuestions());
     }
 }

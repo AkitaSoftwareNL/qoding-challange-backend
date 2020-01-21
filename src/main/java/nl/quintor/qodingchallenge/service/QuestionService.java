@@ -20,21 +20,21 @@ public interface QuestionService {
     @Autowired
     void setParticipantDAO(ParticipantDAO participantDAO);
 
-    QuestionCollection getQuestions(String category, int campaignID) throws SQLException;
+    QuestionCollection getQuestions(String category, int campaignID);
 
     void setAnswer(QuestionCollection questionCollection) throws SQLException;
 
-    void createQuestion(QuestionDTO question) throws SQLException;
+    void createQuestion(QuestionDTO question);
 
-    List<QuestionDTO> getAllQuestions() throws SQLException;
+    List<QuestionDTO> getAllQuestions();
 
-    void removeQuestion(int questionID) throws SQLException;
+    void removeQuestion(int questionID);
 
-    List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState) throws SQLException;
+    List<GivenAnswerDTO> getPendingAnswers(int campaignId, int questionState);
 
-    QuestionDTO getQuestion(int questionid) throws SQLException;
+    QuestionDTO getQuestion(int questionid);
 
-    void setPendingAnswer(GivenAnswerDTO givenAnswerDTO) throws SQLException;
+    void setPendingAnswer(GivenAnswerDTO givenAnswerDTO);
 
-    AmountOfQuestionTypeCollection countQuestions() throws SQLException;
+    AmountOfQuestionTypeCollection countQuestions();
 }

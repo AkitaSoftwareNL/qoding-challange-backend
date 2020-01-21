@@ -27,25 +27,25 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public void createNewCampaign(CampaignDTO campaignDTO) throws SQLException {
+    public void createNewCampaign(CampaignDTO campaignDTO) {
         if (campaignDAO.campaignExists(campaignDTO.getId())) {
-            logger.warn(format("Campaign %s already exists, try an other name.", campaignDTO.getName()));
+            logger.warn(format("campagne %s bestaat al probeer een andere naam", campaignDTO.getName()));
             throw new CampaignAlreadyExistsException(
-                    format("The campaign with name %s you tried to create already exists, try a different name like: %s%04d", campaignDTO.getName(), campaignDTO.getName(), new Random().nextInt(9999)),
-                    format("Campaign name = %s", campaignDTO.getName()),
-                    format("Try another name like %s%04d", campaignDTO.getName(), new Random().nextInt(9999))
+                    format("De campagne met de naam %s die je probeerde aan te maken bestaat al, Probeer een andere naam zoals : %s%04d", campaignDTO.getName(), campaignDTO.getName(), new Random().nextInt(9999)),
+                    format("Campagne naam = %s", campaignDTO.getName()),
+                    format("Probeer een andere naam zoals: %s%04d", campaignDTO.getName(), new Random().nextInt(9999))
             );
         }
         campaignDAO.persistCampaign(campaignDTO);
     }
 
     @Override
-    public List<CampaignDTO> showCampaign() throws SQLException {
+    public List<CampaignDTO> showCampaign() {
         return campaignDAO.getAllCampaigns();
     }
 
     @Override
-    public void deleteCampaign(int campaignID) throws SQLException {
+    public void deleteCampaign(int campaignID) {
         campaignDAO.deleteCampaign(campaignID);
     }
 
