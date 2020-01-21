@@ -88,7 +88,7 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             }
         } catch (SQLException e) {
             throw new CouldNotRecievePropertyException(
-                    "Kon niet deelnemer per campagne ophalen",
+                    "Er iets mis gegaan met het ophalen van de campagene",
                     "Kon niet deelnemer per campagne ophalen",
                     "Neem contact op support"
             );

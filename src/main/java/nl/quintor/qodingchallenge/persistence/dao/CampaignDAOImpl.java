@@ -69,7 +69,7 @@ public class CampaignDAOImpl implements CampaignDAO {
             }
         } catch (SQLException e) {
             throw new CouldNotPersistCampaignException(
-                    "Opslag fout",
+                    "Opslaan van campagne ging mis",
                     "Campagne kon niet worden opgeslagen",
                     "Neem contact op met support"
             );
@@ -126,7 +126,7 @@ public class CampaignDAOImpl implements CampaignDAO {
         } catch (SQLException e) {
             throw new CouldNotRecieveCampaignException(
                     "Campagnes konden niet worden opgehaald",
-                    "Campagnes konden niet worden opgehaald",
+                    "Er is iets mis gegaan met het ophalen van campagnes, Neem contact op met support",
                     "Neem contact op met support"
             );
         }
