@@ -57,7 +57,6 @@ class QuestionDAOImplIntTest {
         assertEquals(5, sut.getQuestions(category, collection).size());
     }
 
-    @Test
     @Deprecated
     void getQuestionsReturnsQuestionsWithALimitDeprecated() throws SQLException {
         AmountOfQuestionTypeCollection collection = new AmountOfQuestionTypeCollection();
@@ -181,7 +180,7 @@ class QuestionDAOImplIntTest {
         assertEquals(amountOfQuestions - 1, sut.getAllQuestions().size());
     }
 
-    @Test
+    @Deprecated
     void getAmountOfQuestionsPerCategoryReturnsAllQuestionsFromOneCategory() throws SQLException {
         final int expectedResult = 15;
 

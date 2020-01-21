@@ -1,6 +1,7 @@
 package nl.quintor.qodingchallenge.persistence.dao;
 
 import nl.quintor.qodingchallenge.dto.AnswerDTO;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotRecievePropertyException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -16,7 +17,7 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 public class ReportDAOImpl implements ReportDAO {
 
     @Override
-    public List<AnswerDTO> getAnswersPerParticipant(int campaignID, String participantID) throws SQLException {
+    public List<AnswerDTO> getAnswersPerParticipant(int campaignID, String participantID) {
         List<AnswerDTO> answers = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -40,7 +41,11 @@ public class ReportDAOImpl implements ReportDAO {
                 );
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "Kon antwoord per deelnemer niet ophalen",
+                    "Kon antwoord per deelnemer niet ophalen",
+                    "Neem contact op met support"
+            );
         }
         return answers;
     }

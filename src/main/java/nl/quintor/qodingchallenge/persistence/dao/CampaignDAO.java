@@ -7,19 +7,19 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface CampaignDAO {
-    boolean campaignExists(int id) throws SQLException;
+    boolean campaignExists(int id);
 
-    void persistCampaign(CampaignDTO campaignDTO) throws SQLException;
+    void persistCampaign(CampaignDTO campaignDTO);
 
-    List<CampaignDTO> getAllCampaigns() throws SQLException;
+    List<CampaignDTO> getAllCampaigns();
 
-    List<CampaignDTO> getAllCampaigns(boolean all) throws SQLException;
+    List<CampaignDTO> getAllCampaigns(boolean all);
 
-    AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID) throws SQLException;
+    AmountOfQuestionTypeCollection getAmountOfQuestions(int campaignID);
 
-    String getCampaignName(int campaignID) throws SQLException;
+    String getCampaignName(int campaignID);
 
-    int getCampaignID(String campaignName) throws SQLException;
+    int getCampaignID(String campaignName);
 
-    void deleteCampaign(int campaignID) throws SQLException;
+    void deleteCampaign(int campaignID);
 }

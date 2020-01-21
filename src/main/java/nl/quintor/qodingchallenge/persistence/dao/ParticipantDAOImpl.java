@@ -3,6 +3,10 @@ package nl.quintor.qodingchallenge.persistence.dao;
 import nl.quintor.qodingchallenge.dto.AnswerCollection;
 import nl.quintor.qodingchallenge.dto.ParticipantDTO;
 import nl.quintor.qodingchallenge.dto.builder.ParticipantDTOBuilder;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistParticipentException;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistPropertyException;
+import nl.quintor.qodingchallenge.persistence.exception.CouldNotRecievePropertyException;
+import nl.quintor.qodingchallenge.persistence.exception.ParticipentHasAlreadyParticipatedInCampaignException;
 import nl.quintor.qodingchallenge.service.QuestionState;
 import nl.quintor.qodingchallenge.util.TimeUtils;
 import org.springframework.stereotype.Service;
@@ -21,7 +25,7 @@ import static nl.quintor.qodingchallenge.persistence.connection.ConnectionPoolFa
 public class ParticipantDAOImpl implements ParticipantDAO {
 
     @Override
-    public AnswerCollection getFirstAndLastname(String participantID) throws SQLException {
+    public AnswerCollection getFirstAndLastname(String participantID) {
         AnswerCollection answerCollection = new AnswerCollection();
         try (
                 Connection connection = getConnection()
@@ -36,7 +40,11 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             answerCollection.setInsertion(resultSet.getString("INSERTION"));
             answerCollection.setLastname(resultSet.getString("LASTNAME"));
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "De voor- en/of achternaam konden niet worden opgehaald.",
+                    "Kon niet voor- en/of achternaam ophalen",
+                    "Neem contact op support"
+            );
         }
         return answerCollection;
     }
@@ -47,10 +55,9 @@ public class ParticipantDAOImpl implements ParticipantDAO {
      *
      * @param campaignID the campaignID of the campaign that the participant are requested from.
      * @return an ordered list with participants with the highest scoring player first.
-     * @throws SQLException when a failure occurs in the database this exception will be thrown
      */
     @Override
-    public List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException {
+    public List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) {
         List<ParticipantDTO> participants = new ArrayList<>();
         try (
                 Connection connection = getConnection()
@@ -80,13 +87,17 @@ public class ParticipantDAOImpl implements ParticipantDAO {
                 );
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotRecievePropertyException(
+                    "Er iets mis gegaan met het ophalen van de campagene",
+                    "Kon niet deelnemer per campagne ophalen",
+                    "Neem contact op support"
+            );
         }
         return participants;
     }
 
     @Override
-    public String addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException {
+    public String addParticipant(ParticipantDTO participantDTO, int campaignID) {
         final String participantID = UUID.randomUUID().toString();
         try (
                 Connection connection = getConnection()
@@ -107,7 +118,11 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             statementConference.executeUpdate();
             statementParticipantOfCampaign.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotPersistParticipentException(
+                    "Deelnemer kon niet worden opgeslagen",
+                    "Er ging iets mis met het opslaan van de deelnemer",
+                    "Neem contact op met support"
+            );
         }
         return participantID;
     }
@@ -120,7 +135,6 @@ public class ParticipantDAOImpl implements ParticipantDAO {
      * @param participantDTO participant object.
      * @param campaignID campaign identifier.
      * @return true if participant already participated.
-     * @throws SQLException when something occured with the database.
      */
     @Override
     public boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException {
@@ -156,10 +170,9 @@ public class ParticipantDAOImpl implements ParticipantDAO {
      * <p>Adds the time when an user is done with the quiz in the format <strong>YYYY-MM-DD hh:mm:ss</strong>
      *
      * @param participantID participant identifier.
-     * @throws SQLException when something occurs with the database or its connection.
      */
     @Override
-    public void addTimeToParticipant(String participantID) throws SQLException {
+    public void addTimeToParticipant(String participantID) {
         try (
                 Connection connection = getConnection()
         ) {
@@ -170,7 +183,11 @@ public class ParticipantDAOImpl implements ParticipantDAO {
             statement.setString(2, participantID);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new CouldNotPersistPropertyException(
+                    "Tijd kon niet worden toegevoegd",
+                    "Tijd kon niet toegevoegd worden",
+                    "Neem contact op met support"
+            );
         }
     }
 }

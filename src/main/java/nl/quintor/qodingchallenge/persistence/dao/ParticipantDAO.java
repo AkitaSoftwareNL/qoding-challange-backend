@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ParticipantDAO {
-    AnswerCollection getFirstAndLastname(String participantID) throws SQLException;
+    AnswerCollection getFirstAndLastname(String participantID);
 
-    List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID) throws SQLException;
+    List<ParticipantDTO> getRankedParticipantsPerCampaign(int campaignID);
 
-    String addParticipant(ParticipantDTO participantDTO, int campaignID) throws SQLException;
+    String addParticipant(ParticipantDTO participantDTO, int campaignID);
 
     boolean participantHasAlreadyParticipatedInCampaign(ParticipantDTO participantDTO, int campaignID) throws SQLException;
 
-    void addTimeToParticipant(String participantID) throws SQLException;
+    void addTimeToParticipant(String participantID);
 }

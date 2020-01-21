@@ -1,8 +1,6 @@
 package nl.quintor.qodingchallenge.rest.exceptionhandler;
 
-import nl.quintor.qodingchallenge.persistence.exception.AnswerNotFoundException;
-import nl.quintor.qodingchallenge.persistence.exception.CouldNotPersistQuestionException;
-import nl.quintor.qodingchallenge.persistence.exception.NoQuestionFoundException;
+import nl.quintor.qodingchallenge.persistence.exception.*;
 import nl.quintor.qodingchallenge.rest.customexception.CustomException;
 import nl.quintor.qodingchallenge.rest.customexception.JSONCustomExceptionSchema;
 import nl.quintor.qodingchallenge.service.exception.*;
@@ -34,7 +32,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             EmptyQuestionException.class,
             CampaignDoesNotExistsException.class,
             IllegalEnumStateException.class,
-            CouldNotPersistQuestionException.class
+            CouldNotPersistQuestionException.class,
+            CouldNotUpdateStateException.class,
+            CouldNotPersistCampaignException.class,
+            CouldNotPersistParticipentException.class,
+            CouldNotPersistPropertyException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionInternalServerError(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =
@@ -48,7 +50,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler({
             NoCampaignFoundException.class,
             NoQuestionFoundException.class,
-            AnswerNotFoundException.class
+            AnswerNotFoundException.class,
+            CouldNotRecievePropertyException.class,
+            CouldNotRecieveCampaignException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionNotFound(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =
@@ -61,7 +65,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({
             CouldNotAddParticipantException.class,
-            CannotPersistQuestionException.class
+            CannotPersistQuestionException.class,
+            CouldNotSetAnswerException.class,
+            ParticipentHasAlreadyParticipatedInCampaignException.class
     })
     public final ResponseEntity<Object> handleCustomExceptionBadRequest(CustomException ex, WebRequest webRequest) {
         JSONCustomExceptionSchema exceptionResponse =

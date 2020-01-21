@@ -20,7 +20,7 @@ public abstract class QuestionStrategy {
         return type.getState() == QuestionType.getEnumAsInt(typeToCheck);
     }
 
-    public void persistQuestion(QuestionDTO question) throws SQLException {
+    public void persistQuestion(QuestionDTO question) {
         questionDAO.persistOpenQuestion(question);
     }
 
